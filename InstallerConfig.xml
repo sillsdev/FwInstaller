@@ -20,14 +20,85 @@
 		<Language Name="Bengali" Id="bn"/>
 		<Language Name="Kinyarwanda" Id="ro"/>
 	</Languages>
-	<CoreFiles>
-		<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed in either TE or FLEx: -->
-		<!-- Format: <File PathPattern="*partial path of any file that is not needed by TE or FLEx but is needed in the FW installation*"/> -->
-		<File PathPattern="Output\${config}\UnicodeCharEditor."/>
-		<File PathPattern="Output\${config}\ObjectBrowser."/>
-		<File PathPattern="Output\${config}\WeifenLuo.WinFormsUI.Docking.dll"/>
-		<File PathPattern="DistFiles\MSSQLMigration\OldMigrationScripts"/>
-	</CoreFiles>
+	<FeatureAllocation>
+		<!-- Allocation of files in Output\Release is generally done by building TE and FLEx Nant targets -->
+		<!-- and comparing the resulting file sets. Here we define heuristics for dealing with files in -->
+		<!-- DistFiles. Each main element defines what section of the installer is being addressed, and -->
+		<!-- then follows a selection from the following 4 types: -->
+		<!-- <File PathContains="*partial path appearing anywhere in a DistFiles file that is needed in the current section*"/> -->
+		<!-- <File PathEnds="*partial path appearing at the end of a DistFiles file that is needed in the current section*"/> -->
+		<!-- <Except PathContains="*partial path appearing anywhere in a DistFiles file that must not appear in the current section*"/> -->
+		<!-- <Except PathEnds="*partial path appearing at the end of a DistFiles file that must not appear in the current section*"/> -->
+		<!-- Be aware that the Except elements take precedence over the File elements. -->
+		<FlexOnly>
+			<!-- Define heuristics for FLEx files: -->
+			<File PathContains="Language Explorer"/>
+			<File PathContains="Language_Explorer"/>
+			<File PathContains="Data Notebook"/>
+			<File PathContains="Data_Notebook"/>
+		</FlexOnly>
+		<FlexMoviesOnly>
+			<!-- Define heuristics for FLEx movie files: -->
+			<File PathContains="Language Explorer\Movies"/>
+			<Except PathContains="Language Explorer\Movies\notfound.html"/>
+		</FlexMoviesOnly>
+		<TeOnly>
+			<!-- Define heuristics for TE files: -->
+			<File PathContains="Editorial Checks"/>
+			<File PathContains="Translation_Editor"/>
+			<File PathContains="Translation Editor"/>
+			<File PathContains="Scripture"/>
+			<File PathContains="Bibl"/>
+		</TeOnly>
+		<Localization>
+			<!-- Define heuristics for (non-TE) localization files: -->
+			<File PathContains="\{0}\"/>
+			<File PathEnds="\strings-{0}.xml"/>
+			<File PathEnds="\LocalizedLists-{0}.xml"/>
+		</Localization>
+		<TeLocalization>
+			<!-- Define heuristics for TE localization files: -->
+			<File PathContains="\{0}\Te"/>
+			<File PathContains="\{0}\Scr"/>
+			<File PathContains="\{0}\DiffView"/>
+			<File PathEnds="\BiblicalTerms-{0}.xml"/>
+		</TeLocalization>
+		<!-- The following heuristics apply over all files, not just DistFiles. -->
+		<CoreFileOrphans>
+			<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed in either TE or FLEx: -->
+			<!-- Format: <File PathPattern="*partial path of any file that is not needed by TE or FLEx but is needed in the FW installation*"/> -->
+			<File PathPattern="Output\${config}\UnicodeCharEditor."/>
+			<File PathPattern="Output\${config}\ObjectBrowser."/>
+			<File PathPattern="Output\${config}\WeifenLuo.WinFormsUI.Docking.dll"/>
+			<File PathPattern="DistFiles\MSSQLMigration\OldMigrationScripts"/>
+		</CoreFileOrphans>
+		<ForceBuiltFilesIntoTE>
+			<!-- Define list of path patterns of built files known to be needed in TE but which are not built by the TE Nant target: -->
+			<!-- Format: <File PathPattern="*partial path of any file that is needed by TE*"/> -->
+			<File PathPattern="Output\${config}\System.Drawing.Html.dll"/>
+		</ForceBuiltFilesIntoTE>
+		<ForceBuiltFilesIntoFlex>
+			<!-- Define list of path patterns of built files known to be needed in FLEx but which are not built by the FLEx Nant target: -->
+			<!-- Format: <File PathPattern="*partial path of any file that is needed by FLEx*"/> -->
+		</ForceBuiltFilesIntoFlex>
+		<TeFileNameTestHeuristics>
+			<!-- Define list of regular expressions serving as coarse heuristics for guessing if a file that has been allocated -->
+			<!-- to the Core or FLEx features may actually be meant only for TE (used as a secondary measure only in generating warnings): -->
+			<!-- Format: <Heuristic RegExp="*regular expression matching names (not full paths) of files that may belong exclusively to TE*"/> -->
+			<Heuristic RegExp="[sS]criptur"/>
+			<Heuristic RegExp="[bB]ibl"/>
+			<Heuristic RegExp="Scr[A-Z]"/>
+			<Heuristic RegExp="^Te[A-Z]"/>
+			<!-- Define list of specific files that may look like TE-only files but aren't really (used in -->
+			<!-- conjunction with above Heuristics to suppress warnings): -->
+			<!-- Format: <File Path="*relative path from FW folder of a file looks like it is TE-exclusive but isn't*"/> -->
+			<Except Path="Output\${config}\ScrUtilsInterfaces.dll"/>
+			<Except Path="Output\${config}\SharedScrUtils.dll"/>
+			<Except Path="Output\${config}\SharedScrUtils.pdb"/>
+			<Except Path="Output\${config}\SharedScrControls.dll"/>
+			<Except Path="Output\${config}\SharedScrControls.pdb"/>
+		</TeFileNameTestHeuristics>
+</FeatureAllocation>
 	<FileConditions>
 		<!-- Define conditions to apply to specified components: -->
 		<!-- Format: <File Path="*partial path of a file that is conditionally installed*" Condition="*MSI Installer condition that must be true to install file*"/> -->
@@ -395,23 +466,6 @@
 		<File Path="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
 		<File Path="PalasoUIWindowsForms.dll"/>
 	</IgnoreRegistration>
-	<TeFileNameHeuristics>
-		<!-- Define list of regular expressions serving as heuristics for detecting if a file is meant only for TE: -->
-		<!-- Format: <Heuristic RegExp="*regular expression matching paths of files that belong exclusively to TE*"/> -->
-		<Heuristic RegExp="[sS]criptur"/>
-		<Heuristic RegExp="[bB]ibl"/>
-		<Heuristic RegExp="Scr[A-Z]"/>
-		<Heuristic RegExp="^Te[A-Z]"/>
-	</TeFileNameHeuristics>
-	<NotTeOnly>
-		<!-- Define list of specific files that may look like TE-only files but aren't really: -->
-		<!-- Format: <File Path="*relative path from FW folder of a file looks like it is TE-exclusive but isn't*"/> -->
-		<File Path="Output\${config}\ScrUtilsInterfaces.dll"/>
-		<File Path="Output\${config}\SharedScrUtils.dll"/>
-		<File Path="Output\${config}\SharedScrUtils.pdb"/>
-		<File Path="Output\${config}\SharedScrControls.dll"/>
-		<File Path="Output\${config}\SharedScrControls.pdb"/>
-	</NotTeOnly>
 	<ErrorReporting>
 		<!-- Define list of features that are allowed to be missing yet have components assigned to them: -->
 		<!-- (This just suppresses the warning in the final report; the feature and its components will be omitted from the installer) -->
