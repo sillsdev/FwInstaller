@@ -18,6 +18,7 @@
 		<Language Name="Telugu" Id="te"/>
 		<Language Name="Nepali" Id="ne"/>
 		<Language Name="Bengali" Id="bn"/>
+		<Language Name="Kinyarwanda" Id="ro"/>
 	</Languages>
 	<CoreFiles>
 		<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed in either TE or FLEx: -->
@@ -439,6 +440,7 @@
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ms.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-te.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-bn.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ro.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\GeneratedLayouts.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\GeneratedParts.xml"/>
@@ -498,5 +500,6 @@
 		<Cabinet Feature="Persian" CabinetIndex="15"/>
 		<Cabinet Feature="Nepali" CabinetIndex="16"/>
 		<Cabinet Feature="Bengali" CabinetIndex="17"/>
+		<Cabinet Feature="Kinyarwanda" CabinetIndex="18"/>
 	</CabinetAssignments>
 </InstallerConfig>

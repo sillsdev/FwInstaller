@@ -158,6 +158,12 @@
 						<Condition Level="3">VIETNAMESE_CAB_FOUND OR REMOVE</Condition>
 					</Feature>
 				</Feature>
+				<Feature Id="Kinyarwanda" Title="Kinyarwanda" Description="Allows the software to have a Kinyarwanda user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">KINYARWANDA_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Kinyarwanda_TE" Title="Kinyarwanda_TE" Description="Kinyarwanda user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">KINYARWANDA_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
 			</Feature>
 		</Feature>
 	</Fragment>
