@@ -27,6 +27,7 @@
 		<Media Id='15' Cabinet='Persian.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='16' Cabinet='Nepali.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='17' Cabinet='Bengali.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='18' Cabinet='Kinyarwa.cab' EmbedCab='no' CompressionLevel='high'/>
 
 		<Property Id="FLEX_MOVIES_CAB_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindFlexMoviesCabFile">
@@ -61,6 +62,11 @@
 		<Property Id="BENGALI_CAB_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindBengaliCabFile">
 				<FileSearch Name="Bengali.cab"/>
+			</DirectorySearch>
+		</Property>
+		<Property Id="KINYARWANDA_CAB_FOUND">
+			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindKinyarwandaCabFile">
+				<FileSearch Name="Kinyarwa.cab"/>
 			</DirectorySearch>
 		</Property>
 
