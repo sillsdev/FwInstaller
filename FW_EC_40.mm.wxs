@@ -24,8 +24,20 @@
 			</Directory>
 		</Directory>
 
-		<CustomAction Id="LaunchAppDataMover" Execute="deferred" Impersonate="no" FileKey="EncConvertersAppDataMover40.exe" ExeCommand="" Return="ignore" />
+		<!-- The following section launches the installed file EncConvertersAppDataMover40.exe but hides its DOS window -->
+		<CustomAction Id="SetAppDataMoverData" Return="check" Property="LaunchAppDataMover" Value="[#EncConvertersAppDataMover40.exe]" />
+		<CustomAction Id="LaunchAppDataMover" Return="ignore" Impersonate="no" Execute="deferred" Script="vbscript">
+			<![CDATA[
+dim EncConvertersAppDataMoverPath
+EncConvertersAppDataMoverPath = Session.Property("CustomActionData")
+const WindowStyleStealth  = &H20000000
+set WSO = createobject("WScript.Shell")
+WSO.run "%comspec% /c """ + EncConvertersAppDataMoverPath + """", WindowStyleStealth, false
+]]>
+		</CustomAction>
+
 		<InstallExecuteSequence>
+			<Custom Action="SetAppDataMoverData" Before="InstallInitialize"><![CDATA[VersionNT >= 501]]></Custom>
 			<Custom Action="LaunchAppDataMover" After="PublishComponents"><![CDATA[NOT Installed]]></Custom>
 		</InstallExecuteSequence>
 

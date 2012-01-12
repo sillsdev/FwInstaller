@@ -23,7 +23,6 @@
 			<ComponentRef Id="ShortcutMorphIntro"/>
 			<ComponentRef Id="ShortcutLicense"/>
 			<ComponentRef Id="ShortcutTechSupport"/>
-			<ComponentRef Id="ShortcutReadMe"/>
 			<ComponentRef Id="ShortcutUnicodeCharEditor"/>
 			<MergeRef Id="ATL"/>
 			<MergeRef Id="ATL_Policy"/>
@@ -46,8 +45,6 @@
 			<MergeRef Id="FW_ICU"/>
 			<MergeRef Id="ICUECHelp"/>
 			<Feature Id="FLEx" Title="Language Explorer (FLEx)" Description="FieldWorks Language Explorer" Display="expand" Level="3" AllowAdvertise="no">
-				<ComponentRef Id="CopyFlexWhatsNew"/>
-				<ComponentRef Id="CopyFLExReadMe"/>
 				<ComponentRef Id="UnregFlex"/>
 				<ComponentRef Id="DeskShortcutFlex"/>
 				<ComponentRef Id="DelOldDeskShortcutFlex"/>
@@ -59,20 +56,17 @@
 				<ComponentRef Id="ShortcutFlexImportHelp"/>
 				<ComponentRef Id="ShortcutFlexWriSys"/>
 				<ComponentRef Id="ShortcutFlex"/>
-				<ComponentRef Id="ShortcutFLExReadMe"/>
 				<ComponentRef Id="ShortcutFlexHelp"/>
 				<Feature Id="FlexMovies" Title="Demo Movies" Description="Language Explorer demonstration movies" Display="expand" Level="0" AllowAdvertise="no">
 					<Condition Level="3">FLEX_MOVIES_CAB_FOUND OR REMOVE</Condition>
 				</Feature>
 			</Feature>
 			<Feature Id="TE" Title="Translation Editor" Description="FieldWorks Translation Editor" Display="expand" Level="3" AllowAdvertise="no">
-				<ComponentRef Id="CopyTEReadMe"/>
 				<ComponentRef Id="ParatextProjectsFolder"/>
 				<ComponentRef Id="RegScrChecks"/>
 				<ComponentRef Id="DeskShortcutTE"/>
 				<ComponentRef Id="DelOldDeskShortcutTE"/>
 				<ComponentRef Id="ShortcutTE"/>
-				<ComponentRef Id="ShortcutTEReadMe"/>
 				<ComponentRef Id="ShortcutTEManual"/>
 				<ComponentRef Id="ShortcutTEHelp"/>
 				<ComponentRef Id="ShortcutTEMovies"/>
@@ -119,10 +113,10 @@
 						<Condition Level="3">NEPALI_CAB_FOUND OR REMOVE</Condition>
 					</Feature>
 				</Feature>
-				<Feature Id="Persian" Title="Persian" Description="Allows the software to have a Persian user interface." Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">PERSIAN_CAB_FOUND OR REMOVE</Condition>
-					<Feature Id="Persian_TE" Title="Persian_TE" Description="Persian user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
-						<Condition Level="3">PERSIAN_CAB_FOUND OR REMOVE</Condition>
+				<Feature Id="Persian" Title="Persian" Description="Allows the software to have a Persian user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1065 OR REMOVE</Condition>
+					<Feature Id="Persian_TE" Title="Persian_TE" Description="Persian user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+						<Condition Level="3">UserLanguageID = 1065 OR REMOVE</Condition>
 					</Feature>
 				</Feature>
 				<Feature Id="Portuguese" Title="Portuguese" Description="Allows the software to have a Portuguese user interface." Display="expand" Level="4" AllowAdvertise="no">

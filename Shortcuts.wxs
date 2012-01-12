@@ -50,13 +50,6 @@
 							<RemoveFolder Id='RF_ShortcutTechSupport' On='uninstall' />
 							<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutTechSupport' Type='integer' Value='1' KeyPath='yes' />
 						</Component>
-						<Component Id="ShortcutReadMe" Guid="7DF69E51-D516-49dc-99E6-898AC1B4972B">
-							<Shortcut Id="ShortcutReadMe" Directory="FieldWorksMenu" Name="View the ReadMe file" Target="[INSTALLDIR]ReadMe.rtf" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
-							<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-							<CreateFolder />
-							<RemoveFolder Id='RF_ShortcutReadMe' On='uninstall' />
-							<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutReadMe' Type='integer' Value='1' KeyPath='yes' />
-						</Component>
 						<Component Id="ShortcutUnicodeCharEditor" Guid="B30B1806-DDF4-4a9d-A97F-99A56CD28BC3">
 							<Shortcut Id="ShortcutUnicodeCharEditor" Directory="FieldWorksMenu" Name="Unicode Character Properties Editor" Target="[#UnicodeCharEditor.exe.ED2F0CDBF116745A2E1842A9C1FECEF0]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
 							<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
@@ -125,13 +118,6 @@
 								<RemoveFolder Id='RF_ShortcutFlex' On='uninstall' />
 								<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutFlex' Type='integer' Value='1' KeyPath='yes' />
 							</Component>
-							<Component Id="ShortcutFLExReadMe" Guid="7FC1B8CF-3AD4-49e0-8985-F419B81BAEB7">
-								<Shortcut Id="ShortcutFLExReadMe" Directory="FlexMenu" Name="View the Language Explorer ReadMe file" Target="[Language_Explorer.B71355FE0E5EE120A559B1F85C4634E1]FLExReadme.rtf" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Language_Explorer.B71355FE0E5EE120A559B1F85C4634E1" />
-								<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-								<CreateFolder />
-								<RemoveFolder Id='RF_ShortcutFLExReadMe' On='uninstall' />
-								<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutFLExReadMe' Type='integer' Value='1' KeyPath='yes' />
-							</Component>
 							<Component Id="ShortcutFlexHelp" Guid="2978CA87-346B-4d45-ADEE-E55E8CF729C1">
 								<Shortcut Id="ShortcutFlexHelp" Directory="FlexMenu" Name="Language Explorer Help" Target="[#FieldWorks_Language_Explorer_Help.chm.374D6604E98DD824DEEC00776D161628]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Helps.02B7932A250F90AC18E7695AC5B9577F" />
 								<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
@@ -154,13 +140,6 @@
 								<CreateFolder />
 								<RemoveFolder Id='RF_ShortcutTE' On='uninstall' />
 								<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutTE' Type='integer' Value='1' KeyPath='yes' />
-							</Component>
-							<Component Id="ShortcutTEReadMe" Guid="886BEBEB-7D1F-4427-A87F-A999ACFBFC73">
-								<Shortcut Id="ShortcutTEReadme" Directory="TEMenu" Name="View the Translation Editor ReadMe file" Target="[Translation_Editor.D7F5CFBB12B316C9F4BFEDB355EEF99B]TEReadMe.rtf" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Translation_Editor.D7F5CFBB12B316C9F4BFEDB355EEF99B" />
-								<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-								<CreateFolder />
-								<RemoveFolder Id='RF_ShortcutTEReadme' On='uninstall' />
-								<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutTEReadme' Type='integer' Value='1' KeyPath='yes' />
 							</Component>
 							<Component Id="ShortcutTEManual" Guid="8CB72BC1-2179-4ca2-8EC0-227D35B7068B">
 								<Shortcut Id="ShortcutTEManual" Directory="TEMenu" Name="Translation Editor Student Manual" Target="[#TE_Student_Manual.doc.66B2E433AF2051AEAFB6E3E958468218]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Training.5986AE16BC0F1F5B5EC81DE119F0B21B" />

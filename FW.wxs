@@ -24,7 +24,7 @@
 		<Media Id='12' Cabinet='Korean.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='13' Cabinet='Turkish.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='14' Cabinet='Vietnam.cab' EmbedCab='no' CompressionLevel='high'/>
-		<Media Id='15' Cabinet='Persian.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='15' Cabinet='Persian.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='16' Cabinet='Nepali.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='17' Cabinet='Bengali.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='18' Cabinet='Kinyarwa.cab' EmbedCab='no' CompressionLevel='high'/>
@@ -47,11 +47,6 @@
 		<Property Id="VIETNAMESE_CAB_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindVietnameseCabFile">
 				<FileSearch Name="Vietnam.cab"/>
-			</DirectorySearch>
-		</Property>
-		<Property Id="PERSIAN_CAB_FOUND">
-			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindPersianCabFile">
-				<FileSearch Name="Persian.cab"/>
 			</DirectorySearch>
 		</Property>
 		<Property Id="NEPALI_CAB_FOUND">
