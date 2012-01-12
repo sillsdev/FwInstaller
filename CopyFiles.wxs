@@ -4,25 +4,11 @@
 	<Property  Id='CopyFilesFragment' Value='1'/>
 		<DirectoryRef Id="TARGETDIR">
 			<Component Id="CopyLicenseTechReadme" Guid="AC8707A0-CDEF-4d0a-9907-335E5FBD0579">
-				<CopyFile Id="CopyReadme" SourceName="ReadMe.rtf" DestinationName="ReadMe.rtf" SourceProperty="SourceDir" DestinationDirectory="INSTALLDIR" Delete="no" />
-				<RemoveFile Id="RemoveReadMe" Directory="INSTALLDIR" Name="ReadMe.rtf" On="uninstall" />
 				<CopyFile Id="CopyTechSupport" SourceName="TechSupport.txt" SourceProperty="SourceDir" DestinationDirectory="INSTALLDIR" Delete="no" DestinationName="TechSupport.txt" />
 				<RemoveFile Id="RemoveTechSupport" Directory="INSTALLDIR" Name="TechSupport.txt"  On="uninstall" />
 				<CopyFile Id="CopyLicense" SourceName="License.rtf" DestinationName="License.rtf" SourceProperty="SourceDir" DestinationDirectory="INSTALLDIR" Delete="no" />
 				<RemoveFile Id="RemoveLicense" Directory="INSTALLDIR" Name="License.rtf" On="uninstall" />
 			</Component>
-	  <Component Id="CopyTEReadMe" Guid="2A3BC141-31C7-4ce8-B4E4-FF3A0CA12614">
-		<CopyFile Id="CopyTEReadMe" SourceName="TEReadMe.rtf" DestinationName="TEReadMe.rtf" SourceProperty="SourceDir" DestinationDirectory="Translation_Editor.D7F5CFBB12B316C9F4BFEDB355EEF99B" Delete="no" />
-		<RemoveFile Id="RemoveTEReadMe" Directory="Translation_Editor.D7F5CFBB12B316C9F4BFEDB355EEF99B" Name="TEReadMe.rtf" On="uninstall" />
-	  </Component>
-	  <Component Id="CopyFLExReadMe" Guid="9D3ACC02-F0F7-4a2c-9307-B535D77A4C00">
-		<CopyFile Id="CopyFLExReadMe" SourceName="FLExReadMe.rtf" SourceProperty="SourceDir" DestinationDirectory="Language_Explorer.B71355FE0E5EE120A559B1F85C4634E1" Delete="no" DestinationName="FLExReadMe.rtf" />
-		<RemoveFile Id="RemoveFLExReadMe" Directory="Language_Explorer.B71355FE0E5EE120A559B1F85C4634E1" Name="FLExReadMe.rtf" On="uninstall" />
-	  </Component>
-	  <Component Id="CopyFlexWhatsNew" Guid="64376975-55AD-4696-9261-39CAB588EEBF">
-		<CopyFile Id="CopyFlexWhatsNew" SourceName="WhatsNew.htm" DestinationName="WhatsNew.htm" SourceProperty="SourceDir" DestinationDirectory="Language_Explorer.B71355FE0E5EE120A559B1F85C4634E1" Delete="no" />
-		<RemoveFile Id="RemoveFlexWhatsNew" Directory="Language_Explorer.B71355FE0E5EE120A559B1F85C4634E1" Name="WhatsNew.htm" On="uninstall" />
-	  </Component>
 		</DirectoryRef>
 	</Fragment>
 </Wix>
