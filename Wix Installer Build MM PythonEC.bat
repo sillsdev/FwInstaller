@@ -1,5 +1,5 @@
 del PythonEC.mmp.wxs.log
 del WixLinkPythonEC.log
 ProcessWixMMs.js PythonEC.mm.wxs
-candle -nologo -sw1044 PythonEC.mmp.wxs >PythonEC.mmp.wxs.log
-light -nologo PythonEC.mmp.wixobj -out PythonEC.msm >WixLinkPythonEC.log
+"%WIX%bin\candle" -nologo PythonEC.mmp.wxs >PythonEC.mmp.wxs.log
+"%WIX%bin\light" -nologo -sice:ICE03 PythonEC.mmp.wixobj -out PythonEC.msm >WixLinkPythonEC.log

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
-	<Module Id="SILICU40" Guid="F001DE50-84CE-44C8-A065-297102C05A95" Language="0" Version="4.0">
-		<Package Id="????????-????-????-????-????????????" Keywords="MergeModule, MSI, Database, ICU" Description="SIL's ICU 4.0 Installation" Comments="Common installer module for SIL's version 4.0 of ICU" Manufacturer="SIL International" InstallerVersion="110" Platforms="Intel" Languages="0" Compressed="yes" SummaryCodepage="1252"/>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<Module Id="SILICU40" Language="0" Version="4.0">
+		<Package Id="F001DE50-84CE-44C8-A065-297102C05A95" Keywords="MergeModule, MSI, Database, ICU" Description="SIL's ICU 4.0 Installation" Comments="Common installer module for SIL's version 4.0 of ICU" Manufacturer="SIL International" InstallerVersion="110" Platform="x86" Languages="0" SummaryCodepage="1252"/>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Component Id="RegisterICUFolders" Guid="E020C452-D07A-4BA6-B7D0-DD2E0A19124D">
-				<Registry Id="regIcu40DataDir" Root="HKLM" Key="Software\SIL" Name="Icu40DataDir" Type="string" KeyPath="yes" Value="[icudt40l]"/>
-				<Registry Id="regIcu40Dir" Root="HKLM" Key="Software\SIL" Name="Icu40Dir" Type="string" Value="[Icu40]"/>
+				<RegistryKey Root="HKLM" Key="Software\SIL" Action="createAndRemoveOnUninstall" >
+					<RegistryValue Name="Icu40DataDir" Type="string" KeyPath="yes" Value="[icudt40l]" />
+					<RegistryValue Name="Icu40Dir" Type="string" Value="[Icu40]"/>
+				</RegistryKey>
 			</Component>
 			<Directory Id="CommonFilesFolder" Name="Common">
 				<Directory Id="SIL" Name="SIL">
@@ -37,7 +39,7 @@
 					<Directory Id="Icu40" Name="Icu40">
 						<Component Id="CreateIcuFolder" Guid="7B52B0E2-0BB1-4A0E-BEFA-AF26878C3BF1">
 							<CreateFolder>
-								<Permission Extended="yes" User="AuthenticatedUser" GenericAll="yes" />
+								<util:PermissionEx User="AuthenticatedUser" GenericAll="yes" />
 							</CreateFolder>
 						</Component>
 						<Directory Id="data" Name="data">
@@ -52,7 +54,7 @@
 									<File Id="en_US.txt" Name="en_US.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\brkitr\en_US.txt"/>
 								</Component>
 								<Component Id="en_US_POSIX.txt" Guid="5E54F3C3-278A-4D54-A1E0-C61AF8375FED">
-									<File Id="en_US_POSIX.txt" Name="EN_US_~1.TXT" LongName="en_US_POSIX.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\brkitr\en_US_POSIX.txt"/>
+									<File Id="en_US_POSIX.txt" Name="en_US_POSIX.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\brkitr\en_US_POSIX.txt"/>
 								</Component>
 								<Component Id="ja.txt" Guid="FB1A4801-AEAC-4E9B-846E-CB78920275A8">
 									<File Id="ja.txt" Name="ja.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\brkitr\ja.txt"/>
@@ -61,7 +63,7 @@
 									<File Id="line.txt" Name="line.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\brkitr\line.txt"/>
 								</Component>
 								<Component Id="res_index.txt" Guid="0446FF49-D50C-4B07-A056-03F5676F52F0">
-									<File Id="res_index.txt" Name="RES_IN~1.TXT" LongName="res_index.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\brkitr\res_index.txt"/>
+									<File Id="res_index.txt" Name="res_index.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\brkitr\res_index.txt"/>
 								</Component>
 								<Component Id="root.txt" Guid="09B7B688-8F4C-49DB-897D-BF8AF17587D8">
 									<File Id="root.txt" Name="root.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\brkitr\root.txt"/>
@@ -82,7 +84,7 @@
 									<File Id="word_ja.txt" Name="word_ja.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\brkitr\word_ja.txt"/>
 								</Component>
 								<Component Id="word_POSIX.txt" Guid="39CEE4F6-60D0-4E8C-BDFF-460C4BEF75BE">
-									<File Id="word_POSIX.txt" Name="WORD_P~1.TXT" LongName="word_POSIX.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\brkitr\word_POSIX.txt"/>
+									<File Id="word_POSIX.txt" Name="word_POSIX.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\brkitr\word_POSIX.txt"/>
 								</Component>
 							</Directory>
 							<Directory Id="coll" Name="coll">
@@ -207,7 +209,7 @@
 									<File Id="de_LU.txt" Name="de_LU.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\de_LU.txt"/>
 								</Component>
 								<Component Id="de__PHONEBOOK.txt" Guid="087802AA-03F4-46DA-9405-2A75625328FB">
-									<File Id="de__PHONEBOOK.txt" Name="DE__PH~1.TXT" LongName="de__PHONEBOOK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\de__PHONEBOOK.txt"/>
+									<File Id="de__PHONEBOOK.txt" Name="de__PHONEBOOK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\de__PHONEBOOK.txt"/>
 								</Component>
 								<Component Id="el.txt" Guid="3BF4A695-DCCB-42F4-A492-A1FC9A1A54D5">
 									<File Id="el.txt" Name="el.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\el.txt"/>
@@ -258,7 +260,7 @@
 									<File Id="en_US.txt2" Name="en_US.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\en_US.txt"/>
 								</Component>
 								<Component Id="en_US_POSIX.txt2" Guid="C58146DE-4BB0-43B9-908A-57B030856D31">
-									<File Id="en_US_POSIX.txt2" Name="EN_US_~1.TXT" LongName="en_US_POSIX.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\en_US_POSIX.txt"/>
+									<File Id="en_US_POSIX.txt2" Name="en_US_POSIX.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\en_US_POSIX.txt"/>
 								</Component>
 								<Component Id="en_VI.txt" Guid="E4D0F139-9669-4013-AFBE-6A434600CD38">
 									<File Id="en_VI.txt" Name="en_VI.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\en_VI.txt"/>
@@ -339,7 +341,7 @@
 									<File Id="es_VE.txt" Name="es_VE.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\es_VE.txt"/>
 								</Component>
 								<Component Id="es__TRADITIONAL.txt" Guid="2BEED6EC-E46F-478A-AE6B-D259EB88C7A4">
-									<File Id="es__TRADITIONAL.txt" Name="ES__TR~1.TXT" LongName="es__TRADITIONAL.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\es__TRADITIONAL.txt"/>
+									<File Id="es__TRADITIONAL.txt" Name="es__TRADITIONAL.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\es__TRADITIONAL.txt"/>
 								</Component>
 								<Component Id="et.txt" Guid="697C2883-C7A1-4B3E-9D99-5EF13940D5E9">
 									<File Id="et.txt" Name="et.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\et.txt"/>
@@ -417,7 +419,7 @@
 									<File Id="hi_IN.txt" Name="hi_IN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\hi_IN.txt"/>
 								</Component>
 								<Component Id="hi__DIRECT.txt" Guid="50D9AF5B-4389-4CAF-B639-25C9D48C9372">
-									<File Id="hi__DIRECT.txt" Name="HI__DI~1.TXT" LongName="hi__DIRECT.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\hi__DIRECT.txt"/>
+									<File Id="hi__DIRECT.txt" Name="hi__DIRECT.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\hi__DIRECT.txt"/>
 								</Component>
 								<Component Id="hr.txt" Guid="23B15F3D-7EF1-4730-8DB1-9DDC229FF123">
 									<File Id="hr.txt" Name="hr.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\hr.txt"/>
@@ -588,13 +590,13 @@
 									<File Id="pa_Arab.txt" Name="pa_Arab.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\pa_Arab.txt"/>
 								</Component>
 								<Component Id="pa_Arab_PK.txt" Guid="F6D2B093-8F8D-4685-936D-98A29FB9C998">
-									<File Id="pa_Arab_PK.txt" Name="PA_ARA~1.TXT" LongName="pa_Arab_PK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\pa_Arab_PK.txt"/>
+									<File Id="pa_Arab_PK.txt" Name="pa_Arab_PK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\pa_Arab_PK.txt"/>
 								</Component>
 								<Component Id="pa_Guru.txt" Guid="A11710D5-EA42-454A-A8A7-48486B0E0244">
 									<File Id="pa_Guru.txt" Name="pa_Guru.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\pa_Guru.txt"/>
 								</Component>
 								<Component Id="pa_Guru_IN.txt" Guid="DEA42EB9-B99B-48F9-92DC-FD930555E342">
-									<File Id="pa_Guru_IN.txt" Name="PA_GUR~1.TXT" LongName="pa_Guru_IN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\pa_Guru_IN.txt"/>
+									<File Id="pa_Guru_IN.txt" Name="pa_Guru_IN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\pa_Guru_IN.txt"/>
 								</Component>
 								<Component Id="pl.txt" Guid="2A7C77BA-D444-4EFD-A4C3-E747F9EC023D">
 									<File Id="pl.txt" Name="pl.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\pl.txt"/>
@@ -618,7 +620,7 @@
 									<File Id="pt_PT.txt" Name="pt_PT.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\pt_PT.txt"/>
 								</Component>
 								<Component Id="res_index.txt2" Guid="48B9B2F1-31E9-4D4D-8325-79C4C0BA6C27">
-									<File Id="res_index.txt2" Name="RES_IN~1.TXT" LongName="res_index.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\res_index.txt"/>
+									<File Id="res_index.txt2" Name="res_index.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\res_index.txt"/>
 								</Component>
 								<Component Id="ro.txt" Guid="9FE413D8-1BE8-482F-9177-33266A6F45D7">
 									<File Id="ro.txt" Name="ro.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\ro.txt"/>
@@ -675,25 +677,25 @@
 									<File Id="sr_Cyrl.txt" Name="sr_Cyrl.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Cyrl.txt"/>
 								</Component>
 								<Component Id="sr_Cyrl_BA.txt" Guid="C852CF2C-E6D4-4EBC-BBC0-55C2DA35F85A">
-									<File Id="sr_Cyrl_BA.txt" Name="SR_CYR~1.TXT" LongName="sr_Cyrl_BA.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Cyrl_BA.txt"/>
+									<File Id="sr_Cyrl_BA.txt" Name="sr_Cyrl_BA.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Cyrl_BA.txt"/>
 								</Component>
 								<Component Id="sr_Cyrl_ME.txt" Guid="BBE31D9F-0A02-4AE3-836B-0424AA0A9581">
-									<File Id="sr_Cyrl_ME.txt" Name="SR_CYR~2.TXT" LongName="sr_Cyrl_ME.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Cyrl_ME.txt"/>
+									<File Id="sr_Cyrl_ME.txt" Name="sr_Cyrl_ME.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Cyrl_ME.txt"/>
 								</Component>
 								<Component Id="sr_Cyrl_RS.txt" Guid="62A31A24-297E-4D61-A018-2709BC1D6FB9">
-									<File Id="sr_Cyrl_RS.txt" Name="SR_CYR~3.TXT" LongName="sr_Cyrl_RS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Cyrl_RS.txt"/>
+									<File Id="sr_Cyrl_RS.txt" Name="sr_Cyrl_RS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Cyrl_RS.txt"/>
 								</Component>
 								<Component Id="sr_Latn.txt" Guid="AB6571DC-DE24-44E3-B079-3BCC49C28CFC">
 									<File Id="sr_Latn.txt" Name="sr_Latn.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Latn.txt"/>
 								</Component>
 								<Component Id="sr_Latn_BA.txt" Guid="019C439B-01C6-4EC6-B890-451DEB8A301E">
-									<File Id="sr_Latn_BA.txt" Name="SR_LAT~1.TXT" LongName="sr_Latn_BA.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Latn_BA.txt"/>
+									<File Id="sr_Latn_BA.txt" Name="sr_Latn_BA.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Latn_BA.txt"/>
 								</Component>
 								<Component Id="sr_Latn_ME.txt" Guid="1147D592-50ED-4CF9-ACA0-91F8F516CE68">
-									<File Id="sr_Latn_ME.txt" Name="SR_LAT~2.TXT" LongName="sr_Latn_ME.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Latn_ME.txt"/>
+									<File Id="sr_Latn_ME.txt" Name="sr_Latn_ME.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Latn_ME.txt"/>
 								</Component>
 								<Component Id="sr_Latn_RS.txt" Guid="DABC3010-4E65-480E-A892-1B2F2435481E">
-									<File Id="sr_Latn_RS.txt" Name="SR_LAT~3.TXT" LongName="sr_Latn_RS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Latn_RS.txt"/>
+									<File Id="sr_Latn_RS.txt" Name="sr_Latn_RS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_Latn_RS.txt"/>
 								</Component>
 								<Component Id="sr_ME.txt" Guid="108E0C9F-CA99-4BB6-8710-5A8FE23FFD40">
 									<File Id="sr_ME.txt" Name="sr_ME.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\sr_ME.txt"/>
@@ -768,22 +770,22 @@
 									<File Id="zh_Hans.txt" Name="zh_Hans.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hans.txt"/>
 								</Component>
 								<Component Id="zh_Hans_CN.txt" Guid="BC28F1CE-9146-4313-9FAF-F8868478D535">
-									<File Id="zh_Hans_CN.txt" Name="ZH_HAN~1.TXT" LongName="zh_Hans_CN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hans_CN.txt"/>
+									<File Id="zh_Hans_CN.txt" Name="zh_Hans_CN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hans_CN.txt"/>
 								</Component>
 								<Component Id="zh_Hans_SG.txt" Guid="E48C36B3-1665-498E-9D8F-69FF1F0CDA8C">
-									<File Id="zh_Hans_SG.txt" Name="ZH_HAN~2.TXT" LongName="zh_Hans_SG.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hans_SG.txt"/>
+									<File Id="zh_Hans_SG.txt" Name="zh_Hans_SG.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hans_SG.txt"/>
 								</Component>
 								<Component Id="zh_Hant.txt" Guid="7E44CBEB-8762-4CB0-86B7-FCC4CCB11694">
 									<File Id="zh_Hant.txt" Name="zh_Hant.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hant.txt"/>
 								</Component>
 								<Component Id="zh_Hant_HK.txt" Guid="5BC0D67D-1C12-49C1-A3C7-567057A5F019">
-									<File Id="zh_Hant_HK.txt" Name="ZH_HAN~3.TXT" LongName="zh_Hant_HK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hant_HK.txt"/>
+									<File Id="zh_Hant_HK.txt" Name="zh_Hant_HK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hant_HK.txt"/>
 								</Component>
 								<Component Id="zh_Hant_MO.txt" Guid="F465FCC3-8718-4264-9555-363CE428FBE6">
-									<File Id="zh_Hant_MO.txt" Name="ZH_HAN~4.TXT" LongName="zh_Hant_MO.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hant_MO.txt"/>
+									<File Id="zh_Hant_MO.txt" Name="zh_Hant_MO.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hant_MO.txt"/>
 								</Component>
 								<Component Id="zh_Hant_TW.txt" Guid="0A2FF2AA-EE6B-4746-BFD5-43F40BF9220F">
-									<File Id="zh_Hant_TW.txt" Name="ZHA4ED~1.TXT" LongName="zh_Hant_TW.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hant_TW.txt"/>
+									<File Id="zh_Hant_TW.txt" Name="zh_Hant_TW.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_Hant_TW.txt"/>
 								</Component>
 								<Component Id="zh_HK.txt" Guid="DF738742-884E-401F-9217-038A06E7A94E">
 									<File Id="zh_HK.txt" Name="zh_HK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_HK.txt"/>
@@ -798,10 +800,10 @@
 									<File Id="zh_TW.txt" Name="zh_TW.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_TW.txt"/>
 								</Component>
 								<Component Id="zh_TW_STROKE.txt" Guid="D0F96B69-42E2-4FC4-B5DD-D7844DF17658">
-									<File Id="zh_TW_STROKE.txt" Name="ZH_TW_~1.TXT" LongName="zh_TW_STROKE.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_TW_STROKE.txt"/>
+									<File Id="zh_TW_STROKE.txt" Name="zh_TW_STROKE.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh_TW_STROKE.txt"/>
 								</Component>
 								<Component Id="zh__PINYIN.txt" Guid="FCA9FDF9-05F8-4835-AA7A-A448B9A4885F">
-									<File Id="zh__PINYIN.txt" Name="ZH__PI~1.TXT" LongName="zh__PINYIN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh__PINYIN.txt"/>
+									<File Id="zh__PINYIN.txt" Name="zh__PINYIN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\coll\zh__PINYIN.txt"/>
 								</Component>
 							</Directory>
 							<Directory Id="locales" Name="locales">
@@ -890,13 +892,13 @@
 									<File Id="az_Cyrl.txt" Name="az_Cyrl.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\az_Cyrl.txt"/>
 								</Component>
 								<Component Id="az_Cyrl_AZ.txt" Guid="CB8A7F4F-4A8C-40F9-96AB-DB9C0346DE28">
-									<File Id="az_Cyrl_AZ.txt" Name="AZ_CYR~1.TXT" LongName="az_Cyrl_AZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\az_Cyrl_AZ.txt"/>
+									<File Id="az_Cyrl_AZ.txt" Name="az_Cyrl_AZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\az_Cyrl_AZ.txt"/>
 								</Component>
 								<Component Id="az_Latn.txt" Guid="71048C13-EB0B-41F3-947C-01EBE645786B">
 									<File Id="az_Latn.txt" Name="az_Latn.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\az_Latn.txt"/>
 								</Component>
 								<Component Id="az_Latn_AZ.txt" Guid="071223D1-07D1-4AB2-ACBB-6F2F4E5649CA">
-									<File Id="az_Latn_AZ.txt" Name="AZ_LAT~1.TXT" LongName="az_Latn_AZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\az_Latn_AZ.txt"/>
+									<File Id="az_Latn_AZ.txt" Name="az_Latn_AZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\az_Latn_AZ.txt"/>
 								</Component>
 								<Component Id="be.txt2" Guid="C2A80398-7B8C-4495-B21A-FFC4C55CA300">
 									<File Id="be.txt2" Name="be.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\be.txt"/>
@@ -1037,7 +1039,7 @@
 									<File Id="en_US.txt3" Name="en_US.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\en_US.txt"/>
 								</Component>
 								<Component Id="en_US_POSIX.txt3" Guid="F7B8AC3E-0CAE-47A6-8848-512FF28CF0FB">
-									<File Id="en_US_POSIX.txt3" Name="EN_US_~1.TXT" LongName="en_US_POSIX.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\en_US_POSIX.txt"/>
+									<File Id="en_US_POSIX.txt3" Name="en_US_POSIX.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\en_US_POSIX.txt"/>
 								</Component>
 								<Component Id="en_VI.txt2" Guid="02472BF9-AD17-4FD2-B1B8-19C6D3AB9F8F">
 									<File Id="en_VI.txt2" Name="en_VI.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\en_VI.txt"/>
@@ -1208,7 +1210,7 @@
 									<File Id="ha_Latn.txt" Name="ha_Latn.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\ha_Latn.txt"/>
 								</Component>
 								<Component Id="ha_Latn_NG.txt" Guid="9062D364-52E2-4040-8B8F-C331F1364BEB">
-									<File Id="ha_Latn_NG.txt" Name="HA_LAT~1.TXT" LongName="ha_Latn_NG.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\ha_Latn_NG.txt"/>
+									<File Id="ha_Latn_NG.txt" Name="ha_Latn_NG.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\ha_Latn_NG.txt"/>
 								</Component>
 								<Component Id="ha_NG.txt" Guid="F86ECB97-4B46-4B81-9D53-28B89614CCC0">
 									<File Id="ha_NG.txt" Name="ha_NG.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\ha_NG.txt"/>
@@ -1244,7 +1246,7 @@
 									<File Id="hy_AM.txt" Name="hy_AM.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\hy_AM.txt"/>
 								</Component>
 								<Component Id="hy_AM_REVISED.txt" Guid="7738C5C9-B4B6-49B9-B917-9661C3D83F28">
-									<File Id="hy_AM_REVISED.txt" Name="HY_AM_~1.TXT" LongName="hy_AM_REVISED.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\hy_AM_REVISED.txt"/>
+									<File Id="hy_AM_REVISED.txt" Name="hy_AM_REVISED.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\hy_AM_REVISED.txt"/>
 								</Component>
 								<Component Id="id.txt2" Guid="50955B01-D486-4EB1-959A-35F4995FA4BF">
 									<File Id="id.txt2" Name="id.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\id.txt"/>
@@ -1292,7 +1294,7 @@
 									<File Id="ja_JP.txt2" Name="ja_JP.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\ja_JP.txt"/>
 								</Component>
 								<Component Id="ja_JP_TRADITIONAL.txt" Guid="83D83E36-60E6-425A-8EE5-66344A6D1A53">
-									<File Id="ja_JP_TRADITIONAL.txt" Name="JA_JP_~1.TXT" LongName="ja_JP_TRADITIONAL.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\ja_JP_TRADITIONAL.txt"/>
+									<File Id="ja_JP_TRADITIONAL.txt" Name="ja_JP_TRADITIONAL.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\ja_JP_TRADITIONAL.txt"/>
 								</Component>
 								<Component Id="ka.txt" Guid="AEF5321A-BE4F-4B3E-BE94-D57F147CB634">
 									<File Id="ka.txt" Name="ka.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\ka.txt"/>
@@ -1307,7 +1309,7 @@
 									<File Id="kk_Cyrl.txt" Name="kk_Cyrl.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\kk_Cyrl.txt"/>
 								</Component>
 								<Component Id="kk_Cyrl_KZ.txt" Guid="CF967758-E82F-43AB-ACEB-86129A3D44A4">
-									<File Id="kk_Cyrl_KZ.txt" Name="KK_CYR~1.TXT" LongName="kk_Cyrl_KZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\kk_Cyrl_KZ.txt"/>
+									<File Id="kk_Cyrl_KZ.txt" Name="kk_Cyrl_KZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\kk_Cyrl_KZ.txt"/>
 								</Component>
 								<Component Id="kk_KZ.txt2" Guid="A8C62642-5C23-416C-A073-363137D7335C">
 									<File Id="kk_KZ.txt2" Name="kk_KZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\kk_KZ.txt"/>
@@ -1454,13 +1456,13 @@
 									<File Id="pa_Arab.txt2" Name="pa_Arab.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\pa_Arab.txt"/>
 								</Component>
 								<Component Id="pa_Arab_PK.txt2" Guid="1A40C35C-D174-43AD-BF4D-5A1D1FDDAC2F">
-									<File Id="pa_Arab_PK.txt2" Name="PA_ARA~1.TXT" LongName="pa_Arab_PK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\pa_Arab_PK.txt"/>
+									<File Id="pa_Arab_PK.txt2" Name="pa_Arab_PK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\pa_Arab_PK.txt"/>
 								</Component>
 								<Component Id="pa_Guru.txt2" Guid="4900361F-07AF-46CC-94E0-E31600772E33">
 									<File Id="pa_Guru.txt2" Name="pa_Guru.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\pa_Guru.txt"/>
 								</Component>
 								<Component Id="pa_Guru_IN.txt2" Guid="11DBF0F2-349E-4501-875E-A749B9F25174">
-									<File Id="pa_Guru_IN.txt2" Name="PA_GUR~1.TXT" LongName="pa_Guru_IN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\pa_Guru_IN.txt"/>
+									<File Id="pa_Guru_IN.txt2" Name="pa_Guru_IN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\pa_Guru_IN.txt"/>
 								</Component>
 								<Component Id="pa_IN.txt" Guid="EB87DD72-8E91-4109-BEEF-866E6E22DF6F">
 									<File Id="pa_IN.txt" Name="pa_IN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\pa_IN.txt"/>
@@ -1490,7 +1492,7 @@
 									<File Id="pt_PT.txt2" Name="pt_PT.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\pt_PT.txt"/>
 								</Component>
 								<Component Id="res_index.txt3" Guid="BE5F91C9-2DFA-47C4-ADBE-3A333961AA20">
-									<File Id="res_index.txt3" Name="RES_IN~1.TXT" LongName="res_index.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\res_index.txt"/>
+									<File Id="res_index.txt3" Name="res_index.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\res_index.txt"/>
 								</Component>
 								<Component Id="ro.txt2" Guid="55AC3A8C-9915-4B4F-99B7-3C386F6D226C">
 									<File Id="ro.txt2" Name="ro.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\ro.txt"/>
@@ -1574,37 +1576,37 @@
 									<File Id="sr_Cyrl.txt2" Name="sr_Cyrl.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Cyrl.txt"/>
 								</Component>
 								<Component Id="sr_Cyrl_BA.txt2" Guid="515D6C73-DCAE-489F-A35B-346BB2E40820">
-									<File Id="sr_Cyrl_BA.txt2" Name="SR_CYR~1.TXT" LongName="sr_Cyrl_BA.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Cyrl_BA.txt"/>
+									<File Id="sr_Cyrl_BA.txt2" Name="sr_Cyrl_BA.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Cyrl_BA.txt"/>
 								</Component>
 								<Component Id="sr_Cyrl_CS.txt" Guid="67405890-2C1E-4EA5-AC3A-9C3811C61261">
-									<File Id="sr_Cyrl_CS.txt" Name="SR_CYR~2.TXT" LongName="sr_Cyrl_CS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Cyrl_CS.txt"/>
+									<File Id="sr_Cyrl_CS.txt" Name="sr_Cyrl_CS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Cyrl_CS.txt"/>
 								</Component>
 								<Component Id="sr_Cyrl_ME.txt2" Guid="AAC8DFFA-D947-41E9-AE53-B0B7C1C01C65">
-									<File Id="sr_Cyrl_ME.txt2" Name="SR_CYR~3.TXT" LongName="sr_Cyrl_ME.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Cyrl_ME.txt"/>
+									<File Id="sr_Cyrl_ME.txt2" Name="sr_Cyrl_ME.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Cyrl_ME.txt"/>
 								</Component>
 								<Component Id="sr_Cyrl_RS.txt2" Guid="86D496ED-6825-4BDB-91F3-86A686BC90A4">
-									<File Id="sr_Cyrl_RS.txt2" Name="SR_CYR~4.TXT" LongName="sr_Cyrl_RS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Cyrl_RS.txt"/>
+									<File Id="sr_Cyrl_RS.txt2" Name="sr_Cyrl_RS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Cyrl_RS.txt"/>
 								</Component>
 								<Component Id="sr_Cyrl_YU.txt" Guid="C6226338-07CA-47F6-ADB4-F410404C375C">
-									<File Id="sr_Cyrl_YU.txt" Name="SREEF9~1.TXT" LongName="sr_Cyrl_YU.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Cyrl_YU.txt"/>
+									<File Id="sr_Cyrl_YU.txt" Name="sr_Cyrl_YU.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Cyrl_YU.txt"/>
 								</Component>
 								<Component Id="sr_Latn.txt2" Guid="37814668-1348-4DC6-8553-1F310777B241">
 									<File Id="sr_Latn.txt2" Name="sr_Latn.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Latn.txt"/>
 								</Component>
 								<Component Id="sr_Latn_BA.txt2" Guid="812CA49F-130C-436C-8C7B-86D2110C997A">
-									<File Id="sr_Latn_BA.txt2" Name="SR_LAT~1.TXT" LongName="sr_Latn_BA.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Latn_BA.txt"/>
+									<File Id="sr_Latn_BA.txt2" Name="sr_Latn_BA.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Latn_BA.txt"/>
 								</Component>
 								<Component Id="sr_Latn_CS.txt" Guid="AE99977B-05DA-4349-8913-A172A391F933">
-									<File Id="sr_Latn_CS.txt" Name="SR_LAT~2.TXT" LongName="sr_Latn_CS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Latn_CS.txt"/>
+									<File Id="sr_Latn_CS.txt" Name="sr_Latn_CS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Latn_CS.txt"/>
 								</Component>
 								<Component Id="sr_Latn_ME.txt2" Guid="22FA7E75-E424-4138-94D4-18E6439A3B2F">
-									<File Id="sr_Latn_ME.txt2" Name="SR_LAT~3.TXT" LongName="sr_Latn_ME.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Latn_ME.txt"/>
+									<File Id="sr_Latn_ME.txt2" Name="sr_Latn_ME.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Latn_ME.txt"/>
 								</Component>
 								<Component Id="sr_Latn_RS.txt2" Guid="F56F82BB-3102-4DF8-B858-035B6C692694">
-									<File Id="sr_Latn_RS.txt2" Name="SR_LAT~4.TXT" LongName="sr_Latn_RS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Latn_RS.txt"/>
+									<File Id="sr_Latn_RS.txt2" Name="sr_Latn_RS.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Latn_RS.txt"/>
 								</Component>
 								<Component Id="sr_Latn_YU.txt" Guid="81EBFC48-4BDB-4C70-9C7E-9690AFCF9B6C">
-									<File Id="sr_Latn_YU.txt" Name="SREA63~1.TXT" LongName="sr_Latn_YU.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Latn_YU.txt"/>
+									<File Id="sr_Latn_YU.txt" Name="sr_Latn_YU.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_Latn_YU.txt"/>
 								</Component>
 								<Component Id="sr_ME.txt2" Guid="FB429B6C-ED54-48F8-93C8-8947578D650A">
 									<File Id="sr_ME.txt2" Name="sr_ME.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\sr_ME.txt"/>
@@ -1652,7 +1654,7 @@
 									<File Id="th_TH.txt2" Name="th_TH.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\th_TH.txt"/>
 								</Component>
 								<Component Id="th_TH_TRADITIONAL.txt" Guid="22ECF5C3-97B8-4F72-BF86-E0F160A6533E">
-									<File Id="th_TH_TRADITIONAL.txt" Name="TH_TH_~1.TXT" LongName="th_TH_TRADITIONAL.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\th_TH_TRADITIONAL.txt"/>
+									<File Id="th_TH_TRADITIONAL.txt" Name="th_TH_TRADITIONAL.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\th_TH_TRADITIONAL.txt"/>
 								</Component>
 								<Component Id="ti.txt" Guid="91F29C43-62A0-4140-8F91-754E00751705">
 									<File Id="ti.txt" Name="ti.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\ti.txt"/>
@@ -1694,19 +1696,19 @@
 									<File Id="uz_Arab.txt" Name="uz_Arab.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\uz_Arab.txt"/>
 								</Component>
 								<Component Id="uz_Arab_AF.txt" Guid="7EC3ABA5-7F61-4C1D-842C-01D891CAA4FF">
-									<File Id="uz_Arab_AF.txt" Name="UZ_ARA~1.TXT" LongName="uz_Arab_AF.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\uz_Arab_AF.txt"/>
+									<File Id="uz_Arab_AF.txt" Name="uz_Arab_AF.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\uz_Arab_AF.txt"/>
 								</Component>
 								<Component Id="uz_Cyrl.txt" Guid="4EDE0947-B27D-4FBE-B82C-FBE78A1BA338">
 									<File Id="uz_Cyrl.txt" Name="uz_Cyrl.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\uz_Cyrl.txt"/>
 								</Component>
 								<Component Id="uz_Cyrl_UZ.txt" Guid="EB2C1606-4132-4571-AD43-873FFAA1BB7A">
-									<File Id="uz_Cyrl_UZ.txt" Name="UZ_CYR~1.TXT" LongName="uz_Cyrl_UZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\uz_Cyrl_UZ.txt"/>
+									<File Id="uz_Cyrl_UZ.txt" Name="uz_Cyrl_UZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\uz_Cyrl_UZ.txt"/>
 								</Component>
 								<Component Id="uz_Latn.txt" Guid="7BE4A721-84BF-4CBB-ADB6-8164FFBFD01D">
 									<File Id="uz_Latn.txt" Name="uz_Latn.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\uz_Latn.txt"/>
 								</Component>
 								<Component Id="uz_Latn_UZ.txt" Guid="709C186B-FB6C-4F39-A1BD-EB1F1548702E">
-									<File Id="uz_Latn_UZ.txt" Name="UZ_LAT~1.TXT" LongName="uz_Latn_UZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\uz_Latn_UZ.txt"/>
+									<File Id="uz_Latn_UZ.txt" Name="uz_Latn_UZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\uz_Latn_UZ.txt"/>
 								</Component>
 								<Component Id="uz_UZ.txt" Guid="8C44D4F7-D159-447C-8945-E10C96342DC5">
 									<File Id="uz_UZ.txt" Name="uz_UZ.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\uz_UZ.txt"/>
@@ -1727,28 +1729,28 @@
 									<File Id="zh_Hans.txt2" Name="zh_Hans.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hans.txt"/>
 								</Component>
 								<Component Id="zh_Hans_CN.txt2" Guid="0777C1E6-D6D6-4830-B114-3FA551D6F04B">
-									<File Id="zh_Hans_CN.txt2" Name="ZH_HAN~1.TXT" LongName="zh_Hans_CN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hans_CN.txt"/>
+									<File Id="zh_Hans_CN.txt2" Name="zh_Hans_CN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hans_CN.txt"/>
 								</Component>
 								<Component Id="zh_Hans_HK.txt" Guid="0AAAA847-FF16-4038-9AA8-7A6321619832">
-									<File Id="zh_Hans_HK.txt" Name="ZH_HAN~2.TXT" LongName="zh_Hans_HK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hans_HK.txt"/>
+									<File Id="zh_Hans_HK.txt" Name="zh_Hans_HK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hans_HK.txt"/>
 								</Component>
 								<Component Id="zh_Hans_MO.txt" Guid="51C6B6D5-BB8D-482C-B3FD-3D12CBED1B08">
-									<File Id="zh_Hans_MO.txt" Name="ZH_HAN~3.TXT" LongName="zh_Hans_MO.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hans_MO.txt"/>
+									<File Id="zh_Hans_MO.txt" Name="zh_Hans_MO.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hans_MO.txt"/>
 								</Component>
 								<Component Id="zh_Hans_SG.txt2" Guid="6DCF3A68-6D96-4C32-9303-34493780CA34">
-									<File Id="zh_Hans_SG.txt2" Name="ZH_HAN~4.TXT" LongName="zh_Hans_SG.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hans_SG.txt"/>
+									<File Id="zh_Hans_SG.txt2" Name="zh_Hans_SG.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hans_SG.txt"/>
 								</Component>
 								<Component Id="zh_Hant.txt2" Guid="72547825-61E6-4F66-9747-E793B47792F4">
 									<File Id="zh_Hant.txt2" Name="zh_Hant.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hant.txt"/>
 								</Component>
 								<Component Id="zh_Hant_HK.txt2" Guid="C9D5D763-CB91-4D61-B914-42F458DD597F">
-									<File Id="zh_Hant_HK.txt2" Name="ZH74BD~1.TXT" LongName="zh_Hant_HK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hant_HK.txt"/>
+									<File Id="zh_Hant_HK.txt2" Name="zh_Hant_HK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hant_HK.txt"/>
 								</Component>
 								<Component Id="zh_Hant_MO.txt2" Guid="9A4D1E9B-5247-4A1C-8642-846EFC3C391D">
-									<File Id="zh_Hant_MO.txt2" Name="ZH88CD~1.TXT" LongName="zh_Hant_MO.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hant_MO.txt"/>
+									<File Id="zh_Hant_MO.txt2" Name="zh_Hant_MO.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hant_MO.txt"/>
 								</Component>
 								<Component Id="zh_Hant_TW.txt2" Guid="FBF58E81-3991-417E-914F-6180868C16A0">
-									<File Id="zh_Hant_TW.txt2" Name="ZHA4ED~1.TXT" LongName="zh_Hant_TW.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hant_TW.txt"/>
+									<File Id="zh_Hant_TW.txt2" Name="zh_Hant_TW.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_Hant_TW.txt"/>
 								</Component>
 								<Component Id="zh_HK.txt2" Guid="C7CA0649-51E4-44F6-AB0A-7D2B75805C4D">
 									<File Id="zh_HK.txt2" Name="zh_HK.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\locales\zh_HK.txt"/>
@@ -1773,19 +1775,19 @@
 									<File Id="icudata.rc" Name="icudata.rc" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\misc\icudata.rc"/>
 								</Component>
 								<Component Id="likelySubtags.txt" Guid="BAE50F14-E4E9-4D29-AD54-EFAB1F88DA81">
-									<File Id="likelySubtags.txt" Name="LIKELY~1.TXT" LongName="likelySubtags.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\misc\likelySubtags.txt"/>
+									<File Id="likelySubtags.txt" Name="likelySubtags.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\misc\likelySubtags.txt"/>
 								</Component>
 								<Component Id="metazoneInfo.txt" Guid="7918860F-27E5-42EC-8AB4-79EF4E4663F1">
-									<File Id="metazoneInfo.txt" Name="METAZO~1.TXT" LongName="metazoneInfo.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\misc\metazoneInfo.txt"/>
+									<File Id="metazoneInfo.txt" Name="metazoneInfo.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\misc\metazoneInfo.txt"/>
 								</Component>
 								<Component Id="NamePrepProfile.txt" Guid="8DEEF89B-DACA-430C-B51D-F68CFFF578CC">
-									<File Id="NamePrepProfile.txt" Name="NAMEPR~1.TXT" LongName="NamePrepProfile.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\misc\NamePrepProfile.txt"/>
+									<File Id="NamePrepProfile.txt" Name="NamePrepProfile.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\misc\NamePrepProfile.txt"/>
 								</Component>
 								<Component Id="plurals.txt" Guid="E8D3B9B3-85F2-47E6-898E-6D17E8B12BF2">
 									<File Id="plurals.txt" Name="plurals.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\misc\plurals.txt"/>
 								</Component>
 								<Component Id="supplementalData.txt" Guid="18BBE119-7E83-4AA8-8479-F45201FA938A">
-									<File Id="supplementalData.txt" Name="SUPPLE~1.TXT" LongName="supplementalData.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\misc\supplementalData.txt"/>
+									<File Id="supplementalData.txt" Name="supplementalData.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\misc\supplementalData.txt"/>
 								</Component>
 								<Component Id="zoneinfo.txt" Guid="B3973AF3-5E96-4F32-8767-67E6F8C6C20F">
 									<File Id="zoneinfo.txt" Name="zoneinfo.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\misc\zoneinfo.txt"/>
@@ -1853,7 +1855,7 @@
 									<File Id="pt.txt3" Name="pt.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\rbnf\pt.txt"/>
 								</Component>
 								<Component Id="res_index.txt4" Guid="A11BAE44-38DC-42EB-A7E2-D8271142B770">
-									<File Id="res_index.txt4" Name="RES_IN~1.TXT" LongName="res_index.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\rbnf\res_index.txt"/>
+									<File Id="res_index.txt4" Name="res_index.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\rbnf\res_index.txt"/>
 								</Component>
 								<Component Id="root.txt4" Guid="077A287B-7136-4899-8048-46141BCD3E6B">
 									<File Id="root.txt4" Name="root.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\rbnf\root.txt"/>
@@ -1873,76 +1875,76 @@
 							</Directory>
 							<Directory Id="translit" Name="translit">
 								<Component Id="Any_Accents.txt" Guid="B9A15B42-8C94-4C61-9CC4-F12BA0A90EF4">
-									<File Id="Any_Accents.txt" Name="ANY_AC~1.TXT" LongName="Any_Accents.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Any_Accents.txt"/>
+									<File Id="Any_Accents.txt" Name="Any_Accents.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Any_Accents.txt"/>
 								</Component>
 								<Component Id="Any_Publishing.txt" Guid="5BD3FD4F-1F71-4C8D-A77D-4AF57F77992F">
-									<File Id="Any_Publishing.txt" Name="ANY_PU~1.TXT" LongName="Any_Publishing.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Any_Publishing.txt"/>
+									<File Id="Any_Publishing.txt" Name="Any_Publishing.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Any_Publishing.txt"/>
 								</Component>
 								<Component Id="Arabic_Latin.txt" Guid="4D74AB4A-7DE8-41AD-AC97-8B8ABF225E37">
-									<File Id="Arabic_Latin.txt" Name="ARABIC~1.TXT" LongName="Arabic_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Arabic_Latin.txt"/>
+									<File Id="Arabic_Latin.txt" Name="Arabic_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Arabic_Latin.txt"/>
 								</Component>
 								<Component Id="Bengali_Devanagari.txt" Guid="8BECA15F-6383-4952-9236-38FBF511D98E">
-									<File Id="Bengali_Devanagari.txt" Name="BENGAL~1.TXT" LongName="Bengali_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Devanagari.txt"/>
+									<File Id="Bengali_Devanagari.txt" Name="Bengali_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Devanagari.txt"/>
 								</Component>
 								<Component Id="Bengali_Gujarati.txt" Guid="1A0CA74C-3EF7-4673-9B6D-84712A4B184B">
-									<File Id="Bengali_Gujarati.txt" Name="BENGAL~2.TXT" LongName="Bengali_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Gujarati.txt"/>
+									<File Id="Bengali_Gujarati.txt" Name="Bengali_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Gujarati.txt"/>
 								</Component>
 								<Component Id="Bengali_Gurmukhi.txt" Guid="797F651C-7354-44B5-A3D4-020BC67C6727">
-									<File Id="Bengali_Gurmukhi.txt" Name="BENGAL~3.TXT" LongName="Bengali_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Gurmukhi.txt"/>
+									<File Id="Bengali_Gurmukhi.txt" Name="Bengali_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Gurmukhi.txt"/>
 								</Component>
 								<Component Id="Bengali_InterIndic.txt" Guid="5FF537E9-887F-4EE1-A460-FEFFBEC4D390">
-									<File Id="Bengali_InterIndic.txt" Name="BENGAL~4.TXT" LongName="Bengali_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_InterIndic.txt"/>
+									<File Id="Bengali_InterIndic.txt" Name="Bengali_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_InterIndic.txt"/>
 								</Component>
 								<Component Id="Bengali_Kannada.txt" Guid="6BF74D05-5667-4B17-84B5-0D32081138F9">
-									<File Id="Bengali_Kannada.txt" Name="BED6B0~1.TXT" LongName="Bengali_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Kannada.txt"/>
+									<File Id="Bengali_Kannada.txt" Name="Bengali_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Kannada.txt"/>
 								</Component>
 								<Component Id="Bengali_Latin.txt" Guid="634472FF-450C-4C76-B539-DEB20561337F">
-									<File Id="Bengali_Latin.txt" Name="BEA0C5~1.TXT" LongName="Bengali_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Latin.txt"/>
+									<File Id="Bengali_Latin.txt" Name="Bengali_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Latin.txt"/>
 								</Component>
 								<Component Id="Bengali_Malayalam.txt" Guid="26DB09EE-C31E-4BA5-8998-5D1DF295BDC6">
-									<File Id="Bengali_Malayalam.txt" Name="BEEF2B~1.TXT" LongName="Bengali_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Malayalam.txt"/>
+									<File Id="Bengali_Malayalam.txt" Name="Bengali_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Malayalam.txt"/>
 								</Component>
 								<Component Id="Bengali_Oriya.txt" Guid="CD635D22-FCC1-4D72-BB2D-5D5E3077C29A">
-									<File Id="Bengali_Oriya.txt" Name="BED974~1.TXT" LongName="Bengali_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Oriya.txt"/>
+									<File Id="Bengali_Oriya.txt" Name="Bengali_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Oriya.txt"/>
 								</Component>
 								<Component Id="Bengali_Tamil.txt" Guid="9F179C9F-2ABE-4267-B0D3-044CF1993346">
-									<File Id="Bengali_Tamil.txt" Name="BEA2B5~1.TXT" LongName="Bengali_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Tamil.txt"/>
+									<File Id="Bengali_Tamil.txt" Name="Bengali_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Tamil.txt"/>
 								</Component>
 								<Component Id="Bengali_Telugu.txt" Guid="55CE48B7-D468-46D0-AC99-65F9B2AC78A4">
-									<File Id="Bengali_Telugu.txt" Name="BE05BB~1.TXT" LongName="Bengali_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Telugu.txt"/>
+									<File Id="Bengali_Telugu.txt" Name="Bengali_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Bengali_Telugu.txt"/>
 								</Component>
 								<Component Id="Cyrillic_Latin.txt" Guid="ECB218F9-C498-4C8F-8A92-0FBCD344C7D2">
-									<File Id="Cyrillic_Latin.txt" Name="CYRILL~1.TXT" LongName="Cyrillic_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Cyrillic_Latin.txt"/>
+									<File Id="Cyrillic_Latin.txt" Name="Cyrillic_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Cyrillic_Latin.txt"/>
 								</Component>
 								<Component Id="Devanagari_Bengali.txt" Guid="C3338108-837E-471F-85AD-BD1E7F35C1BA">
-									<File Id="Devanagari_Bengali.txt" Name="DEVANA~1.TXT" LongName="Devanagari_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Bengali.txt"/>
+									<File Id="Devanagari_Bengali.txt" Name="Devanagari_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Bengali.txt"/>
 								</Component>
 								<Component Id="Devanagari_Gujarati.txt" Guid="050486D6-DB89-4D4D-AE36-7746B58A51AD">
-									<File Id="Devanagari_Gujarati.txt" Name="DEVANA~2.TXT" LongName="Devanagari_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Gujarati.txt"/>
+									<File Id="Devanagari_Gujarati.txt" Name="Devanagari_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Gujarati.txt"/>
 								</Component>
 								<Component Id="Devanagari_Gurmukhi.txt" Guid="48A32CE2-21AF-4291-84D7-92949B4CA8A6">
-									<File Id="Devanagari_Gurmukhi.txt" Name="DEVANA~3.TXT" LongName="Devanagari_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Gurmukhi.txt"/>
+									<File Id="Devanagari_Gurmukhi.txt" Name="Devanagari_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Gurmukhi.txt"/>
 								</Component>
 								<Component Id="Devanagari_InterIndic.txt" Guid="A5E84843-BE28-4C30-A53C-D5CCCE630D09">
-									<File Id="Devanagari_InterIndic.txt" Name="DEVANA~4.TXT" LongName="Devanagari_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_InterIndic.txt"/>
+									<File Id="Devanagari_InterIndic.txt" Name="Devanagari_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_InterIndic.txt"/>
 								</Component>
 								<Component Id="Devanagari_Kannada.txt" Guid="D6F66ED8-E168-4981-9F8F-B2A80BB5D5A5">
-									<File Id="Devanagari_Kannada.txt" Name="DE63B1~1.TXT" LongName="Devanagari_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Kannada.txt"/>
+									<File Id="Devanagari_Kannada.txt" Name="Devanagari_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Kannada.txt"/>
 								</Component>
 								<Component Id="Devanagari_Latin.txt" Guid="93D65D39-9907-4B47-8E1C-264B79A448CB">
-									<File Id="Devanagari_Latin.txt" Name="DE2536~1.TXT" LongName="Devanagari_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Latin.txt"/>
+									<File Id="Devanagari_Latin.txt" Name="Devanagari_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Latin.txt"/>
 								</Component>
 								<Component Id="Devanagari_Malayalam.txt" Guid="C4A78B75-16D0-4498-A218-ECF76410FF37">
-									<File Id="Devanagari_Malayalam.txt" Name="DE0A4D~1.TXT" LongName="Devanagari_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Malayalam.txt"/>
+									<File Id="Devanagari_Malayalam.txt" Name="Devanagari_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Malayalam.txt"/>
 								</Component>
 								<Component Id="Devanagari_Oriya.txt" Guid="E2030133-5D33-42D4-B839-BCC770A3E336">
-									<File Id="Devanagari_Oriya.txt" Name="DEE69D~1.TXT" LongName="Devanagari_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Oriya.txt"/>
+									<File Id="Devanagari_Oriya.txt" Name="Devanagari_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Oriya.txt"/>
 								</Component>
 								<Component Id="Devanagari_Tamil.txt" Guid="C0002A1F-626A-4EF1-B3AB-1ECB49C6616D">
-									<File Id="Devanagari_Tamil.txt" Name="DE253C~1.TXT" LongName="Devanagari_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Tamil.txt"/>
+									<File Id="Devanagari_Tamil.txt" Name="Devanagari_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Tamil.txt"/>
 								</Component>
 								<Component Id="Devanagari_Telugu.txt" Guid="871746C3-BA8E-4AE3-869E-4CE7A8A1D709">
-									<File Id="Devanagari_Telugu.txt" Name="DE8171~1.TXT" LongName="Devanagari_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Telugu.txt"/>
+									<File Id="Devanagari_Telugu.txt" Name="Devanagari_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Devanagari_Telugu.txt"/>
 								</Component>
 								<Component Id="el.txt4" Guid="9154B73B-67BB-420A-B233-F806146BA21B">
 									<File Id="el.txt4" Name="el.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\el.txt"/>
@@ -1951,426 +1953,426 @@
 									<File Id="en.txt5" Name="en.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\en.txt"/>
 								</Component>
 								<Component Id="Fullwidth_Halfwidth.txt" Guid="C8497892-2D27-40CA-AE09-1088EDEB1073">
-									<File Id="Fullwidth_Halfwidth.txt" Name="FULLWI~1.TXT" LongName="Fullwidth_Halfwidth.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Fullwidth_Halfwidth.txt"/>
+									<File Id="Fullwidth_Halfwidth.txt" Name="Fullwidth_Halfwidth.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Fullwidth_Halfwidth.txt"/>
 								</Component>
 								<Component Id="Georgian_Latin.txt" Guid="BFB362BD-181C-4EAB-808A-AAE4EA77889B">
-									<File Id="Georgian_Latin.txt" Name="GEORGI~1.TXT" LongName="Georgian_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Georgian_Latin.txt"/>
+									<File Id="Georgian_Latin.txt" Name="Georgian_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Georgian_Latin.txt"/>
 								</Component>
 								<Component Id="Greek_Latin.txt" Guid="FBE2A92B-246A-4C8B-B997-C665D7A7A465">
-									<File Id="Greek_Latin.txt" Name="GREEK_~1.TXT" LongName="Greek_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Greek_Latin.txt"/>
+									<File Id="Greek_Latin.txt" Name="Greek_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Greek_Latin.txt"/>
 								</Component>
 								<Component Id="Greek_Latin_UNGEGN.txt" Guid="32DFD465-A8B9-46AB-9A0D-EEF4F59D2B9D">
-									<File Id="Greek_Latin_UNGEGN.txt" Name="GREEK_~2.TXT" LongName="Greek_Latin_UNGEGN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Greek_Latin_UNGEGN.txt"/>
+									<File Id="Greek_Latin_UNGEGN.txt" Name="Greek_Latin_UNGEGN.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Greek_Latin_UNGEGN.txt"/>
 								</Component>
 								<Component Id="Gujarati_Bengali.txt" Guid="BBFD9B85-EF02-4A1F-B533-397415D91F3A">
-									<File Id="Gujarati_Bengali.txt" Name="GUJARA~1.TXT" LongName="Gujarati_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Bengali.txt"/>
+									<File Id="Gujarati_Bengali.txt" Name="Gujarati_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Bengali.txt"/>
 								</Component>
 								<Component Id="Gujarati_Devanagari.txt" Guid="6F20F8D6-923B-4F98-977B-F4E462F5AEB8">
-									<File Id="Gujarati_Devanagari.txt" Name="GUJARA~2.TXT" LongName="Gujarati_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Devanagari.txt"/>
+									<File Id="Gujarati_Devanagari.txt" Name="Gujarati_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Devanagari.txt"/>
 								</Component>
 								<Component Id="Gujarati_Gurmukhi.txt" Guid="314DC9B6-131D-4440-B5ED-42D0007868E9">
-									<File Id="Gujarati_Gurmukhi.txt" Name="GUJARA~3.TXT" LongName="Gujarati_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Gurmukhi.txt"/>
+									<File Id="Gujarati_Gurmukhi.txt" Name="Gujarati_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Gurmukhi.txt"/>
 								</Component>
 								<Component Id="Gujarati_InterIndic.txt" Guid="FDADA82A-D6B3-43A3-AF03-28D4800AD0E4">
-									<File Id="Gujarati_InterIndic.txt" Name="GUJARA~4.TXT" LongName="Gujarati_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_InterIndic.txt"/>
+									<File Id="Gujarati_InterIndic.txt" Name="Gujarati_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_InterIndic.txt"/>
 								</Component>
 								<Component Id="Gujarati_Kannada.txt" Guid="C4414D50-2A8D-4B4D-811D-04F294942A65">
-									<File Id="Gujarati_Kannada.txt" Name="GU86BA~1.TXT" LongName="Gujarati_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Kannada.txt"/>
+									<File Id="Gujarati_Kannada.txt" Name="Gujarati_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Kannada.txt"/>
 								</Component>
 								<Component Id="Gujarati_Latin.txt" Guid="742DBA46-115B-48DE-90A6-C294D9E1FDF4">
-									<File Id="Gujarati_Latin.txt" Name="GU5B30~1.TXT" LongName="Gujarati_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Latin.txt"/>
+									<File Id="Gujarati_Latin.txt" Name="Gujarati_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Latin.txt"/>
 								</Component>
 								<Component Id="Gujarati_Malayalam.txt" Guid="85E6B353-B567-4D4C-B295-FDC3A9A677A0">
-									<File Id="Gujarati_Malayalam.txt" Name="GU9BC9~1.TXT" LongName="Gujarati_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Malayalam.txt"/>
+									<File Id="Gujarati_Malayalam.txt" Name="Gujarati_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Malayalam.txt"/>
 								</Component>
 								<Component Id="Gujarati_Oriya.txt" Guid="25ED5AD8-A96D-4AE8-8012-C74A819D7E5F">
-									<File Id="Gujarati_Oriya.txt" Name="GU1D97~1.TXT" LongName="Gujarati_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Oriya.txt"/>
+									<File Id="Gujarati_Oriya.txt" Name="Gujarati_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Oriya.txt"/>
 								</Component>
 								<Component Id="Gujarati_Tamil.txt" Guid="BB603567-85E2-4767-BC50-E6B176798F42">
-									<File Id="Gujarati_Tamil.txt" Name="GU4B36~1.TXT" LongName="Gujarati_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Tamil.txt"/>
+									<File Id="Gujarati_Tamil.txt" Name="Gujarati_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Tamil.txt"/>
 								</Component>
 								<Component Id="Gujarati_Telugu.txt" Guid="67FB0165-E28F-45CD-863A-51C00E291CB3">
-									<File Id="Gujarati_Telugu.txt" Name="GUA47A~1.TXT" LongName="Gujarati_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Telugu.txt"/>
+									<File Id="Gujarati_Telugu.txt" Name="Gujarati_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gujarati_Telugu.txt"/>
 								</Component>
 								<Component Id="Gurmukhi_Bengali.txt" Guid="FE790CC9-5556-43FB-AEDD-5394DBC442E6">
-									<File Id="Gurmukhi_Bengali.txt" Name="GURMUK~1.TXT" LongName="Gurmukhi_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Bengali.txt"/>
+									<File Id="Gurmukhi_Bengali.txt" Name="Gurmukhi_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Bengali.txt"/>
 								</Component>
 								<Component Id="Gurmukhi_Devanagari.txt" Guid="1F4E9F0D-51D9-4138-AE8F-F0A2845B3909">
-									<File Id="Gurmukhi_Devanagari.txt" Name="GURMUK~2.TXT" LongName="Gurmukhi_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Devanagari.txt"/>
+									<File Id="Gurmukhi_Devanagari.txt" Name="Gurmukhi_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Devanagari.txt"/>
 								</Component>
 								<Component Id="Gurmukhi_Gujarati.txt" Guid="DF70B2DC-6E94-40A4-8D7E-67BB6BEAE05B">
-									<File Id="Gurmukhi_Gujarati.txt" Name="GURMUK~3.TXT" LongName="Gurmukhi_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Gujarati.txt"/>
+									<File Id="Gurmukhi_Gujarati.txt" Name="Gurmukhi_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Gujarati.txt"/>
 								</Component>
 								<Component Id="Gurmukhi_InterIndic.txt" Guid="DE957A87-39DC-44D8-9E2E-C04FC3069D8B">
-									<File Id="Gurmukhi_InterIndic.txt" Name="GURMUK~4.TXT" LongName="Gurmukhi_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_InterIndic.txt"/>
+									<File Id="Gurmukhi_InterIndic.txt" Name="Gurmukhi_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_InterIndic.txt"/>
 								</Component>
 								<Component Id="Gurmukhi_Kannada.txt" Guid="44C501C8-C213-42C7-9365-657C370DBC2C">
-									<File Id="Gurmukhi_Kannada.txt" Name="GU649C~1.TXT" LongName="Gurmukhi_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Kannada.txt"/>
+									<File Id="Gurmukhi_Kannada.txt" Name="Gurmukhi_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Kannada.txt"/>
 								</Component>
 								<Component Id="Gurmukhi_Latin.txt" Guid="DD5F4302-DE33-4DBB-B841-733708CBDC6C">
-									<File Id="Gurmukhi_Latin.txt" Name="GU27FB~1.TXT" LongName="Gurmukhi_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Latin.txt"/>
+									<File Id="Gurmukhi_Latin.txt" Name="Gurmukhi_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Latin.txt"/>
 								</Component>
 								<Component Id="Gurmukhi_Malayalam.txt" Guid="057BF770-39CC-4014-921C-3F2DB77C2421">
-									<File Id="Gurmukhi_Malayalam.txt" Name="GU8ABC~1.TXT" LongName="Gurmukhi_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Malayalam.txt"/>
+									<File Id="Gurmukhi_Malayalam.txt" Name="Gurmukhi_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Malayalam.txt"/>
 								</Component>
 								<Component Id="Gurmukhi_Oriya.txt" Guid="8FBB5518-AF93-4AB2-B728-A1A7AABCF285">
-									<File Id="Gurmukhi_Oriya.txt" Name="GUD853~1.TXT" LongName="Gurmukhi_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Oriya.txt"/>
+									<File Id="Gurmukhi_Oriya.txt" Name="Gurmukhi_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Oriya.txt"/>
 								</Component>
 								<Component Id="Gurmukhi_Tamil.txt" Guid="77AE480B-DE19-4E61-AF75-F1710EEC9026">
-									<File Id="Gurmukhi_Tamil.txt" Name="GU17F9~1.TXT" LongName="Gurmukhi_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Tamil.txt"/>
+									<File Id="Gurmukhi_Tamil.txt" Name="Gurmukhi_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Tamil.txt"/>
 								</Component>
 								<Component Id="Gurmukhi_Telugu.txt" Guid="C11541B2-8AF0-4C72-9A3E-2B8C341313A0">
-									<File Id="Gurmukhi_Telugu.txt" Name="GU8258~1.TXT" LongName="Gurmukhi_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Telugu.txt"/>
+									<File Id="Gurmukhi_Telugu.txt" Name="Gurmukhi_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Gurmukhi_Telugu.txt"/>
 								</Component>
 								<Component Id="Hangul_Latin.txt" Guid="B047A0A7-AF87-4ECA-B318-CBE52C0E847A">
-									<File Id="Hangul_Latin.txt" Name="HANGUL~1.TXT" LongName="Hangul_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Hangul_Latin.txt"/>
+									<File Id="Hangul_Latin.txt" Name="Hangul_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Hangul_Latin.txt"/>
 								</Component>
 								<Component Id="Han_Latin.txt" Guid="9E153A50-7790-4D45-9A37-E1757459B0CA">
-									<File Id="Han_Latin.txt" Name="HAN_LA~1.TXT" LongName="Han_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Han_Latin.txt"/>
+									<File Id="Han_Latin.txt" Name="Han_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Han_Latin.txt"/>
 								</Component>
 								<Component Id="Han_Spacedhan.txt" Guid="A9975339-408D-48B2-8A5F-E803E5EF3396">
-									<File Id="Han_Spacedhan.txt" Name="HAN_SP~1.TXT" LongName="Han_Spacedhan.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Han_Spacedhan.txt"/>
+									<File Id="Han_Spacedhan.txt" Name="Han_Spacedhan.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Han_Spacedhan.txt"/>
 								</Component>
 								<Component Id="Hebrew_Latin.txt" Guid="4B5875CF-CB22-4BDC-B380-D3D6298BEDD1">
-									<File Id="Hebrew_Latin.txt" Name="HEBREW~1.TXT" LongName="Hebrew_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Hebrew_Latin.txt"/>
+									<File Id="Hebrew_Latin.txt" Name="Hebrew_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Hebrew_Latin.txt"/>
 								</Component>
 								<Component Id="Hiragana_Katakana.txt" Guid="CC2D0514-8272-41C6-A58D-6D0314E5C993">
-									<File Id="Hiragana_Katakana.txt" Name="HIRAGA~1.TXT" LongName="Hiragana_Katakana.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Hiragana_Katakana.txt"/>
+									<File Id="Hiragana_Katakana.txt" Name="Hiragana_Katakana.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Hiragana_Katakana.txt"/>
 								</Component>
 								<Component Id="Hiragana_Latin.txt" Guid="0F05A428-4D23-4664-A520-8E99E6AF9CA6">
-									<File Id="Hiragana_Latin.txt" Name="HIRAGA~2.TXT" LongName="Hiragana_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Hiragana_Latin.txt"/>
+									<File Id="Hiragana_Latin.txt" Name="Hiragana_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Hiragana_Latin.txt"/>
 								</Component>
 								<Component Id="InterIndic_Bengali.txt" Guid="E2CDA9CB-B6CC-4666-9631-1B86629B237B">
-									<File Id="InterIndic_Bengali.txt" Name="INTERI~1.TXT" LongName="InterIndic_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Bengali.txt"/>
+									<File Id="InterIndic_Bengali.txt" Name="InterIndic_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Bengali.txt"/>
 								</Component>
 								<Component Id="InterIndic_Devanagari.txt" Guid="F7EF928F-14F8-479A-8733-429C817C9ACC">
-									<File Id="InterIndic_Devanagari.txt" Name="INTERI~2.TXT" LongName="InterIndic_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Devanagari.txt"/>
+									<File Id="InterIndic_Devanagari.txt" Name="InterIndic_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Devanagari.txt"/>
 								</Component>
 								<Component Id="InterIndic_Gujarati.txt" Guid="7DCF19A4-3276-4234-9C35-F04B7BD47C4D">
-									<File Id="InterIndic_Gujarati.txt" Name="INTERI~3.TXT" LongName="InterIndic_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Gujarati.txt"/>
+									<File Id="InterIndic_Gujarati.txt" Name="InterIndic_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Gujarati.txt"/>
 								</Component>
 								<Component Id="InterIndic_Gurmukhi.txt" Guid="F1A2A67A-F52B-4D3F-A580-6A03E73E9F79">
-									<File Id="InterIndic_Gurmukhi.txt" Name="INTERI~4.TXT" LongName="InterIndic_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Gurmukhi.txt"/>
+									<File Id="InterIndic_Gurmukhi.txt" Name="InterIndic_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Gurmukhi.txt"/>
 								</Component>
 								<Component Id="InterIndic_Kannada.txt" Guid="F5BE1B61-17F1-4A6F-887D-076398259548">
-									<File Id="InterIndic_Kannada.txt" Name="IN4EFF~1.TXT" LongName="InterIndic_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Kannada.txt"/>
+									<File Id="InterIndic_Kannada.txt" Name="InterIndic_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Kannada.txt"/>
 								</Component>
 								<Component Id="InterIndic_Latin.txt" Guid="10E57A30-240B-46DD-A160-07F9D10EF4D4">
-									<File Id="InterIndic_Latin.txt" Name="INFACA~1.TXT" LongName="InterIndic_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Latin.txt"/>
+									<File Id="InterIndic_Latin.txt" Name="InterIndic_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Latin.txt"/>
 								</Component>
 								<Component Id="InterIndic_Malayalam.txt" Guid="08843951-7B1A-46AC-B7B3-BD4E9C379852">
-									<File Id="InterIndic_Malayalam.txt" Name="IN7F6E~1.TXT" LongName="InterIndic_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Malayalam.txt"/>
+									<File Id="InterIndic_Malayalam.txt" Name="InterIndic_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Malayalam.txt"/>
 								</Component>
 								<Component Id="InterIndic_Oriya.txt" Guid="C94F4A2B-5775-4048-9CA2-8F56F4D72D3F">
-									<File Id="InterIndic_Oriya.txt" Name="INAC22~1.TXT" LongName="InterIndic_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Oriya.txt"/>
+									<File Id="InterIndic_Oriya.txt" Name="InterIndic_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Oriya.txt"/>
 								</Component>
 								<Component Id="InterIndic_Tamil.txt" Guid="B3344B9A-40C6-4D3F-938C-D0BEF21797D8">
-									<File Id="InterIndic_Tamil.txt" Name="INEACC~1.TXT" LongName="InterIndic_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Tamil.txt"/>
+									<File Id="InterIndic_Tamil.txt" Name="InterIndic_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Tamil.txt"/>
 								</Component>
 								<Component Id="InterIndic_Telugu.txt" Guid="3B5675A1-9A4E-4233-BDB7-B25865D6DF58">
-									<File Id="InterIndic_Telugu.txt" Name="IN6CBF~1.TXT" LongName="InterIndic_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Telugu.txt"/>
+									<File Id="InterIndic_Telugu.txt" Name="InterIndic_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\InterIndic_Telugu.txt"/>
 								</Component>
 								<Component Id="Jamo_Latin.txt" Guid="B85FCE56-E83E-4FF0-830D-F6162FCAB9B1">
-									<File Id="Jamo_Latin.txt" Name="JAMO_L~1.TXT" LongName="Jamo_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Jamo_Latin.txt"/>
+									<File Id="Jamo_Latin.txt" Name="Jamo_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Jamo_Latin.txt"/>
 								</Component>
 								<Component Id="Kannada_Bengali.txt" Guid="40FB9865-1C2E-47BE-9F30-882E383B1D4E">
-									<File Id="Kannada_Bengali.txt" Name="KANNAD~1.TXT" LongName="Kannada_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Bengali.txt"/>
+									<File Id="Kannada_Bengali.txt" Name="Kannada_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Bengali.txt"/>
 								</Component>
 								<Component Id="Kannada_Devanagari.txt" Guid="3FE12F4D-E6D5-4D97-9A14-B349170599C2">
-									<File Id="Kannada_Devanagari.txt" Name="KANNAD~2.TXT" LongName="Kannada_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Devanagari.txt"/>
+									<File Id="Kannada_Devanagari.txt" Name="Kannada_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Devanagari.txt"/>
 								</Component>
 								<Component Id="Kannada_Gujarati.txt" Guid="ECE2515F-9598-4A29-9D8F-2993708A4785">
-									<File Id="Kannada_Gujarati.txt" Name="KANNAD~3.TXT" LongName="Kannada_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Gujarati.txt"/>
+									<File Id="Kannada_Gujarati.txt" Name="Kannada_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Gujarati.txt"/>
 								</Component>
 								<Component Id="Kannada_Gurmukhi.txt" Guid="D9A0ABF9-1596-4BA9-84C9-6DFAFDA13396">
-									<File Id="Kannada_Gurmukhi.txt" Name="KANNAD~4.TXT" LongName="Kannada_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Gurmukhi.txt"/>
+									<File Id="Kannada_Gurmukhi.txt" Name="Kannada_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Gurmukhi.txt"/>
 								</Component>
 								<Component Id="Kannada_InterIndic.txt" Guid="2235BC79-7548-428C-A5FC-8E6F0D5C2E17">
-									<File Id="Kannada_InterIndic.txt" Name="KAEE36~1.TXT" LongName="Kannada_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_InterIndic.txt"/>
+									<File Id="Kannada_InterIndic.txt" Name="Kannada_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_InterIndic.txt"/>
 								</Component>
 								<Component Id="Kannada_Latin.txt" Guid="00AD1ECA-656D-400C-BBFC-E53587C7D655">
-									<File Id="Kannada_Latin.txt" Name="KA3DDA~1.TXT" LongName="Kannada_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Latin.txt"/>
+									<File Id="Kannada_Latin.txt" Name="Kannada_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Latin.txt"/>
 								</Component>
 								<Component Id="Kannada_Malayalam.txt" Guid="75F6AA0A-BC8B-4CDB-B0E4-5E2116E9A27E">
-									<File Id="Kannada_Malayalam.txt" Name="KA0777~1.TXT" LongName="Kannada_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Malayalam.txt"/>
+									<File Id="Kannada_Malayalam.txt" Name="Kannada_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Malayalam.txt"/>
 								</Component>
 								<Component Id="Kannada_Oriya.txt" Guid="65A60993-719C-4310-B9E6-F5B419C189C7">
-									<File Id="Kannada_Oriya.txt" Name="KA6695~1.TXT" LongName="Kannada_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Oriya.txt"/>
+									<File Id="Kannada_Oriya.txt" Name="Kannada_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Oriya.txt"/>
 								</Component>
 								<Component Id="Kannada_Tamil.txt" Guid="E6F6D2DF-7704-4B55-8185-0AE7C42BBF7F">
-									<File Id="Kannada_Tamil.txt" Name="KA3FCA~1.TXT" LongName="Kannada_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Tamil.txt"/>
+									<File Id="Kannada_Tamil.txt" Name="Kannada_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Tamil.txt"/>
 								</Component>
 								<Component Id="Kannada_Telugu.txt" Guid="FAAE446A-8759-4F97-AAA8-2C1B890DAB97">
-									<File Id="Kannada_Telugu.txt" Name="KA81D0~1.TXT" LongName="Kannada_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Telugu.txt"/>
+									<File Id="Kannada_Telugu.txt" Name="Kannada_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Kannada_Telugu.txt"/>
 								</Component>
 								<Component Id="Latin_Armenian.txt" Guid="14DA48C8-B73E-4EC9-94B1-C463D2B51072">
-									<File Id="Latin_Armenian.txt" Name="LATIN_~1.TXT" LongName="Latin_Armenian.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Armenian.txt"/>
+									<File Id="Latin_Armenian.txt" Name="Latin_Armenian.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Armenian.txt"/>
 								</Component>
 								<Component Id="Latin_Bengali.txt" Guid="A295792E-57E7-4493-8343-D9C1F3E86EF0">
-									<File Id="Latin_Bengali.txt" Name="LATIN_~2.TXT" LongName="Latin_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Bengali.txt"/>
+									<File Id="Latin_Bengali.txt" Name="Latin_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Bengali.txt"/>
 								</Component>
 								<Component Id="Latin_ConjoiningJamo.txt" Guid="CC7DCA7D-6BE1-40CA-800B-D87D474BD68A">
-									<File Id="Latin_ConjoiningJamo.txt" Name="LATIN_~3.TXT" LongName="Latin_ConjoiningJamo.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_ConjoiningJamo.txt"/>
+									<File Id="Latin_ConjoiningJamo.txt" Name="Latin_ConjoiningJamo.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_ConjoiningJamo.txt"/>
 								</Component>
 								<Component Id="Latin_Devanagari.txt" Guid="BB8C8422-2A2F-4031-A9A2-1A847C0D19CF">
-									<File Id="Latin_Devanagari.txt" Name="LATIN_~4.TXT" LongName="Latin_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Devanagari.txt"/>
+									<File Id="Latin_Devanagari.txt" Name="Latin_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Devanagari.txt"/>
 								</Component>
 								<Component Id="Latin_Gujarati.txt" Guid="4C682D7F-7A6E-4896-9867-1E593E04D343">
-									<File Id="Latin_Gujarati.txt" Name="LA4E30~1.TXT" LongName="Latin_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Gujarati.txt"/>
+									<File Id="Latin_Gujarati.txt" Name="Latin_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Gujarati.txt"/>
 								</Component>
 								<Component Id="Latin_Gurmukhi.txt" Guid="A8A4E1F3-BB50-48A3-B8A9-5518BAA3660C">
-									<File Id="Latin_Gurmukhi.txt" Name="LA6C10~1.TXT" LongName="Latin_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Gurmukhi.txt"/>
+									<File Id="Latin_Gurmukhi.txt" Name="Latin_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Gurmukhi.txt"/>
 								</Component>
 								<Component Id="Latin_Hangul.txt" Guid="C094C298-10A9-4F24-A931-C8551B7ED981">
-									<File Id="Latin_Hangul.txt" Name="LA93F7~1.TXT" LongName="Latin_Hangul.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Hangul.txt"/>
+									<File Id="Latin_Hangul.txt" Name="Latin_Hangul.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Hangul.txt"/>
 								</Component>
 								<Component Id="Latin_InterIndic.txt" Guid="92D31498-8411-4C23-8210-5691C9FD5E82">
-									<File Id="Latin_InterIndic.txt" Name="LA8BFB~1.TXT" LongName="Latin_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_InterIndic.txt"/>
+									<File Id="Latin_InterIndic.txt" Name="Latin_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_InterIndic.txt"/>
 								</Component>
 								<Component Id="Latin_Jamo.txt" Guid="DB0A0F2D-8918-4C76-8114-6372AA6291D3">
-									<File Id="Latin_Jamo.txt" Name="LA0143~1.TXT" LongName="Latin_Jamo.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Jamo.txt"/>
+									<File Id="Latin_Jamo.txt" Name="Latin_Jamo.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Jamo.txt"/>
 								</Component>
 								<Component Id="Latin_Kannada.txt" Guid="D97A65FD-903F-4933-BF35-813B450C430D">
-									<File Id="Latin_Kannada.txt" Name="LA4EB4~1.TXT" LongName="Latin_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Kannada.txt"/>
+									<File Id="Latin_Kannada.txt" Name="Latin_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Kannada.txt"/>
 								</Component>
 								<Component Id="Latin_Katakana.txt" Guid="E6AE9A0C-B920-4FDC-A765-1118F9A23394">
-									<File Id="Latin_Katakana.txt" Name="LA242A~1.TXT" LongName="Latin_Katakana.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Katakana.txt"/>
+									<File Id="Latin_Katakana.txt" Name="Latin_Katakana.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Katakana.txt"/>
 								</Component>
 								<Component Id="Latin_Malayalam.txt" Guid="CDDAF152-17A8-4D6E-803E-1F6FD2957767">
-									<File Id="Latin_Malayalam.txt" Name="LA9335~1.TXT" LongName="Latin_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Malayalam.txt"/>
+									<File Id="Latin_Malayalam.txt" Name="Latin_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Malayalam.txt"/>
 								</Component>
 								<Component Id="Latin_NumericPinyin.txt" Guid="29109554-0277-45D3-B784-8959B7F438F5">
-									<File Id="Latin_NumericPinyin.txt" Name="LA69D6~1.TXT" LongName="Latin_NumericPinyin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_NumericPinyin.txt"/>
+									<File Id="Latin_NumericPinyin.txt" Name="Latin_NumericPinyin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_NumericPinyin.txt"/>
 								</Component>
 								<Component Id="Latin_Oriya.txt" Guid="63EEAAD1-980B-4E87-A7CF-09A1C212D375">
-									<File Id="Latin_Oriya.txt" Name="LAB88C~1.TXT" LongName="Latin_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Oriya.txt"/>
+									<File Id="Latin_Oriya.txt" Name="Latin_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Oriya.txt"/>
 								</Component>
 								<Component Id="Latin_Tamil.txt" Guid="3A8B7B3E-80D4-46BE-886D-FA1A2AA498F7">
-									<File Id="Latin_Tamil.txt" Name="LA81CD~1.TXT" LongName="Latin_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Tamil.txt"/>
+									<File Id="Latin_Tamil.txt" Name="Latin_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Tamil.txt"/>
 								</Component>
 								<Component Id="Latin_Telugu.txt" Guid="782FD56D-8304-45AF-9195-FCB8A20BD530">
-									<File Id="Latin_Telugu.txt" Name="LAD3C3~1.TXT" LongName="Latin_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Telugu.txt"/>
+									<File Id="Latin_Telugu.txt" Name="Latin_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Telugu.txt"/>
 								</Component>
 								<Component Id="Latin_Thai.txt" Guid="4E69FEDE-C2BF-46C0-8814-17D34595D987">
-									<File Id="Latin_Thai.txt" Name="LAF425~1.TXT" LongName="Latin_Thai.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Thai.txt"/>
+									<File Id="Latin_Thai.txt" Name="Latin_Thai.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Latin_Thai.txt"/>
 								</Component>
 								<Component Id="Malayalam_Bengali.txt" Guid="10DA9475-A974-44E3-8BFC-51D1229AB771">
-									<File Id="Malayalam_Bengali.txt" Name="MALAYA~1.TXT" LongName="Malayalam_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Bengali.txt"/>
+									<File Id="Malayalam_Bengali.txt" Name="Malayalam_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Bengali.txt"/>
 								</Component>
 								<Component Id="Malayalam_Devanagari.txt" Guid="CDF76145-7F61-459C-A0FF-628281FF35F0">
-									<File Id="Malayalam_Devanagari.txt" Name="MALAYA~2.TXT" LongName="Malayalam_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Devanagari.txt"/>
+									<File Id="Malayalam_Devanagari.txt" Name="Malayalam_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Devanagari.txt"/>
 								</Component>
 								<Component Id="Malayalam_Gujarati.txt" Guid="DC6059BA-9EB6-4437-8AD2-ACC4B79B8B41">
-									<File Id="Malayalam_Gujarati.txt" Name="MALAYA~3.TXT" LongName="Malayalam_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Gujarati.txt"/>
+									<File Id="Malayalam_Gujarati.txt" Name="Malayalam_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Gujarati.txt"/>
 								</Component>
 								<Component Id="Malayalam_Gurmukhi.txt" Guid="6342560D-67B2-4AB2-90D1-2883AF40B142">
-									<File Id="Malayalam_Gurmukhi.txt" Name="MALAYA~4.TXT" LongName="Malayalam_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Gurmukhi.txt"/>
+									<File Id="Malayalam_Gurmukhi.txt" Name="Malayalam_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Gurmukhi.txt"/>
 								</Component>
 								<Component Id="Malayalam_InterIndic.txt" Guid="CDDB8389-8A4A-4B67-8979-4C1353955E7C">
-									<File Id="Malayalam_InterIndic.txt" Name="MA9868~1.TXT" LongName="Malayalam_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_InterIndic.txt"/>
+									<File Id="Malayalam_InterIndic.txt" Name="Malayalam_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_InterIndic.txt"/>
 								</Component>
 								<Component Id="Malayalam_Kannada.txt" Guid="E87EDC08-31EE-48AD-8542-E36CB8B4A6AF">
-									<File Id="Malayalam_Kannada.txt" Name="MA789D~1.TXT" LongName="Malayalam_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Kannada.txt"/>
+									<File Id="Malayalam_Kannada.txt" Name="Malayalam_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Kannada.txt"/>
 								</Component>
 								<Component Id="Malayalam_Latin.txt" Guid="11997437-E0DE-4E58-BC09-3AD101150566">
-									<File Id="Malayalam_Latin.txt" Name="MAC38F~1.TXT" LongName="Malayalam_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Latin.txt"/>
+									<File Id="Malayalam_Latin.txt" Name="Malayalam_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Latin.txt"/>
 								</Component>
 								<Component Id="Malayalam_Oriya.txt" Guid="9A4577A3-9AC5-425A-8EED-735ADD23CF2D">
-									<File Id="Malayalam_Oriya.txt" Name="MA0D3D~1.TXT" LongName="Malayalam_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Oriya.txt"/>
+									<File Id="Malayalam_Oriya.txt" Name="Malayalam_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Oriya.txt"/>
 								</Component>
 								<Component Id="Malayalam_Tamil.txt" Guid="81733BD8-F9A8-4689-965D-8A6F468CFD22">
-									<File Id="Malayalam_Tamil.txt" Name="MAC570~1.TXT" LongName="Malayalam_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Tamil.txt"/>
+									<File Id="Malayalam_Tamil.txt" Name="Malayalam_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Tamil.txt"/>
 								</Component>
 								<Component Id="Malayalam_Telugu.txt" Guid="4B6C506C-FAB5-4523-93BA-EC1FF0D9F621">
-									<File Id="Malayalam_Telugu.txt" Name="MA287E~1.TXT" LongName="Malayalam_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Telugu.txt"/>
+									<File Id="Malayalam_Telugu.txt" Name="Malayalam_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Malayalam_Telugu.txt"/>
 								</Component>
 								<Component Id="Oriya_Bengali.txt" Guid="AA234FBC-F218-4DBE-BDF9-A22899BFE32E">
-									<File Id="Oriya_Bengali.txt" Name="ORIYA_~1.TXT" LongName="Oriya_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Bengali.txt"/>
+									<File Id="Oriya_Bengali.txt" Name="Oriya_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Bengali.txt"/>
 								</Component>
 								<Component Id="Oriya_Devanagari.txt" Guid="81D8470A-BB1E-45B1-97CE-39CF394D19AB">
-									<File Id="Oriya_Devanagari.txt" Name="ORIYA_~2.TXT" LongName="Oriya_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Devanagari.txt"/>
+									<File Id="Oriya_Devanagari.txt" Name="Oriya_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Devanagari.txt"/>
 								</Component>
 								<Component Id="Oriya_Gujarati.txt" Guid="5905C678-FCAB-44D9-ACD5-F65099288D33">
-									<File Id="Oriya_Gujarati.txt" Name="ORIYA_~3.TXT" LongName="Oriya_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Gujarati.txt"/>
+									<File Id="Oriya_Gujarati.txt" Name="Oriya_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Gujarati.txt"/>
 								</Component>
 								<Component Id="Oriya_Gurmukhi.txt" Guid="A0CF6498-D92A-4E1B-ABCC-2F9E7657FE06">
-									<File Id="Oriya_Gurmukhi.txt" Name="ORIYA_~4.TXT" LongName="Oriya_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Gurmukhi.txt"/>
+									<File Id="Oriya_Gurmukhi.txt" Name="Oriya_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Gurmukhi.txt"/>
 								</Component>
 								<Component Id="Oriya_InterIndic.txt" Guid="9AE8EF77-4681-46DF-882A-C482D7487056">
-									<File Id="Oriya_InterIndic.txt" Name="OR4152~1.TXT" LongName="Oriya_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_InterIndic.txt"/>
+									<File Id="Oriya_InterIndic.txt" Name="Oriya_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_InterIndic.txt"/>
 								</Component>
 								<Component Id="Oriya_Kannada.txt" Guid="D72345F9-3361-4B09-BAE6-7188563354F0">
-									<File Id="Oriya_Kannada.txt" Name="ORD961~1.TXT" LongName="Oriya_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Kannada.txt"/>
+									<File Id="Oriya_Kannada.txt" Name="Oriya_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Kannada.txt"/>
 								</Component>
 								<Component Id="Oriya_Latin.txt" Guid="0B862A4C-FA50-4962-8D0E-DFA99DC0D83D">
-									<File Id="Oriya_Latin.txt" Name="ORA62F~1.TXT" LongName="Oriya_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Latin.txt"/>
+									<File Id="Oriya_Latin.txt" Name="Oriya_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Latin.txt"/>
 								</Component>
 								<Component Id="Oriya_Malayalam.txt" Guid="9E875C27-4BB3-4EC1-9E30-F4E7D0080FB4">
-									<File Id="Oriya_Malayalam.txt" Name="OR698B~1.TXT" LongName="Oriya_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Malayalam.txt"/>
+									<File Id="Oriya_Malayalam.txt" Name="Oriya_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Malayalam.txt"/>
 								</Component>
 								<Component Id="Oriya_Tamil.txt" Guid="86FAF8CA-B3A0-4D53-8D71-1AACA052A034">
-									<File Id="Oriya_Tamil.txt" Name="ORA81F~1.TXT" LongName="Oriya_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Tamil.txt"/>
+									<File Id="Oriya_Tamil.txt" Name="Oriya_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Tamil.txt"/>
 								</Component>
 								<Component Id="Oriya_Telugu.txt" Guid="D0F8A928-1840-4078-86F8-F423DC6B52D6">
-									<File Id="Oriya_Telugu.txt" Name="ORFA15~1.TXT" LongName="Oriya_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Telugu.txt"/>
+									<File Id="Oriya_Telugu.txt" Name="Oriya_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Oriya_Telugu.txt"/>
 								</Component>
 								<Component Id="Pinyin_NumericPinyin.txt" Guid="61DFEE43-17C3-4405-A104-6316847B45B7">
-									<File Id="Pinyin_NumericPinyin.txt" Name="PINYIN~1.TXT" LongName="Pinyin_NumericPinyin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Pinyin_NumericPinyin.txt"/>
+									<File Id="Pinyin_NumericPinyin.txt" Name="Pinyin_NumericPinyin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Pinyin_NumericPinyin.txt"/>
 								</Component>
 								<Component Id="root.txt5" Guid="262333FE-1BF6-4D6D-9405-F31F95B47918">
 									<File Id="root.txt5" Name="root.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\root.txt"/>
 								</Component>
 								<Component Id="Simplified_Traditional.txt" Guid="AD2592DA-D7A1-41DA-ACB8-B79BE2A6F985">
-									<File Id="Simplified_Traditional.txt" Name="SIMPLI~1.TXT" LongName="Simplified_Traditional.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Simplified_Traditional.txt"/>
+									<File Id="Simplified_Traditional.txt" Name="Simplified_Traditional.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Simplified_Traditional.txt"/>
 								</Component>
 								<Component Id="Syriac_Latin.txt" Guid="7534CBC6-DE9D-4453-8F8B-8C2F4EA0D02C">
-									<File Id="Syriac_Latin.txt" Name="SYRIAC~1.TXT" LongName="Syriac_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Syriac_Latin.txt"/>
+									<File Id="Syriac_Latin.txt" Name="Syriac_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Syriac_Latin.txt"/>
 								</Component>
 								<Component Id="Tamil_Bengali.txt" Guid="65789CAC-C4AC-46E4-BA7C-F13BF77C5F74">
-									<File Id="Tamil_Bengali.txt" Name="TAMIL_~1.TXT" LongName="Tamil_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Bengali.txt"/>
+									<File Id="Tamil_Bengali.txt" Name="Tamil_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Bengali.txt"/>
 								</Component>
 								<Component Id="Tamil_Devanagari.txt" Guid="AD2851D2-BEEC-4C5E-B415-DFF29E407C54">
-									<File Id="Tamil_Devanagari.txt" Name="TAMIL_~2.TXT" LongName="Tamil_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Devanagari.txt"/>
+									<File Id="Tamil_Devanagari.txt" Name="Tamil_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Devanagari.txt"/>
 								</Component>
 								<Component Id="Tamil_Gujarati.txt" Guid="149A113D-67A5-449F-BBB4-BADE31D19BC1">
-									<File Id="Tamil_Gujarati.txt" Name="TAMIL_~3.TXT" LongName="Tamil_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Gujarati.txt"/>
+									<File Id="Tamil_Gujarati.txt" Name="Tamil_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Gujarati.txt"/>
 								</Component>
 								<Component Id="Tamil_Gurmukhi.txt" Guid="D06A9896-982F-41A0-8635-A6E42C0A6B80">
-									<File Id="Tamil_Gurmukhi.txt" Name="TAMIL_~4.TXT" LongName="Tamil_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Gurmukhi.txt"/>
+									<File Id="Tamil_Gurmukhi.txt" Name="Tamil_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Gurmukhi.txt"/>
 								</Component>
 								<Component Id="Tamil_InterIndic.txt" Guid="DE58A9C0-7D11-46E5-8CA8-5D9C2E898F12">
-									<File Id="Tamil_InterIndic.txt" Name="TA1BFB~1.TXT" LongName="Tamil_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_InterIndic.txt"/>
+									<File Id="Tamil_InterIndic.txt" Name="Tamil_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_InterIndic.txt"/>
 								</Component>
 								<Component Id="Tamil_Kannada.txt" Guid="07C23829-87D9-4A30-A89C-D92BB7F3D59B">
-									<File Id="Tamil_Kannada.txt" Name="TA6DB4~1.TXT" LongName="Tamil_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Kannada.txt"/>
+									<File Id="Tamil_Kannada.txt" Name="Tamil_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Kannada.txt"/>
 								</Component>
 								<Component Id="Tamil_Latin.txt" Guid="A2E8FFCD-1555-47A4-A76B-9A46B607455F">
-									<File Id="Tamil_Latin.txt" Name="TACDCD~1.TXT" LongName="Tamil_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Latin.txt"/>
+									<File Id="Tamil_Latin.txt" Name="Tamil_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Latin.txt"/>
 								</Component>
 								<Component Id="Tamil_Malayalam.txt" Guid="F93E860D-4A63-4232-9124-72960AB29A33">
-									<File Id="Tamil_Malayalam.txt" Name="TA2335~1.TXT" LongName="Tamil_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Malayalam.txt"/>
+									<File Id="Tamil_Malayalam.txt" Name="Tamil_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Malayalam.txt"/>
 								</Component>
 								<Component Id="Tamil_Oriya.txt" Guid="54D85283-27A7-46B2-A493-C18AB023DACB">
-									<File Id="Tamil_Oriya.txt" Name="TAF68C~1.TXT" LongName="Tamil_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Oriya.txt"/>
+									<File Id="Tamil_Oriya.txt" Name="Tamil_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Oriya.txt"/>
 								</Component>
 								<Component Id="Tamil_Telugu.txt" Guid="DDA82B94-E2E2-4623-880A-8EB2B856922B">
-									<File Id="Tamil_Telugu.txt" Name="TA12C3~1.TXT" LongName="Tamil_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Telugu.txt"/>
+									<File Id="Tamil_Telugu.txt" Name="Tamil_Telugu.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Tamil_Telugu.txt"/>
 								</Component>
 								<Component Id="Telugu_Bengali.txt" Guid="8773234D-C048-42F0-8545-C59C89A56512">
-									<File Id="Telugu_Bengali.txt" Name="TELUGU~1.TXT" LongName="Telugu_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Bengali.txt"/>
+									<File Id="Telugu_Bengali.txt" Name="Telugu_Bengali.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Bengali.txt"/>
 								</Component>
 								<Component Id="Telugu_Devanagari.txt" Guid="2138AABE-E8EB-4419-9CE8-A50614F2FD4A">
-									<File Id="Telugu_Devanagari.txt" Name="TELUGU~2.TXT" LongName="Telugu_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Devanagari.txt"/>
+									<File Id="Telugu_Devanagari.txt" Name="Telugu_Devanagari.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Devanagari.txt"/>
 								</Component>
 								<Component Id="Telugu_Gujarati.txt" Guid="10D0435A-C129-42E8-9806-762996F25427">
-									<File Id="Telugu_Gujarati.txt" Name="TELUGU~3.TXT" LongName="Telugu_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Gujarati.txt"/>
+									<File Id="Telugu_Gujarati.txt" Name="Telugu_Gujarati.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Gujarati.txt"/>
 								</Component>
 								<Component Id="Telugu_Gurmukhi.txt" Guid="9EB03555-0FDA-4BD5-B648-84787C23E457">
-									<File Id="Telugu_Gurmukhi.txt" Name="TELUGU~4.TXT" LongName="Telugu_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Gurmukhi.txt"/>
+									<File Id="Telugu_Gurmukhi.txt" Name="Telugu_Gurmukhi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Gurmukhi.txt"/>
 								</Component>
 								<Component Id="Telugu_InterIndic.txt" Guid="1C7954F2-7458-4150-9CA9-8BDE95642940">
-									<File Id="Telugu_InterIndic.txt" Name="TE2C4C~1.TXT" LongName="Telugu_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_InterIndic.txt"/>
+									<File Id="Telugu_InterIndic.txt" Name="Telugu_InterIndic.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_InterIndic.txt"/>
 								</Component>
 								<Component Id="Telugu_Kannada.txt" Guid="F0190FB0-264E-4C2D-B45C-4889D5C6B63D">
-									<File Id="Telugu_Kannada.txt" Name="TEE6B4~1.TXT" LongName="Telugu_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Kannada.txt"/>
+									<File Id="Telugu_Kannada.txt" Name="Telugu_Kannada.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Kannada.txt"/>
 								</Component>
 								<Component Id="Telugu_Latin.txt" Guid="0CC7877C-46FD-4FD6-A4EB-214B51362390">
-									<File Id="Telugu_Latin.txt" Name="TE3C3C~1.TXT" LongName="Telugu_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Latin.txt"/>
+									<File Id="Telugu_Latin.txt" Name="Telugu_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Latin.txt"/>
 								</Component>
 								<Component Id="Telugu_Malayalam.txt" Guid="45D9B924-018A-4ADD-9ECE-492B364A449D">
-									<File Id="Telugu_Malayalam.txt" Name="TECBC8~1.TXT" LongName="Telugu_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Malayalam.txt"/>
+									<File Id="Telugu_Malayalam.txt" Name="Telugu_Malayalam.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Malayalam.txt"/>
 								</Component>
 								<Component Id="Telugu_Oriya.txt" Guid="75E95BFD-0449-4336-B17D-5E486F2DA724">
-									<File Id="Telugu_Oriya.txt" Name="TEED93~1.TXT" LongName="Telugu_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Oriya.txt"/>
+									<File Id="Telugu_Oriya.txt" Name="Telugu_Oriya.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Oriya.txt"/>
 								</Component>
 								<Component Id="Telugu_Tamil.txt" Guid="F6ADED16-F101-4272-8B87-846E0FF32AB0">
-									<File Id="Telugu_Tamil.txt" Name="TE2C3A~1.TXT" LongName="Telugu_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Tamil.txt"/>
+									<File Id="Telugu_Tamil.txt" Name="Telugu_Tamil.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Telugu_Tamil.txt"/>
 								</Component>
 								<Component Id="Thaana_Latin.txt" Guid="A8B5936B-9211-427C-928D-B8FF4EA73083">
-									<File Id="Thaana_Latin.txt" Name="THAANA~1.TXT" LongName="Thaana_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Thaana_Latin.txt"/>
+									<File Id="Thaana_Latin.txt" Name="Thaana_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Thaana_Latin.txt"/>
 								</Component>
 								<Component Id="ThaiLogical_Latin.txt" Guid="546F44CA-DBA7-4E3E-AB5E-D2ECDD9A7DA0">
-									<File Id="ThaiLogical_Latin.txt" Name="THAILO~1.TXT" LongName="ThaiLogical_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\ThaiLogical_Latin.txt"/>
+									<File Id="ThaiLogical_Latin.txt" Name="ThaiLogical_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\ThaiLogical_Latin.txt"/>
 								</Component>
 								<Component Id="Thai_Latin.txt" Guid="8BC0A833-3E5E-4B93-AB7B-B779A841A8FE">
-									<File Id="Thai_Latin.txt" Name="THAI_L~1.TXT" LongName="Thai_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Thai_Latin.txt"/>
+									<File Id="Thai_Latin.txt" Name="Thai_Latin.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Thai_Latin.txt"/>
 								</Component>
 								<Component Id="Thai_ThaiLogical.txt" Guid="310A01C5-6DC5-4FFC-ADA0-D74D396C40F2">
-									<File Id="Thai_ThaiLogical.txt" Name="THAI_T~1.TXT" LongName="Thai_ThaiLogical.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Thai_ThaiLogical.txt"/>
+									<File Id="Thai_ThaiLogical.txt" Name="Thai_ThaiLogical.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Thai_ThaiLogical.txt"/>
 								</Component>
 								<Component Id="Thai_ThaiSemi.txt" Guid="586510F2-0F1E-41DC-8DFF-59826A768E0C">
-									<File Id="Thai_ThaiSemi.txt" Name="THAI_T~2.TXT" LongName="Thai_ThaiSemi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Thai_ThaiSemi.txt"/>
+									<File Id="Thai_ThaiSemi.txt" Name="Thai_ThaiSemi.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\translit\Thai_ThaiSemi.txt"/>
 								</Component>
 							</Directory>
 							<Directory Id="unidata" Name="unidata">
 								<Component Id="BidiMirroring.txt" Guid="598B9662-D665-42DD-A29B-C1538A1716D3">
-									<File Id="BidiMirroring.txt" Name="BIDIMI~1.TXT" LongName="BidiMirroring.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\BidiMirroring.txt"/>
+									<File Id="BidiMirroring.txt" Name="BidiMirroring.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\BidiMirroring.txt"/>
 								</Component>
 								<Component Id="BidiMirroring_STANDARD.txt" Guid="173B15C9-0D10-4DCB-AC90-1F8B310FC0DC">
-									<File Id="BidiMirroring_STANDARD.txt" Name="BIDIMI~2.TXT" LongName="BidiMirroring_STANDARD.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\BidiMirroring_STANDARD.txt"/>
+									<File Id="BidiMirroring_STANDARD.txt" Name="BidiMirroring_STANDARD.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\BidiMirroring_STANDARD.txt"/>
 								</Component>
 								<Component Id="Blocks.txt" Guid="CFF28A45-7254-4469-A5D8-005D924AB0AA">
 									<File Id="Blocks.txt" Name="Blocks.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\Blocks.txt"/>
 								</Component>
 								<Component Id="CaseFolding.txt" Guid="BB2BBC5A-F8AC-4E51-8159-712D522EC977">
-									<File Id="CaseFolding.txt" Name="CASEFO~1.TXT" LongName="CaseFolding.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\CaseFolding.txt"/>
+									<File Id="CaseFolding.txt" Name="CaseFolding.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\CaseFolding.txt"/>
 								</Component>
 								<Component Id="changes.txt" Guid="CAE467D9-EB8C-4C7F-91AA-CA529EEA22D0">
 									<File Id="changes.txt" Name="changes.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\changes.txt"/>
 								</Component>
 								<Component Id="DerivedAge.txt" Guid="A8CE63C1-08BB-4BA8-8D8F-577E984D690D">
-									<File Id="DerivedAge.txt" Name="DERIVE~1.TXT" LongName="DerivedAge.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedAge.txt"/>
+									<File Id="DerivedAge.txt" Name="DerivedAge.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedAge.txt"/>
 								</Component>
 								<Component Id="DerivedBidiClass.txt" Guid="00301771-B5D9-4712-9BD6-A956EC5F73FC">
-									<File Id="DerivedBidiClass.txt" Name="DERIVE~2.TXT" LongName="DerivedBidiClass.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedBidiClass.txt"/>
+									<File Id="DerivedBidiClass.txt" Name="DerivedBidiClass.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedBidiClass.txt"/>
 								</Component>
 								<Component Id="DerivedBidiClass_STANDARD.txt" Guid="E066E684-2A68-4BAA-AF2D-0806D645132F">
-									<File Id="DerivedBidiClass_STANDARD.txt" Name="DERIVE~3.TXT" LongName="DerivedBidiClass_STANDARD.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedBidiClass_STANDARD.txt"/>
+									<File Id="DerivedBidiClass_STANDARD.txt" Name="DerivedBidiClass_STANDARD.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedBidiClass_STANDARD.txt"/>
 								</Component>
 								<Component Id="DerivedCoreProperties.txt" Guid="CF9CD9FD-09BC-4CBF-8084-B2909348FCE1">
-									<File Id="DerivedCoreProperties.txt" Name="DERIVE~4.TXT" LongName="DerivedCoreProperties.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedCoreProperties.txt"/>
+									<File Id="DerivedCoreProperties.txt" Name="DerivedCoreProperties.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedCoreProperties.txt"/>
 								</Component>
 								<Component Id="DerivedJoiningGroup.txt" Guid="0315E2EE-90AB-45D1-97BD-496F8CD15F3A">
-									<File Id="DerivedJoiningGroup.txt" Name="DED125~1.TXT" LongName="DerivedJoiningGroup.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedJoiningGroup.txt"/>
+									<File Id="DerivedJoiningGroup.txt" Name="DerivedJoiningGroup.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedJoiningGroup.txt"/>
 								</Component>
 								<Component Id="DerivedJoiningType.txt" Guid="27A0BD11-6F69-4552-BEEB-1678AF0A6487">
-									<File Id="DerivedJoiningType.txt" Name="DE731C~1.TXT" LongName="DerivedJoiningType.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedJoiningType.txt"/>
+									<File Id="DerivedJoiningType.txt" Name="DerivedJoiningType.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedJoiningType.txt"/>
 								</Component>
 								<Component Id="DerivedNormalizationProps.txt" Guid="23FB5A44-5D20-4A19-9F1F-5392837ABCA9">
-									<File Id="DerivedNormalizationProps.txt" Name="DEAA4E~1.TXT" LongName="DerivedNormalizationProps.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedNormalizationProps.txt"/>
+									<File Id="DerivedNormalizationProps.txt" Name="DerivedNormalizationProps.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedNormalizationProps.txt"/>
 								</Component>
-								<Component Id="DerivedNormalizationProps_STANDARD.txt" Guid="A893274D-AA16-4465-B8A3-3356AEFF7080">
-									<File Id="DerivedNormalizationProps_STANDARD.txt" Name="DEED2F~1.TXT" LongName="DerivedNormalizationProps_STANDARD.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedNormalizationProps_STANDARD.txt"/>
+								<Component Id="DerivedNormalizationProps_STANDARD." Guid="A893274D-AA16-4465-B8A3-3356AEFF7080">
+									<File Id="DerivedNormalizationProps_STANDARD." Name="DerivedNormalizationProps_STANDARD.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedNormalizationProps_STANDARD.txt"/>
 								</Component>
 								<Component Id="DerivedNumericValues.txt" Guid="15096B56-E227-4259-AAF5-C9F62F27A5AC">
-									<File Id="DerivedNumericValues.txt" Name="DEF217~1.TXT" LongName="DerivedNumericValues.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedNumericValues.txt"/>
+									<File Id="DerivedNumericValues.txt" Name="DerivedNumericValues.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\DerivedNumericValues.txt"/>
 								</Component>
 								<Component Id="EastAsianWidth.txt" Guid="432FE2A4-D2EC-45DF-8A95-86D3B9CD99D3">
-									<File Id="EastAsianWidth.txt" Name="EASTAS~1.TXT" LongName="EastAsianWidth.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\EastAsianWidth.txt"/>
+									<File Id="EastAsianWidth.txt" Name="EastAsianWidth.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\EastAsianWidth.txt"/>
 								</Component>
 								<Component Id="FractionalUCA.txt" Guid="0E348206-4392-422E-A76C-C6B6887D0F06">
-									<File Id="FractionalUCA.txt" Name="FRACTI~1.TXT" LongName="FractionalUCA.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\FractionalUCA.txt"/>
+									<File Id="FractionalUCA.txt" Name="FractionalUCA.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\FractionalUCA.txt"/>
 								</Component>
 								<Component Id="GraphemeBreakProperty.txt" Guid="A862604F-8DF3-4FC8-A719-28680F09F341">
-									<File Id="GraphemeBreakProperty.txt" Name="GRAPHE~1.TXT" LongName="GraphemeBreakProperty.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\GraphemeBreakProperty.txt"/>
+									<File Id="GraphemeBreakProperty.txt" Name="GraphemeBreakProperty.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\GraphemeBreakProperty.txt"/>
 								</Component>
 								<Component Id="LineBreak.txt" Guid="DFE69826-493B-43D0-A377-F9F080A582C5">
-									<File Id="LineBreak.txt" Name="LINEBR~1.TXT" LongName="LineBreak.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\LineBreak.txt"/>
+									<File Id="LineBreak.txt" Name="LineBreak.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\LineBreak.txt"/>
 								</Component>
 								<Component Id="LineBreak_STANDARD.txt" Guid="6CC9EA50-AA01-435C-A5B5-36B685C87001">
-									<File Id="LineBreak_STANDARD.txt" Name="LINEBR~2.TXT" LongName="LineBreak_STANDARD.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\LineBreak_STANDARD.txt"/>
+									<File Id="LineBreak_STANDARD.txt" Name="LineBreak_STANDARD.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\LineBreak_STANDARD.txt"/>
 								</Component>
 								<Component Id="NormalizationCorrections.txt" Guid="13E25E69-B865-4153-BD9E-C0F66283AAC7">
-									<File Id="NormalizationCorrections.txt" Name="NORMAL~1.TXT" LongName="NormalizationCorrections.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\NormalizationCorrections.txt"/>
+									<File Id="NormalizationCorrections.txt" Name="NormalizationCorrections.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\NormalizationCorrections.txt"/>
 								</Component>
 								<Component Id="NormalizationTest.txt" Guid="5E9EA245-2DFB-44C7-ABDB-F2256272B72E">
-									<File Id="NormalizationTest.txt" Name="NORMAL~2.TXT" LongName="NormalizationTest.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\NormalizationTest.txt"/>
+									<File Id="NormalizationTest.txt" Name="NormalizationTest.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\NormalizationTest.txt"/>
 								</Component>
 								<Component Id="PropertyAliases.txt" Guid="7782328A-84DC-4E8C-A853-1374E7F95DB0">
-									<File Id="PropertyAliases.txt" Name="PROPER~1.TXT" LongName="PropertyAliases.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\PropertyAliases.txt"/>
+									<File Id="PropertyAliases.txt" Name="PropertyAliases.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\PropertyAliases.txt"/>
 								</Component>
 								<Component Id="PropertyValueAliases.txt" Guid="4360B5E4-0FB1-46D7-9AED-8B195E4C549E">
-									<File Id="PropertyValueAliases.txt" Name="PROPER~2.TXT" LongName="PropertyValueAliases.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\PropertyValueAliases.txt"/>
+									<File Id="PropertyValueAliases.txt" Name="PropertyValueAliases.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\PropertyValueAliases.txt"/>
 								</Component>
 								<Component Id="PropList.txt" Guid="97A021B6-F0AB-4EBC-8603-6B9E54B914BC">
 									<File Id="PropList.txt" Name="PropList.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\PropList.txt"/>
@@ -2379,10 +2381,10 @@
 									<File Id="Scripts.txt" Name="Scripts.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\Scripts.txt"/>
 								</Component>
 								<Component Id="SentenceBreakProperty.txt" Guid="2133B595-98C2-496D-86C5-AE75543891D4">
-									<File Id="SentenceBreakProperty.txt" Name="SENTEN~1.TXT" LongName="SentenceBreakProperty.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\SentenceBreakProperty.txt"/>
+									<File Id="SentenceBreakProperty.txt" Name="SentenceBreakProperty.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\SentenceBreakProperty.txt"/>
 								</Component>
 								<Component Id="SpecialCasing.txt" Guid="7088214E-21BC-419A-AA87-E99D9F34EAC9">
-									<File Id="SpecialCasing.txt" Name="SPECIA~1.TXT" LongName="SpecialCasing.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\SpecialCasing.txt"/>
+									<File Id="SpecialCasing.txt" Name="SpecialCasing.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\SpecialCasing.txt"/>
 								</Component>
 								<Component Id="UCARules.txt" Guid="D772481B-2893-446E-8348-64B9524EE837">
 									<File Id="UCARules.txt" Name="UCARules.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\UCARules.txt"/>
@@ -2391,17 +2393,17 @@
 									<File Id="ucdterms.txt" Name="ucdterms.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\ucdterms.txt"/>
 								</Component>
 								<Component Id="UnicodeData.txt" Guid="A5FC8B3C-1522-4BE9-93FE-3548253C1EFD">
-									<File Id="UnicodeData.txt" Name="UNICOD~1.TXT" LongName="UnicodeData.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\UnicodeData.txt"/>
+									<File Id="UnicodeData.txt" Name="UnicodeData.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\UnicodeData.txt"/>
 								</Component>
 								<Component Id="UnicodeData_STANDARD.txt" Guid="381CBAB5-F952-4894-9C10-90AC136DFA74">
-									<File Id="UnicodeData_STANDARD.txt" Name="UNICOD~2.TXT" LongName="UnicodeData_STANDARD.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\UnicodeData_STANDARD.txt"/>
+									<File Id="UnicodeData_STANDARD.txt" Name="UnicodeData_STANDARD.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\UnicodeData_STANDARD.txt"/>
 								</Component>
 								<Component Id="WordBreakProperty.txt" Guid="9F2C4474-FEAE-4588-BBF0-02F38BDE23BC">
-									<File Id="WordBreakProperty.txt" Name="WORDBR~1.TXT" LongName="WordBreakProperty.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\WordBreakProperty.txt"/>
+									<File Id="WordBreakProperty.txt" Name="WordBreakProperty.txt" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\unidata\WordBreakProperty.txt"/>
 								</Component>
 							</Directory>
 							<Component Id="UCD.html" Guid="D11CF3A1-9BB7-4671-8CF3-E5EF92072DF5">
-								<File Id="UCD.html" Name="UCD~1.HTM" LongName="UCD.html" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\UCD.html"/>
+								<File Id="UCD.html" Name="UCD.html" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\data\UCD.html"/>
 							</Component>
 						</Directory>
 						<Directory Id="icudt40l" Name="icudt40l">
@@ -2416,7 +2418,7 @@
 									<File Id="en_US.res" Name="en_US.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\brkitr\en_US.res"/>
 								</Component>
 								<Component Id="en_US_POSIX.res" Guid="B1DF2A3D-76A6-4A22-BA8F-AE54EF3F3619">
-									<File Id="en_US_POSIX.res" Name="EN_US_~1.RES" LongName="en_US_POSIX.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\brkitr\en_US_POSIX.res"/>
+									<File Id="en_US_POSIX.res" Name="en_US_POSIX.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\brkitr\en_US_POSIX.res"/>
 								</Component>
 								<Component Id="ja.res" Guid="3D59B230-3EE6-4920-BD0A-FE6F2D3EF3ED">
 									<File Id="ja.res" Name="ja.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\brkitr\ja.res"/>
@@ -2425,7 +2427,7 @@
 									<File Id="line.brk" Name="line.brk" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\brkitr\line.brk"/>
 								</Component>
 								<Component Id="res_index.res" Guid="BB55D9F8-AEDC-4179-94B3-0857C95272CC">
-									<File Id="res_index.res" Name="RES_IN~1.RES" LongName="res_index.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\brkitr\res_index.res"/>
+									<File Id="res_index.res" Name="res_index.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\brkitr\res_index.res"/>
 								</Component>
 								<Component Id="root.res" Guid="CAD1592F-A797-4DE8-896E-5F9894B9B40A">
 									<File Id="root.res" Name="root.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\brkitr\root.res"/>
@@ -2446,7 +2448,7 @@
 									<File Id="word_ja.brk" Name="word_ja.brk" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\brkitr\word_ja.brk"/>
 								</Component>
 								<Component Id="word_POSIX.brk" Guid="F777522D-A10A-44C8-B2B7-6B5E0D04DA05">
-									<File Id="word_POSIX.brk" Name="WORD_P~1.BRK" LongName="word_POSIX.brk" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\brkitr\word_POSIX.brk"/>
+									<File Id="word_POSIX.brk" Name="word_POSIX.brk" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\brkitr\word_POSIX.brk"/>
 								</Component>
 							</Directory>
 							<Directory Id="coll2" Name="coll">
@@ -2571,7 +2573,7 @@
 									<File Id="de_LU.res" Name="de_LU.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\de_LU.res"/>
 								</Component>
 								<Component Id="de__PHONEBOOK.res" Guid="ED4EDA07-DE34-45D1-B71C-CBD3C35001FF">
-									<File Id="de__PHONEBOOK.res" Name="DE__PH~1.RES" LongName="de__PHONEBOOK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\de__PHONEBOOK.res"/>
+									<File Id="de__PHONEBOOK.res" Name="de__PHONEBOOK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\de__PHONEBOOK.res"/>
 								</Component>
 								<Component Id="el.res" Guid="D247FE6A-236F-40E4-8545-FB778A3FB04C">
 									<File Id="el.res" Name="el.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\el.res"/>
@@ -2622,7 +2624,7 @@
 									<File Id="en_US.res2" Name="en_US.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\en_US.res"/>
 								</Component>
 								<Component Id="en_US_POSIX.res2" Guid="FD5F8AC2-60BE-4695-9594-39B99B47B4E7">
-									<File Id="en_US_POSIX.res2" Name="EN_US_~1.RES" LongName="en_US_POSIX.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\en_US_POSIX.res"/>
+									<File Id="en_US_POSIX.res2" Name="en_US_POSIX.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\en_US_POSIX.res"/>
 								</Component>
 								<Component Id="en_VI.res" Guid="324B276F-1C9A-40C8-ACD6-CCB784E7CFCC">
 									<File Id="en_VI.res" Name="en_VI.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\en_VI.res"/>
@@ -2703,7 +2705,7 @@
 									<File Id="es_VE.res" Name="es_VE.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\es_VE.res"/>
 								</Component>
 								<Component Id="es__TRADITIONAL.res" Guid="09894377-BFE5-4E82-A254-C696A51EC9CE">
-									<File Id="es__TRADITIONAL.res" Name="ES__TR~1.RES" LongName="es__TRADITIONAL.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\es__TRADITIONAL.res"/>
+									<File Id="es__TRADITIONAL.res" Name="es__TRADITIONAL.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\es__TRADITIONAL.res"/>
 								</Component>
 								<Component Id="et.res" Guid="680E7023-8131-446F-8825-B44E1C42440A">
 									<File Id="et.res" Name="et.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\et.res"/>
@@ -2781,7 +2783,7 @@
 									<File Id="hi_IN.res" Name="hi_IN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\hi_IN.res"/>
 								</Component>
 								<Component Id="hi__DIRECT.res" Guid="2B4CC729-A6FC-4C7C-8EA1-3095D6087432">
-									<File Id="hi__DIRECT.res" Name="HI__DI~1.RES" LongName="hi__DIRECT.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\hi__DIRECT.res"/>
+									<File Id="hi__DIRECT.res" Name="hi__DIRECT.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\hi__DIRECT.res"/>
 								</Component>
 								<Component Id="hr.res" Guid="2C0A92CF-0ADA-4D97-B8F4-640F66BD4104">
 									<File Id="hr.res" Name="hr.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\hr.res"/>
@@ -2952,13 +2954,13 @@
 									<File Id="pa_Arab.res" Name="pa_Arab.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\pa_Arab.res"/>
 								</Component>
 								<Component Id="pa_Arab_PK.res" Guid="5E92A19B-A4D5-4E1D-B1B4-133464AC28C3">
-									<File Id="pa_Arab_PK.res" Name="PA_ARA~1.RES" LongName="pa_Arab_PK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\pa_Arab_PK.res"/>
+									<File Id="pa_Arab_PK.res" Name="pa_Arab_PK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\pa_Arab_PK.res"/>
 								</Component>
 								<Component Id="pa_Guru.res" Guid="55C85C46-2630-475A-B5FE-8A144A4A34DC">
 									<File Id="pa_Guru.res" Name="pa_Guru.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\pa_Guru.res"/>
 								</Component>
 								<Component Id="pa_Guru_IN.res" Guid="D6F716EC-C409-448D-AD73-36C32E9C30D1">
-									<File Id="pa_Guru_IN.res" Name="PA_GUR~1.RES" LongName="pa_Guru_IN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\pa_Guru_IN.res"/>
+									<File Id="pa_Guru_IN.res" Name="pa_Guru_IN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\pa_Guru_IN.res"/>
 								</Component>
 								<Component Id="pl.res" Guid="54179878-053B-40AC-98CB-53095837772E">
 									<File Id="pl.res" Name="pl.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\pl.res"/>
@@ -2982,7 +2984,7 @@
 									<File Id="pt_PT.res" Name="pt_PT.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\pt_PT.res"/>
 								</Component>
 								<Component Id="res_index.res2" Guid="A8EE676E-3C1C-4F13-AF6E-251A71A004C0">
-									<File Id="res_index.res2" Name="RES_IN~1.RES" LongName="res_index.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\res_index.res"/>
+									<File Id="res_index.res2" Name="res_index.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\res_index.res"/>
 								</Component>
 								<Component Id="ro.res" Guid="AF91CAC8-5B85-4724-A571-32070F008059">
 									<File Id="ro.res" Name="ro.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\ro.res"/>
@@ -3039,25 +3041,25 @@
 									<File Id="sr_Cyrl.res" Name="sr_Cyrl.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Cyrl.res"/>
 								</Component>
 								<Component Id="sr_Cyrl_BA.res" Guid="FD90BFAE-2014-494C-A579-63E8B462B7B7">
-									<File Id="sr_Cyrl_BA.res" Name="SR_CYR~1.RES" LongName="sr_Cyrl_BA.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Cyrl_BA.res"/>
+									<File Id="sr_Cyrl_BA.res" Name="sr_Cyrl_BA.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Cyrl_BA.res"/>
 								</Component>
 								<Component Id="sr_Cyrl_ME.res" Guid="89175ED0-2F7D-447B-ADF3-D43F4175FDEE">
-									<File Id="sr_Cyrl_ME.res" Name="SR_CYR~2.RES" LongName="sr_Cyrl_ME.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Cyrl_ME.res"/>
+									<File Id="sr_Cyrl_ME.res" Name="sr_Cyrl_ME.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Cyrl_ME.res"/>
 								</Component>
 								<Component Id="sr_Cyrl_RS.res" Guid="F4164994-99A3-4DE8-B3C5-EF55B3EDA8FA">
-									<File Id="sr_Cyrl_RS.res" Name="SR_CYR~3.RES" LongName="sr_Cyrl_RS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Cyrl_RS.res"/>
+									<File Id="sr_Cyrl_RS.res" Name="sr_Cyrl_RS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Cyrl_RS.res"/>
 								</Component>
 								<Component Id="sr_Latn.res" Guid="23D24FF6-9341-4D21-BF90-7C6907A2D0F4">
 									<File Id="sr_Latn.res" Name="sr_Latn.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Latn.res"/>
 								</Component>
 								<Component Id="sr_Latn_BA.res" Guid="2FA1BDA5-BA52-4A76-9E76-AD6A34F55FDA">
-									<File Id="sr_Latn_BA.res" Name="SR_LAT~1.RES" LongName="sr_Latn_BA.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Latn_BA.res"/>
+									<File Id="sr_Latn_BA.res" Name="sr_Latn_BA.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Latn_BA.res"/>
 								</Component>
 								<Component Id="sr_Latn_ME.res" Guid="C2DF66BD-31EF-40ED-9188-0A6AFD33C9BE">
-									<File Id="sr_Latn_ME.res" Name="SR_LAT~2.RES" LongName="sr_Latn_ME.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Latn_ME.res"/>
+									<File Id="sr_Latn_ME.res" Name="sr_Latn_ME.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Latn_ME.res"/>
 								</Component>
 								<Component Id="sr_Latn_RS.res" Guid="5231AD64-DE9B-4A48-B590-029EE0F1CADC">
-									<File Id="sr_Latn_RS.res" Name="SR_LAT~3.RES" LongName="sr_Latn_RS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Latn_RS.res"/>
+									<File Id="sr_Latn_RS.res" Name="sr_Latn_RS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_Latn_RS.res"/>
 								</Component>
 								<Component Id="sr_ME.res" Guid="D8C1A623-AA45-4216-9CCC-1ADE7F41D29F">
 									<File Id="sr_ME.res" Name="sr_ME.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\sr_ME.res"/>
@@ -3132,22 +3134,22 @@
 									<File Id="zh_Hans.res" Name="zh_Hans.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hans.res"/>
 								</Component>
 								<Component Id="zh_Hans_CN.res" Guid="B39E124E-5576-4F25-82E4-41059BB54FE9">
-									<File Id="zh_Hans_CN.res" Name="ZH_HAN~1.RES" LongName="zh_Hans_CN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hans_CN.res"/>
+									<File Id="zh_Hans_CN.res" Name="zh_Hans_CN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hans_CN.res"/>
 								</Component>
 								<Component Id="zh_Hans_SG.res" Guid="BC5DBB9D-3954-47EF-8049-0B364588458E">
-									<File Id="zh_Hans_SG.res" Name="ZH_HAN~2.RES" LongName="zh_Hans_SG.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hans_SG.res"/>
+									<File Id="zh_Hans_SG.res" Name="zh_Hans_SG.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hans_SG.res"/>
 								</Component>
 								<Component Id="zh_Hant.res" Guid="FAE26BBE-EB1D-45DB-AD33-66003795ADEC">
 									<File Id="zh_Hant.res" Name="zh_Hant.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hant.res"/>
 								</Component>
 								<Component Id="zh_Hant_HK.res" Guid="28897887-06AE-4D77-9C97-1B804234C12F">
-									<File Id="zh_Hant_HK.res" Name="ZH_HAN~3.RES" LongName="zh_Hant_HK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hant_HK.res"/>
+									<File Id="zh_Hant_HK.res" Name="zh_Hant_HK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hant_HK.res"/>
 								</Component>
 								<Component Id="zh_Hant_MO.res" Guid="F62F9F12-04B0-4A1E-8A08-576863F53B7D">
-									<File Id="zh_Hant_MO.res" Name="ZH_HAN~4.RES" LongName="zh_Hant_MO.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hant_MO.res"/>
+									<File Id="zh_Hant_MO.res" Name="zh_Hant_MO.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hant_MO.res"/>
 								</Component>
 								<Component Id="zh_Hant_TW.res" Guid="16BDB00C-9B69-4A6E-B093-909F2C49FB0F">
-									<File Id="zh_Hant_TW.res" Name="ZH84BC~1.RES" LongName="zh_Hant_TW.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hant_TW.res"/>
+									<File Id="zh_Hant_TW.res" Name="zh_Hant_TW.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_Hant_TW.res"/>
 								</Component>
 								<Component Id="zh_HK.res" Guid="F3089E05-D73C-4E20-BF7D-F41C2E2CE06C">
 									<File Id="zh_HK.res" Name="zh_HK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_HK.res"/>
@@ -3162,10 +3164,10 @@
 									<File Id="zh_TW.res" Name="zh_TW.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_TW.res"/>
 								</Component>
 								<Component Id="zh_TW_STROKE.res" Guid="077AF534-DB72-4369-BC04-0E9219AA11FF">
-									<File Id="zh_TW_STROKE.res" Name="ZH_TW_~1.RES" LongName="zh_TW_STROKE.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_TW_STROKE.res"/>
+									<File Id="zh_TW_STROKE.res" Name="zh_TW_STROKE.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh_TW_STROKE.res"/>
 								</Component>
 								<Component Id="zh__PINYIN.res" Guid="62374994-92FC-4E5C-899B-F662DCAFB15E">
-									<File Id="zh__PINYIN.res" Name="ZH__PI~1.RES" LongName="zh__PINYIN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh__PINYIN.res"/>
+									<File Id="zh__PINYIN.res" Name="zh__PINYIN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\coll\zh__PINYIN.res"/>
 								</Component>
 							</Directory>
 							<Directory Id="rbnf2" Name="rbnf">
@@ -3227,7 +3229,7 @@
 									<File Id="pt.res2" Name="pt.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\rbnf\pt.res"/>
 								</Component>
 								<Component Id="res_index.res3" Guid="DA9F133B-265F-49A7-AC95-FB1E1C605C53">
-									<File Id="res_index.res3" Name="RES_IN~1.RES" LongName="res_index.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\rbnf\res_index.res"/>
+									<File Id="res_index.res3" Name="res_index.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\rbnf\res_index.res"/>
 								</Component>
 								<Component Id="root.res3" Guid="9D5E3472-5231-4784-9059-B306A1B39A76">
 									<File Id="root.res3" Name="root.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\rbnf\root.res"/>
@@ -3341,13 +3343,13 @@
 								<File Id="az_Cyrl.res" Name="az_Cyrl.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\az_Cyrl.res"/>
 							</Component>
 							<Component Id="az_Cyrl_AZ.res" Guid="528ACECA-0C2B-4699-B749-BFD8715F3E3F">
-								<File Id="az_Cyrl_AZ.res" Name="AZ_CYR~1.RES" LongName="az_Cyrl_AZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\az_Cyrl_AZ.res"/>
+								<File Id="az_Cyrl_AZ.res" Name="az_Cyrl_AZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\az_Cyrl_AZ.res"/>
 							</Component>
 							<Component Id="az_Latn.res" Guid="3CD63608-F4F2-4C7C-9393-8006031205CB">
 								<File Id="az_Latn.res" Name="az_Latn.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\az_Latn.res"/>
 							</Component>
 							<Component Id="az_Latn_AZ.res" Guid="86E13360-7E10-487F-AB6E-DB870A89D9EB">
-								<File Id="az_Latn_AZ.res" Name="AZ_LAT~1.RES" LongName="az_Latn_AZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\az_Latn_AZ.res"/>
+								<File Id="az_Latn_AZ.res" Name="az_Latn_AZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\az_Latn_AZ.res"/>
 							</Component>
 							<Component Id="be.res2" Guid="6E1F7095-A331-48AE-AA04-ED002B089161">
 								<File Id="be.res2" Name="be.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\be.res"/>
@@ -3491,7 +3493,7 @@
 								<File Id="en_US.res3" Name="en_US.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\en_US.res"/>
 							</Component>
 							<Component Id="en_US_POSIX.res3" Guid="8C742957-1ADD-4DE5-9E7E-A14157E28401">
-								<File Id="en_US_POSIX.res3" Name="EN_US_~1.RES" LongName="en_US_POSIX.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\en_US_POSIX.res"/>
+								<File Id="en_US_POSIX.res3" Name="en_US_POSIX.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\en_US_POSIX.res"/>
 							</Component>
 							<Component Id="en_VI.res2" Guid="36E9BAFE-0B0E-41AD-9EA7-59AC80CF48CA">
 								<File Id="en_VI.res2" Name="en_VI.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\en_VI.res"/>
@@ -3662,7 +3664,7 @@
 								<File Id="ha_Latn.res" Name="ha_Latn.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\ha_Latn.res"/>
 							</Component>
 							<Component Id="ha_Latn_NG.res" Guid="535607B5-65D8-4139-8B92-CDA1C9C35E67">
-								<File Id="ha_Latn_NG.res" Name="HA_LAT~1.RES" LongName="ha_Latn_NG.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\ha_Latn_NG.res"/>
+								<File Id="ha_Latn_NG.res" Name="ha_Latn_NG.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\ha_Latn_NG.res"/>
 							</Component>
 							<Component Id="ha_NG.res" Guid="3F06A93A-64FB-401A-B429-4C8E771DD4EB">
 								<File Id="ha_NG.res" Name="ha_NG.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\ha_NG.res"/>
@@ -3698,7 +3700,7 @@
 								<File Id="hy_AM.res" Name="hy_AM.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\hy_AM.res"/>
 							</Component>
 							<Component Id="hy_AM_REVISED.res" Guid="6359890C-CFF6-40EA-BEB6-385DA60939E2">
-								<File Id="hy_AM_REVISED.res" Name="HY_AM_~1.RES" LongName="hy_AM_REVISED.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\hy_AM_REVISED.res"/>
+								<File Id="hy_AM_REVISED.res" Name="hy_AM_REVISED.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\hy_AM_REVISED.res"/>
 							</Component>
 							<Component Id="id.res2" Guid="2B28E107-A347-4ACE-9AD3-88CF7860F325">
 								<File Id="id.res2" Name="id.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\id.res"/>
@@ -3749,7 +3751,7 @@
 								<File Id="ja_JP.res2" Name="ja_JP.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\ja_JP.res"/>
 							</Component>
 							<Component Id="ja_JP_TRADITIONAL.res" Guid="5AE2299A-6887-4A36-A858-7332F9798D88">
-								<File Id="ja_JP_TRADITIONAL.res" Name="JA_JP_~1.RES" LongName="ja_JP_TRADITIONAL.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\ja_JP_TRADITIONAL.res"/>
+								<File Id="ja_JP_TRADITIONAL.res" Name="ja_JP_TRADITIONAL.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\ja_JP_TRADITIONAL.res"/>
 							</Component>
 							<Component Id="ka.res" Guid="412CD61A-0371-40BB-AFEF-F0EE7E71F29C">
 								<File Id="ka.res" Name="ka.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\ka.res"/>
@@ -3764,7 +3766,7 @@
 								<File Id="kk_Cyrl.res" Name="kk_Cyrl.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\kk_Cyrl.res"/>
 							</Component>
 							<Component Id="kk_Cyrl_KZ.res" Guid="D9C743B4-E815-423A-B1F8-BFA57B7786C5">
-								<File Id="kk_Cyrl_KZ.res" Name="KK_CYR~1.RES" LongName="kk_Cyrl_KZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\kk_Cyrl_KZ.res"/>
+								<File Id="kk_Cyrl_KZ.res" Name="kk_Cyrl_KZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\kk_Cyrl_KZ.res"/>
 							</Component>
 							<Component Id="kk_KZ.res2" Guid="876B8269-79E1-4AFC-A35D-49BF886F7725">
 								<File Id="kk_KZ.res2" Name="kk_KZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\kk_KZ.res"/>
@@ -3806,7 +3808,7 @@
 								<File Id="kw_GB.res" Name="kw_GB.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\kw_GB.res"/>
 							</Component>
 							<Component Id="likelySubtags.res" Guid="BA9BBEB4-0AA3-4ED2-937A-253EDED05873">
-								<File Id="likelySubtags.res" Name="LIKELY~1.RES" LongName="likelySubtags.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\likelySubtags.res"/>
+								<File Id="likelySubtags.res" Name="likelySubtags.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\likelySubtags.res"/>
 							</Component>
 							<Component Id="lt.res2" Guid="1F4E0FF3-54CE-43FA-967F-DE513DBFFC4D">
 								<File Id="lt.res2" Name="lt.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\lt.res"/>
@@ -3821,7 +3823,7 @@
 								<File Id="lv_LV.res2" Name="lv_LV.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\lv_LV.res"/>
 							</Component>
 							<Component Id="metazoneInfo.res" Guid="094B7D66-E079-4BB0-ADEA-B4706E9C42C7">
-								<File Id="metazoneInfo.res" Name="METAZO~1.RES" LongName="metazoneInfo.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\metazoneInfo.res"/>
+								<File Id="metazoneInfo.res" Name="metazoneInfo.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\metazoneInfo.res"/>
 							</Component>
 							<Component Id="mk.res2" Guid="0795B904-3F8C-4691-933F-D483BD1122F1">
 								<File Id="mk.res2" Name="mk.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\mk.res"/>
@@ -3917,13 +3919,13 @@
 								<File Id="pa_Arab.res2" Name="pa_Arab.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\pa_Arab.res"/>
 							</Component>
 							<Component Id="pa_Arab_PK.res2" Guid="B5C46799-D901-484F-AF6E-F4F963E704C3">
-								<File Id="pa_Arab_PK.res2" Name="PA_ARA~1.RES" LongName="pa_Arab_PK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\pa_Arab_PK.res"/>
+								<File Id="pa_Arab_PK.res2" Name="pa_Arab_PK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\pa_Arab_PK.res"/>
 							</Component>
 							<Component Id="pa_Guru.res2" Guid="5D9A97D6-38FB-4F9E-9218-9702A2BBA8CD">
 								<File Id="pa_Guru.res2" Name="pa_Guru.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\pa_Guru.res"/>
 							</Component>
 							<Component Id="pa_Guru_IN.res2" Guid="AB251CE0-4A06-44DA-AF45-8FC9DF8946EB">
-								<File Id="pa_Guru_IN.res2" Name="PA_GUR~1.RES" LongName="pa_Guru_IN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\pa_Guru_IN.res"/>
+								<File Id="pa_Guru_IN.res2" Name="pa_Guru_IN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\pa_Guru_IN.res"/>
 							</Component>
 							<Component Id="pa_IN.res" Guid="A4E6E81B-EAFC-4B77-8DFB-E877D118EB62">
 								<File Id="pa_IN.res" Name="pa_IN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\pa_IN.res"/>
@@ -3959,7 +3961,7 @@
 								<File Id="pt_PT.res2" Name="pt_PT.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\pt_PT.res"/>
 							</Component>
 							<Component Id="res_index.res4" Guid="68AB106F-A12A-4412-8B85-D5F75BDB50E0">
-								<File Id="res_index.res4" Name="RES_IN~1.RES" LongName="res_index.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\res_index.res"/>
+								<File Id="res_index.res4" Name="res_index.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\res_index.res"/>
 							</Component>
 							<Component Id="ro.res2" Guid="55C1D52F-2ABE-4EBB-B12E-A9EA4F4E1F44">
 								<File Id="ro.res2" Name="ro.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\ro.res"/>
@@ -4043,37 +4045,37 @@
 								<File Id="sr_Cyrl.res2" Name="sr_Cyrl.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Cyrl.res"/>
 							</Component>
 							<Component Id="sr_Cyrl_BA.res2" Guid="43B79690-47CD-4048-98E0-605D701DA8F9">
-								<File Id="sr_Cyrl_BA.res2" Name="SR_CYR~1.RES" LongName="sr_Cyrl_BA.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Cyrl_BA.res"/>
+								<File Id="sr_Cyrl_BA.res2" Name="sr_Cyrl_BA.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Cyrl_BA.res"/>
 							</Component>
 							<Component Id="sr_Cyrl_CS.res" Guid="E05E2390-0F2E-4ECA-B36E-F1D694EE2918">
-								<File Id="sr_Cyrl_CS.res" Name="SR_CYR~2.RES" LongName="sr_Cyrl_CS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Cyrl_CS.res"/>
+								<File Id="sr_Cyrl_CS.res" Name="sr_Cyrl_CS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Cyrl_CS.res"/>
 							</Component>
 							<Component Id="sr_Cyrl_ME.res2" Guid="6B640C4D-D56E-4F73-ABF8-2F6FBDF02287">
-								<File Id="sr_Cyrl_ME.res2" Name="SR_CYR~3.RES" LongName="sr_Cyrl_ME.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Cyrl_ME.res"/>
+								<File Id="sr_Cyrl_ME.res2" Name="sr_Cyrl_ME.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Cyrl_ME.res"/>
 							</Component>
 							<Component Id="sr_Cyrl_RS.res2" Guid="E8CBD83E-6300-4B34-A545-D168D8674BBB">
-								<File Id="sr_Cyrl_RS.res2" Name="SR_CYR~4.RES" LongName="sr_Cyrl_RS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Cyrl_RS.res"/>
+								<File Id="sr_Cyrl_RS.res2" Name="sr_Cyrl_RS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Cyrl_RS.res"/>
 							</Component>
 							<Component Id="sr_Cyrl_YU.res" Guid="8C1A2B2B-5F25-477F-9A9E-E6E33DB4E3BD">
-								<File Id="sr_Cyrl_YU.res" Name="SRCEC8~1.RES" LongName="sr_Cyrl_YU.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Cyrl_YU.res"/>
+								<File Id="sr_Cyrl_YU.res" Name="sr_Cyrl_YU.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Cyrl_YU.res"/>
 							</Component>
 							<Component Id="sr_Latn.res2" Guid="73AA72C1-A986-412E-AA75-E57E313E43B8">
 								<File Id="sr_Latn.res2" Name="sr_Latn.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Latn.res"/>
 							</Component>
 							<Component Id="sr_Latn_BA.res2" Guid="967BDA46-D330-4E62-AD83-4C6C796F56F9">
-								<File Id="sr_Latn_BA.res2" Name="SR_LAT~1.RES" LongName="sr_Latn_BA.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Latn_BA.res"/>
+								<File Id="sr_Latn_BA.res2" Name="sr_Latn_BA.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Latn_BA.res"/>
 							</Component>
 							<Component Id="sr_Latn_CS.res" Guid="11C9CB5E-DDD8-44AE-ABD1-2E68D6B4E968">
-								<File Id="sr_Latn_CS.res" Name="SR_LAT~2.RES" LongName="sr_Latn_CS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Latn_CS.res"/>
+								<File Id="sr_Latn_CS.res" Name="sr_Latn_CS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Latn_CS.res"/>
 							</Component>
 							<Component Id="sr_Latn_ME.res2" Guid="18B174EA-7806-4E84-AF69-94746E81916F">
-								<File Id="sr_Latn_ME.res2" Name="SR_LAT~3.RES" LongName="sr_Latn_ME.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Latn_ME.res"/>
+								<File Id="sr_Latn_ME.res2" Name="sr_Latn_ME.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Latn_ME.res"/>
 							</Component>
 							<Component Id="sr_Latn_RS.res2" Guid="C9711FB8-B13E-495E-8F4E-E8E1035BEE70">
-								<File Id="sr_Latn_RS.res2" Name="SR_LAT~4.RES" LongName="sr_Latn_RS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Latn_RS.res"/>
+								<File Id="sr_Latn_RS.res2" Name="sr_Latn_RS.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Latn_RS.res"/>
 							</Component>
 							<Component Id="sr_Latn_YU.res" Guid="C4A39D9C-A35C-4AA1-93EA-EBA75DEC2999">
-								<File Id="sr_Latn_YU.res" Name="SRCA32~1.RES" LongName="sr_Latn_YU.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Latn_YU.res"/>
+								<File Id="sr_Latn_YU.res" Name="sr_Latn_YU.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_Latn_YU.res"/>
 							</Component>
 							<Component Id="sr_ME.res2" Guid="D18B475E-3DB4-40FE-A980-94BBD37D1E91">
 								<File Id="sr_ME.res2" Name="sr_ME.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_ME.res"/>
@@ -4085,7 +4087,7 @@
 								<File Id="sr_YU.res" Name="sr_YU.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sr_YU.res"/>
 							</Component>
 							<Component Id="supplementalData.res" Guid="730F8566-3106-4932-BB61-984B44AEA0D1">
-								<File Id="supplementalData.res" Name="SUPPLE~1.RES" LongName="supplementalData.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\supplementalData.res"/>
+								<File Id="supplementalData.res" Name="supplementalData.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\supplementalData.res"/>
 							</Component>
 							<Component Id="sv.res3" Guid="A3E2FDC2-BE4B-4142-8D2C-A4A444117FA1">
 								<File Id="sv.res3" Name="sv.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\sv.res"/>
@@ -4124,7 +4126,7 @@
 								<File Id="th_TH.res2" Name="th_TH.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\th_TH.res"/>
 							</Component>
 							<Component Id="th_TH_TRADITIONAL.res" Guid="C92EF4E1-7429-4A28-B98D-886CFFBAE593">
-								<File Id="th_TH_TRADITIONAL.res" Name="TH_TH_~1.RES" LongName="th_TH_TRADITIONAL.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\th_TH_TRADITIONAL.res"/>
+								<File Id="th_TH_TRADITIONAL.res" Name="th_TH_TRADITIONAL.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\th_TH_TRADITIONAL.res"/>
 							</Component>
 							<Component Id="ti.res" Guid="CD8FA6C2-B1B9-4D08-85F0-813FB61D052A">
 								<File Id="ti.res" Name="ti.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\ti.res"/>
@@ -4187,19 +4189,19 @@
 								<File Id="uz_Arab.res" Name="uz_Arab.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\uz_Arab.res"/>
 							</Component>
 							<Component Id="uz_Arab_AF.res" Guid="38F75315-8421-43AE-BD6E-BE41D508F84A">
-								<File Id="uz_Arab_AF.res" Name="UZ_ARA~1.RES" LongName="uz_Arab_AF.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\uz_Arab_AF.res"/>
+								<File Id="uz_Arab_AF.res" Name="uz_Arab_AF.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\uz_Arab_AF.res"/>
 							</Component>
 							<Component Id="uz_Cyrl.res" Guid="255AB671-11D0-4ADF-8216-C76A572D4A60">
 								<File Id="uz_Cyrl.res" Name="uz_Cyrl.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\uz_Cyrl.res"/>
 							</Component>
 							<Component Id="uz_Cyrl_UZ.res" Guid="DD93CA58-EAEB-46B8-8E45-D92364088BE3">
-								<File Id="uz_Cyrl_UZ.res" Name="UZ_CYR~1.RES" LongName="uz_Cyrl_UZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\uz_Cyrl_UZ.res"/>
+								<File Id="uz_Cyrl_UZ.res" Name="uz_Cyrl_UZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\uz_Cyrl_UZ.res"/>
 							</Component>
 							<Component Id="uz_Latn.res" Guid="E19F4EDF-5584-4BDA-B0C4-1F5B52667BE0">
 								<File Id="uz_Latn.res" Name="uz_Latn.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\uz_Latn.res"/>
 							</Component>
 							<Component Id="uz_Latn_UZ.res" Guid="7A07B0AE-6EB0-4222-A33F-AC8E68249F55">
-								<File Id="uz_Latn_UZ.res" Name="UZ_LAT~1.RES" LongName="uz_Latn_UZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\uz_Latn_UZ.res"/>
+								<File Id="uz_Latn_UZ.res" Name="uz_Latn_UZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\uz_Latn_UZ.res"/>
 							</Component>
 							<Component Id="uz_UZ.res" Guid="50FB4D69-48BD-41D7-B931-5813A69BDA46">
 								<File Id="uz_UZ.res" Name="uz_UZ.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\uz_UZ.res"/>
@@ -4220,28 +4222,28 @@
 								<File Id="zh_Hans.res2" Name="zh_Hans.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hans.res"/>
 							</Component>
 							<Component Id="zh_Hans_CN.res2" Guid="E7E6DA26-3B89-4172-8C89-E3CD28927A3D">
-								<File Id="zh_Hans_CN.res2" Name="ZH_HAN~1.RES" LongName="zh_Hans_CN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hans_CN.res"/>
+								<File Id="zh_Hans_CN.res2" Name="zh_Hans_CN.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hans_CN.res"/>
 							</Component>
 							<Component Id="zh_Hans_HK.res" Guid="C392996C-2C52-49D4-991F-C30E14B5C598">
-								<File Id="zh_Hans_HK.res" Name="ZH_HAN~2.RES" LongName="zh_Hans_HK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hans_HK.res"/>
+								<File Id="zh_Hans_HK.res" Name="zh_Hans_HK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hans_HK.res"/>
 							</Component>
 							<Component Id="zh_Hans_MO.res" Guid="C79DF24A-A076-424F-9C31-A1D7E1855ED4">
-								<File Id="zh_Hans_MO.res" Name="ZH_HAN~3.RES" LongName="zh_Hans_MO.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hans_MO.res"/>
+								<File Id="zh_Hans_MO.res" Name="zh_Hans_MO.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hans_MO.res"/>
 							</Component>
 							<Component Id="zh_Hans_SG.res2" Guid="B02FE89A-D06E-4B33-97FD-F14C4F32344A">
-								<File Id="zh_Hans_SG.res2" Name="ZH_HAN~4.RES" LongName="zh_Hans_SG.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hans_SG.res"/>
+								<File Id="zh_Hans_SG.res2" Name="zh_Hans_SG.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hans_SG.res"/>
 							</Component>
 							<Component Id="zh_Hant.res2" Guid="6FABE238-9D11-4463-B1CE-B4AE2B4CD0B4">
 								<File Id="zh_Hant.res2" Name="zh_Hant.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hant.res"/>
 							</Component>
 							<Component Id="zh_Hant_HK.res2" Guid="D6B5341D-7FEA-43F4-9E2C-1D0CAFAA8CA6">
-								<File Id="zh_Hant_HK.res2" Name="ZH548C~1.RES" LongName="zh_Hant_HK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hant_HK.res"/>
+								<File Id="zh_Hant_HK.res2" Name="zh_Hant_HK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hant_HK.res"/>
 							</Component>
 							<Component Id="zh_Hant_MO.res2" Guid="417401C1-B454-4572-8D6D-F6129C79AC06">
-								<File Id="zh_Hant_MO.res2" Name="ZH689C~1.RES" LongName="zh_Hant_MO.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hant_MO.res"/>
+								<File Id="zh_Hant_MO.res2" Name="zh_Hant_MO.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hant_MO.res"/>
 							</Component>
 							<Component Id="zh_Hant_TW.res2" Guid="D71BD89C-49EC-4AF2-A4DC-3F7A24BAD52A">
-								<File Id="zh_Hant_TW.res2" Name="ZH84BC~1.RES" LongName="zh_Hant_TW.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hant_TW.res"/>
+								<File Id="zh_Hant_TW.res2" Name="zh_Hant_TW.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_Hant_TW.res"/>
 							</Component>
 							<Component Id="zh_HK.res2" Guid="908EF44C-6DEB-4BD0-BB49-9F086738413E">
 								<File Id="zh_HK.res2" Name="zh_HK.res" Checksum="yes" KeyPath="yes" Source="DistFiles\Icu40\icudt40l\zh_HK.res"/>
@@ -4331,7 +4333,7 @@
 		</Directory>
 		<CustomAction Id="DelIcuFiles" Return="ignore" BinaryKey="WixIcuHelperDll" DllEntry="CleanupICU" />
 		<Binary Id="WixIcuHelperDll" SourceFile="WIX Helper DLL\release\WIX ICU Helper DLL.dll"/>
-		<IgnoreModularization Type="Property" Name="SIL_ICU_DEL_DATA"/>
+		<Property Id="SIL_ICU_DEL_DATA" SuppressModularization="yes" />
 		<UI>
 			<ProgressText Action="DelIcuFiles"><![CDATA[Deleting ICU files]]></ProgressText>
 		</UI>

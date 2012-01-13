@@ -89,7 +89,7 @@ namespace ExtractLibAddenda
 			// Get reverse-engineered WIX version of FieldWorks installer:
 			m_installerWxs = Dark(m_installerFilePath);
 			m_xmlnsManager = new XmlNamespaceManager(m_installerWxs.NameTable);
-			m_xmlnsManager.AddNamespace("wix", "http://schemas.microsoft.com/wix/2003/01/wi");
+			m_xmlnsManager.AddNamespace("wix", "http://schemas.microsoft.com/wix/2006/wi");
 
 			// Create list of GUIDs of components we don't want in our output addenda file:
 			var excludedGuids = new List<string>();
@@ -99,7 +99,7 @@ namespace ExtractLibAddenda
 			{
 				var xmlnsManager = new XmlNamespaceManager(document.NameTable);
 				// Add the namespace used in Files.wxs to the XmlNamespaceManager:
-				xmlnsManager.AddNamespace("wix", "http://schemas.microsoft.com/wix/2003/01/wi");
+				xmlnsManager.AddNamespace("wix", "http://schemas.microsoft.com/wix/2006/wi");
 
 				var componentList = document.SelectNodes("//wix:Component", xmlnsManager);
 				foreach (XmlElement component in componentList)

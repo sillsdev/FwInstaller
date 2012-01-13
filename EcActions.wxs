@@ -1,5 +1,7 @@
-﻿<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+﻿<?xml version="1.0"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment Id="EcActionsFragment">
+		<Property Id='EcActionsFragment' Value='1'/>
 		<CustomAction Id="Set_WORD_DOT_FOLDER_for_CSC_Word_template" Return="check" Property="WORD_DOT_FOLDER.34B6C3D2C69942758689B50BD49ADEE6" Value="[WORD_DOT_FOLDER]" />
 		<CustomAction Id="Set_WORD_DOT_FOLDER_for_SpellFixer" Return="check" Property="WORD_DOT_FOLDER.52CAB578042E44829AF9352B8DFCE924" Value="[WORD_DOT_FOLDER]" />
 		<CustomAction Id="Set_WORD_DOT_FOLDER_for_Word_Doc_Template" Return="check" Property="WORD_DOT_FOLDER.AD33AB03A29E4DDF9FEF78B883DAFE7F" Value="[WORD_DOT_FOLDER]" />

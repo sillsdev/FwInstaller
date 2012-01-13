@@ -16,7 +16,7 @@ namespace ComponentInstallerGenerator
 		private const string FwWxsFileName = "FW.wxs";
 
 		// WIX namespace URI:
-		private const string WixNsUri = "http://schemas.microsoft.com/wix/2003/01/wi";
+		private const string WixNsUri = "http://schemas.microsoft.com/wix/2006/wi";
 
 		// Definitions of installers we can generate:
 		private readonly XmlDocument m_xmlDefinitions = new XmlDocument();
@@ -122,7 +122,7 @@ namespace ComponentInstallerGenerator
 		/// </summary>
 		/// <param name="features">Main installer features to be included in file</param>
 		/// <returns>The file name of the generated file.</returns>
-		private string GenerateComponentAutoFile(List<string> features)
+		private string GenerateComponentAutoFile(IList<string> features)
 		{
 			// Create a working copy of the main ProcessedAutoFiles.wxs structure:
 			var xmlFiles = new XmlDocument();
@@ -260,40 +260,36 @@ namespace ComponentInstallerGenerator
 		/// Runs the given DOS command. Waits for it to terminate.
 		/// </summary>
 		/// <param name="cmd">A DOS command</param>
+		/// <param name="args">Arguments to be sent to cmd</param>
 		/// <returns>Any text sent to standard output</returns>
-		private string RunDosCmd(string cmd)
+		private string RunDosCmd(string cmd, string args)
 		{
-			const string dosCmdIntro = "/Q /D /C ";
-			const string dosOutputRedirectFile = "_dos_output.txt";
-			cmd = dosCmdIntro + cmd + " >" + dosOutputRedirectFile;
 			var dosError = false;
+			var output = "";
+			var error = "";
 			try
 			{
-				var startInfo = new ProcessStartInfo("cmd");
+				var startInfo = new ProcessStartInfo(cmd);
 				startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-				startInfo.Arguments = cmd;
+				startInfo.CreateNoWindow = true;
+				startInfo.Arguments = args;
+				startInfo.UseShellExecute = false;
+				startInfo.RedirectStandardOutput = true;
+				startInfo.RedirectStandardError = true;
 
 				var dosProc = Process.Start(startInfo);
 				dosProc.WaitForExit();
 				if (dosProc.ExitCode != 0)
 					dosError = true;
+				output = dosProc.StandardOutput.ReadToEnd();
+				error = dosProc.StandardError.ReadToEnd();
 			}
 			catch (Exception)
 			{
 				Report("Error while running this DOS command: " + cmd);
 			}
-			var output = "";
-			var opFile = new StreamReader(dosOutputRedirectFile);
 
-			// Put the list into a List structure:
-			string line;
-			while ((line = opFile.ReadLine()) != null)
-				output += line + Environment.NewLine;
-
-			opFile.Close();
-			File.Delete(dosOutputRedirectFile);
-
-			return dosError ? output : "";
+			return dosError ? error : output;
 		}
 
 		/// <summary>
@@ -303,8 +299,11 @@ namespace ComponentInstallerGenerator
 		/// <returns>Any text sent to standard output</returns>
 		private void Candle(string fileName)
 		{
-			string cmd = "candle.exe -nologo -sw1044 \"" + fileName + "\"";
-			Report(RunDosCmd(cmd));
+			var candlePath = Path.Combine(Environment.GetEnvironmentVariable("WIX"), "bin\\candle.exe");
+			var args = " -nologo -sw1044 \"" + fileName + "\"";
+			var output = RunDosCmd(candlePath, args);
+			if (output.ToLowerInvariant() != fileName.ToLowerInvariant() + Environment.NewLine)
+				Report(output);
 		}
 
 		/// <summary>
@@ -340,7 +339,8 @@ namespace ComponentInstallerGenerator
 
 			// Link each WIX intermediate file:
 			var wixobjFiles = wixobjFileList.Aggregate("", (current, wixobjFile) => current + (" \"" + wixobjFile + "\""));
-			Report(RunDosCmd("light.exe -nologo " + wixobjFiles + " -out \"" + msiFileName + "\""));
+			var lightPath = Path.Combine(Environment.GetEnvironmentVariable("WIX"), "bin\\light.exe");
+			Report(RunDosCmd(lightPath, " -nologo -sice:ICE40 -sice:ICE48 " + wixobjFiles + " -out \"" + msiFileName + "\""));
 
 			if (m_statusReport == "")
 			{

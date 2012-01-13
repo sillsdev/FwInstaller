@@ -1,5 +1,5 @@
 del ICU040.mmp.wxs.log
 del WixLinkICU040.log
 ProcessWixMMs.js ICU040.mm.wxs
-candle -nologo ICU040.mmp.wxs -sw1044 >ICU040.mmp.wxs.log
-light -nologo -sw1054 wixca.wixlib ICU040.mmp.wixobj -out ICU040.msm >WixLinkICU040.log
+"%WIX%bin\candle" -nologo -sw1006 -sw1086 -ext "%WIX%bin\WixUtilExtension.dll" ICU040.mmp.wxs >ICU040.mmp.wxs.log
+"%WIX%bin\light" -nologo -sw1072 -ext "%WIX%bin\WixUtilExtension.dll" ICU040.mmp.wixobj -out ICU040.msm >WixLinkICU040.log

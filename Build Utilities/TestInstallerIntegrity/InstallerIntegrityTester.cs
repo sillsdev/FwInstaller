@@ -51,7 +51,7 @@ namespace TestInstallerIntegrity
 				XmlDoc = new XmlDocument();
 				XmlDoc.Load(fileName);
 				XmlnsMan = new XmlNamespaceManager(XmlDoc.NameTable);
-				XmlnsMan.AddNamespace("wix", "http://schemas.microsoft.com/wix/2003/01/wi");
+				XmlnsMan.AddNamespace("wix", "http://schemas.microsoft.com/wix/2006/wi");
 			}
 		}
 		private List<WixSource> m_wixFilesSources;

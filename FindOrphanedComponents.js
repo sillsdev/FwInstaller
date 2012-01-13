@@ -29,7 +29,7 @@ WixSources.push("MergeModules.wxs");
 // Read in current Feature Component References:
 var FeaturesWxs = new ActiveXObject("Msxml2.DOMDocument.6.0");
 FeaturesWxs.async = false;
-FeaturesWxs.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2003/01/wi"');
+FeaturesWxs.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"');
 FeaturesWxs.load("Features.wxs");
 if (FeaturesWxs.parseError.errorCode != 0)
 {
@@ -40,7 +40,7 @@ if (FeaturesWxs.parseError.errorCode != 0)
 // Also read in current Feature Component References from AutoFiles:
 var AutoFeaturesWxs = new ActiveXObject("Msxml2.DOMDocument.6.0");
 AutoFeaturesWxs.async = false;
-AutoFeaturesWxs.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2003/01/wi"');
+AutoFeaturesWxs.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"');
 AutoFeaturesWxs.load("AutoFiles.wxs");
 if (AutoFeaturesWxs.parseError.errorCode != 0)
 {
@@ -71,7 +71,7 @@ function MakeOrphanedRefs(WixSourceFileName, tso)
 	// Read in current Wix Source:
 	var WixSource = new ActiveXObject("Msxml2.DOMDocument.6.0");
 	WixSource.async = false;
-	WixSource.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2003/01/wi"');
+	WixSource.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"');
 	WixSource.load(WixSourceFileName);
 	if (WixSource.parseError.errorCode != 0)
 	{

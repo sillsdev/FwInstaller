@@ -127,7 +127,7 @@ namespace ArchiveAndBuildPatch
 
 			wxsPatch.LoadXml(
 				"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-				"<Wix xmlns=\"http://schemas.microsoft.com/wix/2003/01/wi\">" +
+				"<Wix xmlns=\"http://schemas.microsoft.com/wix/2006/wi\">" +
 				"<PatchCreation" +
 				" Id=\"" + Guid.NewGuid().ToString().ToUpperInvariant() + "\"" +
 				" AllowMajorVersionMismatches=\"no\"" +

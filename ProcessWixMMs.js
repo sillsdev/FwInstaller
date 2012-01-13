@@ -66,7 +66,7 @@ function ProcessWixMM(MmFilePath)
 	// Set up the XML parser, including namespaces that are in WIX:
 	var xmlFiles = new ActiveXObject("Msxml2.DOMDocument.6.0");
 	xmlFiles.async = false;
-	xmlFiles.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2003/01/wi"');
+	xmlFiles.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"');
 	xmlFiles.load(MmFilePath);
 	xmlFiles.preserveWhiteSpace = true;
 
@@ -223,18 +223,18 @@ function AddSpecificRegInfo(FileNode, TallowCmd)
 	var TempXmlFile = "temp.xml";
 	var xmlTemp = new ActiveXObject("Msxml2.DOMDocument.6.0");
 	xmlTemp.async = false;
-	xmlTemp.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2003/01/wi"');
+	xmlTemp.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"');
 
+	// TODO: revamp this part of the script to use Heat.exe in WIX 3.
 	// Call Tallow to get any COM registry info into a temp file:
 	var Cmd = 'cmd /Q /D /C  Tallow -nologo ' + TallowCmd + ' >"' + TempXmlFile + '"';
-
 	if (shellObj.Run(Cmd, 0, true) != 0)
 	{
 		var NewFragment = new ActiveXObject("Msxml2.DOMDocument.6.0");
 		NewFragment.preserveWhiteSpace = true;
 
-		NewFragment.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2003/01/wi"');
-		NewFragment.loadXML('<?xml version="1.0"?><Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi"><Error GetFilesRegInfo="Error encountered while running Tallow with ' + TallowCmd + '" /></Wix>');
+		NewFragment.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"');
+		NewFragment.loadXML('<?xml version="1.0"?><Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"><Error GetFilesRegInfo="Error encountered while running Tallow with ' + TallowCmd + '" /></Wix>');
 
 		var NewNode = NewFragment.selectSingleNode("//wix:Error");
 		ComponentNode.appendChild(NewNode);
@@ -244,6 +244,30 @@ function AddSpecificRegInfo(FileNode, TallowCmd)
 		return;
 	}
 
+	// Hack: because we're using WIX 3; Tallow shouldn't really be used, as it is deprecated since WIX 2.
+	// So to make up for the mismatch, we must preprocess the Tallow output to make it
+	// compatible with WIX 3:
+	var TempXmlFile2 = TempXmlFile + ".new";
+	var tsoRead = fso.OpenTextFile(TempXmlFile, 1, false);
+	var tsoWrite = fso.CreateTextFile(TempXmlFile2, true);
+	while (!tsoRead.AtEndOfStream)
+	{
+		var line = tsoRead.ReadLine();
+		var oldline = line;
+
+		if (line == '<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">')
+			line = '<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">';
+		else
+			line = line.replace("<Registry ", "<RegistryValue ")
+
+		tsoWrite.WriteLine(line);
+	}
+	tsoRead.Close();
+	tsoWrite.Close();
+	fso.DeleteFile(TempXmlFile);
+	fso.MoveFile(TempXmlFile2, TempXmlFile);
+	// End of hack.
+
 	xmlTemp.load(TempXmlFile);
 	if (xmlTemp.parseError.errorCode != 0)
 	{
@@ -252,7 +276,7 @@ function AddSpecificRegInfo(FileNode, TallowCmd)
 		return;
 	}
 	fso.DeleteFile(TempXmlFile);
-	var RegNodes = xmlTemp.selectNodes("//wix:Registry");
+	var RegNodes = xmlTemp.selectNodes("//wix:RegistryValue");
 	var ErrorNodes = xmlTemp.selectNodes("//wix:Error");
 
 	// Get versions of file path and its folder with both backslashes and forward slashes:
@@ -302,10 +326,19 @@ function AddSpecificRegInfo(FileNode, TallowCmd)
 		var NewFragment = new ActiveXObject("Msxml2.DOMDocument.6.0");
 		NewFragment.preserveWhiteSpace = true;
 
-		NewFragment.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2003/01/wi"');
+		NewFragment.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"');
 		NewFragment.loadXML(RegText);
 
-		var NewRegNode = NewFragment.selectSingleNode("//wix:Registry");
+		var NewRegNode = NewFragment.selectSingleNode("//wix:RegistryValue");
+
+		// WIX 3 addition: if there is no Value attribute, add one:
+		if (NewRegNode.getAttribute("Value") == null)
+			NewRegNode.setAttribute("Value", "")
+
+		// WIX 3 addition: if there is no Type attribute, add one:
+		if (NewRegNode.getAttribute("Type") == null)
+			NewRegNode.setAttribute("Type", "string")
+
 		ComponentNode.appendChild(NewRegNode);
 		NewRegNode.removeAttribute("xmlns");
 		ComponentNode.appendChild(NewFragment.createTextNode("\n"));

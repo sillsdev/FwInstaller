@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <!--The following components are the help files for the ICU transducers' configuration dialog
 			box and are maintained (mostly) by SEC. It is possible that these will want to retain the
 			same GUIDs from version to version of ICU (since the help files likely won't change much),
 			so they are being moved out of the main ICU merge module wix script. However, this merge
 			module totally depends on that other merge module (id=SILICU40) or this won't do anything.
 		  -->
-  <Module Id="SILICUECHELP40" Guid="3DAFE62A-D816-4d02-BDB5-8645ECE89BE4" Language="0" Version="4.0">
-		<Package Id="????????-????-????-????-????????????" Keywords="MergeModule, MSI, ICU EncConverters Help Files" Description="SIL's ICU 4.0 EncConverter Help Installation" Comments="Common installer module for SIL's version 4.0 of ICU (for EncConverters components--requires ICU040.msm also)" Manufacturer="SIL International" InstallerVersion="110" Platforms="Intel" Languages="0" Compressed="yes" SummaryCodepage="1252"/>
+  <Module Id="SILICUECHELP40" Language="0" Version="4.0">
+		<Package Id="3DAFE62A-D816-4d02-BDB5-8645ECE89BE4" Keywords="MergeModule, MSI, ICU EncConverters Help Files" Description="SIL's ICU 4.0 EncConverter Help Installation" Comments="Common installer module for SIL's version 4.0 of ICU (for EncConverters components--requires ICU040.msm also)" Manufacturer="SIL International" InstallerVersion="110" Platform="x86" Languages="0" SummaryCodepage="1252"/>
 	<Directory Id="TARGETDIR" Name="SourceDir">
 	  <Directory Id="CommonFilesFolder" Name="Common">
 		<Directory Id="SIL" Name="SIL">
 		  <Directory Id="Help" Name="Help">
 						<Component Id="IcuRegex" Guid="786CA242-4204-46B7-86D5-93ED456710B5">
-							<File Id="IcuRegex" Name="ICUREG~1.HTM" LongName="ICU Regular Expression Plug-in About box.htm" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\ICU Regular Expression Plug-in About box.htm"/>
+							<File Id="IcuRegex" Name="ICU Regular Expression Plug-in About box.htm" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\ICU Regular Expression Plug-in About box.htm"/>
 						</Component>
 						<Component Id="IcuTranslit" Guid="024219A1-29EB-4D20-BB9A-DB9E3C3F1743">
-							<File Id="IcuTranslit" Name="ICUTRA~1.HTM" LongName="ICU Transliterators Plug-in About box.htm" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\ICU Transliterators Plug-in About box.htm"/>
+							<File Id="IcuTranslit" Name="ICU Transliterators Plug-in About box.htm" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\ICU Transliterators Plug-in About box.htm"/>
 						</Component>
 						<Component Id="ICU_Converters_Plugin_About_box.htm" Guid="963A2D88-6CFE-4C91-8830-CD6F8A3872E8">
-							<File Id="ICU_Converters_Plugin_About_box.htm" Name="ICUCON~1.HTM" LongName="ICU Converters Plug-in About box.htm" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\ICU Converters Plug-in About box.htm"/>
+							<!-- The follwing File ID has been truncated to suppress ICE03 string overflow in the shortcut that uses it -->
+							<File Id="ICU_Converters_Plugin_About_box." Name="ICU Converters Plug-in About box.htm" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\ICU Converters Plug-in About box.htm"/>
 						</Component>
-						<Directory Id="ICUConvPlug" Name="ICUCON~1" LongName="ICU Converters Plug-in About box_files">
+						<Directory Id="ICUConvPlug" Name="ICU Converters Plug-in About box_files">
 							<Component Id="image008.jpg" Guid="C3970194-5CAF-44A9-B59E-F7AD6CF3F84D">
 								<File Id="image008.jpg" Name="image008.jpg" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\ICU Converters Plug-in About box_files\image008.jpg"/>
 							</Component>
@@ -44,7 +45,7 @@
 								<File Id="filelist.xml" Name="filelist.xml" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\ICU Converters Plug-in About box_files\filelist.xml"/>
 							</Component>
 						</Directory>
-						<Directory Id="IcuRegexPlug" Name="ICUREG~1" LongName="ICU Regular Expression Plug-in About box_files">
+						<Directory Id="IcuRegexPlug" Name="ICU Regular Expression Plug-in About box_files">
 							<Component Id="image001.png2" Guid="7CC9F931-00BD-4435-9CFF-6F4ECE8E4E0F">
 								<File Id="image001.png2" Name="image001.png" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\ICU Regular Expression Plug-in About box_files\image001.png"/>
 							</Component>
@@ -73,7 +74,7 @@
 								<File Id="image008.jpg7" Name="image008.jpg" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\ICU Regular Expression Plug-in About box_files\image008.jpg"/>
 							</Component>
 						</Directory>
-						<Directory Id="ICUTranslitPlug" Name="ICUTRA~1" LongName="ICU Transliterators Plug-in About box_files">
+						<Directory Id="ICUTranslitPlug" Name="ICU Transliterators Plug-in About box_files">
 							<Component Id="image005.png" Guid="047DAC88-FA5E-4F1D-B3D2-9082E9B425BD">
 								<File Id="image005.png" Name="image005.png" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\ICU Transliterators Plug-in About box_files\image005.png"/>
 							</Component>
@@ -101,12 +102,12 @@
 				</Directory>
 			</Directory>
 			<Directory Id="ProgramMenuFolder" Name="Program">
-				<Directory Id="SIL_Converters" Name="SILCON~1" LongName="SIL Converters">
+				<Directory Id="SIL_Converters" Name="SIL Converters">
 					<Directory Id="SILConvHelp" Name="Help">
 						<Component Id="HelpShortcuts" Guid="1EA5CB2D-D255-4CAD-8538-971E59BE87E6" KeyPath="yes">
-							<Shortcut Id="ICUTranlitHelp" Directory="SILConvHelp" Name="ICUTRA~1" LongName="ICU Transliterators Help" Target="[#IcuTranslit]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Help"/>
-							<Shortcut Id="ICUConvHelp" Directory="SILConvHelp" Name="ICUCON~1" LongName="ICU Converters Help" Target="[#ICU_Converters_Plugin_About_box.htm]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Help"/>
-							<Shortcut Id="ICURegexHelp" Directory="SILConvHelp" Name="ICUREG~1" LongName="ICU Regular Expression Help" Target="[#IcuRegex]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Help"/>
+							<Shortcut Id="ICUTranlitHelp" Directory="SILConvHelp" Name="ICU Transliterators Help" Target="[#IcuTranslit]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Help"/>
+							<Shortcut Id="ICUConvHelp" Directory="SILConvHelp" Name="ICU Converters Help" Target="[#ICU_Converters_Plugin_About_box.]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Help"/>
+							<Shortcut Id="ICURegexHelp" Directory="SILConvHelp" Name="ICU Regular Expression Help" Target="[#IcuRegex]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Help"/>
 							<!-- The next item is junk to make validation pass on ICE18 -->
 							<CreateFolder />
 						</Component>

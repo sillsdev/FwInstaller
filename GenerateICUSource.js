@@ -4,7 +4,7 @@ JScript to generate a partial WIX source for the ICU data files.
 
 The contents of the output file "PartialICU.wxs" should be copied and pasted into
 a suitable full ICU WIX source. If pasted within Visual Studio, proper indentation
-will be appiled. (None is generated in the output of this script.)
+will be applied. (None is generated in the output of this script.)
 
 */
 
@@ -47,7 +47,7 @@ function TreeOutput(Tree, tso)
 		fOutputFirstDirectory = true;
 		tso.WriteLine('<Component Id="CreateIcuFolder" Guid="' + MakeGuid() + '">');
 		tso.WriteLine('<CreateFolder>');
-		tso.WriteLine('<Permission Extended="yes" User="AuthenticatedUser" GenericAll="yes" />');
+		tso.WriteLine('<util:PermissionEx User="AuthenticatedUser" GenericAll="yes" />');
 		tso.WriteLine('</CreateFolder>');
 		tso.WriteLine('</Component>');
 	}
@@ -69,9 +69,7 @@ function TreeOutput(Tree, tso)
 		// Make relative path to source by removing FW root path from absolute file path:
 		var RelativeSource = Files[file].Path.slice(1 + FwRootPath.length);
 		tso.WriteLine('<Component Id="' + Id + '" Guid="' + MakeGuid() + '">');
-		tso.Write('<File Id="' + Id + '" Name="' + ShortName + '" ');
-		if (LongName != ShortName)
-			tso.Write('LongName="' + LongName + '" ');
+		tso.Write('<File Id="' + Id + '" Name="' + LongName + '" ');
 		if (FolderName == "tools")
 			tso.Write('ReadOnly="yes" ');
 		tso.WriteLine('Checksum="yes" KeyPath="yes" Source="' + RelativeSource + '"/>');
@@ -86,7 +84,7 @@ WScript.Echo("Done.");
 // Returns a suitable Id based on the given name. (Removes spaces, etc.)
 // Identifiers may contain ASCII characters A-Z, a-z, digits, underscores (_), or periods (.).
 // Every identifier must begin with either a letter or an underscore.
-// Space is limited to 72 chars, so after that, we just truncate the string.
+// Space is limited to 72 chars (including appended .GUID), so after that, we just truncate the string.
 // If MatchInputs is set to true, this function remembers the inputs it deals with, so that if the same
 // inputs are presented again, the same output is given, but if unique inputs are given,
 // the output will be unique.
@@ -102,7 +100,8 @@ function MakeId(Prefix, Name, MatchInputs)
 				return IdInputs[i].Output;
 		}
 	}
-	var MaxLen = 72;
+	var dummyGuidExtension = ".F001DE50_84CE_44C8_A065_297102C05A95"
+	var MaxLen = 72 - dummyGuidExtension.length;
 	var Id = Name.split("");
 	var ValidChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.";
 

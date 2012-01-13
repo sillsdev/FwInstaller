@@ -25,7 +25,7 @@ if (iLastBackslash > 0)
 // Set up the XML parser, including namespaces that are in WIX:
 var xmlMergeModules = new ActiveXObject("Msxml2.DOMDocument.6.0");
 xmlMergeModules.async = false;
-xmlMergeModules.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2003/01/wi"');
+xmlMergeModules.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"');
 xmlMergeModules.load("MergeModules.wxs");
 xmlMergeModules.preserveWhiteSpace = true;
 

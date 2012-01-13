@@ -1,8 +1,8 @@
 <?xml version='1.0'?>
-<Wix xmlns='http://schemas.microsoft.com/wix/2003/01/wi'>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Product UpgradeCode="C1E7F690-958C-44D8-8B57-D3333037B83E" Id="821728B7-83CA-44FF-B779-F53D511F9982" Name='FW Test Package' Language='1033'
 			 Version='1.0.0' Manufacturer='SIL International'>
-		<Package Id='12345678-1234-1234-1234-123456789012'
+		<Package Id='*'
 				  Description='FieldWorks WIX Test'
 				  Comments='Do not redistribute!'
 				  Manufacturer='SIL International' InstallerVersion='200' Compressed='yes' />
@@ -12,10 +12,10 @@
 
 		<Media Id='1' Cabinet='product.cab' EmbedCab='yes'/>
 
-		<FragmentRef Id='FwUI'/>
-			<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder" SourceName="ProgramF" LongSource="Program Files">
-				<Directory Id="INSTALLDIR" Name="FIELDW~1" LongName="FieldWorks">
+		<PropertyRef Id='FwUI'/>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder" SourceName="Program Files">
+				<Directory Id="INSTALLDIR" Name="FieldWorks">
 					<Component Id="UItest.wxs" Guid="09B4C71A-12DE-4071-8067-339EDB393CBE">
 						<File Id="UItest.wxs" Name="UItest.wxs" ReadOnly="yes" Source="UItest.wxs" DiskId="1" />
 					</Component>

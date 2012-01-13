@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment Id="EcFeaturesFragment">
+		<Property Id='EcFeaturesFragment' Value='1'/>
 		<Feature Id="Always" Title="Always" Display="hidden" Level="1" AllowAdvertise="no">
 			<ComponentRef Id="RemoveFile" />
 			<MergeRef Id="ScHelp"/>

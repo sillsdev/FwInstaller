@@ -1,4 +1,3 @@
-del FileLibraryAddenda.xml
 del RegLibraryAddenda.xml
 ProcessMergeModules.js
 GenerateFilesSource.exe reuse

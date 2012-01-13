@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment Id="MergeModulesFragment">
+		<Property Id='MergeModulesFragment' Value='1'/>
 		<DirectoryRef Id="INSTALLDIR">
 			<Merge Id="FW_EC" Language="1033" SourceFile="Installer\FW_EC_40.msm" DiskId="2"/>
 			<Merge Id="FW_ICU" Language="1033" SourceFile="Installer\FW_ICU40.msm" DiskId="2"/>

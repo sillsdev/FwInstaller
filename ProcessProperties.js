@@ -12,7 +12,7 @@ var shellObj = new ActiveXObject("WScript.Shell");
 // Set up the XML parser, including namespaces that are in WIX:
 var xmlProperties = new ActiveXObject("Msxml2.DOMDocument.6.0");
 xmlProperties.async = false;
-xmlProperties.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2003/01/wi"');
+xmlProperties.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"');
 xmlProperties.load("Properties.wxs");
 xmlProperties.preserveWhiteSpace = true;
 

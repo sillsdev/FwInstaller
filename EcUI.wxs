@@ -1,5 +1,7 @@
-﻿<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
-	<Fragment Id='EcUI'>
+﻿<?xml version="1.0"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment Id='EcUIFragment'>
+		<Property Id='EcUIFragment' Value='1'/>
 		<UI>
 			<TextStyle Id="MSSansSerif8" FaceName="MS Sans Serif" Size="8" Red="0" Green="0" Blue="0" />
 			<TextStyle Id="MSSansSerif8Bold" FaceName="MS Sans Serif" Size="8" Red="0" Green="0" Blue="0" Bold="yes" />
@@ -1102,13 +1104,14 @@ Click the Cancel button to exit the uninstall process.]]>
 		<Property Id="DialogTitleFontDefault"><![CDATA[{\MSSansSerif8Bold}]]></Property>
 		<Property Id="DialogTitleFontHuge"><![CDATA[{\MSSansSerif18Bold}]]></Property>
 		<Property Id="DialogFontDefault"><![CDATA[{\MSSansSerif8}]]></Property>
-		<Property Id="DiskPrompt"><![CDATA[[ProductName] [1]]]></Property>
+		<Property Id="DiskPrompt"><![CDATA[SIL Encoding Converters [1]]]></Property>
 		<Property Id="MaintenanceMode"><![CDATA[Modify]]></Property>
 		<Property Id="INSTALLLEVEL"><![CDATA[3]]></Property>
 		<Property Id="Accept"><![CDATA[No]]></Property>
+		<Property Id="Accept1"><![CDATA[No]]></Property>
 		<Property Id="DialogSuffix"><![CDATA[Installer]]></Property>
-		<Property Id="ProductID"><![CDATA[none]]></Property>
 		<Property Id="ReinstallFileVersion"><![CDATA[o]]></Property>
 		<Property Id="InstallMode"><![CDATA[Custom]]></Property>
+		<Property Id="DefaultUIFont">MSSansSerif8</Property>
 	</Fragment>
 </Wix>

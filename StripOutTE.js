@@ -177,7 +177,7 @@ function GetXmlParser(FileName)
 {
 	var xmlFile = new ActiveXObject("Msxml2.DOMDocument.6.0");
 	xmlFile.async = false;
-	xmlFile.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2003/01/wi"');
+	xmlFile.setProperty("SelectionNamespaces", 'xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"');
 	xmlFile.load(FileName);
 	xmlFile.preserveWhiteSpace = true;
 

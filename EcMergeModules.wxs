@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment Id="EcMergeModulesFragment">
+		<Property Id='EcMergeModulesFragment' Value='1'/>
 		<!-- Media item 1 is defined in EC.wxs -->
 		<Media Id='2' Cabinet='EC2.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='3' Cabinet='EC3.cab' EmbedCab='no' CompressionLevel='high'/>

@@ -1,5 +1,5 @@
 del EcFolderACLs.mm.wxs.log
 del WixLinkEcFolderACLs.log
 ProcessWixMMs.js EcFolderACLs.mm.wxs
-candle -nologo EcFolderACLs.mm.wxs -sw1044 >EcFolderACLs.mm.wxs.log
-light -nologo -sw1054 wixca.wixlib EcFolderACLs.mm.wixobj -out EcFolderACLs.msm >WixLinkEcFolderACLs.log
+"%WIX%bin\candle" -nologo -ext "%WIX%bin\WixUtilExtension.dll" EcFolderACLs.mm.wxs >EcFolderACLs.mm.wxs.log
+"%WIX%bin\light" -nologo -sw1072 -sw1079 -ext "%WIX%bin\WixUtilExtension.dll" EcFolderACLs.mm.wixobj -out EcFolderACLs.msm >WixLinkEcFolderACLs.log

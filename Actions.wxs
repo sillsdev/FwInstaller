@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment Id="ActionsFragment">
-		<CustomAction Id="CheckForResidueFiles" Impersonate="no" BinaryKey="WixHelperDll" DllEntry="CheckForFwResidueFiles" />
+	<Property Id='ActionsFragment' Value='1'/>
+		<CustomAction Id="CheckForResidueFiles" BinaryKey="WixHelperDll" DllEntry="CheckForFwResidueFiles" />
 	<CustomAction Id="SetLocalAppFolderPathSIL" Return="check" Property="LocalAppFolder" Value="[LocalAppDataFolder]\SIL International\Language Explorer" />
 		<CustomAction Id="InstallDoulosFont" Execute="deferred" Impersonate="no" BinaryKey="Doulos.exe" ExeCommand="/S" Return="ignore" />
 		<CustomAction Id="InstallCharisFont" Execute="deferred" Impersonate="no" BinaryKey="Charis.exe" ExeCommand="/S" Return="ignore" />
@@ -9,7 +10,7 @@
 		<CustomAction Id="InstallGalatiaFont" Execute="deferred" Impersonate="no" BinaryKey="Galatia.exe" ExeCommand="/S" Return="ignore" />
 		<CustomAction Id="GlobalWritingSystemStoreUpdater" Execute="deferred" Impersonate="no" ExeCommand="" BinaryKey="GlobalWSSUpdater" Return="ignore" />
 	<CustomAction Id="SetOldFwMigrationScriptFolder" Return="check" Property="OLDDATAMIGRATIONDIR" Value="[OLDER_FW_INSTALL_PATH]DataMigration\" />
-	<CustomAction Id="GetOlderFwMaxDbMig" Impersonate="no" BinaryKey="WixHelperDll" DllEntry="GetHighestDbMigrationVersion" />
+	<CustomAction Id="GetOlderFwMaxDbMig" BinaryKey="WixHelperDll" DllEntry="GetHighestDbMigrationVersion" />
 	<CustomAction Id="SetDelIcuDataFlag" Return="check" Property="SIL_ICU_DEL_DATA" Value="1" />
 		<CustomAction Id="SetFirewallDataFW" Return="check" Property="SetupFirewallFW" Value="[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]*FieldWorks 7*" />
 		<CustomAction Id="SetFirewallDataFwRemoteConnect" Return="check" Property="SetupFirewallFwRemoteConnect" Value="[#FwRemoteDatabaseConnectorService.exe]*FieldWorks 7 Remote Database Connector Service*" />

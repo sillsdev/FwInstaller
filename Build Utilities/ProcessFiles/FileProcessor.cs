@@ -77,7 +77,7 @@ namespace ProcessFiles
 
 		private XmlDocument m_currentWixFilesSource;
 		private XmlNamespaceManager m_currentWixNsManager;
-		private const string WixNameSpaceUri = "http://schemas.microsoft.com/wix/2003/01/wi";
+		private const string WixNameSpaceUri = "http://schemas.microsoft.com/wix/2006/wi";
 
 		class SeparateRegCluster
 		{
@@ -253,7 +253,7 @@ namespace ProcessFiles
 			// Create WIX namespace:
 			m_currentWixNsManager = new XmlNamespaceManager(m_currentWixFilesSource.NameTable);
 			// Add the namespace used in m_wixOutput to the XmlNamespaceManager:
-			m_currentWixNsManager.AddNamespace("wix", "http://schemas.microsoft.com/wix/2003/01/wi");
+			m_currentWixNsManager.AddNamespace("wix", "http://schemas.microsoft.com/wix/2006/wi");
 
 			// Get all file nodes:
 			var wixFileNodes = m_currentWixFilesSource.SelectNodes("//wix:File", m_currentWixNsManager);
@@ -509,7 +509,7 @@ namespace ProcessFiles
 
 				// Load the modified raw XML text into a new MSXML DOM container:
 				var newFragment = new XmlDocument();
-				newFragment.LoadXml("<?xml version=\"1.0\"?><Wix xmlns=\"http://schemas.microsoft.com/wix/2003/01/wi\">" + regText + "</Wix>");
+				newFragment.LoadXml("<?xml version=\"1.0\"?><Wix xmlns=\"http://schemas.microsoft.com/wix/2006/wi\">" + regText + "</Wix>");
 
 				// Get the element for the modified registry data:
 				var newRegNode = newFragment.SelectSingleNode("//wix:Registry", m_currentWixNsManager) as XmlElement;
@@ -1063,7 +1063,7 @@ namespace ProcessFiles
 			if (procTallow.ExitCode != 0)
 			{
 				var newFragment = new XmlDocument();
-				newFragment.LoadXml("<?xml version=\"1.0\"?><Wix xmlns=\"http://schemas.microsoft.com/wix/2003/01/wi\"><Error GetFilesRegInfo=\"Error encountered while running Tallow with " + tallowCmd + "\" /></Wix>");
+				newFragment.LoadXml("<?xml version=\"1.0\"?><Wix xmlns=\"http://schemas.microsoft.com/wix/2006/wi\"><Error GetFilesRegInfo=\"Error encountered while running Tallow with " + tallowCmd + "\" /></Wix>");
 
 				var newNode = newFragment.SelectSingleNode("//wix:Error", m_currentWixNsManager);
 				var newNodeClone = m_currentWixFilesSource.ImportNode(newNode, true);

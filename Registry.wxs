@@ -1,49 +1,50 @@
 <?xml version="1.0"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment Id="RegistryFragment">
+	<Property  Id='RegistryFragment' Value='1'/>
 		<DirectoryRef Id="TARGETDIR">
 			<Component Id="RegHyperLinks" Guid="F9188050-7FCA-45f4-8BA0-1F2612F74354">
-				<Registry Id="RegHyperLinksProtocol" Root="HKCR" Key="silfw" Name="URL Protocol" KeyPath="yes" />
-				<Registry Id="RegHyperLinksCmd" Root="HKCR" Key="silfw\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" %1' />
-				<Registry Id="RegHyperLinksSilfw" Root="HKCR" Key="silfw" Type="string" Value="URL:SILFW Protocol" />
+				<RegistryValue Id="RegHyperLinksProtocol" Root="HKCR" Key="silfw" Name="URL Protocol" KeyPath="yes" Value="" Type="string" />
+				<RegistryValue Id="RegHyperLinksCmd" Root="HKCR" Key="silfw\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" %1' />
+				<RegistryValue Id="RegHyperLinksSilfw" Root="HKCR" Key="silfw" Type="string" Value="URL:SILFW Protocol" />
 			</Component>
 			<Component Id="RegFwBackupFiles" Guid="1F2C9550-5EF6-4867-A9DF-1C9B1A90F151">
-				<Registry Id="RegFwBackupFilesExt" Root="HKCR" Key=".fwbackup" Type="string" Value="fwbackup_auto_file" />
-				<Registry Id="RegFwBackupFilesAutoAssoc" Root="HKCR" Key="fwbackup_auto_file" Type="string" Value="FieldWorks Backup" />
-				<Registry Id="RegFwBackupFilesAutoAssocShell" Root="HKCR" Key="fwbackup_auto_file\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" "%1"' />
+				<RegistryValue Id="RegFwBackupFilesExt" Root="HKCR" Key=".fwbackup" Type="string" Value="fwbackup_auto_file" />
+				<RegistryValue Id="RegFwBackupFilesAutoAssoc" Root="HKCR" Key="fwbackup_auto_file" Type="string" Value="FieldWorks Backup" />
+				<RegistryValue Id="RegFwBackupFilesAutoAssocShell" Root="HKCR" Key="fwbackup_auto_file\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" "%1"' />
 			</Component>
 			<Component Id="RegFwDbFiles" Guid="F2B67E27-3994-4683-923C-E6D97A511479">
-				<Registry Id="RegFwDbFilesExt" Root="HKCR" Key=".fwdb" Type="string" Value="fwdb_auto_file" />
-				<Registry Id="RegFwDbFilesAutoAssoc" Root="HKCR" Key="fwdb_auto_file" Type="string" Value="FieldWorks DB File" />
-				<Registry Id="RegFwDbFilesAutoAssocShell" Root="HKCR" Key="fwdb_auto_file\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" "%1"' />
+				<RegistryValue Id="RegFwDbFilesExt" Root="HKCR" Key=".fwdb" Type="string" Value="fwdb_auto_file" />
+				<RegistryValue Id="RegFwDbFilesAutoAssoc" Root="HKCR" Key="fwdb_auto_file" Type="string" Value="FieldWorks DB File" />
+				<RegistryValue Id="RegFwDbFilesAutoAssocShell" Root="HKCR" Key="fwdb_auto_file\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" "%1"' />
 			</Component>
 			<Component Id="RegFwDataFiles" Guid="69236760-F742-4e90-9D11-584241DE1DDC">
-				<Registry Id="RegFwDataFilesExt" Root="HKCR" Key=".fwdata" Type="string" Value="fwdata_auto_file" />
-				<Registry Id="RegFwDataFilesAutoAssoc" Root="HKCR" Key="fwdata_auto_file" Type="string" Value="FieldWorks Data File" />
-				<Registry Id="RegFwDataFilesAutoAssocShell" Root="HKCR" Key="fwdata_auto_file\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" "%1"' />
+				<RegistryValue Id="RegFwDataFilesExt" Root="HKCR" Key=".fwdata" Type="string" Value="fwdata_auto_file" />
+				<RegistryValue Id="RegFwDataFilesAutoAssoc" Root="HKCR" Key="fwdata_auto_file" Type="string" Value="FieldWorks Data File" />
+				<RegistryValue Id="RegFwDataFilesAutoAssocShell" Root="HKCR" Key="fwdata_auto_file\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" "%1"' />
 			</Component>
 			<Component Id="UnregFlex" Guid="C46427EE-2C13-4596-A583-DBE1DF7109E6">
-				<Registry Id="UnregFlex" Root="HKCU" Key="Software\Microsoft\Windows\ShellNoRoam\MUICache" Name="[#Flex.exe.FC28A9E5DCD6E8D3C3C2F909AF45C74A]" Action="remove" />
+				<RemoveRegistryValue Id="UnregFlex" Root="HKCU" Key="Software\Microsoft\Windows\ShellNoRoam\MUICache" Name="[#Flex.exe.FC28A9E5DCD6E8D3C3C2F909AF45C74A]" />
 			</Component>
 			<Component Id="RegLangPack" Guid="D63D925E-4904-4f19-A7DA-9C7D2996F864">
-				<Registry Id="RegLangPack" Root="HKLM" Key="SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack" Type="integer" KeyPath="yes" Value="2" Name="Surrogate" />
+				<RegistryValue Id="RegLangPack" Root="HKLM" Key="SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack" Type="integer" KeyPath="yes" Value="2" Name="Surrogate" />
 			</Component>
 			<Component Id="RegRootCodeDir" Guid="FF9768AE-C70F-4716-BDEF-4984C7755AC8">
-				<Registry Id="RegRootCodeDir" Root="HKLM" Key="SOFTWARE\SIL\FieldWorks\7.0" Type="string" Value="[INSTALLDIR]" Name="RootCodeDir" />
+				<RegistryValue Id="RegRootCodeDir" Root="HKLM" Key="SOFTWARE\SIL\FieldWorks\7.0" Type="string" Value="[INSTALLDIR]" Name="RootCodeDir" />
 			</Component>
 			<Component Id="RegProjectsDir" Guid="62DB965A-6954-4578-B9FA-DEB7CD55D240">
-				<Registry Id="RegProjectsDir" Root="HKLM" Key="SOFTWARE\SIL\FieldWorks\7.0" Type="string" Value="[PROJECTSDIR]" Name="ProjectsDir" />
+				<RegistryValue Id="RegProjectsDir" Root="HKLM" Key="SOFTWARE\SIL\FieldWorks\7.0" Type="string" Value="[PROJECTSDIR]" Name="ProjectsDir" />
 			</Component>
 			<Component Id="RegInitIcu" Guid="E4A17048-1543-4eec-9554-A9668282E3BC">
-				<Registry Id="RegInitIcu" Root="HKLM" Key="SOFTWARE\SIL" Type="integer" Value="1" Name="InitIcu" />
+				<RegistryValue Id="RegInitIcu" Root="HKLM" Key="SOFTWARE\SIL" Type="integer" Value="1" Name="InitIcu" />
 			</Component>
 			<Component Id="RegScrChecks" Permanent="yes" Guid="2DB8302C-6C11-4270-BA26-D457B03B04E1">
 				<Condition><![CDATA[NOT SCR_CHECKS_REG_FOUND]]></Condition>
-				<Registry Id="RegScrChecks" Root="HKLM" Key="SOFTWARE\ScrChecks\1.0\Settings_Directory" Type="string" Value="C:\My Paratext Projects" />
+				<RegistryValue Id="RegScrChecks" Root="HKLM" Key="SOFTWARE\ScrChecks\1.0\Settings_Directory" Type="string" Value="C:\My Paratext Projects" />
 			</Component>
 			<!-- Make the .NET Component Category registry data an orphan so it never gets removed: -->
 			<Component Id="RegDotNetCategory" Guid="">
-				<Registry Root="HKCR" Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Name="0" Value=".NET Category" Type="string"/>
+				<RegistryValue Root="HKCR" Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Name="0" Value=".NET Category" Type="string"/>
 			</Component>
 		</DirectoryRef>
 	</Fragment>

@@ -32,7 +32,7 @@ namespace ArchiveAndBuildPatch
 			// Create WIX namespace:
 			m_wixNsManager = new XmlNamespaceManager(m_xmlFwWxs.NameTable);
 			// Add the namespace used in xmlFwWxs to the XmlNamespaceManager:
-			m_wixNsManager.AddNamespace("wix", "http://schemas.microsoft.com/wix/2003/01/wi");
+			m_wixNsManager.AddNamespace("wix", "http://schemas.microsoft.com/wix/2006/wi");
 
 			var productElement = m_xmlFwWxs.SelectSingleNode("//wix:Product", m_wixNsManager) as XmlElement;
 

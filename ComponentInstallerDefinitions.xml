@@ -118,4 +118,49 @@
 		<Feature>Persian_TE</Feature>
 		<Installer>SetupFw-fa</Installer>
 	</Component>
+	<Component>
+		<Name>Malay Localization</Name>
+		<Description>Malay language pack for FieldWorks</Description>
+		<ProductCode>94D81170-27B1-40d6-94D3-E6B40054989B</ProductCode>
+		<UpgradeCode>16948AC3-4BDC-4d27-8641-EF501950498F</UpgradeCode>
+		<Feature>Malay</Feature>
+		<Feature>Malay_TE</Feature>
+		<Installer>SetupFw-ms</Installer>
+	</Component>
+	<Component>
+		<Name>Telugu Localization</Name>
+		<Description>Telugu language pack for FieldWorks</Description>
+		<ProductCode>FB8E9808-4755-404b-924F-46A1198C673B</ProductCode>
+		<UpgradeCode>D81B2633-72EA-4a9d-AF7F-F92141C5922A</UpgradeCode>
+		<Feature>Telugu</Feature>
+		<Feature>Telugu_TE</Feature>
+		<Installer>SetupFw-te</Installer>
+	</Component>
+	<Component>
+		<Name>Nepali Localization</Name>
+		<Description>Nepali language pack for FieldWorks</Description>
+		<ProductCode>8A3DFD6D-B527-46ad-88E1-27A67CEF5CE8</ProductCode>
+		<UpgradeCode>3BE68716-FD23-4883-BC70-7A26D69E6D0C</UpgradeCode>
+		<Feature>Nepali</Feature>
+		<Feature>Nepali_TE</Feature>
+		<Installer>SetupFw-ne</Installer>
+	</Component>
+	<Component>
+		<Name>Bengali Localization</Name>
+		<Description>Bengali language pack for FieldWorks</Description>
+		<ProductCode>E919E200-1AAB-4351-ABE8-6237B507A3E9</ProductCode>
+		<UpgradeCode>91850F55-848F-4526-A230-06CC752102A2</UpgradeCode>
+		<Feature>Bengali</Feature>
+		<Feature>Bengali_TE</Feature>
+		<Installer>SetupFw-ms</Installer>
+	</Component>
+	<Component>
+		<Name>Kinyarwanda Localization</Name>
+		<Description>Kinyarwanda language pack for FieldWorks</Description>
+		<ProductCode>AB8FA75C-1616-4963-A4F8-2704FA48569E</ProductCode>
+		<UpgradeCode>B96478CA-2B15-4746-85AE-AABE987D3381</UpgradeCode>
+		<Feature>Kinyarwanda</Feature>
+		<Feature>Kinyarwanda_TE</Feature>
+		<Installer>SetupFw-ro</Installer>
+	</Component>
 </FieldWorksComponents>
