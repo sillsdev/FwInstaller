@@ -9,7 +9,7 @@
 	<Fragment Id="PatchCorrectionsFragment">
 	<Property  Id='PatchCorrectionsFragment' Value='1'/>
 
-	<!-- Patch from 7.1.1 to ??? -->
+	<!-- Patch from 7.2.0 to ??? -->
 
 	</Fragment>
 </Wix>
