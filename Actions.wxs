@@ -114,8 +114,8 @@ Loop
 			<RegistrySearch Id="SearchScrChecksReg" Root="HKLM" Key="SOFTWARE\ScrChecks\1.0\Settings_Directory" Type="raw" />
 		</Property>
 
-		<Binary Id="Doulos.exe" SourceFile="Binary\DoulosSIL4.106.exe" />
-		<Binary Id="Charis.exe" SourceFile="Binary\CharisSIL4.106.exe" />
+		<Binary Id="Doulos.exe" SourceFile="Binary\DoulosSIL-4.110.exe" />
+		<Binary Id="Charis.exe" SourceFile="Binary\CharisSIL-4.110.exe" />
 		<Binary Id="Ezra.exe" SourceFile="Binary\EzraSIL251.exe" />
 		<Binary Id="Galatia.exe" SourceFile="Binary\GalatiaSIL-2.1.exe" />
 		<Binary Id="GlobalWSSUpdater" SourceFile="GlobalWritingSystemStoreUpdater.exe" />
