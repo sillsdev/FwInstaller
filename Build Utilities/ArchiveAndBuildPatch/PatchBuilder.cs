@@ -57,12 +57,14 @@ namespace ArchiveAndBuildPatch
 
 		private void Candle()
 		{
+			var wixPath = Environment.GetEnvironmentVariable("WIX") ?? "";
 			var procCandle = new Process
 				{
 					StartInfo =
 					{
-						FileName = "Candle",
-						Arguments = "\"" + m_wixSourcePath + "\" -out \"" + m_wixObjectPath + "\""
+						FileName = Path.Combine(wixPath, "bin\\Candle"),
+						Arguments = "\"" + m_wixSourcePath + "\" -out \"" + m_wixObjectPath + "\"",
+						UseShellExecute = true
 					}
 				};
 			procCandle.Start();
@@ -74,11 +76,12 @@ namespace ArchiveAndBuildPatch
 
 		private void Light()
 		{
+			var wixPath = Environment.GetEnvironmentVariable("WIX") ?? "";
 			var procLight = new Process
 			{
 				StartInfo =
 					{
-						FileName = "Light",
+						FileName = Path.Combine(wixPath, "bin\\Light"),
 						Arguments = "\"" + m_wixObjectPath + "\" -out \"" + m_pcpPath + "\"",
 						UseShellExecute = false
 					}
@@ -138,11 +141,8 @@ namespace ArchiveAndBuildPatch
 
 				"<PatchInformation" +
 				" Comments=\"Patch for FieldWorks\"" +
-				" Compressed=\"yes\"" +
 				" Description=\"Patches FieldWorks " + m_baseVersion  + " to " + m_updateVersion + "\"" +
-				" Languages=\"1033\"" +
-				" Manufacturer=\"SIL International\"" +
-				" ShortNames=\"no\"/>" +
+				" Manufacturer=\"SIL International\"/>" +
 
 				"<PatchMetadata" +
 				" AllowRemoval=\"yes\"" +
@@ -159,12 +159,12 @@ namespace ArchiveAndBuildPatch
 				" Name=\"SILFW" + baseVersionSquashed.First() + "\"" +
 				" SequenceStart=\"10000\">" +
 
-				"<UpgradeImage src=\"" + updateMsiPath + "\" Id=\"FW" + updateVersionSquashed + "\">" +
-				"<TargetImage src=\"" + baseMsiPath + "\" Order=\"" + (m_archiveFolderManager.NumArchives) + "\" Id=\"FW" + baseVersionSquashed + "\" IgnoreMissingFiles=\"no\" />" +
+				"<UpgradeImage SourceFile=\"" + updateMsiPath + "\" Id=\"FW" + updateVersionSquashed + "\">" +
+				"<TargetImage SourceFile=\"" + baseMsiPath + "\" Order=\"" + (m_archiveFolderManager.NumArchives) + "\" Id=\"FW" + baseVersionSquashed + "\" IgnoreMissingFiles=\"no\" />" +
 				"</UpgradeImage>" +
 				"</Family>" +
 
-				"<PatchSequence PatchFamily=\"" + m_updateBuiltInstaller.ProductGuid.ToUpperInvariant().Replace("-", "") + "\" " +
+				"<PatchSequence PatchFamily=\"_" + m_updateBuiltInstaller.ProductGuid.ToUpperInvariant().Replace("-", "") + "\" " +
 					"Sequence=\"" + m_baseVersion + "\"/>" +
 
 				"</PatchCreation>" +
