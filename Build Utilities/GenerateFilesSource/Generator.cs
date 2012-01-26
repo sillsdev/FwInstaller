@@ -257,7 +257,7 @@ namespace GenerateFilesSource
 				Comment = "unknown";
 				ComponentGuid = "unknown";
 				DiskId = 0;
-				PatchGroup = 0; // Initial release files will have PatchGroup 0, those in first update will have Patchgroup 1, etc.
+				PatchGroup = 0; // Initial release files will have implied (but omitted) PatchGroup 0, those new in first update will have Patchgroup 1, etc.
 				DirId = "";
 				Features = new List<string>();
 				OnlyUsedInUnusedFeatures = false;

@@ -10,12 +10,14 @@
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace>ArchiveAndBuildPatch</RootNamespace>
 	<AssemblyName>ArchiveAndBuildPatch</AssemblyName>
-	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<FileUpgradeFlags>
 	</FileUpgradeFlags>
 	<OldToolsVersion>3.5</OldToolsVersion>
 	<UpgradeBackupLocation />
+	<IsWebBootstrapper>false</IsWebBootstrapper>
+	<TargetFrameworkProfile />
 	<PublishUrl>publish\</PublishUrl>
 	<Install>true</Install>
 	<InstallFrom>Disk</InstallFrom>
@@ -28,7 +30,6 @@
 	<MapFileExtensions>true</MapFileExtensions>
 	<ApplicationRevision>0</ApplicationRevision>
 	<ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-	<IsWebBootstrapper>false</IsWebBootstrapper>
 	<UseApplicationTrust>false</UseApplicationTrust>
 	<BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -75,16 +76,6 @@
 	<Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-	<COMReference Include="WindowsInstaller">
-	  <Guid>{000C1092-0000-0000-C000-000000000046}</Guid>
-	  <VersionMajor>1</VersionMajor>
-	  <VersionMinor>0</VersionMinor>
-	  <Lcid>1033</Lcid>
-	  <WrapperTool>tlbimp</WrapperTool>
-	  <Isolated>False</Isolated>
-	</COMReference>
-  </ItemGroup>
-  <ItemGroup>
 	<BootstrapperPackage Include="Microsoft.Net.Client.3.5">
 	  <Visible>False</Visible>
 	  <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -100,6 +91,20 @@
 	  <ProductName>Windows Installer 3.1</ProductName>
 	  <Install>true</Install>
 	</BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+	<None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+	<COMReference Include="WindowsInstaller">
+	  <Guid>{000C1092-0000-0000-C000-000000000046}</Guid>
+	  <VersionMajor>1</VersionMajor>
+	  <VersionMinor>0</VersionMinor>
+	  <Lcid>1033</Lcid>
+	  <WrapperTool>tlbimp</WrapperTool>
+	  <Isolated>False</Isolated>
+	  <EmbedInteropTypes>True</EmbedInteropTypes>
+	</COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
