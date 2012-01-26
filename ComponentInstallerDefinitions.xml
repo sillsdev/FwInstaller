@@ -154,4 +154,13 @@
 		<Feature>Bengali_TE</Feature>
 		<Installer>SetupFw-ms</Installer>
 	</Component>
+	<Component>
+		<Name>Kinyarwanda Localization</Name>
+		<Description>Kinyarwanda language pack for FieldWorks</Description>
+		<ProductCode>AB8FA75C-1616-4963-A4F8-2704FA48569E</ProductCode>
+		<UpgradeCode>B96478CA-2B15-4746-85AE-AABE987D3381</UpgradeCode>
+		<Feature>Kinyarwanda</Feature>
+		<Feature>Kinyarwanda_TE</Feature>
+		<Installer>SetupFw-ro</Installer>
+	</Component>
 </FieldWorksComponents>

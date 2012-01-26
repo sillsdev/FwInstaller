@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Security.Cryptography;
 
@@ -76,7 +77,14 @@ namespace GenerateFilesSource
 		private readonly List<FilePair> m_similarFilePairs = new List<FilePair>();
 		// List of file patterns of files known to be needed in the core files feature
 		// but which are not needed in either TE or FLEx:
-		private readonly List<string> m_customCoreFiles = new List<string>();
+		private readonly List<string> m_coreFileOrphans = new List<string>();
+		// List of file patterns of built files known to be needed by FLEx but which are not
+		// built by the FLEx Nant target:
+		private readonly List<string> m_forceBuiltFilesIntoFlex = new List<string>();
+		// List of file patterns of built files known to be needed by TE but which are not
+		// built by the TE Nant target:
+		private readonly List<string> m_forceBuiltFilesIntoTE = new List<string>();
+
 		// List of paths of executable files that crash and burn if you try to register them:
 		private readonly List<string> m_ignoreRegistrations = new List<string>();
 		// List of (partial) paths of files that must not be set to read-only:
@@ -87,8 +95,53 @@ namespace GenerateFilesSource
 		private readonly List<string> m_neverOverwriteList = new List<string>();
 		// List of partial paths of files which are installed only if respective conditions are met:
 		private readonly Dictionary<string, string> m_fileSourceConditions = new Dictionary<string, string>();
-		// List of regular expressions serving as heuristics for detecting if a file is meant only for TE:
-		private readonly List<string> m_TeFileNameHeuristics = new List<string>();
+
+		class FileHeuristics
+		{
+			public class HeuristicSet
+			{
+				public readonly List<string> PathContains = new List<string>();
+				public readonly List<string> PathEnds = new List<string>();
+
+				public bool MatchFound(string path)
+				{
+					if (PathContains.Any(path.Contains))
+						return true;
+					if (PathEnds.Any(path.EndsWith))
+						return true;
+					return false;
+				}
+				public void Merge(HeuristicSet that)
+				{
+					this.PathContains.AddRange(that.PathContains);
+					this.PathEnds.AddRange(that.PathEnds);
+				}
+			}
+			public readonly HeuristicSet Inclusions = new HeuristicSet();
+			public readonly HeuristicSet Exclusions = new HeuristicSet();
+
+			public bool IsFileIncluded(string path)
+			{
+				if (Exclusions.MatchFound(path))
+					return false;
+				if (Inclusions.MatchFound(path))
+					return true;
+				return false;
+			}
+			public void Merge(FileHeuristics that)
+			{
+				this.Inclusions.Merge(that.Inclusions);
+				this.Exclusions.Merge(that.Exclusions);
+			}
+		}
+		private readonly FileHeuristics m_flexFileHeuristics = new FileHeuristics();
+		private readonly FileHeuristics m_flexMovieFileHeuristics = new FileHeuristics();
+		private readonly FileHeuristics m_teFileHeuristics = new FileHeuristics();
+		private readonly Dictionary<string, FileHeuristics> m_localizationHeuristics = new Dictionary<string, FileHeuristics>();
+		private readonly Dictionary<string, FileHeuristics> m_teLocalizationHeuristics = new Dictionary<string, FileHeuristics>();
+
+		// List of regular expressions serving as coarse heuristics for guessing if a file might be meant only for TE:
+		private readonly List<string> m_TeFileNameTestHeuristics = new List<string>();
 		// List of specific files that may look like TE-only files but aren't really.
 		private readonly List<string> m_TeFileNameExceptions = new List<string>();
 
@@ -437,10 +490,24 @@ namespace GenerateFilesSource
 
 			// Define list of path patterns of files known to be needed in the core files feature but which are not needed in either TE or FLEx:
 			// Format: <File PathPattern="*partial path of any file that is not needed by TE or FLEx but is needed in the FW installation*"/>
-			var coreFiles = configuration.SelectNodes("//CoreFiles/File");
-			if (coreFiles != null)
-				foreach (XmlElement file in coreFiles)
-					m_customCoreFiles.Add(file.GetAttribute("PathPattern"));
+			var coreFileOrphans = configuration.SelectNodes("//FeatureAllocation/CoreFileOrphans/File");
+			if (coreFileOrphans != null)
+				foreach (XmlElement file in coreFileOrphans)
+					m_coreFileOrphans.Add(file.GetAttribute("PathPattern"));
+
+			// Define list of path patterns of built files known to be needed by FLEx but which are not built by the FLEx Nant target:
+			// Format: <File PathPattern="*partial path of any file that is needed by FLEx*"/>
+			var forceBuiltFilesIntoFlex = configuration.SelectNodes("//FeatureAllocation/ForceBuiltFilesIntoFlex/File");
+			if (forceBuiltFilesIntoFlex != null)
+				foreach (XmlElement file in forceBuiltFilesIntoFlex)
+					m_forceBuiltFilesIntoFlex.Add(file.GetAttribute("PathPattern"));
+
+			// Define list of path patterns of built files known to be needed by TE but which are not built by the TE Nant target:
+			// Format: <File PathPattern="*partial path of any file that is needed by TE*"/>
+			var forceBuiltFilesIntoTE = configuration.SelectNodes("//FeatureAllocation/ForceBuiltFilesIntoTE/File");
+			if (forceBuiltFilesIntoTE != null)
+				foreach (XmlElement file in forceBuiltFilesIntoTE)
+					m_forceBuiltFilesIntoTE.Add(file.GetAttribute("PathPattern"));
 
 			// Define conditions to apply to specified components:
 			// Format: <File Path="*partial path of a file that is conditionally installed*" Condition="*MSI Installer condition that must be true to install file*"/>
@@ -492,16 +559,32 @@ namespace GenerateFilesSource
 				foreach (XmlElement file in ignoreRegistrations)
 					m_ignoreRegistrations.Add(file.GetAttribute("Path"));
 
-			// Define list of regular expressions serving as heuristics for detecting if a file is meant only for TE:
-			// Format: <Heuristic RegExp="*regular expression matching paths of files that belong exclusively to TE*"/>
-			var teHeuristics = configuration.SelectNodes("//TeFileNameHeuristics/Heuristic");
-			if (teHeuristics != null)
-				foreach (XmlElement heuristic in teHeuristics)
-					m_TeFileNameHeuristics.Add(heuristic.GetAttribute("RegExp"));
+			// Define lists of heuristics for assigning DistFiles files into their correct installer features:
+			ConfigureHeuristics(configuration, m_flexFileHeuristics, "//FeatureAllocation/FlexOnly");
+			ConfigureHeuristics(configuration, m_flexMovieFileHeuristics, "//FeatureAllocation/FlexMoviesOnly");
+			ConfigureHeuristics(configuration, m_teFileHeuristics, "//FeatureAllocation/TeOnly");
 
-			// Define list of specific files that may look like TE-only files but aren't really:
+			// Do the same for localization files.
+			// Prerequisite: m_languages already configured with all languages:
+			ConfigureLocalizationHeuristics(configuration, m_localizationHeuristics, "//FeatureAllocation/Localization");
+			ConfigureLocalizationHeuristics(configuration, m_teLocalizationHeuristics, "//FeatureAllocation/TeLocalization");
+			// Merge m_teLocalizationHeuristics into m_localizationHeuristics so that the latter is a complete set of all localization heuristics:
+			foreach (var language in m_languages)
+				m_localizationHeuristics[language.Folder].Merge(m_teLocalizationHeuristics[language.Folder]);
+
+			// Define list of regular expressions serving as coarse heuristics for guessing if a file that
+			// has been allocated to the Core or FLEx features may actually be meant only for TE (used as
+			// a secondary measure only in generating warnings):
+			// Format: <Heuristic RegExp="*regular expression matching paths of files that belong exclusively to TE*"/>
+			var teTestHeuristics = configuration.SelectNodes("//FeatureAllocation/TeFileNameTestHeuristics/Heuristic");
+			if (teTestHeuristics != null)
+				foreach (XmlElement heuristic in teTestHeuristics)
+					m_TeFileNameTestHeuristics.Add(heuristic.GetAttribute("RegExp"));
+
+			// Define list of specific files that may look like TE-only files but aren't really (used in
+			// conjunction with m_TeFileNameTestHeuristics to suppress warnings):
 			// Format: <File Path="*relative path from FW folder of a file looks like it is TE-exclusive but isn't*"/>
-			var teFileNameExceptions = configuration.SelectNodes("//NotTeOnly/File");
+			var teFileNameExceptions = configuration.SelectNodes("//FeatureAllocation/TeFileNameTestHeuristics/Except");
 			if (teFileNameExceptions != null)
 				foreach (XmlElement file in teFileNameExceptions)
 					m_TeFileNameExceptions.Add(file.GetAttribute("Path"));
@@ -606,6 +689,93 @@ namespace GenerateFilesSource
 				var assignments = cabinetAssignments.SelectNodes("Cabinet");
 				foreach (XmlElement assignment in assignments)
 					m_featureCabinetMappings.Add(assignment.GetAttribute("Feature"), int.Parse(assignment.GetAttribute("CabinetIndex")));
+			}
+		}
+
+		/// <summary>
+		/// Configures a "dictionary" of heuristics sets. Each entry in the dictionary is referenced by a
+		/// language code, and is a set of heuristics for distinguishing files that belong to that language's
+		/// localization pack. The heuristics are defined in the InstallerConfig.xml document, but in a
+		/// language-independent way, such that the language code is represented by "{0}", so that the
+		/// string.Format method can be used to substitute in the correct language code.
+		/// </summary>
+		/// <param name="configuration">The InstallerConfig.xml document</param>
+		/// <param name="localizationHeuristics">The dictionary of heuristics sets</param>
+		/// <param name="xPath">The xPath to the relevant heuristics section in the configuration file</param>
+		private void ConfigureLocalizationHeuristics(XmlDocument configuration, IDictionary<string, FileHeuristics> localizationHeuristics, string xPath)
+		{
+			// Make one heuristics set per language:
+			foreach (var language in m_languages)
+			{
+				var heuristics = new FileHeuristics();
+				// Use the standard configuration method to read in the heuristics:
+				ConfigureHeuristics(configuration, heuristics, xPath);
+
+				// Swap out the "{0}" occurrences and replace with the language code:
+				FormatLocalizationHeuristics(heuristics.Inclusions.PathContains, language.Folder);
+				FormatLocalizationHeuristics(heuristics.Inclusions.PathEnds, language.Folder);
+				FormatLocalizationHeuristics(heuristics.Exclusions.PathContains, language.Folder);
+				FormatLocalizationHeuristics(heuristics.Exclusions.PathEnds, language.Folder);
+
+				// Add the new heuristics set to the dictionary:
+				localizationHeuristics.Add(language.Folder, heuristics);
+			}
+		}
+
+		/// <summary>
+		/// Replaces each occurrence of "{0}" with the given language string.
+		/// </summary>
+		/// <param name="heuristicList">List of heuristic strings</param>
+		/// <param name="language">language code</param>
+		private static void FormatLocalizationHeuristics(IList<string> heuristicList, string language)
+		{
+			for (int i = 0; i < heuristicList.Count; i++)
+				heuristicList[i] = string.Format(heuristicList[i], language);
+		}
+
+		/// <summary>
+		/// Configures a complete set of heuristics (Inclusions, Exclusions, Files and Exceptions) from
+		/// the specified section of the InstallerConfig.xml file.
+		/// </summary>
+		/// <param name="configuration">The InstallerConfig.xml file</param>
+		/// <param name="heuristics">The initialized heuristics set</param>
+		/// <param name="xPath">The root section of the XML configuration file</param>
+		private static void ConfigureHeuristics(XmlDocument configuration, FileHeuristics heuristics, string xPath)
+		{
+			// Configure the Inclusions subset from the "File" sub-element:
+			ConfigureHeuristicSet(configuration, heuristics.Inclusions, xPath + "/File");
+			// Configure the Exclusions subset from the "Except" sub-element:
+			ConfigureHeuristicSet(configuration, heuristics.Exclusions, xPath + "/Except");
+		}
+
+		/// <summary>
+		/// Configures a heuristics subset (Either the Inclusions or the Exclusions) from the specified
+		/// section of the InstallerConfig.xml file.
+		/// </summary>
+		/// <param name="configuration">The InstallerConfig.xml file</param>
+		/// <param name="heuristicSet">The heuristics subset</param>
+		/// <param name="xPath">The relevant section of the XML configuration file</param>
+		private static void ConfigureHeuristicSet(XmlDocument configuration, FileHeuristics.HeuristicSet heuristicSet, string xPath)
+		{
+			// Create a set of heuristic definitions:
+			var heuristicNodes = configuration.SelectNodes(xPath);
+			if (heuristicNodes == null)
+				return;
+
+			// Process each heuristic definition:
+			foreach (XmlElement heuristic in heuristicNodes)
+			{
+				// The definition should contain either a "PathContains" attribute or
+				// a "PathEnds" attribute. Anything else is ignored:
+				var pathContains = heuristic.GetAttribute("PathContains");
+				if (pathContains.Length > 0)
+					heuristicSet.PathContains.Add(pathContains);
+				else
+				{
+					var pathEnds = heuristic.GetAttribute("PathEnds");
+					if (pathEnds.Length > 0)
+						heuristicSet.PathEnds.Add(pathEnds);
+				}
 			}
 		}
 
@@ -1118,70 +1288,103 @@ namespace GenerateFilesSource
 			m_teFeatureFiles = teOnlyBuiltFiles.Union(teOnlyDistFiles);
 			m_fwCoreFeatureFiles = coreBuiltFiles.Union(coreDistFiles);
 
-			// Add to m_fwCoreFeatureFiles any files specified in the m_customCoreFiles set:
-			// (By definition, such files are not needed by FLEx or TE, so won't appear in FLEx or TE sets.)
+			// Add to m_fwCoreFeatureFiles any files specified in the m_coreFileOrphans set:
+			// (Such files are not needed by FLEx or TE, so won't appear in FLEx or TE sets.)
 			var fwCoreFeatureFiles = new HashSet<InstallerFile>();
 			foreach (var file in from file in m_allFilesFiltered
-								 from coreFile in m_customCoreFiles
+								 from coreFile in m_coreFileOrphans
 								 where file.RelativeSourcePath.ToLowerInvariant().Contains(coreFile.Replace("\\${config}\\", "\\" + m_buildType + "\\").ToLowerInvariant())
 								 select file)
 			{
+				file.Comment += " Orphaned: not needed in TE or FLEx. ";
 				fwCoreFeatureFiles.Add(file);
 			}
 			m_fwCoreFeatureFiles = m_fwCoreFeatureFiles.Union(fwCoreFeatureFiles);
 
+			// Add to m_flexFeatureFiles any files specified in the m_forceBuiltFilesIntoFlex set:
+			// (Such files are needed by FLEx but aren't built by the FLEx Nant target.)
+			var forceBuiltFilesIntoFlex = new HashSet<InstallerFile>();
+			foreach (var file in from file in m_allFilesFiltered
+								 from flexFile in m_forceBuiltFilesIntoFlex
+								 where file.RelativeSourcePath.ToLowerInvariant().Contains(flexFile.Replace("\\${config}\\", "\\" + m_buildType + "\\").ToLowerInvariant())
+								 select file)
+			{
+				file.Comment += " Specifically added to FLEx via //FeatureAllocation/ForceBuiltFilesIntoFlex in XML configuration. ";
+				forceBuiltFilesIntoFlex.Add(file);
+			}
+			m_flexFeatureFiles = m_flexFeatureFiles.Union(forceBuiltFilesIntoFlex);
+			// Remove from the Core features the files we've just forced into FLEx:
+			m_fwCoreFeatureFiles = m_fwCoreFeatureFiles.Except(forceBuiltFilesIntoFlex);
+
+			// Add to m_teFeatureFiles any files specified in the m_forceBuiltFilesIntoTE set:
+			// (Such files are needed by TE but aren't built by the TE Nant target.)
+			var forceBuiltFilesIntoTE = new HashSet<InstallerFile>();
+			foreach (var file in from file in m_allFilesFiltered
+								 from teFile in m_forceBuiltFilesIntoTE
+								 where file.RelativeSourcePath.ToLowerInvariant().Contains(teFile.Replace("\\${config}\\", "\\" + m_buildType + "\\").ToLowerInvariant())
+								 select file)
+			{
+				file.Comment += " Specifically added to TE via //FeatureAllocation/ForceBuiltFilesIntoTE in XML configuration. ";
+				forceBuiltFilesIntoTE.Add(file);
+			}
+			m_teFeatureFiles = m_teFeatureFiles.Union(forceBuiltFilesIntoTE);
+			// Remove from the Core features the files we've just forced into TE:
+			m_fwCoreFeatureFiles = m_fwCoreFeatureFiles.Except(forceBuiltFilesIntoTE);
+
 			// Run tests to see if any files that look like they are for TE appear in the core or in FLEx:
-			TestNoTeFiles(m_fwCoreFeatureFiles, "Core");
-			TestNoTeFiles(m_flexFeatureFiles, "FLEx");
+			TestForPossibleTeFiles(m_fwCoreFeatureFiles, "Core");
+			TestForPossibleTeFiles(m_flexFeatureFiles, "FLEx");
 
 			// Assign feature names in m_allFilesFiltered:
-			foreach (var file in m_allFilesFiltered)
-			{
-				if (m_flexFeatureFiles.Contains(file))
-					file.Features.Add("FLEx");
-				if (m_flexMoviesFeatureFiles.Contains(file))
-					file.Features.Add("FlexMovies");
-				if (m_teFeatureFiles.Contains(file))
-					file.Features.Add("TE");
-				if (m_fwCoreFeatureFiles.Contains(file))
-					file.Features.Add("FW_Core");
-
-				foreach (var language in m_languages)
+			Parallel.ForEach(m_allFilesFiltered, file =>
 				{
-					if (language.OtherFiles.Contains(file))
-						file.Features.Add(language.LanguageName);
-					if (language.TeFiles.Contains(file))
-						file.Features.Add(language.LanguageName + "_TE");
-				}
+					if (m_flexFeatureFiles.Contains(file))
+						file.Features.Add("FLEx");
+					if (m_flexMoviesFeatureFiles.Contains(file))
+						file.Features.Add("FlexMovies");
+					if (m_teFeatureFiles.Contains(file))
+						file.Features.Add("TE");
+					if (m_fwCoreFeatureFiles.Contains(file))
+						file.Features.Add("FW_Core");
 
-				// Test if any features of the current file are represented in Features.wxs:
-				file.OnlyUsedInUnusedFeatures = !m_representedFeatures.Any(feature => file.Features.Contains(feature));
+					foreach (var language in m_languages)
+					{
+						if (language.OtherFiles.Contains(file))
+							file.Features.Add(language.LanguageName);
+						if (language.TeFiles.Contains(file))
+							file.Features.Add(language.LanguageName + "_TE");
+					}
 
-				if (file.Features.Count > 0)
-				{
-					// Assign a DiskId for the file's cabinet:
-					var firstFeature = file.Features.First();
-					if (m_featureCabinetMappings.ContainsKey(firstFeature))
-						file.DiskId = m_featureCabinetMappings[firstFeature];
-					else
-						file.DiskId = m_featureCabinetMappings["Default"];
+					// Test if any features of the current file are represented in Features.wxs:
+					file.OnlyUsedInUnusedFeatures =
+						!m_representedFeatures.Any(feature => file.Features.Contains(feature));
+
+					if (file.Features.Count > 0)
+					{
+						// Assign a DiskId for the file's cabinet:
+						var firstFeature = file.Features.First();
+						if (m_featureCabinetMappings.ContainsKey(firstFeature))
+							file.DiskId = m_featureCabinetMappings[firstFeature];
+						else
+							file.DiskId = m_featureCabinetMappings["Default"];
+					}
 				}
-			}
+			);
 		}
 
 		/// <summary>
-		/// Uses a set of heuristics to judge whether the given set of files contains any
-		/// that belong uniquely to TE. If so, the m_seriousIssues report is extended to
-		/// include the misplaced files.
-		/// Uses heuristics from the TeFileNameHeuristics node of InstallerConfig.xml,
+		/// Uses a set of coarse heuristics to guess whether any files in the given set
+		/// might possibly belong uniquely to TE. If so, the m_seriousIssues report is extended to
+		/// report the suspect files.
+		/// Uses heuristics from the TeFileNameTestHeuristics node of InstallerConfig.xml,
 		/// and checks only against file name, not folder path.
 		/// </summary>
 		/// <param name="files">List of files</param>
 		/// <param name="section">Label of installer section to report to user if there is a problem</param>
-		private void TestNoTeFiles(IEnumerable<InstallerFile> files, string section)
+		private void TestForPossibleTeFiles(IEnumerable<InstallerFile> files, string section)
 		{
 			foreach (var file in from file in files
-								 from heuristic in m_TeFileNameHeuristics
+								 from heuristic in m_TeFileNameTestHeuristics
 								 let re = new Regex(heuristic)
 								 where re.IsMatch(file.Name)
 								 select file)
@@ -1210,16 +1413,8 @@ namespace GenerateFilesSource
 				return false;
 			if (FileIsForFlexMoviesOnly(file))
 				return false;
-			if (file.RelativeSourcePath.Contains("Language Explorer"))
-				return true;
-			if (file.RelativeSourcePath.Contains("Language_Explorer"))
-				return true;
-			if (file.RelativeSourcePath.Contains("Data Notebook"))
-				return true;
-			if (file.RelativeSourcePath.Contains("Data_Notebook"))
-				return true;
 
-			return false;
+			return m_flexFileHeuristics.IsFileIncluded(file.RelativeSourcePath);
 		}
 
 		/// <summary>
@@ -1228,15 +1423,9 @@ namespace GenerateFilesSource
 		/// </summary>
 		/// <param name="file">the candidate installer file</param>
 		/// <returns>true if the file is for FLEx Movies only</returns>
-		private static bool FileIsForFlexMoviesOnly(InstallerFile file)
+		private bool FileIsForFlexMoviesOnly(InstallerFile file)
 		{
-			if (file.RelativeSourcePath.Contains("Language Explorer\\Movies\\notfound.html"))
-				return false;
-
-			if (file.RelativeSourcePath.Contains("Language Explorer\\Movies"))
-				return true;
-
-			return false;
+			return m_flexMovieFileHeuristics.IsFileIncluded(file.RelativeSourcePath);
 		}
 
 		/// <summary>
@@ -1249,20 +1438,10 @@ namespace GenerateFilesSource
 		{
 			// If a file is a localization file it will be put in a localization pack
 			// and not considered a TE file as such:
-			if (FileIsForLocalization(file) || FileIsForTeLocalization(file))
+			if (FileIsForLocalization(file))
 				return false;
-			if (file.RelativeSourcePath.Contains("Editorial Checks"))
-				return true;
-			if (file.RelativeSourcePath.Contains("Translation_Editor"))
-				return true;
-			if (file.RelativeSourcePath.Contains("Translation Editor"))
-				return true;
-			if (file.RelativeSourcePath.Contains("Scripture"))
-				return true;
-			if (file.RelativeSourcePath.Contains("Bibl"))
-				return true;
 
-			return false;
+			return m_teFileHeuristics.IsFileIncluded(file.RelativeSourcePath);
 		}
 
 		/// <summary>
@@ -1272,24 +1451,12 @@ namespace GenerateFilesSource
 		/// <param name="file">File to be analyzed</param>
 		/// <param name="language">Language to be considered</param>
 		/// <returns>True if file is a localization file for that language</returns>
-		private static bool FileIsForLocalization(InstallerFile file, LocalizationData language)
+		private bool FileIsForLocalization(InstallerFile file, LocalizationData language)
 		{
 			if (language.Folder.Length == 0)
 				throw new Exception("Language defined with no localization folder");
 
-			if (file.RelativeSourcePath.Contains("\\" + language.Folder + "\\"))
-				return true;
-
-			if (file.RelativeSourcePath.EndsWith("\\strings-" + language.Folder + ".xml"))
-				return true;
-
-			if (file.RelativeSourcePath.EndsWith("\\LocalizedLists-" + language.Folder + ".xml"))
-				return true;
-
-			if (file.RelativeSourcePath.EndsWith("\\BiblicalTerms-" + language.Folder + ".xml"))
-				return true;
-
-			return false;
+			return m_localizationHeuristics[language.Folder].IsFileIncluded(file.RelativeSourcePath);
 		}
 
 		/// <summary>
@@ -1308,22 +1475,12 @@ namespace GenerateFilesSource
 		/// <param name="file">File to be analyzed</param>
 		/// <param name="language">Language to be considered</param>
 		/// <returns>True if file is a TE localization file for that language</returns>
-		private static bool FileIsForTeLocalization(InstallerFile file, LocalizationData language)
+		private bool FileIsForTeLocalization(InstallerFile file, LocalizationData language)
 		{
 			if (language.Folder.Length == 0)
 				throw new Exception("Language defined with no localization folder");
 
-			if (file.RelativeSourcePath.Contains("\\" + language.Folder + "\\Te"))
-				return true;
-			if (file.RelativeSourcePath.Contains("\\" + language.Folder + "\\Scr"))
-				return true;
-			if (file.RelativeSourcePath.Contains("\\" + language.Folder + "\\DiffView"))
-				return true;
-
-			if (file.RelativeSourcePath.EndsWith("\\BiblicalTerms-" + language.Folder + ".xml"))
-				return true;
-
-			return false;
+			return m_teLocalizationHeuristics[language.Folder].IsFileIncluded(file.RelativeSourcePath);
 		}
 
 		/// <summary>
@@ -1342,7 +1499,7 @@ namespace GenerateFilesSource
 		/// <param name="file">File to be analyzed</param>
 		/// <param name="language">Language to be considered</param>
 		/// <returns>True if file is a TE or FLEx localization file</returns>
-		private static bool FileIsForNonTeLocalization(InstallerFile file, LocalizationData language)
+		private bool FileIsForNonTeLocalization(InstallerFile file, LocalizationData language)
 		{
 			if (FileIsForLocalization(file, language) && !FileIsForTeLocalization(file, language))
 				return true;

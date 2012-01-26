@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product UpgradeCode="1092269F-9EA1-419B-8685-90203F83E254" Id="8E80F1ED-826A-46d5-A59A-D8A203F2F0D9" Name='SIL FieldWorks 7.2' Language='1033'
-			 Version='7.2.0' Manufacturer='SIL International'>
+	<Product UpgradeCode="1092269F-9EA1-419B-8685-90203F83E254" Id="8E80F1ED-826A-46d5-A59A-D8A203F2F0D9" Name='SIL FieldWorks 7.3' Language='1033'
+			 Version='7.3.0' Manufacturer='SIL International'>
 		<Package Id='*'
 				  Description='FieldWorks Installer'
 				  Manufacturer='SIL International' InstallerVersion='300' Compressed='yes' />
@@ -24,9 +24,10 @@
 		<Media Id='12' Cabinet='Korean.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='13' Cabinet='Turkish.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='14' Cabinet='Vietnam.cab' EmbedCab='no' CompressionLevel='high'/>
-		<Media Id='15' Cabinet='Persian.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='15' Cabinet='Persian.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='16' Cabinet='Nepali.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='17' Cabinet='Bengali.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='18' Cabinet='Kinyarwa.cab' EmbedCab='no' CompressionLevel='high'/>
 
 		<Property Id="FLEX_MOVIES_CAB_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindFlexMoviesCabFile">
@@ -48,11 +49,6 @@
 				<FileSearch Name="Vietnam.cab"/>
 			</DirectorySearch>
 		</Property>
-		<Property Id="PERSIAN_CAB_FOUND">
-			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindPersianCabFile">
-				<FileSearch Name="Persian.cab"/>
-			</DirectorySearch>
-		</Property>
 		<Property Id="NEPALI_CAB_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindNepaliCabFile">
 				<FileSearch Name="Nepali.cab"/>
@@ -61,6 +57,11 @@
 		<Property Id="BENGALI_CAB_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindBengaliCabFile">
 				<FileSearch Name="Bengali.cab"/>
+			</DirectorySearch>
+		</Property>
+		<Property Id="KINYARWANDA_CAB_FOUND">
+			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindKinyarwandaCabFile">
+				<FileSearch Name="Kinyarwa.cab"/>
 			</DirectorySearch>
 		</Property>
 
