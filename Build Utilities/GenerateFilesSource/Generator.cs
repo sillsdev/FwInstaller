@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Security.Cryptography;
 
@@ -256,7 +257,7 @@ namespace GenerateFilesSource
 				Comment = "unknown";
 				ComponentGuid = "unknown";
 				DiskId = 0;
-				PatchGroup = 0; // Initial release files will have PatchGroup 0, those in first update will have Patchgroup 1, etc.
+				PatchGroup = 0; // Initial release files will have implied (but omitted) PatchGroup 0, those new in first update will have Patchgroup 1, etc.
 				DirId = "";
 				Features = new List<string>();
 				OnlyUsedInUnusedFeatures = false;
@@ -1335,38 +1336,40 @@ namespace GenerateFilesSource
 			TestForPossibleTeFiles(m_flexFeatureFiles, "FLEx");
 
 			// Assign feature names in m_allFilesFiltered:
-			foreach (var file in m_allFilesFiltered)
-			{
-				if (m_flexFeatureFiles.Contains(file))
-					file.Features.Add("FLEx");
-				if (m_flexMoviesFeatureFiles.Contains(file))
-					file.Features.Add("FlexMovies");
-				if (m_teFeatureFiles.Contains(file))
-					file.Features.Add("TE");
-				if (m_fwCoreFeatureFiles.Contains(file))
-					file.Features.Add("FW_Core");
-
-				foreach (var language in m_languages)
+			Parallel.ForEach(m_allFilesFiltered, file =>
 				{
-					if (language.OtherFiles.Contains(file))
-						file.Features.Add(language.LanguageName);
-					if (language.TeFiles.Contains(file))
-						file.Features.Add(language.LanguageName + "_TE");
-				}
+					if (m_flexFeatureFiles.Contains(file))
+						file.Features.Add("FLEx");
+					if (m_flexMoviesFeatureFiles.Contains(file))
+						file.Features.Add("FlexMovies");
+					if (m_teFeatureFiles.Contains(file))
+						file.Features.Add("TE");
+					if (m_fwCoreFeatureFiles.Contains(file))
+						file.Features.Add("FW_Core");
 
-				// Test if any features of the current file are represented in Features.wxs:
-				file.OnlyUsedInUnusedFeatures = !m_representedFeatures.Any(feature => file.Features.Contains(feature));
+					foreach (var language in m_languages)
+					{
+						if (language.OtherFiles.Contains(file))
+							file.Features.Add(language.LanguageName);
+						if (language.TeFiles.Contains(file))
+							file.Features.Add(language.LanguageName + "_TE");
+					}
 
-				if (file.Features.Count > 0)
-				{
-					// Assign a DiskId for the file's cabinet:
-					var firstFeature = file.Features.First();
-					if (m_featureCabinetMappings.ContainsKey(firstFeature))
-						file.DiskId = m_featureCabinetMappings[firstFeature];
-					else
-						file.DiskId = m_featureCabinetMappings["Default"];
+					// Test if any features of the current file are represented in Features.wxs:
+					file.OnlyUsedInUnusedFeatures =
+						!m_representedFeatures.Any(feature => file.Features.Contains(feature));
+
+					if (file.Features.Count > 0)
+					{
+						// Assign a DiskId for the file's cabinet:
+						var firstFeature = file.Features.First();
+						if (m_featureCabinetMappings.ContainsKey(firstFeature))
+							file.DiskId = m_featureCabinetMappings[firstFeature];
+						else
+							file.DiskId = m_featureCabinetMappings["Default"];
+					}
 				}
-			}
+			);
 		}
 
 		/// <summary>

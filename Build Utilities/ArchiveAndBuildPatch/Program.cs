@@ -47,23 +47,23 @@ namespace ArchiveAndBuildPatch
 			// and can be achieved manually using the msiexec.exe /a option:
 			installer.ArchivedAdministrativeInstall(archiveFolder);
 
-			// Unless this is the first installer in the series, build a patch from the
-			// first installer to this new one:
-			if (archiveFolderManager.EarliestVersion == installer.Version)
+			// If there is a previous installer in the series, build a patch from the
+			// previous installer to this new one:
+			if (archiveFolderManager.GetNthFromEndVersion(1) == null)
 				return;
 
-			var patchBuilder = new PatchBuilder(archiveFolderManager.EarliestVersion, installer, archiveFolderManager);
+			var patchBuilder = new PatchBuilder(archiveFolderManager.GetNthFromEndVersion(1), installer, archiveFolderManager);
 			var patchPath = patchBuilder.BuildPatch();
 
 			var patchWrapper = new PatchWrapper(patchPath);
 			patchWrapper.Wrap();
 
-			// Build patch from previous version to this version, unless previous version was the
-			// first version, in which case we have jut built it already:
-			if (archiveFolderManager.EarliestVersion == archiveFolderManager.PreviousVersion)
+			// If there is a previous but one installer in the series, build a patch from the
+			// previous but one installer to this new one:
+			if (archiveFolderManager.GetNthFromEndVersion(2) == null)
 				return;
 
-			patchBuilder = new PatchBuilder(archiveFolderManager.PreviousVersion, installer, archiveFolderManager);
+			patchBuilder = new PatchBuilder(archiveFolderManager.GetNthFromEndVersion(2), installer, archiveFolderManager);
 			patchPath = patchBuilder.BuildPatch();
 			patchWrapper = new PatchWrapper(patchPath);
 			patchWrapper.Wrap();

@@ -182,18 +182,23 @@ namespace ArchiveAndBuildPatch
 			var fileLibraryNodes = fileLibraryNode.SelectNodes("File");
 			if (fileLibraryNodes == null)
 				throw new Exception("Attempt to select File nodes in " + m_fileLibPath + " returned null.");
-			var maxPatchGroup = 0;
-			foreach (XmlElement node in fileLibraryNodes)
+
+			string newPatchGroup = "0";
+			if (fileLibraryNodes.Count > 0)
 			{
-				var patchGroup = node.GetAttribute("PatchGroup");
-				if (patchGroup.Length > 0)
+				var maxPatchGroup = 0;
+				foreach (XmlElement node in fileLibraryNodes)
 				{
-					int currentPatchGroup = int.Parse(patchGroup);
-					if (currentPatchGroup > maxPatchGroup)
-						maxPatchGroup = currentPatchGroup;
+					var patchGroup = node.GetAttribute("PatchGroup");
+					if (patchGroup.Length > 0)
+					{
+						int currentPatchGroup = int.Parse(patchGroup);
+						if (currentPatchGroup > maxPatchGroup)
+							maxPatchGroup = currentPatchGroup;
+					}
 				}
+				newPatchGroup = (1 + maxPatchGroup).ToString();
 			}
-			string newPatchGroup = (1 + maxPatchGroup).ToString();
 
 			// Load addenda file:
 			var xmlFileLibraryAddenda = new XmlDocument();
