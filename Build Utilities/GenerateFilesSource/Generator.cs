@@ -1518,10 +1518,7 @@ namespace GenerateFilesSource
 			batchFile.WriteLine("set fwroot=" + m_projRootPath);
 			batchFile.WriteLine("set path=%fwroot%\\DistFiles;%path%");
 			batchFile.WriteLine("cd " + Path.Combine(m_projRootPath, "bld"));
-			// We need to specify .NET 3.5 to avoid errors on Windows 7 64-bit machines which
-			// come with part of .NET 4.0 installed. When we move beyond .NET 3.5, we will need
-			// to change this line:
-			batchFile.WriteLine("..\\bin\\nant\\bin\\nant -t:net-3.5 release extraInstallerBuild build " + target);
+			batchFile.WriteLine("..\\bin\\nant\\bin\\nant release extraInstallerBuild build " + target);
 			batchFile.Close();
 
 			var nantProc = new Process();
