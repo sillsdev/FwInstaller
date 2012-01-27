@@ -23,6 +23,9 @@ namespace ArchiveAndBuildPatch
 
 		public PatchBuilder(string baseVersion, BuiltInstaller updateBuiltInstaller, ArchiveFolderManager archiveFolderManager)
 		{
+			if (baseVersion == null)
+				throw new ArgumentNullException("baseVersion", "PatchBuilder instantiated with no baseVersion defined.");
+
 			m_updateBuiltInstaller = updateBuiltInstaller;
 			m_archiveFolderManager = archiveFolderManager;
 
@@ -59,14 +62,14 @@ namespace ArchiveAndBuildPatch
 		{
 			var wixPath = Environment.GetEnvironmentVariable("WIX") ?? "";
 			var procCandle = new Process
+			{
+				StartInfo =
 				{
-					StartInfo =
-					{
-						FileName = Path.Combine(wixPath, "bin\\Candle"),
-						Arguments = "\"" + m_wixSourcePath + "\" -out \"" + m_wixObjectPath + "\"",
-						UseShellExecute = true
-					}
-				};
+					FileName = Path.Combine(wixPath, "bin\\Candle.exe"),
+					Arguments = "\"" + m_wixSourcePath + "\" -out \"" + m_wixObjectPath + "\"",
+					UseShellExecute = false
+				}
+			};
 			procCandle.Start();
 			procCandle.WaitForExit();
 
@@ -80,11 +83,11 @@ namespace ArchiveAndBuildPatch
 			var procLight = new Process
 			{
 				StartInfo =
-					{
-						FileName = Path.Combine(wixPath, "bin\\Light"),
-						Arguments = "\"" + m_wixObjectPath + "\" -out \"" + m_pcpPath + "\"",
-						UseShellExecute = false
-					}
+				{
+					FileName = Path.Combine(wixPath, "bin\\Light.exe"),
+					Arguments = "\"" + m_wixObjectPath + "\" -out \"" + m_pcpPath + "\"",
+					UseShellExecute = false
+				}
 			};
 			procLight.Start();
 			procLight.WaitForExit();
