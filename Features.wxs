@@ -8,6 +8,7 @@
 			<ComponentRef Id="CopyLicenseTechReadme"/>
 			<ComponentRef Id="vs_piaredist.exe"/>
 			<ComponentRef Id="MigrateSqlDbs.exe"/>
+			<ComponentRef Id="FieldWorksBridgeInstaller.msi"/>
 			<ComponentRef Id="FwRemoteDatabaseConnectorService.exe"/>
 			<ComponentRef Id="Quivira.ttf"/>
 			<ComponentRef Id="FwPath"/>

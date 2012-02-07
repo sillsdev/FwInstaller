@@ -32,6 +32,12 @@ AutoFiles.wxs.
 							<ServiceInstall Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" DisplayName="FieldWorks Remote Database Connector Service" Type="ownProcess" Interactive="yes" Start="auto" ErrorControl="ignore" Description="Allows connection to local FieldWorks projects from other machines on the network." />
 							<ServiceControl Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
 						</Component>
+						<Directory Id="AddOnInstallers" Name="Installers">
+							<!-- The following component GUID is required by the master istaller to locate and launch the FLEx Bridge installer: -->
+							<Component Id="FieldWorksBridgeInstaller.msi" Guid="9442BF43-4A64-4885-9593-43DD7E927290">
+								<File Id="FieldWorksBridgeInstaller.msi" Name="FieldWorksBridgeInstaller.msi" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="2" Source="DistFiles\Installers\FieldWorksBridgeInstaller.msi" />
+							</Component>
+						</Directory>
 					</Directory>
 				</Directory>
 			</Directory>
