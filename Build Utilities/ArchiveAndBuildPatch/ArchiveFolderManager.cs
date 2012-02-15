@@ -11,8 +11,6 @@ namespace ArchiveAndBuildPatch
 		private const string ArchiveFolder = "Archives and Patches";
 		private const string VersionFolderNamePattern = @"^([0-9\.]+)$";
 		private readonly string m_archiveFolder;
-		private string m_firstArchiveFolder;
-		private string m_previousArchiveFolder;
 		private string m_currentArchiveFolder;
 		private readonly List<string> m_archiveFolderVersions = new List<string>();
 		private static int _numTimesCalled;
@@ -57,8 +55,6 @@ namespace ArchiveAndBuildPatch
 			{
 				var comparer = new VersionStringComparer();
 				m_archiveFolderVersions.Sort(comparer);
-				m_firstArchiveFolder = m_archiveFolderVersions.First();
-				m_previousArchiveFolder = m_archiveFolderVersions.Last();
 			}
 		}
 
@@ -74,12 +70,15 @@ namespace ArchiveAndBuildPatch
 
 		public string EarliestVersion
 		{
-			get { return m_firstArchiveFolder;  }
+			get { return (m_archiveFolderVersions.Count > 0)? m_archiveFolderVersions.First() : null; }
 		}
 
-		public string PreviousVersion
+		public string GetNthFromEndVersion(int n)
 		{
-			get { return m_previousArchiveFolder; }
+			if (n < 0 || n >= m_archiveFolderVersions.Count)
+				return null;
+
+			return m_archiveFolderVersions[m_archiveFolderVersions.Count - 1 - n];
 		}
 
 		public int NumArchives
@@ -103,21 +102,17 @@ namespace ArchiveAndBuildPatch
 				throw new Exception("Folder " + m_currentArchiveFolder +
 									" already exists. Current installer may already be archived. Did you forget to increment the installer version number?");
 
-			if (m_previousArchiveFolder != null)
+			if (m_archiveFolderVersions.Count >= 1)
 			{
 				var comparer = new VersionStringComparer();
-				if (comparer.Compare(version, m_previousArchiveFolder) != 1)
-					throw new Exception("New version " + version + " is not higher than current highest version (" + m_previousArchiveFolder +
+				if (comparer.Compare(version, m_archiveFolderVersions.Last()) != 1)
+					throw new Exception("New version " + version + " is not higher than current highest version (" + m_archiveFolderVersions.Last() +
 										"). This will not make for a viable patch!");
 			}
-			if (m_archiveFolderVersions.Count > 0)
-				m_previousArchiveFolder = m_archiveFolderVersions.Last();
 
 			Directory.CreateDirectory(m_currentArchiveFolder);
 
 			m_archiveFolderVersions.Add(version);
-			if (m_firstArchiveFolder == null)
-				m_firstArchiveFolder = m_archiveFolderVersions.First();
 
 			return m_currentArchiveFolder;
 		}

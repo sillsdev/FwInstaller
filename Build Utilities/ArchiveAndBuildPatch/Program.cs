@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace ArchiveAndBuildPatch
@@ -47,26 +48,23 @@ namespace ArchiveAndBuildPatch
 			// and can be achieved manually using the msiexec.exe /a option:
 			installer.ArchivedAdministrativeInstall(archiveFolder);
 
-			// Unless this is the first installer in the series, build a patch from the
-			// first installer to this new one:
-			if (archiveFolderManager.EarliestVersion == installer.Version)
-				return;
+			// Define how many installer releases back we are going to make patches from:
+			var patchFromIndexes = new [] {1, 2}; // patch from previous and previous but one installers.
 
-			var patchBuilder = new PatchBuilder(archiveFolderManager.EarliestVersion, installer, archiveFolderManager);
-			var patchPath = patchBuilder.BuildPatch();
-
-			var patchWrapper = new PatchWrapper(patchPath);
-			patchWrapper.Wrap();
-
-			// Build patch from previous version to this version, unless previous version was the
-			// first version, in which case we have jut built it already:
-			if (archiveFolderManager.EarliestVersion == archiveFolderManager.PreviousVersion)
-				return;
-
-			patchBuilder = new PatchBuilder(archiveFolderManager.PreviousVersion, installer, archiveFolderManager);
-			patchPath = patchBuilder.BuildPatch();
-			patchWrapper = new PatchWrapper(patchPath);
-			patchWrapper.Wrap();
+			Parallel.ForEach(patchFromIndexes, index =>
+			{
+				// If there is a previous installer in the series, build a patch from the
+				// previous installer to this new one:
+				if (archiveFolderManager.GetNthFromEndVersion(index) != null)
+				{
+					var patchBuilder =
+						new PatchBuilder(archiveFolderManager.GetNthFromEndVersion(index), installer,
+										 archiveFolderManager);
+					var patchPath = patchBuilder.BuildPatch();
+					var patchWrapper = new PatchWrapper(patchPath);
+					patchWrapper.Wrap();
+				}
+			});
 		}
 
 		/// <summary>
