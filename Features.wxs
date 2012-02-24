@@ -26,6 +26,7 @@
 			<ComponentRef Id="ShortcutUnicodeCharEditor"/>
 			<MergeRef Id="ATL"/>
 			<MergeRef Id="CRT"/>
+			<MergeRef Id="CRT90"/>
 			<MergeRef Id="MFC"/>
 			<MergeRef Id="PerlEC"/>
 			<MergeRef Id="FW_PerlEC"/>

@@ -6,8 +6,8 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="PerlECFolder" Name="EC">
 				<Directory Id="PerlPluginsFolder" Name="Plugins">
-					<Component Id="FWPerl_3.1.0.0_Plugin_Details.xml" Guid="F70C6679-329B-496a-8817-14FA04AD8976">
-						<File Id="PerlEC510_3.1.0.0PluginDetails.xml" Name="PerlEC510 3.1.0.0 Plugin Details.xml" Vital="yes" KeyPath="yes" Source="Lib\release\EC\Plugins\PerlEC510 3.1.0.0 Plugin Details.xml"/>
+					<Component Id="FWPerlEC512_4.0.0.0_Plugin_Details.xml" Guid="517937AC-A624-421D-9C01-8822E1979772">
+						<File Id="PerlEC512_4.0.0.0PluginDetails.xml" Name="PerlEC512 4.0.0.0 Plugin Details.xml" Vital="yes" KeyPath="yes" Source="Lib\release\EC\Plugins\PerlEC512 4.0.0.0 Plugin Details.xml"/>
 					</Component>
 				</Directory>
 			</Directory>
