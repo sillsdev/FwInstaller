@@ -113,8 +113,8 @@ namespace GenerateFilesSource
 				}
 				public void Merge(HeuristicSet that)
 				{
-					this.PathContains.AddRange(that.PathContains);
-					this.PathEnds.AddRange(that.PathEnds);
+					PathContains.AddRange(that.PathContains);
+					PathEnds.AddRange(that.PathEnds);
 				}
 			}
 			public readonly HeuristicSet Inclusions = new HeuristicSet();
@@ -130,8 +130,8 @@ namespace GenerateFilesSource
 			}
 			public void Merge(FileHeuristics that)
 			{
-				this.Inclusions.Merge(that.Inclusions);
-				this.Exclusions.Merge(that.Exclusions);
+				Inclusions.Merge(that.Inclusions);
+				Exclusions.Merge(that.Exclusions);
 			}
 		}
 		private readonly FileHeuristics m_flexFileHeuristics = new FileHeuristics();
@@ -149,15 +149,11 @@ namespace GenerateFilesSource
 		private readonly List<string> m_wixFileSources = new List<string>();
 
 		// Folders where installable files are to be collected from:
-		private string m_builtFilesFolderName;
-		private string m_staticFilesFolderName;
-		private string m_builtFilesBuildTypeFolder;
-
-		// Paths to folders we will be using:
-		private string m_builtFilesFolder;
-		private string m_builtFilesFolderFull;
-		private string m_builtFilesFolderFlex;
-		private string m_builtFilesFolderTe;
+		private string m_outputFolderName;
+		private string m_distFilesFolderName;
+		private string m_outputFolderAbsolutePath;
+		private string m_outputReleaseFolderRelativePath;
+		private string m_outputReleaseFolderAbsolutePath;
 
 		// Set of collected DistFiles, junk filtered out:
 		private HashSet<InstallerFile> m_distFilesFiltered;
@@ -169,6 +165,8 @@ namespace GenerateFilesSource
 		private HashSet<InstallerFile> m_flexBuiltFilesFiltered;
 		// Set of collected installable TE files, junk filtered out:
 		private HashSet<InstallerFile> m_teBuiltFilesFiltered;
+		// Set of files rejected as duplicates:
+		private HashSet<InstallerFile> m_rejectedFiles;
 
 		// Set of files for FLEx feature:
 		private IEnumerable<InstallerFile> m_flexFeatureFiles;
@@ -207,7 +205,7 @@ namespace GenerateFilesSource
 		public static string CalcMD5(string msg)
 		{
 			// We first have to convert the string to an array of bytes:
-			byte[] inputBytes = System.Text.Encoding.UTF8.GetBytes(msg);
+			byte[] inputBytes = Encoding.UTF8.GetBytes(msg);
 
 			// Now compute the MD5 hash, also as a byte array:
 			MD5 md5 = MD5.Create();
@@ -440,19 +438,10 @@ namespace GenerateFilesSource
 			// Read in the XML config file:
 			ConfigureFromXml();
 
-			// Form paths to folders we will be using:
-			m_builtFilesBuildTypeFolder = Path.Combine(m_builtFilesFolderName, m_buildType);
-			m_builtFilesFolder = Path.Combine(m_projRootPath, m_builtFilesFolderName);
-			m_builtFilesFolderFull = Path.Combine(m_projRootPath, m_builtFilesFolderName + "_FULL");
-			m_builtFilesFolderFlex = Path.Combine(m_projRootPath, m_builtFilesFolderName + "_FLEx");
-			m_builtFilesFolderTe = Path.Combine(m_projRootPath, m_builtFilesFolderName + "_TE");
-
-			// Delete the temporary folders we created last time:
-			if (!m_reuseOutput)
-			{
-				ForceDeleteDirectory(m_builtFilesFolderFlex);
-				ForceDeleteDirectory(m_builtFilesFolderTe);
-			}
+			// Define paths to folders we will be using:
+			m_outputReleaseFolderRelativePath = Path.Combine(m_outputFolderName, m_buildType);
+			m_outputReleaseFolderAbsolutePath = Path.Combine(m_projRootPath, m_outputReleaseFolderRelativePath);
+			m_outputFolderAbsolutePath = Path.Combine(m_projRootPath, m_outputFolderName);
 
 			// Set up File Library, either from XML file or from scratch if file doesn't exist:
 			InitFileLibrary();
@@ -622,10 +611,10 @@ namespace GenerateFilesSource
 				// (Only two entries are possible: BuiltFiles and StaticFiles)
 				var builtFiles = sourceFolders.SelectSingleNode("BuiltFiles") as XmlElement;
 				if (builtFiles != null)
-					m_builtFilesFolderName = builtFiles.GetAttribute("Path");
+					m_outputFolderName = builtFiles.GetAttribute("Path");
 				var staticFiles = sourceFolders.SelectSingleNode("StaticFiles") as XmlElement;
 				if (staticFiles != null)
-					m_staticFilesFolderName = staticFiles.GetAttribute("Path");
+					m_distFilesFolderName = staticFiles.GetAttribute("Path");
 
 				// Define list of WIX files that list files explicitly:
 				// Format: <WixSource File="*name of WIX source file in Installer folder that contains <File> definitions inside <Component> definitions*"/>
@@ -779,32 +768,6 @@ namespace GenerateFilesSource
 			}
 		}
 
-		public static void ForceDeleteDirectory(string path)
-		{
-			if (!Directory.Exists(path))
-				return;
-
-			DirectoryInfo fol;
-			var fols = new Stack<DirectoryInfo>();
-			var root = new DirectoryInfo(path);
-			fols.Push(root);
-			while (fols.Count > 0)
-			{
-				fol = fols.Pop();
-				fol.Attributes = fol.Attributes & ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
-				foreach (var d in fol.GetDirectories())
-				{
-					fols.Push(d);
-				}
-				foreach (var f in fol.GetFiles())
-				{
-					f.Attributes = f.Attributes & ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
-					f.Delete();
-				}
-			}
-			root.Delete(true);
-		}
-
 		/// <summary>
 		/// Sets up File Library, either from an XML file or from scratch if the file doesn't exist.
 		/// Also sets up Previous File Library Addenda in the same way, and New File Library Addenda from scratch.
@@ -850,17 +813,6 @@ namespace GenerateFilesSource
 			{
 				m_xmlPreviousFileLibraryAddenda.Load(addendaPath);
 				AddReportLine(" Previous file library addenda contains " + m_xmlPreviousFileLibraryAddenda.FirstChild.ChildNodes.Count + " items.");
-
-				// Copy items from addenda into internal main library object:
-				/*
-				var fileLibraryNode = m_xmlFileLibrary.SelectSingleNode("//FileLibrary");
-
-				foreach (XmlNode xn in m_xmlPreviousFileLibraryAddenda.FirstChild.ChildNodes)
-				{
-					var clone = m_xmlFileLibrary.ImportNode(xn, true);
-					((XmlElement)clone).SetAttribute("PatchGroup", m_newPatchGroup.ToString());
-					fileLibraryNode.AppendChild(clone);
-				}*/
 			}
 			else
 			{
@@ -905,9 +857,84 @@ namespace GenerateFilesSource
 		/// </summary>
 		private void CollectInstallableFiles()
 		{
-			// Collect main file sets. First is Output\Release:
-			HashSet<InstallerFile> fileSet = CollectFiles(Path.Combine(m_projRootPath, m_builtFilesBuildTypeFolder), m_rootDirectory, "", true, false);
-			AddReportLine("Collected " + fileSet.Count + " files from " + m_builtFilesBuildTypeFolder);
+			// We ought to be able to do the first three tasks in parallel:
+			// 1) Collect existing files from Output\Release and DistFiles;
+			// 2) Build the FLEx-only target and collect its files;
+			// 3) Build the TE-only target and collect its files.
+			// However, tasks 2 and 3 clash over files in the lib\Release folder, so cannot
+			// be run concurrently. Here, we run tasks 1 and 2 together, then run task 3:
+			HashSet<InstallerFile> flexBuiltFilesDejunked = null;
+
+			Parallel.Invoke(
+				// Collect files (in m_allFilesFiltered, typically from Output\Release and Distfiles)
+				// and retrieve list of duplicates:
+				GetAllFilesFiltered,
+
+				// Collect file set from special FLEx build target:
+				delegate
+				{
+					flexBuiltFilesDejunked = GetNantBuiltFilesDejunked("remakele", "_FLEx");
+				}
+			);
+			// Collect file set from special TE build target:
+			var teBuiltFilesDejunked = GetNantBuiltFilesDejunked("remakete", "_TE");
+
+			// The next 3 tasks can all be run in parallel:
+			Parallel.Invoke(
+				delegate
+					{
+						// Remove any FLEx files that have already been rejected:
+						m_flexBuiltFilesFiltered = flexBuiltFilesDejunked;
+						foreach (var file in m_rejectedFiles.Where(m_flexBuiltFilesFiltered.Contains))
+							m_flexBuiltFilesFiltered.Remove(file);
+						AddReportLine("Removed " + (flexBuiltFilesDejunked.Count - m_flexBuiltFilesFiltered.Count) +
+									  " already rejected files:");
+						foreach (var file in flexBuiltFilesDejunked.Except(m_flexBuiltFilesFiltered))
+							AddReportLine("    " + file.RelativeSourcePath);
+
+						// Make sure m_flexBuiltFilesFiltered references equivalent files from m_allFilesFiltered:
+						ReplaceEquivalentFiles(m_flexBuiltFilesFiltered, m_allFilesFiltered);
+					},
+				delegate
+					{
+						// Remove any TE files that have already been rejected:
+						m_teBuiltFilesFiltered = teBuiltFilesDejunked;
+						foreach (var file in m_rejectedFiles.Where(m_teBuiltFilesFiltered.Contains))
+							m_teBuiltFilesFiltered.Remove(file);
+						AddReportLine("Removed " + (teBuiltFilesDejunked.Count - m_teBuiltFilesFiltered.Count) +
+									  " already rejected files:");
+						foreach (var file in teBuiltFilesDejunked.Except(m_teBuiltFilesFiltered))
+							AddReportLine("    " + file.RelativeSourcePath);
+
+						// Make sure m_teBuiltFilesFiltered references equivalent files from m_allFilesFiltered:
+						ReplaceEquivalentFiles(m_teBuiltFilesFiltered, m_allFilesFiltered);
+					},
+				delegate
+					{
+						// Collect localization files:
+						foreach (var currentLanguage in m_languages)
+						{
+							var language = currentLanguage;
+							currentLanguage.TeFiles = (m_allFilesFiltered.Where(file => FileIsForTeLocalization(file, language)));
+							currentLanguage.OtherFiles = (m_allFilesFiltered.Where(file => FileIsForNonTeLocalization(file, language)));
+
+							m_allLocalizationFiles.UnionWith(currentLanguage.TeFiles);
+							m_allLocalizationFiles.UnionWith(currentLanguage.OtherFiles);
+						}
+					}
+				);
+		}
+
+		/// <summary>
+		/// Collects the main set of files (typically from Output\Release and Distfiles), removes junk,
+		/// then returns the combined file set.
+		/// </summary>
+		/// <returns>A set of files rejected as duplicates (typically in both Output\Release and Distfiles)</returns>
+		private void GetAllFilesFiltered()
+		{
+			// First set is typically Output\Release:
+			HashSet<InstallerFile> fileSet = CollectFiles(m_outputReleaseFolderAbsolutePath, m_rootDirectory, "", true, false);
+			AddReportLine("Collected " + fileSet.Count + " files from " + m_outputReleaseFolderAbsolutePath);
 
 			// Filter out known junk:
 			m_builtFilesFiltered = FilterOutSpecifiedOmissions(fileSet);
@@ -915,9 +942,9 @@ namespace GenerateFilesSource
 			foreach (var file in fileSet.Except(m_builtFilesFiltered))
 				AddReportLine("    " + file.RelativeSourcePath);
 
-			// Next is DistFiles:
-			fileSet = CollectFiles(Path.Combine(m_projRootPath, m_staticFilesFolderName), m_rootDirectory, "", true, false);
-			AddReportLine("Collected " + fileSet.Count + " files from " + m_staticFilesFolderName);
+			// Next is typically DistFiles:
+			fileSet = CollectFiles(Path.Combine(m_projRootPath, m_distFilesFolderName), m_rootDirectory, "", true, false);
+			AddReportLine("Collected " + fileSet.Count + " files from " + m_distFilesFolderName);
 
 			// Filter out known junk:
 			m_distFilesFiltered = FilterOutSpecifiedOmissions(fileSet);
@@ -926,92 +953,64 @@ namespace GenerateFilesSource
 				AddReportLine("    " + file.RelativeSourcePath);
 
 			// Merge all collected files together:
-			var rejectedFiles = new HashSet<InstallerFile>();
-			m_allFilesFiltered = MergeFileSets(m_builtFilesFiltered, m_distFilesFiltered, rejectedFiles);
+			m_rejectedFiles = new HashSet<InstallerFile>(); // must set this up before MergeFileSets() starts adding to it!
+			m_allFilesFiltered = MergeFileSets(m_builtFilesFiltered, m_distFilesFiltered);
 
-			AddReportLine("Rejected " + rejectedFiles.Count + " files as duplicates:");
-			foreach (var file in rejectedFiles)
+			// Report on removed duplicate files:
+			AddReportLine("Rejected " + m_rejectedFiles.Count + " files as duplicates:");
+			foreach (var file in m_rejectedFiles)
 				AddReportLine("    " + file.RelativeSourcePath);
+		}
 
-			// Collect file sets from special build targets, typically remakele for FLEx and remakete for TE:
+		/// <summary>
+		/// Builds all files of specified Nant target, then collects the details of those files in a HashSet,
+		/// then removes junk from the set.
+		/// </summary>
+		/// <param name="nantTarget">The Nant target, typically "remakele" or "remakete"</param>
+		/// <param name="outputSuffix">The suffix added to the Output folder, typically "_FLEx" or "_TE"</param>
+		/// <returns>A cleaned-up set of files ouptut from building that Nant target</returns>
+		private HashSet<InstallerFile> GetNantBuiltFilesDejunked(string nantTarget, string outputSuffix)
+		{
+			// Set up some folder paths based on the outputSuffix:
+			var outputFolderAbsolutePath = m_outputFolderAbsolutePath + outputSuffix;
+			var outputFolderRelativePath = m_outputFolderName + outputSuffix;
+			var outputReleaseFolderAbsolutePath = Path.Combine(outputFolderAbsolutePath, m_buildType);
 
-			// Rename pre-existing output folder temporarily:
-			Directory.Move(m_builtFilesFolder, m_builtFilesFolderFull);
-
-			// Now build FLEx:
+			// If our process was launched with a request to re-use previous file-sets, then
+			// don't bother running Nant:
 			if (!m_reuseOutput)
-				Nant("remakele");
-			else
-				Directory.Move(m_builtFilesFolderFlex, m_builtFilesFolder);
-
-			string fullOutputBuildFolder = Path.Combine(m_projRootPath, m_builtFilesBuildTypeFolder);
-
-			// Collect files built for FLEx:
-			HashSet<InstallerFile> flexBuiltFiles = CollectFiles(fullOutputBuildFolder, m_rootDirectory, "From FLEx target", true, false);
-			AddReportLine("Collected " + flexBuiltFiles.Count + " files from FLEx target.");
-
-			// Filter out known junk:
-			HashSet<InstallerFile> flexBuiltFilesDejunked = FilterOutSpecifiedOmissions(flexBuiltFiles);
-			AddReportLine("Removed " + (flexBuiltFiles.Count - flexBuiltFilesDejunked.Count) + " junk files:");
-			foreach (var file in flexBuiltFiles.Except(flexBuiltFilesDejunked))
-				AddReportLine("    " + file.RelativeSourcePath);
-
-			// Remove any files that have already been rejected:
-			m_flexBuiltFilesFiltered = flexBuiltFilesDejunked;
-			foreach (var file in rejectedFiles.Where(m_flexBuiltFilesFiltered.Contains))
-				m_flexBuiltFilesFiltered.Remove(file);
-			AddReportLine("Removed " + (flexBuiltFilesDejunked.Count - m_flexBuiltFilesFiltered.Count) + " already rejected files:");
-			foreach (var file in flexBuiltFilesDejunked.Except(m_flexBuiltFilesFiltered))
-				AddReportLine("    " + file.RelativeSourcePath);
-
-			// Make sure m_flexBuiltFilesFiltered references equivalent files from m_allFilesFiltered:
-			ReplaceEquivalentFiles(m_flexBuiltFilesFiltered, m_allFilesFiltered);
-
-			// Rename Flex output folder:
-			Directory.Move(m_builtFilesFolder, m_builtFilesFolderFlex);
-
-			// Now build TE:
-			if (!m_reuseOutput)
-				Nant("remakete");
-			else
-				Directory.Move(m_builtFilesFolderTe, m_builtFilesFolder);
-
-			// Collect files built for TE:
-			HashSet<InstallerFile> teBuiltFiles = CollectFiles(fullOutputBuildFolder, m_rootDirectory, "From TE target", true, false);
-			AddReportLine("Collected " + teBuiltFiles.Count + " files from TE target.");
-
-			// Filter out known junk:
-			HashSet<InstallerFile> teBuiltFilesDejunked = FilterOutSpecifiedOmissions(teBuiltFiles);
-			AddReportLine("Removed " + (teBuiltFiles.Count - teBuiltFilesDejunked.Count) + " junk files:");
-			foreach (var file in teBuiltFiles.Except(teBuiltFilesDejunked))
-				AddReportLine("    " + file.RelativeSourcePath);
-
-			// Remove any files that have already been rejected:
-			m_teBuiltFilesFiltered = teBuiltFilesDejunked;
-			foreach (var file in rejectedFiles.Where(m_teBuiltFilesFiltered.Contains))
-				m_teBuiltFilesFiltered.Remove(file);
-			AddReportLine("Removed " + (teBuiltFilesDejunked.Count - m_teBuiltFilesFiltered.Count) + " already rejected files:");
-			foreach (var file in teBuiltFilesDejunked.Except(m_teBuiltFilesFiltered))
-				AddReportLine("    " + file.RelativeSourcePath);
-
-			// Make sure m_teBuiltFilesFiltered references equivalent files from m_allFilesFiltered:
-			ReplaceEquivalentFiles(m_teBuiltFilesFiltered, m_allFilesFiltered);
-
-			// Rename TE output folder:
-			Directory.Move(m_builtFilesFolder, m_builtFilesFolderTe);
-
-			// Restore original output folder:
-			Directory.Move(m_builtFilesFolderFull, m_builtFilesFolder);
-
-			// Collect localization files:
-			foreach (var currentLanguage in m_languages)
 			{
-				var language = currentLanguage;
-				currentLanguage.TeFiles = (m_allFilesFiltered.Where(file => FileIsForTeLocalization(file, language)));
-				currentLanguage.OtherFiles = (m_allFilesFiltered.Where(file => FileIsForNonTeLocalization(file, language)));
+				var nantOutput = Nant(nantTarget, outputFolderAbsolutePath);
+				OutputConsoleMutex(nantOutput);
+			}
 
-				m_allLocalizationFiles.UnionWith(currentLanguage.TeFiles);
-				m_allLocalizationFiles.UnionWith(currentLanguage.OtherFiles);
+			// Collect built files:
+			var builtFiles = CollectFiles(outputReleaseFolderAbsolutePath, m_rootDirectory, "From " + outputSuffix + " target", true, false);
+			AddReportLine("Collected " + builtFiles.Count + " files from " + outputSuffix + " target.");
+
+			// Replace start of source path of files (e.g. "Output_FLEx") with original
+			// Output folder (typically "Output"):
+			foreach (var file in builtFiles.Where(file => file.RelativeSourcePath.StartsWith(outputFolderRelativePath)))
+				file.RelativeSourcePath = file.RelativeSourcePath.Replace(outputFolderRelativePath, m_outputFolderName);
+
+			// Filter out known junk:
+			var builtFilesDejunked = FilterOutSpecifiedOmissions(builtFiles);
+			AddReportLine("Removed " + (builtFiles.Count - builtFilesDejunked.Count) + " junk files:");
+			foreach (var file in builtFiles.Except(builtFilesDejunked))
+				AddReportLine("    " + file.RelativeSourcePath);
+			return builtFilesDejunked;
+		}
+
+		/// <summary>
+		/// Writes text to the Console output, in a mutual exclusion block so that
+		/// output cannot be contaminated by racing threads.
+		/// </summary>
+		/// <param name="msg">The text to be written</param>
+		private void OutputConsoleMutex(string msg)
+		{
+			lock (this)
+			{
+				Console.WriteLine(msg);
 			}
 		}
 
@@ -1149,10 +1148,8 @@ namespace GenerateFilesSource
 		/// </summary>
 		/// <param name="preferredSet">This set of files will always be in the result</param>
 		/// <param name="otherSet">Files from this set will be in the result if there are no duplicates with the first set</param>
-		/// <param name="rejectedFiles">A set that gets populated with files that get rejected because they are effectively duplicates</param>
 		/// <returns>A new set containing the merged combination of the arguments</returns>
-		private HashSet<InstallerFile> MergeFileSets(IEnumerable<InstallerFile> preferredSet, IEnumerable<InstallerFile> otherSet,
-			HashSet<InstallerFile> rejectedFiles)
+		private HashSet<InstallerFile> MergeFileSets(IEnumerable<InstallerFile> preferredSet, IEnumerable<InstallerFile> otherSet)
 		{
 			// Find sets of files with matching names:
 			foreach (InstallerFile currentFile in preferredSet)
@@ -1162,13 +1159,13 @@ namespace GenerateFilesSource
 														   where other.FileNameMatches(file)
 														   select other;
 
-				ArbitrateFileMatches(currentFile, matchingFiles, rejectedFiles);
+				ArbitrateFileMatches(currentFile, matchingFiles);
 			}
 
 			var returnSet = new HashSet<InstallerFile>();
 
-			returnSet.UnionWith(preferredSet.Except(rejectedFiles));
-			returnSet.UnionWith(otherSet.Except(rejectedFiles));
+			returnSet.UnionWith(preferredSet.Except(m_rejectedFiles));
+			returnSet.UnionWith(otherSet.Except(m_rejectedFiles));
 
 			return returnSet;
 		}
@@ -1178,8 +1175,7 @@ namespace GenerateFilesSource
 		/// </summary>
 		/// <param name="candidate">File to be considered</param>
 		/// <param name="matchingFiles">Set of files to consider against</param>
-		/// <param name="rejectedFiles">set to receive rejected files</param>
-		private void ArbitrateFileMatches(InstallerFile candidate, IEnumerable<InstallerFile> matchingFiles, HashSet<InstallerFile> rejectedFiles)
+		private void ArbitrateFileMatches(InstallerFile candidate, IEnumerable<InstallerFile> matchingFiles)
 		{
 			string candidateTargetPath = MakeRelativeTargetPath(candidate.RelativeSourcePath);
 			foreach (InstallerFile file in matchingFiles)
@@ -1224,12 +1220,12 @@ namespace GenerateFilesSource
 				// one with the deeper target path:
 				if (candidateTargetPath == fileTargetPath || candidateTargetPath.Length >= fileTargetPath.Length)
 				{
-					rejectedFiles.Add(file);
+					m_rejectedFiles.Add(file);
 					candidate.Comment += "(preferred over " + file.RelativeSourcePath + ")";
 				}
 				else
 				{
-					rejectedFiles.Add(candidate);
+					m_rejectedFiles.Add(candidate);
 					file.Comment += "(preferred over " + candidate.RelativeSourcePath + ")";
 					return;
 				}
@@ -1508,17 +1504,45 @@ namespace GenerateFilesSource
 		}
 
 		/// <summary>
-		/// Runs NAnt on a given target.
+		/// Runs NAnt on a given target. Here, we specify the output folder - a feature limited in
+		/// robustness. The regular "Output" and "Obj" folders are fairly well ingrained in much of the
+		/// FieldWorks build system. Perforce change 37429 includes changes to various .bat, .mak  and
+		/// Nant build files to parameterize the output and obj folders. It also includes special cases
+		/// in Nant build files for when the extraInstallerBuild task has been called to set a special
+		/// buildingInstallers property. Despite all this, some source files refer to include files
+		/// (e.g. bldinc.h) using a relative path that hard-codes the Output folder. In addition, a
+		/// Nant build may well write files to the Lib and DistFiles folders. Consequently, we have
+		/// to tread very carefully when redirecting build output.
 		/// </summary>
 		/// <param name="target">The NAnt target to run</param>
-		private void Nant(string target)
+		/// <param name="outputPath">The full path of the directory where build output is to appear</param>
+		/// <returns>string concatenation of std output, std error and exit code</returns>
+		private string Nant(string target, string outputPath)
 		{
-			var batchFilePath = Path.Combine(m_projRootPath, "__nant.bat");
+			var objPath = outputPath + "_Obj"; // The full path of "obj" output.
+
+			// Define some property values to be passed to Nant command line:
+			var nantOutput = " -D:dir.fwoutput=\"" + outputPath + "\"";
+			var nantObj = " -D:dir.fwobj=\"" + objPath + "\"";
+
+			// Define .NET version to be targeted by Nant:
+			// We need to specify .NET 3.5 to avoid errors on Windows 7 64-bit machines which
+			// come with part of .NET 4.0 installed. When we move beyond .NET 3.5, we will need
+			// to change this line:
+			const string nantDotNet = " -t:net-3.5 ";
+
+			// Define some targets that must always be specified for these special installer builds:
+			const string nantFixedTargets = " release extraInstallerBuild build ";
+
+			var batchFilePath = Path.Combine(m_projRootPath, target + "_nant.bat");
 			var batchFile = new StreamWriter(batchFilePath);
+
+			batchFile.WriteLine("rmdir /S /Q \"" + objPath + "\"");
+			batchFile.WriteLine("rmdir /S /Q \"" + outputPath + "\"");
 			batchFile.WriteLine("set fwroot=" + m_projRootPath);
 			batchFile.WriteLine("set path=%fwroot%\\DistFiles;%path%");
 			batchFile.WriteLine("cd " + Path.Combine(m_projRootPath, "bld"));
-			batchFile.WriteLine("..\\bin\\nant\\bin\\nant release extraInstallerBuild build " + target);
+			batchFile.WriteLine("..\\bin\\nant\\bin\\nant " + nantDotNet + nantFixedTargets + target + nantOutput + nantObj);
 			batchFile.Close();
 
 			var nantProc = new Process();
@@ -1533,11 +1557,13 @@ namespace GenerateFilesSource
 
 			nantProc.WaitForExit();
 
-			Console.WriteLine("Output: " + output);
-			Console.WriteLine("Errors: " + error);
-			Console.WriteLine("exit code = " + nantProc.ExitCode);
-
 			File.Delete(batchFilePath);
+
+			var retVal = "Output: " + output + Environment.NewLine;
+			retVal += "Errors: " + error + Environment.NewLine;
+			retVal += "exit code = " + nantProc.ExitCode + Environment.NewLine;
+
+			return retVal;
 		}
 
 		/// <summary>
@@ -1629,17 +1655,17 @@ namespace GenerateFilesSource
 		/// <returns></returns>
 		private string MakeRelativeTargetPath(string path)
 		{
-			foreach (string source in new[] { m_builtFilesBuildTypeFolder, m_staticFilesFolderName })
+			foreach (var source in new[] { m_outputReleaseFolderRelativePath, m_distFilesFolderName })
 			{
-				string root = Path.Combine(m_projRootPath, source);
-				string bitToHackOff = "";
+				var root = Path.Combine(m_projRootPath, source);
+				var bitToHackOff = "";
 				if (path.StartsWith(root))
 					bitToHackOff = root;
 				if (path.StartsWith(source))
 					bitToHackOff = source;
 				if (bitToHackOff.Length > 0)
 				{
-					string p = path.Remove(0, bitToHackOff.Length);
+					var p = path.Remove(0, bitToHackOff.Length);
 					if (p.EndsWith("\\"))
 						p = p.Remove(bitToHackOff.Length - 1, 1);
 					if (p.StartsWith("\\"))
@@ -1905,12 +1931,12 @@ namespace GenerateFilesSource
 		private void SynchWithFileLibrary(InstallerFile file)
 		{
 			// Get file's relative source path with build output folder parameterized:
-			string libRelSourcePath = file.RelativeSourcePath.Replace(m_builtFilesBuildTypeFolder, m_builtFilesFolderName + "\\${config}");
+			var libRelSourcePath = file.RelativeSourcePath.Replace(m_outputReleaseFolderRelativePath, m_outputFolderName + "\\${config}");
 
 			// Test if file already exists in FileLibrary.
 			// If it does, then use the existing GUID.
 			// Else create a new GUID etc. and add it to FileLibrary.
-			string selectString = "//File[translate(@Path, \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\", \"abcdefghijklmnopqrstuvwxyz\")=\"" +
+			var selectString = "//File[translate(@Path, \"ABCDEFGHIJKLMNOPQRSTUVWXYZ\", \"abcdefghijklmnopqrstuvwxyz\")=\"" +
 							   libRelSourcePath.ToLowerInvariant() + "\"]"; // case-insensitive look-up
 			var libSearch = m_xmlFileLibrary.SelectSingleNode(selectString) as XmlElement;
 			if (libSearch != null)
@@ -2211,7 +2237,10 @@ namespace GenerateFilesSource
 		/// <param name="line">Text to add to report</param>
 		private void AddReportLine(string line)
 		{
-			m_report += line + Environment.NewLine;
+			lock (this)
+			{
+				m_report += line + Environment.NewLine;
+			}
 		}
 
 		/// <summary>

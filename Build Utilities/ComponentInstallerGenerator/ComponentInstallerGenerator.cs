@@ -7,33 +7,25 @@ using System.Xml;
 
 namespace ComponentInstallerGenerator
 {
-	class ComponentInstallerGenerator
+	class InstallerInfo
 	{
 		// Define names of files we expect to exist:
 		private const string DefinintionsFileName = "ComponentInstallerDefinitions.xml";
-		private const string ProcessedFilesFileName = "ProcessedAutoFiles.wxs";
-		private const string InstallerTemplateFileName = "ComponentInstallerTemplate.wxs";
 		private const string FwWxsFileName = "FW.wxs";
 
 		// WIX namespace URI:
-		private const string WixNsUri = "http://schemas.microsoft.com/wix/2006/wi";
+		public const string WixNsUri = "http://schemas.microsoft.com/wix/2006/wi";
 
 		// Definitions of installers we can generate:
 		private readonly XmlDocument m_xmlDefinitions = new XmlDocument();
 		// Version number of main FW installer:
-		private string m_fwVersion;
-		// Accumulate status, warnings and error messages:
-		private string m_statusReport = "";
+		public string FwVersion { get; private set; }
 
 		public void Init()
 		{
 			// Make sure we can find all the files we will be reading:
 			if (!File.Exists(DefinintionsFileName))
 				throw new Exception(DefinintionsFileName + " is missing.");
-			if (!File.Exists(ProcessedFilesFileName))
-				throw new Exception(ProcessedFilesFileName + " is missing.");
-			if (!File.Exists(InstallerTemplateFileName))
-				throw new Exception(InstallerTemplateFileName + " is missing.");
 			if (!File.Exists(FwWxsFileName))
 				throw new Exception(FwWxsFileName + " is missing.");
 
@@ -48,7 +40,7 @@ namespace ComponentInstallerGenerator
 			// Add the namespace used in WIX file to the XmlNamespaceManager:
 			xmlnsManagerFw.AddNamespace("wix", WixNsUri);
 
-			m_fwVersion = (fwWix.SelectSingleNode("//wix:Product", xmlnsManagerFw) as XmlElement).GetAttribute("Version");
+			FwVersion = (fwWix.SelectSingleNode("//wix:Product", xmlnsManagerFw) as XmlElement).GetAttribute("Version");
 		}
 
 		/// <summary>
@@ -67,7 +59,7 @@ namespace ComponentInstallerGenerator
 		/// </summary>
 		/// <param name="index">Zero-based index from selection combo box</param>
 		/// <returns>Xml element of required component</returns>
-		private XmlElement GetSelectedComponent(int index)
+		public XmlElement GetSelectedComponent(int index)
 		{
 			// Add 1 to index to use as 1-based node index:
 			var node = m_xmlDefinitions.SelectSingleNode("//Component[" + (index + 1) + "]");
@@ -88,7 +80,7 @@ namespace ComponentInstallerGenerator
 
 			var summary = "";
 
-			summary += "Building for FieldWorks version: " + m_fwVersion;
+			summary += "Building for FieldWorks version: " + FwVersion;
 			summary += Environment.NewLine;
 
 			summary += "Description: " + componentNode.SelectSingleNode("Description").InnerText;
@@ -100,6 +92,28 @@ namespace ComponentInstallerGenerator
 			summary += "Product Code: " + componentNode.SelectSingleNode("ProductCode").InnerText;
 
 			return summary;
+		}
+	}
+
+	class InstallerGenerator
+	{
+		private const string ProcessedFilesFileName = "ProcessedAutoFiles.wxs";
+		private const string InstallerTemplateFileName = "ComponentInstallerTemplate.wxs";
+
+		private readonly InstallerInfo m_installerInfo;
+		private string m_statusReport;
+
+		public InstallerGenerator(InstallerInfo info)
+		{
+			m_installerInfo = info;
+		}
+
+		public void Init()
+		{
+			if (!File.Exists(ProcessedFilesFileName))
+				throw new Exception(ProcessedFilesFileName + " is missing.");
+			if (!File.Exists(InstallerTemplateFileName))
+				throw new Exception(InstallerTemplateFileName + " is missing.");
 		}
 
 		/// <summary>
@@ -131,7 +145,7 @@ namespace ComponentInstallerGenerator
 			// Set up WIX namespace stuff:
 			var xmlnsManager = new XmlNamespaceManager(xmlFiles.NameTable);
 			// Add the namespace used in ProcessedAutoFiles.wxs to the XmlNamespaceManager:
-			xmlnsManager.AddNamespace("wix", WixNsUri);
+			xmlnsManager.AddNamespace("wix", InstallerInfo.WixNsUri);
 
 			// Iterate over every feature in the main ProcessedAutoFiles.wxs file:
 			var mainFeatureNodes = xmlFiles.SelectNodes("//wix:FeatureRef", xmlnsManager);
@@ -217,7 +231,7 @@ namespace ComponentInstallerGenerator
 			// Set up WIX namespace stuff:
 			var xmlnsManager = new XmlNamespaceManager(mainWix.NameTable);
 			// Add the namespace used in WIX file to the XmlNamespaceManager:
-			xmlnsManager.AddNamespace("wix", WixNsUri);
+			xmlnsManager.AddNamespace("wix", InstallerInfo.WixNsUri);
 
 			// Get the main details to apply to the template:
 			var name = installerDefinitionElement.SelectSingleNode("Name").InnerText;
@@ -227,10 +241,10 @@ namespace ComponentInstallerGenerator
 
 			// Apply main details to template:
 			var productNode = mainWix.SelectSingleNode("//wix:Product", xmlnsManager) as XmlElement;
-			productNode.SetAttribute("Name", "SIL FieldWorks " + m_fwVersion + " " + name);
+			productNode.SetAttribute("Name", "SIL FieldWorks " + m_installerInfo.FwVersion + " " + name);
 			productNode.SetAttribute("Id", productCode);
 			productNode.SetAttribute("UpgradeCode", upgradeCode);
-			productNode.SetAttribute("Version", m_fwVersion);
+			productNode.SetAttribute("Version", m_installerInfo.FwVersion);
 
 			var packageNode = mainWix.SelectSingleNode("//wix:Package", xmlnsManager) as XmlElement;
 			packageNode.SetAttribute("Description", description);
@@ -240,7 +254,7 @@ namespace ComponentInstallerGenerator
 			foreach (XmlElement definitionFeatureNode in definitionFeatureNodes)
 			{
 				var feature = definitionFeatureNode.InnerText;
-				var featureNode = mainWix.CreateElement("Feature", WixNsUri);
+				var featureNode = mainWix.CreateElement("Feature", InstallerInfo.WixNsUri);
 				featureNode.SetAttribute("Id", feature);
 				featureNode.SetAttribute("Title", feature);
 				featureNode.SetAttribute("Display", "expand");
@@ -317,7 +331,7 @@ namespace ComponentInstallerGenerator
 			m_statusReport = "";
 
 			// Get the XML definition of the requested installer:
-			var installerDefinitionElement = GetSelectedComponent(index);
+			var installerDefinitionElement = m_installerInfo.GetSelectedComponent(index);
 
 			// Generate the WIX files sources:
 			var fileList = new List<string>();
@@ -335,7 +349,7 @@ namespace ComponentInstallerGenerator
 			}
 
 			// Get the required .msi name:
-			var msiFileName = installerDefinitionElement.SelectSingleNode("Installer").InnerText + "." + m_fwVersion.Replace(".", "") + ".msi";
+			var msiFileName = installerDefinitionElement.SelectSingleNode("Installer").InnerText + "." + m_installerInfo.FwVersion.Replace(".", "") + ".msi";
 
 			// Link each WIX intermediate file:
 			var wixobjFiles = wixobjFileList.Aggregate("", (current, wixobjFile) => current + (" \"" + wixobjFile + "\""));
