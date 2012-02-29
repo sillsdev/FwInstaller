@@ -6,8 +6,8 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="PythonECFolder" Name="EC">
 				<Directory Id="PythonPluginsFolder" Name="Plugins">
-					<Component Id="SECPython_3.1.0.0_Plugin_Details.xm" Guid="9A2534C0-E4E9-4a72-85AE-35E1B2B8A252">
-						<File Id="PythonEC25_3.1.0.0PluginDetails.xm" Name="PythonEC25 3.1.0.0 Plugin Details.xml" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\release\EC\Plugins\PythonEC25 3.1.0.0 Plugin Details.xml"/>
+					<Component Id="SECPython_4.0.0.0_Plugin_Details.xml" Guid="0EDAF1ED-8252-4C58-A1AF-A969273A841C">
+						<File Id="PythonEC27_4.0.0.0PluginDetails.xml" Name="PythonEC27 4.0.0.0 Plugin Details.xml" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\release\EC\Plugins\PythonEC27 4.0.0.0 Plugin Details.xml"/>
 					</Component>
 				</Directory>
 			</Directory>

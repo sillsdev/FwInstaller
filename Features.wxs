@@ -26,11 +26,9 @@
 			<ComponentRef Id="ShortcutTechSupport"/>
 			<ComponentRef Id="ShortcutUnicodeCharEditor"/>
 			<MergeRef Id="ATL"/>
-			<MergeRef Id="ATL_Policy"/>
 			<MergeRef Id="CRT"/>
-			<MergeRef Id="CRT_Policy"/>
+			<MergeRef Id="CRT90"/>
 			<MergeRef Id="MFC"/>
-			<MergeRef Id="MFC_Policy"/>
 			<MergeRef Id="PerlEC"/>
 			<MergeRef Id="FW_PerlEC"/>
 			<MergeRef Id="PythonEC"/>
