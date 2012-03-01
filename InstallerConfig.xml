@@ -379,7 +379,7 @@
 		<File PathPattern="icuin40"/>
 		<File PathPattern="icuuc40"/>
 		<File PathPattern="icudt40"/>
-		<File PathPattern="DistFiles\CC32.dll"/>
+		<File PathPattern="DistFiles\PXPerlWrap-d.dll"/>
 		<File PathPattern="DistFiles\DropTEC.exe"/>
 		<File PathPattern="DistFiles\SFconv.exe"/>
 		<File PathPattern="DistFiles\TECkit Mapping Editor.exe"/>
