@@ -981,6 +981,10 @@ To install into a different folder, click the Browse button, and select another 
 					<Publish Event="Remove" Value="Bengali_TE"><![CDATA[&Bengali = 2 OR &TE = 2]]></Publish>
 					<Publish Event="AddLocal" Value="Kinyarwanda_TE"><![CDATA[((&Kinyarwanda = 3 AND !TE = 3) OR (!Kinyarwanda = 3 AND &TE = 3) OR (&Kinyarwanda = 3 AND &TE = 3)) AND NOT (&Kinyarwanda = 2)]]></Publish>
 					<Publish Event="Remove" Value="Kinyarwanda_TE"><![CDATA[&Kinyarwanda = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Thai_TE"><![CDATA[((&Thai = 3 AND !TE = 3) OR (!Thai = 3 AND &TE = 3) OR (&Thai = 3 AND &TE = 3)) AND NOT (&Thai = 2)]]></Publish>
+					<Publish Event="Remove" Value="Thai_TE"><![CDATA[&Thai = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Khmer_TE"><![CDATA[((&Khmer = 3 AND !TE = 3) OR (!Khmer = 3 AND &TE = 3) OR (&Khmer = 3 AND &TE = 3)) AND NOT (&Khmer = 2)]]></Publish>
+					<Publish Event="Remove" Value="Khmer_TE"><![CDATA[&Khmer = 2 OR &TE = 2]]></Publish>
 					<!-- Phew! now on with the rest of the stuff. -->
 					<Publish Event="Reinstall" Value="ALL"><![CDATA[Installed AND MaintenanceMode="Repair"]]></Publish>
 					<Publish Event="EndDialog" Value="Return"><![CDATA[OutOfDiskSpace <> 1]]></Publish>

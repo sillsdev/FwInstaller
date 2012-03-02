@@ -158,6 +158,18 @@
 						<Condition Level="3">KINYARWANDA_CAB_FOUND OR REMOVE</Condition>
 					</Feature>
 				</Feature>
+				<Feature Id="Thai" Title="Thai" Description="Allows the software to have a Thai user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">THAI_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Thai_TE" Title="Thai_TE" Description="Thai user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">THAI_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
+				<Feature Id="Khmer" Title="Khmer" Description="Allows the software to have a Khmer user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">KHMER_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Khmer_TE" Title="Khmer_TE" Description="Khmer user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">KHMER_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
 			</Feature>
 		</Feature>
 	</Fragment>
