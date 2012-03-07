@@ -245,6 +245,10 @@ You can run the setup program at a later time to complete the installation.]]>
 				<Control Id="Text6" Type="Text" X="100" Y="70" Width="227" Height="38" Transparent="yes">
 					<Text><![CDATA[[DialogFontDefault]Click the Finish button to exit this installation.]]></Text>
 				</Control>
+				<Control Id="RebootWarning" Type="Text" X="100" Y="110" Width="227" Height="38" Transparent="yes">
+					<Text><![CDATA[[DialogFontDefault]If you encounter an error when starting FieldWorks for the first time after this installation, please restart your computer and then try again.]]></Text>
+					<Condition Action="hide"><![CDATA[Uninstalling]]></Condition>
+				</Control>
 				<Control Id="Bitmap31" Type="Bitmap" X="0" Y="0" Width="375" Height="234" Text="side16" />
 				<Control Id="Line11" Type="Line" X="0" Y="234" Width="375" Height="1" />
 			</Dialog>
@@ -292,7 +296,7 @@ You can run the setup program at a later time to complete the installation.]]>
 					<Text><![CDATA[[DialogTitleFontDefault]Updating System]]></Text>
 				</Control>
 			</Dialog>
-			<Dialog Id="Setup_Dialog" Width="375" Height="270" Title="[ProductName] [DialogSuffix]" Modeless="yes" CustomPalette="yes">
+			<Dialog Id="Setup_Dialog" Width="375" Height="270" Title="[ProductName] [DialogSuffix]" Modeless="yes" CustomPalette="yes" NoMinimize="yes">
 				<Control Id="Cancel" Type="PushButton" X="309" Y="244" Width="56" Height="17" Default="yes">
 					<Text><![CDATA[[DialogFontDefault]Cancel]]></Text>
 					<Publish Event="SpawnDialog" Value="Cancel"><![CDATA[1]]></Publish>
