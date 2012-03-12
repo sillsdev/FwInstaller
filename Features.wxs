@@ -170,6 +170,12 @@
 						<Condition Level="3">KHMER_CAB_FOUND OR REMOVE</Condition>
 					</Feature>
 				</Feature>
+				<Feature Id="Urdu" Title="Urdu" Description="Allows the software to have a Urdu user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">URDU_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Urdu_TE" Title="Urdu_TE" Description="Urdu user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">URDU_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
 			</Feature>
 		</Feature>
 	</Fragment>

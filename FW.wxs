@@ -30,6 +30,7 @@
 		<Media Id='18' Cabinet='Kinyarwa.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='19' Cabinet='Thai.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='20' Cabinet='Khmer.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='21' Cabinet='Urdu.cab' EmbedCab='no' CompressionLevel='high'/>
 
 		<Property Id="FLEX_MOVIES_CAB_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindFlexMoviesCabFile">
@@ -74,6 +75,11 @@
 		<Property Id="KHMER_CAB_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindKhmerCabFile">
 				<FileSearch Name="Khmer.cab"/>
+			</DirectorySearch>
+		</Property>
+		<Property Id="URDU_CAB_FOUND">
+			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindUrduCabFile">
+				<FileSearch Name="Urdu.cab"/>
 			</DirectorySearch>
 		</Property>
 

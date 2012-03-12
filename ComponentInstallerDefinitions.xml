@@ -181,4 +181,13 @@
 		<Feature>Khmer_TE</Feature>
 		<Installer>SetupFw-km</Installer>
 	</Component>
+	<Component>
+		<Name>Urdu Localization</Name>
+		<Description>Urdu language pack for FieldWorks</Description>
+		<ProductCode>35ABDEEB-F6DD-4e2f-8FD7-4E0B380BADD2</ProductCode>
+		<UpgradeCode>92A26793-D75F-490c-AB4A-EB43602E529E</UpgradeCode>
+		<Feature>Urdu</Feature>
+		<Feature>Urdu_TE</Feature>
+		<Installer>SetupFw-ur</Installer>
+	</Component>
 </FieldWorksComponents>
