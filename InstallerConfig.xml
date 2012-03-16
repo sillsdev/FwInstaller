@@ -19,6 +19,9 @@
 		<Language Name="Nepali" Id="ne"/>
 		<Language Name="Bengali" Id="bn"/>
 		<Language Name="Kinyarwanda" Id="ro"/>
+		<Language Name="Thai" Id="th"/>
+		<Language Name="Khmer" Id="km"/>
+		<Language Name="Urdu" Id="ur"/>
 	</Languages>
 	<FeatureAllocation>
 		<!-- Allocation of files in Output\Release is generally done by building TE and FLEx Nant targets -->
@@ -490,6 +493,9 @@
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-te.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-bn.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ro.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-th.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-km.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ur.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\GeneratedLayouts.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\GeneratedParts.xml"/>
@@ -550,5 +556,8 @@
 		<Cabinet Feature="Nepali" CabinetIndex="16"/>
 		<Cabinet Feature="Bengali" CabinetIndex="17"/>
 		<Cabinet Feature="Kinyarwanda" CabinetIndex="18"/>
+		<Cabinet Feature="Thai" CabinetIndex="19"/>
+		<Cabinet Feature="Khmer" CabinetIndex="20"/>
+		<Cabinet Feature="Urdu" CabinetIndex="21"/>
 	</CabinetAssignments>
 </InstallerConfig>

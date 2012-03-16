@@ -163,4 +163,31 @@
 		<Feature>Kinyarwanda_TE</Feature>
 		<Installer>SetupFw-ro</Installer>
 	</Component>
+	<Component>
+		<Name>Thai Localization</Name>
+		<Description>Thai language pack for FieldWorks</Description>
+		<ProductCode>6FD7519C-4CBE-4E04-B4A4-A7345930951A</ProductCode>
+		<UpgradeCode>5305B1D1-071C-4028-BEAB-05AE33BA77CA</UpgradeCode>
+		<Feature>Thai</Feature>
+		<Feature>Thai_TE</Feature>
+		<Installer>SetupFw-th</Installer>
+	</Component>
+	<Component>
+		<Name>Khmer Localization</Name>
+		<Description>Khmer language pack for FieldWorks</Description>
+		<ProductCode>7A61D4AC-D96D-413D-925F-5CAD6C2EC6A8</ProductCode>
+		<UpgradeCode>83D830F6-0528-485D-A294-4F58D0A5E043</UpgradeCode>
+		<Feature>Khmer</Feature>
+		<Feature>Khmer_TE</Feature>
+		<Installer>SetupFw-km</Installer>
+	</Component>
+	<Component>
+		<Name>Urdu Localization</Name>
+		<Description>Urdu language pack for FieldWorks</Description>
+		<ProductCode>35ABDEEB-F6DD-4e2f-8FD7-4E0B380BADD2</ProductCode>
+		<UpgradeCode>92A26793-D75F-490c-AB4A-EB43602E529E</UpgradeCode>
+		<Feature>Urdu</Feature>
+		<Feature>Urdu_TE</Feature>
+		<Installer>SetupFw-ur</Installer>
+	</Component>
 </FieldWorksComponents>
