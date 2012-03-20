@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Module Id="SILPYTHON25B" Language="1033" Version="3.1.0.0">
+	<Module Id="SILPYTHON27" Language="1033" Version="3.1.0.0">
 		<Package Id="F43C06D9-FB1E-4391-AA71-7C0F3980A81A" Keywords="Python, Encoding Conversion, SILConverters" Description="Python EncConverter merge module" Comments="Merge module containing the Python EncConverter DLLs" Manufacturer="SIL" InstallerVersion="200" Platform="x86" Languages="1033" SummaryCodepage="1252" />
+		<Dependency RequiredId="Microsoft_VC90_CRT_x86.D8D85FD0_537C_3A3A_9BEC_7A1B426637EC" RequiredLanguage="1033"/>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Component Id="PythonRemoveOldShortcuts" Guid="1371781E-FDD1-4231-89C5-C4A3EB4011D3" KeyPath="yes">
 				<RemoveFolder Id="PythonRemoveOldShortcuts1" Directory="PFSILConvertersFolder" On="uninstall" />
@@ -9,25 +10,22 @@
 			</Component>
 			<Directory Id="CommonFilesFolder" Name="Common">
 				<Directory Id="SIL" Name="SIL">
-					<Component Id="MSVCR71.DLL" Guid="C1356695-1CCF-7ED0-A51E-7AF166E751DB">
-						<File Id="MSVCR71.DLL" Name="MSVCR71.DLL" Vital="yes" KeyPath="yes" Source="Lib\release\MSVCR71.DLL" />
+					<Component Id="PythonEC27.dll" Guid="4F5366DF-4EED-4B1C-A833-0C71C16E5E0C">
+						<File Id="PythonEC27.dll" Name="PythonEC27.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\PythonEC27.dll"/>
 					</Component>
-					<Component Id="PythonEC25b.dll" Guid="8B91C85C-1B3E-472f-B987-DA10DBBDEA5E">
-						<File Id="PythonEC25b.dll" Name="PythonEC25b.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\PythonEC25b.dll"/>
-					</Component>
-					<Component Id="PythonEC25b.tlb" Guid="FDBC4445-01C9-4366-A36A-5AD122AB6137">
-						<File Id="PythonEC25b.tlb" Name="PythonEC25b.tlb" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\PythonEC25b.tlb">
-							<TypeLib Id="640AC7A0-77F8-479b-B963-1A5D243E4059" Language="0" MajorVersion="3" MinorVersion="1" Description="Python IEncConverter implementation 3.1 Type Library" />
+					<Component Id="PythonEC27.tlb" Guid="8EB5FEA0-3668-4B72-9D10-2CE46DD948DB">
+						<File Id="PythonEC27.tlb" Name="PythonEC27.tlb" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\PythonEC27.tlb">
+							<TypeLib Id="28A1F0A9-82F2-4B95-A3A6-BB69DB118D9C" Language="0" MajorVersion="4" MinorVersion="0" Description="Python IEncConverter implementation 3.1 Type Library" />
 						</File>
 					</Component>
-					<Component Id="pywintypes25.dll" Guid="18DA44D9-C203-C7EB-292A-CFF49929DCE3">
-						<File Id="pywintypes25.dll" Name="pywintypes25.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\pywintypes25.dll"/>
+					<Component Id="pywintypes27.dll" Guid="BC618F76-2717-4EE0-86BE-F991C7897478">
+						<File Id="pywintypes27.dll" Name="pywintypes27.dll" IgnoreRegistration="true" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\pywintypes27.dll"/>
 					</Component>
-					<Component Id="python25.dll" Guid="3F764636-300E-B647-6215-3D517EC3326E">
-						<File Id="python25.dll" Name="python25.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\python25.dll"/>
+					<Component Id="python27.dll" Guid="05B13B4E-F294-4855-B01A-760252F447D1">
+						<File Id="python27.dll" Name="python27.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\python27.dll"/>
 					</Component>
-					<Component Id="pythoncom25.dll" Guid="E21DAA0E-FC10-FD7A-0F48-3DC6F8C3422D">
-						<File Id="pythoncom25.dll" Name="pythoncom25.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\pythoncom25.dll"/>
+					<Component Id="pythoncom27.dll" Guid="67C7F75C-95ED-406B-8D3D-EFB21E5047FE">
+						<File Id="pythoncom27.dll" Name="pythoncom27.dll" IgnoreRegistration="true" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\pythoncom27.dll"/>
 					</Component>
 					<Directory Id="Help" Name="Help">
 						<Component Id="PythonScriptPluginAboutbox" Guid="082C4028-8388-7C6E-179B-16B2F088DE56">

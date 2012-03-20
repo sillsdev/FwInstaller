@@ -8,7 +8,7 @@
 			<ComponentRef Id="CopyLicenseTechReadme"/>
 			<ComponentRef Id="vs_piaredist.exe"/>
 			<ComponentRef Id="MigrateSqlDbs.exe"/>
-			<ComponentRef Id="FieldWorksBridgeInstaller.msi"/>
+			<ComponentRef Id="FLExBridgeInstaller.msi"/>
 			<ComponentRef Id="FwRemoteDatabaseConnectorService.exe"/>
 			<ComponentRef Id="Quivira.ttf"/>
 			<ComponentRef Id="FwPath"/>
@@ -26,11 +26,9 @@
 			<ComponentRef Id="ShortcutTechSupport"/>
 			<ComponentRef Id="ShortcutUnicodeCharEditor"/>
 			<MergeRef Id="ATL"/>
-			<MergeRef Id="ATL_Policy"/>
 			<MergeRef Id="CRT"/>
-			<MergeRef Id="CRT_Policy"/>
+			<MergeRef Id="CRT90"/>
 			<MergeRef Id="MFC"/>
-			<MergeRef Id="MFC_Policy"/>
 			<MergeRef Id="PerlEC"/>
 			<MergeRef Id="FW_PerlEC"/>
 			<MergeRef Id="PythonEC"/>
@@ -157,6 +155,24 @@
 					<Condition Level="3">KINYARWANDA_CAB_FOUND OR REMOVE</Condition>
 					<Feature Id="Kinyarwanda_TE" Title="Kinyarwanda_TE" Description="Kinyarwanda user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
 						<Condition Level="3">KINYARWANDA_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
+				<Feature Id="Thai" Title="Thai" Description="Allows the software to have a Thai user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">THAI_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Thai_TE" Title="Thai_TE" Description="Thai user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">THAI_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
+				<Feature Id="Khmer" Title="Khmer" Description="Allows the software to have a Khmer user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">KHMER_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Khmer_TE" Title="Khmer_TE" Description="Khmer user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">KHMER_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
+				<Feature Id="Urdu" Title="Urdu" Description="Allows the software to have a Urdu user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">URDU_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Urdu_TE" Title="Urdu_TE" Description="Urdu user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">URDU_CAB_FOUND OR REMOVE</Condition>
 					</Feature>
 				</Feature>
 			</Feature>

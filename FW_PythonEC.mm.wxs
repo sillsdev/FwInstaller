@@ -6,8 +6,8 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="PythonECFolder" Name="EC">
 				<Directory Id="PythonPluginsFolder" Name="Plugins">
-					<Component Id="FWPython_3.1.0.0_Plugin_Details.xml" Guid="CACDAF0D-012B-4da0-9839-83517C6580B4">
-						<File Id="PythonEC25_3.1.0.0PluginDetails.xml" Name="PythonEC25 3.1.0.0 Plugin Details.xml" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\release\EC\Plugins\PythonEC25 3.1.0.0 Plugin Details.xml"/>
+					<Component Id="FWPython_4.0.0.0_Plugin_Details.xml" Guid="32868A31-EC41-41E6-8ACC-DE8D085BC5A5">
+						<File Id="PythonEC27_4.0.0.0PluginDetails.xml" Name="PythonEC27 4.0.0.0 Plugin Details.xml" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\release\EC\Plugins\PythonEC27 4.0.0.0 Plugin Details.xml"/>
 					</Component>
 				</Directory>
 			</Directory>

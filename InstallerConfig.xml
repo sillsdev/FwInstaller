@@ -19,6 +19,9 @@
 		<Language Name="Nepali" Id="ne"/>
 		<Language Name="Bengali" Id="bn"/>
 		<Language Name="Kinyarwanda" Id="ro"/>
+		<Language Name="Thai" Id="th"/>
+		<Language Name="Khmer" Id="km"/>
+		<Language Name="Urdu" Id="ur"/>
 	</Languages>
 	<FeatureAllocation>
 		<!-- Allocation of files in Output\Release is generally done by building TE and FLEx Nant targets -->
@@ -51,13 +54,13 @@
 			<File PathContains="Bibl"/>
 		</TeOnly>
 		<Localization>
-			<!-- Define heuristics for (non-TE) localization files: -->
+			<!-- Define heuristics for (non-TE) localization files, where the {0} parameter is replaced by the language code: -->
 			<File PathContains="\{0}\"/>
 			<File PathEnds="\strings-{0}.xml"/>
 			<File PathEnds="\LocalizedLists-{0}.xml"/>
 		</Localization>
 		<TeLocalization>
-			<!-- Define heuristics for TE localization files: -->
+			<!-- Define heuristics for TE localization files, where the {0} parameter is replaced by the language code: -->
 			<File PathContains="\{0}\Te"/>
 			<File PathContains="\{0}\Scr"/>
 			<File PathContains="\{0}\DiffView"/>
@@ -375,16 +378,11 @@
 		<File PathPattern="DistFiles\Fonts\Raw"/>
 		<File PathPattern="DistFiles\TECkit_"/>
 		<File PathPattern="DistFiles\CC32.dll"/>
-		<File PathPattern="IcuEC40a"/>
+		<File PathPattern="IcuEC40b"/>
 		<File PathPattern="icuin40"/>
 		<File PathPattern="icuuc40"/>
 		<File PathPattern="icudt40"/>
-		<File PathPattern="DistFiles\CC32.dll"/>
-		<File PathPattern="DistFiles\perl510.dll"/>
-		<File PathPattern="DistFiles\PXPerlWrap510"/>
-		<File PathPattern="DistFiles\python25.dll"/>
-		<File PathPattern="DistFiles\pythoncom25.dll"/>
-		<File PathPattern="DistFiles\pywintypes25.dll"/>
+		<File PathPattern="DistFiles\PXPerlWrap-d.dll"/>
 		<File PathPattern="DistFiles\DropTEC.exe"/>
 		<File PathPattern="DistFiles\SFconv.exe"/>
 		<File PathPattern="DistFiles\TECkit Mapping Editor.exe"/>
@@ -392,7 +390,7 @@
 		<File PathPattern="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder"/>
 		<!-- SilEncConverters30 is old: -->
 		<File PathPattern="SilEncConverters30"/>
-		<!-- SilEncConverters40 and ECInterfaces are taken from lib\\release and put into merge modules: -->
+		<!-- SilEncConverters40 and ECInterfaces are taken from lib\release and put into merge modules: -->
 		<File PathPattern="Output\${config}\SilEncConverters40.dll"/>
 		<File PathPattern="Output\${config}\SilEncConverters40.pdb"/>
 		<File PathPattern="Output\${config}\ECInterfaces.dll"/>
@@ -495,6 +493,9 @@
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-te.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-bn.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ro.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-th.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-km.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ur.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\GeneratedLayouts.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\GeneratedParts.xml"/>
@@ -555,5 +556,8 @@
 		<Cabinet Feature="Nepali" CabinetIndex="16"/>
 		<Cabinet Feature="Bengali" CabinetIndex="17"/>
 		<Cabinet Feature="Kinyarwanda" CabinetIndex="18"/>
+		<Cabinet Feature="Thai" CabinetIndex="19"/>
+		<Cabinet Feature="Khmer" CabinetIndex="20"/>
+		<Cabinet Feature="Urdu" CabinetIndex="21"/>
 	</CabinetAssignments>
 </InstallerConfig>

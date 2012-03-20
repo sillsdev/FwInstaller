@@ -14,9 +14,7 @@
 				<MergeRef Id="EncConverters_Common"/>
 				<MergeRef Id="SEC_EC"/>
 				<MergeRef Id="MFC"/>
-				<MergeRef Id="MFC_Policy"/>
 				<MergeRef Id="CRT"/>
-				<MergeRef Id="CRT_Policy"/>
 			</Feature>
 			<Feature Id="Clipboard_EncConverter" Title="Clipboard Encoding Converter " Description="The Clipboard EncConverter allows you to convert data on the clipboard with one of the converters in the system repository (e.g. TECkit, CC, etc)." Display="expand" Level="3" AllowAdvertise="no">
 				<MergeRef Id="Managed_Install_Fix"/>
@@ -24,9 +22,7 @@
 				<MergeRef Id="EncConverters_Common"/>
 				<MergeRef Id="SEC_EC"/>
 				<MergeRef Id="MFC"/>
-				<MergeRef Id="MFC_Policy"/>
 				<MergeRef Id="CRT"/>
-				<MergeRef Id="CRT_Policy"/>
 			</Feature>
 			<Feature Id="XML_Data_Converter" Title="XML Data Converter" Description="An XML document editor which allows you to convert XML data attributes and elements using a converter from the system repository." Level="3" AllowAdvertise="no">
 				<MergeRef Id="Managed_Install_Fix"/>
@@ -34,9 +30,7 @@
 				<MergeRef Id="SEC_EC"/>
 				<MergeRef Id="XmlConverters"/>
 				<MergeRef Id="MFC"/>
-				<MergeRef Id="MFC_Policy"/>
 				<MergeRef Id="CRT"/>
-				<MergeRef Id="CRT_Policy"/>
 			</Feature>
 			<Feature Id="Word_DOTs" Title="Word DOTs" Description="Expand this node to select or deselect individual document templates for Microsoft Word" Level="3" AllowAdvertise="no">
 				<Feature Id="DataConversion" Title="Data Conversion Macro" Description="Install this component to use SIL Converters in Microsoft Word." Display="expand" Level="3" AllowAdvertise="no">
@@ -46,9 +40,7 @@
 					<MergeRef Id="SEC_EC"/>
 					<MergeRef Id="SetPath"/>
 					<MergeRef Id="MFC"/>
-					<MergeRef Id="MFC_Policy"/>
 					<MergeRef Id="CRT"/>
-					<MergeRef Id="CRT_Policy"/>
 					<MergeRef Id="MS_KB908002_Fix"/>
 				</Feature>
 				<Feature Id="SpellFixer" Title="Spelling Fixer" Description="An SIL Converters client application for fixing spelling errors in Microsoft Word." Level="3" AllowAdvertise="no">
@@ -58,9 +50,7 @@
 					<MergeRef Id="SpellFixerEc"/>
 					<MergeRef Id="SetPath"/>
 					<MergeRef Id="MFC"/>
-					<MergeRef Id="MFC_Policy"/>
 					<MergeRef Id="CRT"/>
-					<MergeRef Id="CRT_Policy"/>
 					<MergeRef Id="MS_KB908002_Fix"/>
 				</Feature>
 				<Feature Id="ConsistencySpellingChecker" Title="Consistency Spelling Checker" Description="A Microsoft Word document template that provides utilities for checking the consistency of spelling for any language." Display="expand" Level="3" AllowAdvertise="no">
@@ -70,9 +60,7 @@
 					<MergeRef Id="SEC_EC"/>
 					<MergeRef Id="SetPath"/>
 					<MergeRef Id="MFC"/>
-					<MergeRef Id="MFC_Policy"/>
 					<MergeRef Id="CRT"/>
-					<MergeRef Id="CRT_Policy"/>
 					<MergeRef Id="Jump2TbxMergeModule"/>
 					<MergeRef Id="MS_KB908002_Fix"/>
 				</Feature>
@@ -146,32 +134,27 @@
 			<Feature Id="ICU_4.0" Title="International Components for Unicode 4.0" Description="Contains the ICU program files for text transliteration, encoding conversion, and collation." Level="3" AllowAdvertise="no">
 				<MergeRef Id="SetPath"/>
 				<MergeRef Id="MFC"/>
-				<MergeRef Id="MFC_Policy"/>
 				<MergeRef Id="CRT"/>
-				<MergeRef Id="CRT_Policy"/>
 				<MergeRef Id="ICU"/>
 		<MergeRef Id="SEC_ICU"/>
 		<MergeRef Id="ICUECHelp"/>
 	  </Feature>
-			<Feature Id="Perl_5.10.1" Title="Perl Expressions 5.10.1" Description="Perl plug-in to use Perl expressions for text transduction. Requires a separately-installed Perl v5.10.1 distribution (tested with ActiveState (R) ActivePerl v5.10.1.1006)" Display="expand" Level="4" AllowAdvertise="no">
+			<Feature Id="Perl_5.12" Title="Perl Expressions 5.12" Description="Perl plug-in to use Perl expressions for text transduction. Requires a separately-installed Perl v5.12 distribution." Display="expand" Level="4" AllowAdvertise="no">
 				<Condition Level="3"><![CDATA[SIL_PERL_FOUND AND NOT REMOVE]]></Condition>
 				<MergeRef Id="PerlEC"/>
 		<MergeRef Id="SEC_PerlEC"/>
 				<MergeRef Id="SetPath"/>
 				<MergeRef Id="MFC"/>
-				<MergeRef Id="MFC_Policy"/>
 				<MergeRef Id="CRT"/>
-				<MergeRef Id="CRT_Policy"/>
 			</Feature>
-			<Feature Id="Python_2.5" Title="Python Script Functions 2.5" Description="Python plug-in to use Python functions for text transduction. Requires a separately-installed distribution of Python v2.5.x (tested with ActivePython (R) v2.5.4.4)" Level="4" AllowAdvertise="no">
+			<Feature Id="Python_2.7" Title="Python Script Functions 2.7" Description="Python plug-in to use Python functions for text transduction. Requires a separately-installed distribution of Python v2.7.x." Level="4" AllowAdvertise="no">
 				<Condition Level="3"><![CDATA[SIL_PYTHON_FOUND AND NOT REMOVE]]></Condition>
 				<MergeRef Id="PythonEC"/>
 		<MergeRef Id="SEC_PythonEC"/>
 		<MergeRef Id="SetPath"/>
 				<MergeRef Id="MFC"/>
-				<MergeRef Id="MFC_Policy"/>
 				<MergeRef Id="CRT"/>
-				<MergeRef Id="CRT_Policy"/>
+				<MergeRef Id="CRT90"/>
 			</Feature>
 			<Feature Id="Adapt_It" Title="Adapt It" Description="Contains AdaptIt knowledge base-related transducers (i.e. the Lookup converter and the target word guesser)." Display="expand" Level="4" AllowAdvertise="no">
 				<Condition Level="3"><![CDATA[(SIL_ADAPTIT_LEGACY_FOUND OR SIL_ADAPTIT_UNICODE_FOUND) AND NOT REMOVE]]></Condition>
@@ -188,9 +171,7 @@
 			<MergeRef Id="EncConverters_Common"/>
 			<MergeRef Id="SEC_EC"/>
 			<MergeRef Id="MFC"/>
-			<MergeRef Id="MFC_Policy"/>
 			<MergeRef Id="CRT"/>
-			<MergeRef Id="CRT_Policy"/>
 			<Feature Id="BasicConverters" Title="Basic Converters" Description="Converters used in SIL (e.g. SIL IPA 93&lt;&gt;UNICODE, UTF8&lt;&gt;UTF16, null, Windows-SymbolEncodedFont, etc)" Level="3" AllowAdvertise="no">
 				<MergeRef Id="BasicConverters"/>
 			</Feature>
@@ -250,9 +231,7 @@
 				<MergeRef Id="SetPath"/>
 				<MergeRef Id="TECkitMapUEditor"/>
 				<MergeRef Id="MFC"/>
-				<MergeRef Id="MFC_Policy"/>
 				<MergeRef Id="CRT"/>
-				<MergeRef Id="CRT_Policy"/>
 			</Feature>
 			<Feature Id="TECkit_Documents" Title="TECkit Documents" Description="Contains the documentation for the TECkit mapping table syntax and instructions on using the executables from the TECkit Exes package." Level="4" AllowAdvertise="no">
 				<MergeRef Id="TECkit_DOCs"/>

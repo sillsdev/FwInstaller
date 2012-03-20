@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Module Id="SECICU40" Language="1033" Version="4.0.0.0">
+	<Module Id="SECICU40" Language="1033" Version="4.0.0.1">
 		<Package Id="25D68386-DDF6-45ec-B3ED-C8F4AB0C287A" Keywords="SIL; Encoding Conversion; ICU Transliterators/Converters" Description="ICU 4.0 Merge Module -- for use in SILConverters" Comments="ICU Plug-in details for use of ICU in SILConverters 4.0" Manufacturer="SIL International" InstallerVersion="200" Platform="x86" Languages="1033" SummaryCodepage="1252" />
 
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ICUECFolder" Name="EC">
 				<Directory Id="ICUPluginsFolder" Name="Plugins">
-					<Component Id="SECIcuEC40_3.1.0.0_Plugin_Details.x" Guid="227FEB4A-16DE-4dd7-8905-71E7ED425418">
-						<File Id="IcuEC40_3.1.0.0_Plugin_Details.x" Name="IcuEC40 3.1.0.0 Plugin Details.xml" KeyPath="yes" Source="Lib\release\EC\Plugins\IcuEC40 3.1.0.0 Plugin Details.xml" />
+					<Component Id="SECIcuEC40_4.0.0.0_Plugin_Details.x" Guid="886256AB-C386-460F-82F0-B3B4E83D4EBB">
+						<File Id="IcuEC40_4.0.0.0_Plugin_Details.x" Name="IcuEC40 4.0.0.0 Plugin Details.xml" KeyPath="yes" Source="Lib\release\EC\Plugins\IcuEC40 4.0.0.0 Plugin Details.xml" />
 					</Component>
 				</Directory>
 			</Directory>

@@ -21,12 +21,11 @@
 			<Merge Id="ICUECHelp" Language="1033" SourceFile="Installer\ICUECHelp.msm" DiskId="2"/>
 		</DirectoryRef>
 		<DirectoryRef Id="SystemFolder">
-			<Merge Id="ATL" Language="1033" SourceFile="Installer\ExternalMergeModules\Microsoft_VC90_ATL_x86.msm" DiskId="2"/>
-			<Merge Id="ATL_Policy" Language="1033" SourceFile="Installer\ExternalMergeModules\policy_9_0_Microsoft_VC90_ATL_x86.msm" DiskId="2"/>
-			<Merge Id="CRT" Language="1033" SourceFile="Installer\ExternalMergeModules\Microsoft_VC90_CRT_x86.msm" DiskId="2"/>
-			<Merge Id="CRT_Policy" Language="1033" SourceFile="Installer\ExternalMergeModules\policy_9_0_Microsoft_VC90_CRT_x86.msm" DiskId="2"/>
-			<Merge Id="MFC" Language="1033" SourceFile="Installer\ExternalMergeModules\Microsoft_VC90_MFC_x86.msm" DiskId="2"/>
-			<Merge Id="MFC_Policy" Language="1033" SourceFile="Installer\ExternalMergeModules\policy_9_0_Microsoft_VC90_MFC_x86.msm" DiskId="2"/>
+			<Merge Id="ATL" Language="1033" SourceFile="Installer\ExternalMergeModules\Microsoft_VC100_ATL_x86.msm" DiskId="2"/>
+			<Merge Id="CRT" Language="1033" SourceFile="Installer\ExternalMergeModules\Microsoft_VC100_CRT_x86.msm" DiskId="2"/>
+			<!-- The CRT90 merge module is needed only for the PythonEC (using Python 2.7) merge module: -->
+			<Merge Id="CRT90" Language="1033" SourceFile="Installer\ExternalMergeModules\Microsoft_VC90_CRT_x86.msm" DiskId="2"/>
+			<Merge Id="MFC" Language="1033" SourceFile="Installer\ExternalMergeModules\Microsoft_VC100_MFC_x86.msm" DiskId="2"/>
 		</DirectoryRef>
 	</Fragment>
 </Wix>

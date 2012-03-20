@@ -34,8 +34,8 @@ AutoFiles.wxs.
 						</Component>
 						<Directory Id="AddOnInstallers" Name="Installers">
 							<!-- The following component GUID is required by the master istaller to locate and launch the FLEx Bridge installer: -->
-							<Component Id="FieldWorksBridgeInstaller.msi" Guid="9442BF43-4A64-4885-9593-43DD7E927290">
-								<File Id="FieldWorksBridgeInstaller.msi" Name="FieldWorksBridgeInstaller.msi" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="2" Source="DistFiles\Installers\FieldWorksBridgeInstaller.msi" />
+							<Component Id="FLExBridgeInstaller.msi" Guid="9442BF43-4A64-4885-9593-43DD7E927290">
+								<File Id="FLExBridgeInstaller.msi" Name="FLExBridgeInstaller.msi" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="2" Source="DistFiles\Installers\FLExBridgeInstaller.msi" />
 							</Component>
 						</Directory>
 					</Directory>
