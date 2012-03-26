@@ -688,7 +688,13 @@ namespace GenerateFilesSource
 
 				var assignments = cabinetAssignments.SelectNodes("Cabinet");
 				foreach (XmlElement assignment in assignments)
-					m_featureCabinetMappings.Add(assignment.GetAttribute("Feature"), int.Parse(assignment.GetAttribute("CabinetIndex")));
+				{
+					var feature = assignment.GetAttribute("Feature");
+					var index = int.Parse(assignment.GetAttribute("CabinetIndex"));
+					m_featureCabinetMappings.Add(feature, index);
+					if (m_languages.Any(language => language.LanguageName == feature))
+						m_featureCabinetMappings.Add(feature + "_TE", index);
+				}
 			}
 		}
 
@@ -1884,7 +1890,9 @@ namespace GenerateFilesSource
 				{
 					if (file.Features.Contains(feature))
 					{
-						m_autoFiles.WriteLine("			<ComponentRef Id=\"" + file.Id + "\"/> <!-- " + file.RelativeSourcePath + " " + file.Comment + " -->");
+						var output = "			<ComponentRef Id=\"" + file.Id + "\"/> <!-- " + file.RelativeSourcePath + " DiskId:" +
+									 file.DiskId + " " + file.Comment + " -->";
+						m_autoFiles.WriteLine(output);
 						file.UsedInFeatureRef = true;
 					}
 				}
