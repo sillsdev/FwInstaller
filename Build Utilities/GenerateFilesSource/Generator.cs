@@ -1525,12 +1525,6 @@ namespace GenerateFilesSource
 			var nantOutput = " -D:dir.fwoutput=\"" + outputPath + "\"";
 			var nantObj = " -D:dir.fwobj=\"" + objPath + "\"";
 
-			// Define .NET version to be targeted by Nant:
-			// We need to specify .NET 3.5 to avoid errors on Windows 7 64-bit machines which
-			// come with part of .NET 4.0 installed. When we move beyond .NET 3.5, we will need
-			// to change this line:
-			const string nantDotNet = " -t:net-3.5 ";
-
 			// Define some targets that must always be specified for these special installer builds:
 			const string nantFixedTargets = " release extraInstallerBuild build ";
 
@@ -1542,7 +1536,7 @@ namespace GenerateFilesSource
 			batchFile.WriteLine("set fwroot=" + m_projRootPath);
 			batchFile.WriteLine("set path=%fwroot%\\DistFiles;%path%");
 			batchFile.WriteLine("cd " + Path.Combine(m_projRootPath, "bld"));
-			batchFile.WriteLine("..\\bin\\nant\\bin\\nant " + nantDotNet + nantFixedTargets + target + nantOutput + nantObj);
+			batchFile.WriteLine("..\\bin\\nant\\bin\\nant " + nantFixedTargets + target + nantOutput + nantObj);
 			batchFile.Close();
 
 			var nantProc = new Process();
