@@ -31,7 +31,7 @@ namespace GenerateFilesSource
 		readonly Dictionary<string, int> m_featureCabinetMappings = new Dictionary<string, int>();
 
 		// Variable used to control file sequencing in patches:
-		private int m_newPatchGroup;
+		private int m_newPatchGroup = 0;
 
 		// Important file/folder paths:
 		private string m_projRootPath;
@@ -677,7 +677,13 @@ namespace GenerateFilesSource
 
 				var assignments = cabinetAssignments.SelectNodes("Cabinet");
 				foreach (XmlElement assignment in assignments)
-					m_featureCabinetMappings.Add(assignment.GetAttribute("Feature"), int.Parse(assignment.GetAttribute("CabinetIndex")));
+				{
+					var feature = assignment.GetAttribute("Feature");
+					var index = int.Parse(assignment.GetAttribute("CabinetIndex"));
+					m_featureCabinetMappings.Add(feature, index);
+					if (m_languages.Any(language => language.LanguageName == feature))
+						m_featureCabinetMappings.Add(feature + "_TE", index);
+				}
 			}
 		}
 
@@ -782,12 +788,16 @@ namespace GenerateFilesSource
 				m_xmlFileLibrary.LoadXml("<FileLibrary>\r\n</FileLibrary>");
 
 			// Find the highest PatchGroup value so far so that we can know what PatchGroup
-			// to assign to any new files. (This has to be iterated with XPath 1.0):
+			// to assign to any new files. (This has to be iterated with XPath 1.0.)
+			// If there were already files in the Library, but none had a PatchGroup
+			// value, then the current highest patch group is 0, and we want to assign a
+			// patch group of 1 to any new files discovered, so that they go at the end of
+			// the installer's file sequence.
 			var libraryFileNodes = m_xmlFileLibrary.SelectNodes("//File");
-			if (libraryFileNodes != null)
+			if (libraryFileNodes != null && libraryFileNodes.Count > 0)
 			{
 				AddReportLine("File Library contains " + libraryFileNodes.Count + " items.");
-				int maxPatchGroup = -1;
+				int maxPatchGroup = 0;
 				foreach (XmlElement libraryFileNode in libraryFileNodes)
 				{
 					var group = libraryFileNode.GetAttribute("PatchGroup");
@@ -799,8 +809,7 @@ namespace GenerateFilesSource
 					}
 				}
 				AddReportLine("Maximum PatchGroup in File Library = " + maxPatchGroup);
-				if (maxPatchGroup >= 0)
-					m_newPatchGroup = 1 + maxPatchGroup;
+				m_newPatchGroup = 1 + maxPatchGroup;
 			}
 			else
 				AddReportLine("No Library file nodes contained a PatchGroup attribute.");
@@ -1898,7 +1907,9 @@ namespace GenerateFilesSource
 				{
 					if (file.Features.Contains(feature))
 					{
-						m_autoFiles.WriteLine("			<ComponentRef Id=\"" + file.Id + "\"/> <!-- " + file.RelativeSourcePath + " " + file.Comment + " -->");
+						var output = "			<ComponentRef Id=\"" + file.Id + "\"/> <!-- " + file.RelativeSourcePath + " DiskId:" +
+									 file.DiskId + " " + file.Comment + " -->";
+						m_autoFiles.WriteLine(output);
 						file.UsedInFeatureRef = true;
 					}
 				}
