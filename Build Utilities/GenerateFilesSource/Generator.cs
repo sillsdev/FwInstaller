@@ -831,7 +831,7 @@ namespace GenerateFilesSource
 			// patch group of 1 to any new files discovered, so that they go at the end of
 			// the installer's file sequence.
 			var libraryFileNodes = m_xmlFileLibrary.SelectNodes("//File");
-			if (libraryFileNodes != null)
+			if (libraryFileNodes != null && libraryFileNodes.Count > 0)
 			{
 				AddReportLine("File Library contains " + libraryFileNodes.Count + " items.");
 				int maxPatchGroup = 0;
