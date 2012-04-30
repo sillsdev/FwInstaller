@@ -8,7 +8,7 @@
 				<Directory Id="ICUPluginsFolder" Name="Plugins">
 					<!-- Component and File IDs have been truncated to prevent ICE03 String Overflow warnings: -->
 					<Component Id="FWIcuEC40_4.0.0.0_Plugin_Details.xm" Guid="25FE5C1A-C604-4C80-856B-03ECF7F57BA3">
-						<File Id="IcuEC40_4.0.0.0_Plugin_Details.xm" Name="IcuEC40 4.0.0.0 Plugin Details.xml" KeyPath="yes" Source="Lib\release\EC\Plugins\IcuEC40 4.0.0.0 Plugin Details.xml" />
+						<File Id="IcuEC40_4.0.0.0_Plugin_Details.xm" Name="IcuEC40 4.0.0.0 Plugin Details.xml" KeyPath="yes" Source="Lib\windows\ECPlugins\IcuEC 4.0.0.0 Plugin Details.xml" />
 					</Component>
 				</Directory>
 			</Directory>

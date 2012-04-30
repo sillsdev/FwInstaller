@@ -12,10 +12,10 @@
 			<Directory Id="CommonFilesFolder" Name="Common">
 				<Directory Id="SIL" Name="SIL">
 					<Component Id="IcuEC40b.tlb" Guid="1B85C0CC-2BE8-40C9-96AD-98C0F7E9C1C1">
-						<File Id="IcuEC40b.tlb" Name="IcuEC40b.tlb" ReadOnly="yes" KeyPath="yes" Source="Lib\${config}\IcuEC40b.tlb"/>
+						<File Id="IcuEC40b.tlb" Name="IcuEC40b.tlb" ReadOnly="yes" KeyPath="yes" Source="Lib\${config}\IcuEC.tlb"/>
 					</Component>
 					<Component Id="IcuEC40b.dll" Guid="5EC407A3-D8A2-471C-BAB7-B9D8D971667C">
-						<File Id="IcuEC40b.dll" Name="IcuEC40b.dll" ReadOnly="yes" Checksum="yes" KeyPath="yes" Source="Lib\${config}\IcuEC40b.dll"/>
+						<File Id="IcuEC40b.dll" Name="IcuEC40b.dll" ReadOnly="yes" Checksum="yes" KeyPath="yes" Source="Lib\windows\${config}\IcuEC.dll"/>
 					</Component>
 					<Component Id="icuuc40.dll" Guid="D8170C39-F568-4C3B-93DA-228C48BF692A">
 						<File Id="icuuc40.dll" Name="icuuc40.dll" ReadOnly="yes" Checksum="yes" KeyPath="yes" Source="DistFiles\icuuc40.dll"/>

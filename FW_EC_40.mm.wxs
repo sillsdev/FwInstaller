@@ -6,10 +6,10 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id='MyModuleDirectory' Name='.'>
 				<Component Id="ECInterfaces.dll" Guid="B87608D6-7EEA-4c54-89A8-76AF83E2C2B1">
-					<File Id="ECInterfaces.dll" Name="ECInterfaces.dll" Vital="yes" KeyPath="yes" AssemblyManifest="ECInterfaces.dll" AssemblyApplication="ECInterfaces.dll" Assembly=".net" Source="Lib\${config}\ECInterfaces.dll" />
+					<File Id="ECInterfaces.dll" Name="ECInterfaces.dll" Vital="yes" KeyPath="yes" AssemblyManifest="ECInterfaces.dll" AssemblyApplication="ECInterfaces.dll" Assembly=".net" Source="Lib\windows\${config}\ECInterfaces.dll" />
 				</Component>
 				<Component Id="SilEncConverters40.dll" Guid="4D011740-D869-479b-80DE-021998A087E5">
-					<File Id="SilEncConverters40.dll" Name="SilEncConverters40.dll" Vital="yes" KeyPath="yes" AssemblyManifest="SilEncConverters40.dll" AssemblyApplication="SilEncConverters40.dll" Assembly=".net" Source="Lib\${config}\SilEncConverters40.dll" />
+					<File Id="SilEncConverters40.dll" Name="SilEncConverters40.dll" Vital="yes" KeyPath="yes" AssemblyManifest="SilEncConverters40.dll" AssemblyApplication="SilEncConverters40.dll" Assembly=".net" Source="Lib\windows\${config}\SilEncConverters40.dll" />
 				</Component>
 				<Component Id="EncConvertersAppDataMover40.exe" Guid="5819C8CA-9422-4c21-98F0-9C2D6F56E442">
 					<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" Source="Lib\${config}\EncConvertersAppDataMover40.exe"/>
@@ -17,7 +17,7 @@
 				<Directory Id="ECFolder" Name="EC">
 					<Directory Id="PluginsFolder" Name="Plugins">
 						<Component Id="EC4.0.0.0PluginDetails.xml" Guid="BDCDF48B-B632-4d72-AC33-859ED9B4A06D">
-							<File Id="EC4.0.0.0PluginDetails.xml" Name="EC 4.0.0.0 Plugin Details.xml" KeyPath="yes" Source="Lib\release\EC\Plugins\EC 4.0.0.0 Plugin Details.xml"/>
+							<File Id="EC4.0.0.0PluginDetails.xml" Name="EC 4.0.0.0 Plugin Details.xml" KeyPath="yes" Source="Lib\windows\ECPlugins\EC 4.0.0.0 Plugin Details.xml"/>
 						</Component>
 					</Directory>
 				</Directory>

@@ -7,7 +7,7 @@
 			<Directory Id="ICUECFolder" Name="EC">
 				<Directory Id="ICUPluginsFolder" Name="Plugins">
 					<Component Id="SECIcuEC40_4.0.0.0_Plugin_Details.x" Guid="886256AB-C386-460F-82F0-B3B4E83D4EBB">
-						<File Id="IcuEC40_4.0.0.0_Plugin_Details.x" Name="IcuEC40 4.0.0.0 Plugin Details.xml" KeyPath="yes" Source="Lib\release\EC\Plugins\IcuEC40 4.0.0.0 Plugin Details.xml" />
+						<File Id="IcuEC40_4.0.0.0_Plugin_Details.x" Name="IcuEC40 4.0.0.0 Plugin Details.xml" KeyPath="yes" Source="Lib\windows\ECPlugins\IcuEC 4.0.0.0 Plugin Details.xml" />
 					</Component>
 				</Directory>
 			</Directory>
