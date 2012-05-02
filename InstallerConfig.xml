@@ -378,6 +378,10 @@
 		<File PathPattern="DistFiles\Fonts\Raw"/>
 		<File PathPattern="DistFiles\TECkit_"/>
 		<File PathPattern="DistFiles\CC32.dll"/>
+		<File PathPattern="ECInterfaces.pdb"/>
+		<File PathPattern="SilEncConverters40.pdb"/>
+		<File PathPattern="ECInterfaces.tlb"/>
+		<File PathPattern="SilEncConverters40.tlb"/>
 		<File PathPattern="IcuEC40b"/>
 		<File PathPattern="icuin40"/>
 		<File PathPattern="icuuc40"/>
@@ -388,13 +392,6 @@
 		<File PathPattern="DistFiles\TECkit Mapping Editor.exe"/>
 		<File PathPattern="DistFiles\TxtConv.exe"/>
 		<File PathPattern="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder"/>
-		<!-- SilEncConverters30 is old: -->
-		<File PathPattern="SilEncConverters30"/>
-		<!-- SilEncConverters40 and ECInterfaces are taken from lib\release and put into merge modules: -->
-		<File PathPattern="Output\${config}\SilEncConverters40.dll"/>
-		<File PathPattern="Output\${config}\SilEncConverters40.pdb"/>
-		<File PathPattern="Output\${config}\ECInterfaces.dll"/>
-		<File PathPattern="Output\${config}\ECInterfaces.pdb"/>
 		<File PathPattern="Output\${config}\asserts.log"/>
 		<File PathPattern="Output\${config}\DefaultIcon.ico"/>
 		<File PathPattern="Output\${config}\basicTest.xml"/>

@@ -10,6 +10,7 @@
 			<ComponentRef Id="MigrateSqlDbs.exe"/>
 			<ComponentRef Id="FLExBridgeInstaller.msi"/>
 			<ComponentRef Id="FwRemoteDatabaseConnectorService.exe"/>
+			<ComponentRef Id="EncConvertersAppDataMover40.exe"/>
 			<ComponentRef Id="Quivira.ttf"/>
 			<ComponentRef Id="FwPath"/>
 			<ComponentRef Id="RegHyperLinks"/>
@@ -30,18 +31,14 @@
 			<MergeRef Id="CRT90"/>
 			<MergeRef Id="MFC"/>
 			<MergeRef Id="PerlEC"/>
-			<MergeRef Id="FW_PerlEC"/>
 			<MergeRef Id="PythonEC"/>
-			<MergeRef Id="FW_PythonEC"/>
 			<MergeRef Id="EncConverters_Common"/>
-			<MergeRef Id="FW_EC"/>
 			<MergeRef Id="EcFolderACLs"/>
 			<MergeRef Id="Set_Path_EC"/>
 			<MergeRef Id="Managed_Install_Fix"/>
 			<MergeRef Id="TECkit_DLLs"/>
 			<MergeRef Id="CC_DLL"/>
 			<MergeRef Id="ICU_4_0"/>
-			<MergeRef Id="FW_ICU"/>
 			<MergeRef Id="ICUECHelp"/>
 			<Feature Id="FLEx" Title="Language Explorer (FLEx)" Description="FieldWorks Language Explorer" Display="expand" Level="3" AllowAdvertise="no">
 				<ComponentRef Id="UnregFlex"/>

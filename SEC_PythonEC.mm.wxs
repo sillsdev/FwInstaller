@@ -7,7 +7,7 @@
 			<Directory Id="PythonECFolder" Name="EC">
 				<Directory Id="PythonPluginsFolder" Name="Plugins">
 					<Component Id="SECPython_4.0.0.0_Plugin_Details.xml" Guid="0EDAF1ED-8252-4C58-A1AF-A969273A841C">
-						<File Id="PythonEC27_4.0.0.0PluginDetails.xml" Name="PythonEC27 4.0.0.0 Plugin Details.xml" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\windows\ECPlugins\PythonEC 4.0.0.0 Plugin Details.xml"/>
+						<File Id="PythonEC27_4.0.0.0PluginDetails.xml" Name="PythonEC27 4.0.0.0 Plugin Details.xml" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC\EC\Plugins\PythonEC27 4.0.0.0 Plugin Details.xml"/>
 					</Component>
 				</Directory>
 			</Directory>

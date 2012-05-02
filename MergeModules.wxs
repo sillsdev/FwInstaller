@@ -2,12 +2,6 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment Id="MergeModulesFragment">
 		<Property Id='MergeModulesFragment' Value='1'/>
-		<DirectoryRef Id="INSTALLDIR">
-			<Merge Id="FW_EC" Language="1033" SourceFile="Installer\FW_EC_40.msm" DiskId="2"/>
-			<Merge Id="FW_ICU" Language="1033" SourceFile="Installer\FW_ICU40.msm" DiskId="2"/>
-			<Merge Id="FW_PerlEC" Language="1033" SourceFile="Installer\FW_PerlEC.msm" DiskId="2"/>
-			<Merge Id="FW_PythonEC" Language="1033" SourceFile="Installer\FW_PythonEC.msm" DiskId="2"/>
-		</DirectoryRef>
 		<DirectoryRef Id="SIL">
 			<Merge Id="PerlEC" Language="1033" SourceFile="Installer\PerlEC.msm" DiskId="2"/>
 			<Merge Id="PythonEC" Language="1033" SourceFile="Installer\PythonEC.msm" DiskId="2"/>
