@@ -7,7 +7,7 @@
 			<Directory Id="PerlECFolder" Name="EC">
 				<Directory Id="PerlPluginsFolder" Name="Plugins">
 					<Component Id="SECPerlEC512_4.0.0.0_Plugin_Details.xml" Guid="ED5D4121-0744-4694-A077-355A29EF0C61">
-						<File Id="PerlEC512_4.0.0.0PluginDetails.xml" Name="PerlEC512 4.0.0.0 Plugin Details.xml" Vital="yes" KeyPath="yes" Source="Lib\release\EC\Plugins\PerlEC512 4.0.0.0 Plugin Details.xml"/>
+						<File Id="PerlEC512_4.0.0.0PluginDetails.xml" Name="PerlEC512 4.0.0.0 Plugin Details.xml" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC\EC\Plugins\PerlEC512 4.0.0.0 Plugin Details.xml"/>
 					</Component>
 				</Directory>
 			</Directory>

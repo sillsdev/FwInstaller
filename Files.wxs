@@ -32,6 +32,9 @@ AutoFiles.wxs.
 							<ServiceInstall Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" DisplayName="FieldWorks Remote Database Connector Service" Type="ownProcess" Interactive="yes" Start="auto" ErrorControl="ignore" Description="Allows connection to local FieldWorks projects from other machines on the network." />
 							<ServiceControl Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
 						</Component>
+						<Component Id="EncConvertersAppDataMover40.exe" Guid="5819C8CA-9422-4c21-98F0-9C2D6F56E442">
+							<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" Source="Output\${config}\EncConvertersAppDataMover40.exe"/>
+						</Component>
 						<Directory Id="AddOnInstallers" Name="Installers">
 							<!-- The following component GUID is required by the master istaller to locate and launch the FLEx Bridge installer: -->
 							<Component Id="FLExBridgeInstaller.msi" Guid="9442BF43-4A64-4885-9593-43DD7E927290">
@@ -81,6 +84,24 @@ AutoFiles.wxs.
 				</Component>
 			</Directory>
 		</Directory>
+
+		<!-- The following section launches the installed file EncConvertersAppDataMover40.exe but hides its DOS window -->
+		<CustomAction Id="SetAppDataMoverData" Return="check" Property="LaunchAppDataMover" Value="[#EncConvertersAppDataMover40.exe]" />
+		<CustomAction Id="LaunchAppDataMover" Return="ignore" Impersonate="no" Execute="deferred" Script="vbscript">
+			<![CDATA[
+dim EncConvertersAppDataMoverPath
+EncConvertersAppDataMoverPath = Session.Property("CustomActionData")
+const WindowStyleStealth  = &H20000000
+set WSO = createobject("WScript.Shell")
+WSO.run "%comspec% /c """ + EncConvertersAppDataMoverPath + """", WindowStyleStealth, false
+]]>
+		</CustomAction>
+
+		<InstallExecuteSequence>
+			<Custom Action="SetAppDataMoverData" Before="InstallInitialize"><![CDATA[VersionNT >= 501]]></Custom>
+			<Custom Action="LaunchAppDataMover" After="PublishComponents"><![CDATA[NOT Installed]]></Custom>
+		</InstallExecuteSequence>
+
 		<Property Id="MyParatextProjects"><![CDATA[C:\My Paratext Projects]]></Property>
 	</Fragment>
 </Wix>

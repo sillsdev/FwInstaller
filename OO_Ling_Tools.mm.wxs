@@ -8,7 +8,7 @@
 		  <Directory Id="INSTALLDIR" Name="SILConverters">
 			<Directory Id="SILConvOO" Name="OpenOffice.org">
 			  <Component Id="LinguisticTools12oxt" Guid="C9134A5F-CF12-4ffe-916B-270483A1A0E2">
-				<File Id="LinguisticTools12oxt" Name="LinguisticTools-1.2.oxt" Vital="yes" KeyPath="yes" Source="Lib\${config}\LinguisticTools-1.2.oxt" />
+				<File Id="LinguisticTools12oxt" Name="LinguisticTools-1.2.oxt" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC for Developers\LinguisticTools-1.2.oxt" />
 			  </Component>
 			</Directory>
 		  </Directory>

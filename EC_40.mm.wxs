@@ -12,23 +12,23 @@
 	  <Directory Id="CommonFilesFolder" Name="Common">
 				<Directory Id="CfSIL" Name="SIL">
 		  <Component Id="ECDriver.dll" Guid="B888AEC2-8F56-4237-B5AC-9BFAC54A86B4">
-			<File Id="ECDriver.dll" Name="ECDriver.dll" IgnoreRegistration="true" ReadOnly="yes" KeyPath="yes" Source="Lib\${config}\ECDriver.dll"/>
+			<File Id="ECDriver.dll" Name="ECDriver.dll" IgnoreRegistration="true" ReadOnly="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\ECDriver.dll"/>
 		  </Component>
 					<Directory Id="Help" Name="Help">
 						<Component Id="CCTableHelp" Guid="1A2209DA-3C80-47a1-A673-614B8AE2E694">
-							<File Id="CCTableHelp" Name="CC Table Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\CC Table Plug-in About box.mht"/>
+							<File Id="CCTableHelp" Name="CC Table Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\CC Table Plug-in About box.mht"/>
 						</Component>
 			<Component Id="CPHelp" Guid="1C7AE6E2-8147-4062-87E2-2285E97345CA">
-			  <File Id="CPHelp" Name="Code Page Converter Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\Code Page Converter Plug-in About box.mht"/>
+			  <File Id="CPHelp" Name="Code Page Converter Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Code Page Converter Plug-in About box.mht"/>
 			</Component>
 			<Component Id="CmpdHelp" Guid="0EB390F2-B7CE-40cb-8D1E-2EB43B196EB4">
-			  <File Id="CmpdHelp" Name="Compound Converter Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\Compound Converter Plug-in About box.mht"/>
+			  <File Id="CmpdHelp" Name="Compound Converter Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Compound Converter Plug-in About box.mht"/>
 			</Component>
 			<Component Id="FallBackHelp" Guid="8C984ED5-779D-4b96-BBAB-E7A1F80B8588">
-			  <File Id="FallBackHelp" Name="Fallback Converter Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\Fallback Converter Plug-in About box.mht"/>
+			  <File Id="FallBackHelp" Name="Fallback Converter Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Fallback Converter Plug-in About box.mht"/>
 			</Component>
 			<Component Id="TECkitHelp" Guid="3A81B42A-C4EA-4a27-9089-FE6F89E30F01">
-							<File Id="TECkitHelp" Name="TECkit Map Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="Lib\${Config}\Help\TECkit Map Plug-in About box.mht"/>
+							<File Id="TECkitHelp" Name="TECkit Map Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\TECkit Map Plug-in About box.mht"/>
 						</Component>
 					</Directory>
 				</Directory>

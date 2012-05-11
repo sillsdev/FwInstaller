@@ -61,45 +61,45 @@
 			  <File Id="MSVCRT100perl512.dll" Name="perl512.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\perl512.dll"/>
 			</Component>
 			<Component Id="C_MSVCRT100PerlEC512.dll" Guid="1C6241ED-1949-4AD2-A191-9B4D1932DEC0">
-			  <File Id="MSVCRT100PerlEC512.dll" Name="PerlEC512.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\PerlEC512.dll"/>
+			  <File Id="MSVCRT100PerlEC512.dll" Name="PerlEC512.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Output\${config}\PerlEC512.dll"/>
 			</Component>
 			<Component Id="C_MSVCRT100PXPerlWrap.dll" Guid="DAC9DF9F-447B-4E90-B210-FBC57BE48A82">
 			  <File Id="MSVCRT100PXPerlWrap.dll" Name="PXPerlWrap.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\PXPerlWrap.dll"/>
 			</Component>
 			<Component Id="C_MSVCRT100PerlEC512.tlb" Guid="780984A4-5353-4179-BE5E-8ED162CE4C8A">
-							<File Id="MSVCRT100PerlEC512.tlb" Name="PerlEC512.tlb" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\PerlEC512.tlb">
-								<TypeLib Id="82391711-76EE-4266-8BC2-66615BAB2437" Language="0" MajorVersion="4" MinorVersion="0" Description="Perl IEncConverter implementation 3.1 Type Library" />
+							<File Id="MSVCRT100PerlEC512.tlb" Name="PerlEC512.tlb" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Output\${config}\PerlEC512.tlb">
+								<TypeLib Id="82391711-76EE-4266-8BC2-66615BAB2437" Language="0" MajorVersion="4" MinorVersion="0" Description="Perl IEncConverter implementation 4.0 Type Library" />
 							</File>
 			</Component>
 		  </Directory>
 		  <Directory Id="Help" Name="Help">
 			<Component Id="PerlExpressionPluginAboutbox" Guid="8D58D219-4BE6-9EAE-AEBE-3C74F2D97146">
-			  <File Id="PerlExpressionPluginAboutbox" Name="Perl Expression Plug-in About box.htm" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\Help\Perl Expression Plug-in About box.htm"/>
+			  <File Id="PerlExpressionPluginAboutbox" Name="Perl Expression Plug-in About box.htm" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Perl Expression Plug-in About box.htm"/>
 			</Component>
 			<Directory Id="PerlExpressionPluginAboutboxFiles" Name="Perl Expression Plug-in About box_files">
 			  <Component Id="PerlExpressionPluginAboutboxFilesfilelist.xml" Guid="D76BEB7D-0631-EC30-CCEA-D619D2D51589">
-				<File Id="PerlExpressionPluginAboutboxFilesfilelist.xml" Name="filelist.xml" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\Help\Perl Expression Plug-in About box_files\filelist.xml" />
+				<File Id="PerlExpressionPluginAboutboxFilesfilelist.xml" Name="filelist.xml" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Perl Expression Plug-in About box_files\filelist.xml" />
 			  </Component>
 			  <Component Id="PerlExpressionPluginAboutboxFilesimage003.png" Guid="64EBEC77-AD7F-739F-62AF-871FCF9E5794">
-				<File Id="PerlExpressionPluginAboutboxFilesimage003.png" Name="image003.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\Help\Perl Expression Plug-in About box_files\image003.png"/>
+				<File Id="PerlExpressionPluginAboutboxFilesimage003.png" Name="image003.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Perl Expression Plug-in About box_files\image003.png"/>
 			  </Component>
 			  <Component Id="PerlExpressionPluginAboutboxFilesimage001.png" Guid="F617C4DC-9098-C24D-DB5E-6D9D9DFE82AF">
-				<File Id="PerlExpressionPluginAboutboxFilesimage001.png" Name="image001.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\Help\Perl Expression Plug-in About box_files\image001.png"/>
+				<File Id="PerlExpressionPluginAboutboxFilesimage001.png" Name="image001.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Perl Expression Plug-in About box_files\image001.png"/>
 			  </Component>
 			  <Component Id="PerlExpressionPluginAboutboxFilesimage004.jpg" Guid="EE705524-0A03-8035-DAB9-C9598A33A533">
-				<File Id="PerlExpressionPluginAboutboxFilesimage004.jpg" Name="image004.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\Help\Perl Expression Plug-in About box_files\image004.jpg"/>
+				<File Id="PerlExpressionPluginAboutboxFilesimage004.jpg" Name="image004.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Perl Expression Plug-in About box_files\image004.jpg"/>
 			  </Component>
 			  <Component Id="PerlExpressionPluginAboutboxFilesheader.htm" Guid="2E64AB91-42D1-DE29-B3EE-10C97C96A240">
-				<File Id="PerlExpressionPluginAboutboxFilesheader.htm" Name="header.htm" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\Help\Perl Expression Plug-in About box_files\header.htm"/>
+				<File Id="PerlExpressionPluginAboutboxFilesheader.htm" Name="header.htm" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Perl Expression Plug-in About box_files\header.htm"/>
 			  </Component>
 			  <Component Id="PerlExpressionPluginAboutboxFilesimage007.jpg" Guid="B589D24C-4370-E93F-6BA9-660721912A11">
-				<File Id="PerlExpressionPluginAboutboxFilesimage007.jpg" Name="image007.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\Help\Perl Expression Plug-in About box_files\image007.jpg"/>
+				<File Id="PerlExpressionPluginAboutboxFilesimage007.jpg" Name="image007.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Perl Expression Plug-in About box_files\image007.jpg"/>
 			  </Component>
 			  <Component Id="PerlExpressionPluginAboutboxFilesimage005.png" Guid="FFACC7CC-CFD0-524F-C596-3BCD7291E14A">
-				<File Id="PerlExpressionPluginAboutboxFilesimage005.png" Name="image005.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\Help\Perl Expression Plug-in About box_files\image005.png"/>
+				<File Id="PerlExpressionPluginAboutboxFilesimage005.png" Name="image005.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Perl Expression Plug-in About box_files\image005.png"/>
 			  </Component>
 			  <Component Id="PerlExpressionPluginAboutboxFilesimage006.jpg" Guid="3FCFC80F-73D3-86F0-9F30-9AFCA8C475C9">
-				<File Id="PerlExpressionPluginAboutboxFilesimage006.jpg" Name="image006.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\${config}\Help\Perl Expression Plug-in About box_files\image006.jpg"/>
+				<File Id="PerlExpressionPluginAboutboxFilesimage006.jpg" Name="image006.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\Windows\EC Common\Help\Perl Expression Plug-in About box_files\image006.jpg"/>
 			  </Component>
 			</Directory>
 		  </Directory>
