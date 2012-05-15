@@ -422,6 +422,7 @@
 		<File PathPattern="Output\${config}\ScrChecks.dll"/> <!-- this will be taken from Distfiles\Editorial Checks -->
 		<File PathPattern="Output\${config}\ScrChecks.pdb"/> <!-- this will be taken from Distfiles\Editorial Checks -->
 		<File PathPattern="Output\${config}\MigrateSqlDbs.pdb"/>
+		<File PathPattern="Output\${config}\FormsTester.dll"/>
 		<!-- Define pairs of file paths known (and allowed) to be similar. This suppresses warnings about omitted files that look like other included files: -->
 		<!-- Format: <SuppressSimilarityWarning Path1="*path of first file of matching pair*" Path2="*path of second file of matching pair*"/> -->
 		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.dll" Path2="Output\${config}\ScrChecks.dll"/>

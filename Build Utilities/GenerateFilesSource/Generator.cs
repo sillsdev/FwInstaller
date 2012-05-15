@@ -1361,8 +1361,9 @@ namespace GenerateFilesSource
 					}
 
 					// Test if any features of the current file are represented in Features.wxs:
-					file.OnlyUsedInUnusedFeatures =
-						!m_representedFeatures.Any(feature => file.Features.Contains(feature));
+					if (file.Features.Count > 0)
+						file.OnlyUsedInUnusedFeatures =
+							!m_representedFeatures.Any(feature => file.Features.Contains(feature));
 
 					if (file.Features.Count > 0)
 					{
@@ -2055,7 +2056,7 @@ namespace GenerateFilesSource
 
 			// List all files that were only used in unused features:
 			IEnumerable<InstallerFile> unusedFileSet = from file in m_allFilesFiltered
-													   where file.OnlyUsedInUnusedFeatures
+													   where (file.OnlyUsedInUnusedFeatures && file.Features.Count > 0)
 													   select file;
 
 			if (unusedFileSet.Count() > 0)
@@ -2190,7 +2191,9 @@ namespace GenerateFilesSource
 			if (unusedFiles.Count() > 0)
 			{
 				failureReport += Environment.NewLine;
-				failureReport += "The following files were not referenced in any features (tested Features.Count==0): ";
+				failureReport += "The following files were omitted because they were not referenced in any features (tested Features.Count==0): ";
+				failureReport += Environment.NewLine;
+				failureReport += "(This is typical of files in " + m_outputReleaseFolderRelativePath + " that are not part of the FLEx build or TE build and not referenced in the CoreFileOrphans section of InstallerConfig.xml)";
 				failureReport += Environment.NewLine + string.Join(Environment.NewLine + "    ", unusedFiles.ToArray());
 				failureReport += Environment.NewLine;
 			}
