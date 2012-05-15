@@ -4,10 +4,8 @@
 		<Package Id="F001DE50-84CE-44C8-A065-297102C05A95" Keywords="MergeModule, MSI, Database, ICU" Description="SIL's ICU 4.0 Installation" Comments="Common installer module for SIL's version 4.0 of ICU" Manufacturer="SIL International" InstallerVersion="110" Platform="x86" Languages="0" SummaryCodepage="1252"/>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Component Id="RegisterICUFolders" Guid="E020C452-D07A-4BA6-B7D0-DD2E0A19124D">
-				<RegistryKey Root="HKLM" Key="Software\SIL" Action="createAndRemoveOnUninstall" >
-					<RegistryValue Name="Icu40DataDir" Type="string" KeyPath="yes" Value="[icudt40l]" />
-					<RegistryValue Name="Icu40Dir" Type="string" Value="[Icu40]"/>
-				</RegistryKey>
+				<RegistryValue Name="Icu40DataDir" Root="HKLM"  Key="Software\SIL" Type="string" KeyPath="yes" Value="[icudt40l]" />
+				<RegistryValue Name="Icu40Dir" Root="HKLM"  Key="Software\SIL" Type="string" Value="[Icu40]"/>
 			</Component>
 			<Directory Id="CommonFilesFolder" Name="Common">
 				<Directory Id="SIL" Name="SIL">
