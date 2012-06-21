@@ -1967,29 +1967,34 @@ namespace GenerateFilesSource
 		/// </summary>
 		private void ReportFileChanges()
 		{
-			var previousFileLibraryAddendaNode = m_xmlPreviousFileLibraryAddenda.SelectSingleNode("FileLibrary");
-			if (previousFileLibraryAddendaNode == null)
-				return;
-
 			var report = "";
-
-			var previousAddendaFiles = previousFileLibraryAddendaNode.SelectNodes("//File");
 			var newAddendaFiles = m_newFileLibraryAddendaNode.SelectNodes("//File");
 
-			// Iterate over files in the new file library addenda:
-			foreach (XmlElement newFileNode in newAddendaFiles)
+			var previousFileLibraryAddendaNode = m_xmlPreviousFileLibraryAddenda.SelectSingleNode("FileLibrary");
+			if (previousFileLibraryAddendaNode == null)
 			{
-				// See if current new file can be found in previous file library addenda
-				if (!previousAddendaFiles.Cast<XmlElement>().Any(f => f.GetAttribute("Path") == newFileNode.GetAttribute("Path")))
+				foreach (XmlElement newFileNode in newAddendaFiles)
 					report += "New file: " + newFileNode.GetAttribute("Path") + Environment.NewLine;
 			}
-
-			// Iterate over files in the previous file library addenda:
-			foreach (XmlElement previousFileNode in previousAddendaFiles)
+			else
 			{
-				// See if current previous file can be found in new file library addenda
-				if (!newAddendaFiles.Cast<XmlElement>().Any(f => f.GetAttribute("Path") == previousFileNode.GetAttribute("Path")))
-					report += "Deleted file: " + previousFileNode.GetAttribute("Path") + Environment.NewLine;
+				var previousAddendaFiles = previousFileLibraryAddendaNode.SelectNodes("//File");
+
+				// Iterate over files in the new file library addenda:
+				foreach (XmlElement newFileNode in newAddendaFiles)
+				{
+					// See if current new file can be found in previous file library addenda
+					if (!previousAddendaFiles.Cast<XmlElement>().Any(f => f.GetAttribute("Path") == newFileNode.GetAttribute("Path")))
+						report += "New file: " + newFileNode.GetAttribute("Path") + Environment.NewLine;
+				}
+
+				// Iterate over files in the previous file library addenda:
+				foreach (XmlElement previousFileNode in previousAddendaFiles)
+				{
+					// See if current previous file can be found in new file library addenda
+					if (!newAddendaFiles.Cast<XmlElement>().Any(f => f.GetAttribute("Path") == previousFileNode.GetAttribute("Path")))
+						report += "Deleted file: " + previousFileNode.GetAttribute("Path") + Environment.NewLine;
+				}
 			}
 
 			if (report.Length > 0)
