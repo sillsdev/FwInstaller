@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Product UpgradeCode="1092269F-9EA1-419B-8685-90203F83E254" Id="8E80F1ED-826A-46d5-A59A-D8A203F2F0D9" Name='SIL FieldWorks 7.2' Language='1033'
-			 Version='7.2.5' Manufacturer='SIL International'>
+			 Version='7.2.6' Manufacturer='SIL International'>
 		<Package Id='*'
 				  Description='FieldWorks Installer'
 				  Manufacturer='SIL International' InstallerVersion='300' Compressed='yes' />
