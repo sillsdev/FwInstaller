@@ -495,7 +495,7 @@
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-km.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ur.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\GeneratedLayouts.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\Generated.fwlayout"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\GeneratedParts.xml"/>
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Templates\LocalizedLists"/>
 		<!-- Define list of (partial) paths of files that are allowed to have a version of 0.0.0.0: -->
