@@ -33,7 +33,7 @@ AutoFiles.wxs.
 							<ServiceControl Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
 						</Component>
 						<Component Id="EncConvertersAppDataMover40.exe" Guid="5819C8CA-9422-4c21-98F0-9C2D6F56E442">
-							<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" Source="Output\${config}\EncConvertersAppDataMover40.exe"/>
+							<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" DiskId="2" Source="Output\${config}\EncConvertersAppDataMover40.exe"/>
 						</Component>
 						<Directory Id="AddOnInstallers" Name="Installers">
 							<!-- The following component GUID is required by the master istaller to locate and launch the FLEx Bridge installer: -->
