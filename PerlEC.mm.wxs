@@ -61,13 +61,13 @@
 			  <File Id="MSVCRT100perl512.dll" Name="perl512.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\perl512.dll"/>
 			</Component>
 			<Component Id="C_MSVCRT100PerlEC512.dll" Guid="1C6241ED-1949-4AD2-A191-9B4D1932DEC0">
-			  <File Id="MSVCRT100PerlEC512.dll" Name="PerlEC512.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Output\${config}\PerlEC512.dll"/>
+			  <File Id="MSVCRT100PerlEC512.dll" Name="PerlEC512.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Output\Release\PerlEC512.dll"/>
 			</Component>
 			<Component Id="C_MSVCRT100PXPerlWrap.dll" Guid="DAC9DF9F-447B-4E90-B210-FBC57BE48A82">
 			  <File Id="MSVCRT100PXPerlWrap.dll" Name="PXPerlWrap.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="DistFiles\PXPerlWrap.dll"/>
 			</Component>
 			<Component Id="C_MSVCRT100PerlEC512.tlb" Guid="780984A4-5353-4179-BE5E-8ED162CE4C8A">
-							<File Id="MSVCRT100PerlEC512.tlb" Name="PerlEC512.tlb" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Output\${config}\PerlEC512.tlb">
+							<File Id="MSVCRT100PerlEC512.tlb" Name="PerlEC512.tlb" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Output\Release\PerlEC512.tlb">
 								<TypeLib Id="82391711-76EE-4266-8BC2-66615BAB2437" Language="0" MajorVersion="4" MinorVersion="0" Description="Perl IEncConverter implementation 4.0 Type Library" />
 							</File>
 			</Component>

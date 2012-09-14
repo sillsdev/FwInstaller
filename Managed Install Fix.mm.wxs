@@ -6,7 +6,7 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id='MyModuleDirectory' Name='.'>
 				<Component Id="InstallUtilLib.dll.config" Guid="F3C5869C-217A-480B-BB92-BD62AC62EEC4">
-					<File Id="InstallUtilLib.dll.config" Name="InstallUtilLib.dll.config" Source="Installer\InstallUtilLib.dll.config" KeyPath="yes" />
+					<File Id="InstallUtilLib.dll.config" Name="InstallUtilLib.dll.config" Source="InstallUtilLib.dll.config" KeyPath="yes" />
 				</Component>
 			</Directory>
 		</Directory>
