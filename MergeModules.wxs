@@ -3,23 +3,23 @@
 	<Fragment Id="MergeModulesFragment">
 		<Property Id='MergeModulesFragment' Value='1'/>
 		<DirectoryRef Id="SIL">
-			<Merge Id="PerlEC" Language="1033" SourceFile="Installer\PerlEC.msm" DiskId="2"/>
-			<Merge Id="PythonEC" Language="1033" SourceFile="Installer\PythonEC.msm" DiskId="2"/>
-			<Merge Id="EncConverters_Common" Language="1033" SourceFile="Installer\EC_40.msm" DiskId="2"/>
-			<Merge Id="EcFolderACLs" Language="1033" SourceFile="Installer\EcFolderACLs.msm" DiskId="2"/>
-			<Merge Id="Set_Path_EC" Language="1033" SourceFile="Installer\SetPath.msm" DiskId="2"/>
-			<Merge Id="Managed_Install_Fix" Language="1033" SourceFile="Installer\Managed Install Fix.msm" DiskId="2"/>
-			<Merge Id="TECkit_DLLs" Language="1033" SourceFile="Installer\externalencodingconverters\TECkit DLLs.msm" DiskId="2"/>
-			<Merge Id="CC_DLL" Language="1033" SourceFile="Installer\externalencodingconverters\CC DLL.msm" DiskId="2"/>
-			<Merge Id="ICU_4_0" Language="1033" SourceFile="Installer\ICU040.msm" DiskId="2"/>
-			<Merge Id="ICUECHelp" Language="1033" SourceFile="Installer\ICUECHelp.msm" DiskId="2"/>
+			<Merge Id="PerlEC" Language="1033" SourceFile="PerlEC.msm" DiskId="2"/>
+			<Merge Id="PythonEC" Language="1033" SourceFile="PythonEC.msm" DiskId="2"/>
+			<Merge Id="EncConverters_Common" Language="1033" SourceFile="EC_40.msm" DiskId="2"/>
+			<Merge Id="EcFolderACLs" Language="1033" SourceFile="EcFolderACLs.msm" DiskId="2"/>
+			<Merge Id="Set_Path_EC" Language="1033" SourceFile="SetPath.msm" DiskId="2"/>
+			<Merge Id="Managed_Install_Fix" Language="1033" SourceFile="Managed Install Fix.msm" DiskId="2"/>
+			<Merge Id="TECkit_DLLs" Language="1033" SourceFile="externalencodingconverters\TECkit DLLs.msm" DiskId="2"/>
+			<Merge Id="CC_DLL" Language="1033" SourceFile="externalencodingconverters\CC DLL.msm" DiskId="2"/>
+			<Merge Id="ICU_4_0" Language="1033" SourceFile="ICU040.msm" DiskId="2"/>
+			<Merge Id="ICUECHelp" Language="1033" SourceFile="ICUECHelp.msm" DiskId="2"/>
 		</DirectoryRef>
 		<DirectoryRef Id="SystemFolder">
-			<Merge Id="ATL" Language="1033" SourceFile="Installer\ExternalMergeModules\Microsoft_VC100_ATL_x86.msm" DiskId="2"/>
-			<Merge Id="CRT" Language="1033" SourceFile="Installer\ExternalMergeModules\Microsoft_VC100_CRT_x86.msm" DiskId="2"/>
+			<Merge Id="ATL" Language="1033" SourceFile="ExternalMergeModules\Microsoft_VC100_ATL_x86.msm" DiskId="2"/>
+			<Merge Id="CRT" Language="1033" SourceFile="ExternalMergeModules\Microsoft_VC100_CRT_x86.msm" DiskId="2"/>
 			<!-- The CRT90 merge module is needed only for the PythonEC (using Python 2.7) merge module: -->
-			<Merge Id="CRT90" Language="1033" SourceFile="Installer\ExternalMergeModules\Microsoft_VC90_CRT_x86.msm" DiskId="2"/>
-			<Merge Id="MFC" Language="1033" SourceFile="Installer\ExternalMergeModules\Microsoft_VC100_MFC_x86.msm" DiskId="2"/>
+			<Merge Id="CRT90" Language="1033" SourceFile="ExternalMergeModules\Microsoft_VC90_CRT_x86.msm" DiskId="2"/>
+			<Merge Id="MFC" Language="1033" SourceFile="ExternalMergeModules\Microsoft_VC100_MFC_x86.msm" DiskId="2"/>
 		</DirectoryRef>
 	</Fragment>
 </Wix>

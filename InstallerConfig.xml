@@ -24,7 +24,7 @@
 		<Language Name="Urdu" Id="ur"/>
 	</Languages>
 	<FeatureAllocation>
-		<!-- Allocation of files in Output\Release is generally done by building TE and FLEx Nant targets -->
+		<!-- Allocation of files in Output\Release is generally done by analyzing FieldWorks.targets -->
 		<!-- and comparing the resulting file sets. Here we define heuristics for dealing with files in -->
 		<!-- DistFiles. Each main element defines what section of the installer is being addressed, and -->
 		<!-- then follows a selection from the following 4 types: -->
@@ -68,21 +68,26 @@
 		</TeLocalization>
 		<!-- The following heuristics apply over all files, not just DistFiles. -->
 		<CoreFileOrphans>
-			<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed in either TE or FLEx: -->
+			<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed or directly referenced by either TE or FLEx: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is not needed by TE or FLEx but is needed in the FW installation*"/> -->
-			<File PathPattern="Output\${config}\UnicodeCharEditor."/>
-			<File PathPattern="Output\${config}\ObjectBrowser."/>
-			<File PathPattern="Output\${config}\WeifenLuo.WinFormsUI.Docking.dll"/>
+			<File PathPattern="Output\Release\UnicodeCharEditor."/>
+			<File PathPattern="Output\Release\ObjectBrowser."/>
+			<File PathPattern="Output\Release\WeifenLuo.WinFormsUI.Docking.dll"/>
 			<File PathPattern="DistFiles\MSSQLMigration\OldMigrationScripts"/>
+			<File PathPattern="Output\Release\FwKernel."/>
+			<File PathPattern="Output\Release\Graphite."/>
+			<File PathPattern="Output\Release\Views."/>
+			<File PathPattern="Output\Release\remoting_tcp_server.config"/>
 		</CoreFileOrphans>
 		<ForceBuiltFilesIntoTE>
-			<!-- Define list of path patterns of built files known to be needed in TE but which are not built by the TE Nant target: -->
+			<!-- Define list of path patterns of built files known to be needed in TE but which are not part of the TeExe FieldWorks.targets dependency chain: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is needed by TE*"/> -->
-			<File PathPattern="Output\${config}\System.Drawing.Html.dll"/>
+			<File PathPattern="Output\Release\System.Drawing.Html.dll"/>
 		</ForceBuiltFilesIntoTE>
 		<ForceBuiltFilesIntoFlex>
-			<!-- Define list of path patterns of built files known to be needed in FLEx but which are not built by the FLEx Nant target: -->
+			<!-- Define list of path patterns of built files known to be needed in FLEx but which are not part of the LexTextgExe FieldWorks.targets dependency chain: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is needed by FLEx*"/> -->
+			<File PathPattern="Output\Release\Discourse."/>
 		</ForceBuiltFilesIntoFlex>
 		<TeFileNameTestHeuristics>
 			<!-- Define list of regular expressions serving as coarse heuristics for guessing if a file that has been allocated -->
@@ -95,17 +100,17 @@
 			<!-- Define list of specific files that may look like TE-only files but aren't really (used in -->
 			<!-- conjunction with above Heuristics to suppress warnings): -->
 			<!-- Format: <File Path="*relative path from FW folder of a file looks like it is TE-exclusive but isn't*"/> -->
-			<Except Path="Output\${config}\ScrUtilsInterfaces.dll"/>
-			<Except Path="Output\${config}\SharedScrUtils.dll"/>
-			<Except Path="Output\${config}\SharedScrUtils.pdb"/>
-			<Except Path="Output\${config}\SharedScrControls.dll"/>
-			<Except Path="Output\${config}\SharedScrControls.pdb"/>
+			<Except Path="Output\Release\ScrUtilsInterfaces.dll"/>
+			<Except Path="Output\Release\SharedScrUtils.dll"/>
+			<Except Path="Output\Release\SharedScrUtils.pdb"/>
+			<Except Path="Output\Release\SharedScrControls.dll"/>
+			<Except Path="Output\Release\SharedScrControls.pdb"/>
 		</TeFileNameTestHeuristics>
 </FeatureAllocation>
 	<FileConditions>
 		<!-- Define conditions to apply to specified components: -->
 		<!-- Format: <File Path="*partial path of a file that is conditionally installed*" Condition="*MSI Installer condition that must be true to install file*"/> -->
-		<!-- Beware! This XML is double-interpretted, so for example a 'less than' sign must be represented as &amp;lt; -->
+		<!-- Beware! This XML is double-interpreted, so for example a 'less than' sign must be represented as &amp;lt; -->
 		<!-- This first bunch is to make sure we only install migration scripts that do not already exist: -->
 		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200005To200006.sql" Condition="MAX_DBMIG_VER &amp;lt; 200006"/>
 		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200006To200007.sql" Condition="MAX_DBMIG_VER &amp;lt; 200007"/>
@@ -392,41 +397,47 @@
 		<File PathPattern="DistFiles\TECkit Mapping Editor.exe"/>
 		<File PathPattern="DistFiles\TxtConv.exe"/>
 		<File PathPattern="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder"/>
-		<File PathPattern="Output\${config}\asserts.log"/>
-		<File PathPattern="Output\${config}\DefaultIcon.ico"/>
-		<File PathPattern="Output\${config}\basicTest.xml"/>
-		<File PathPattern="Output\${config}\Good.xml"/>
-		<File PathPattern="Output\${config}\includeTest.xml"/>
-		<File PathPattern="Output\${config}\listitems.bmp"/>
-		<File PathPattern="Output\${config}\PhonEnvValidatorTest.dll"/>
-		<File PathPattern="Output\${config}\PhonEnvValidatorTest.dll-results.xml"/>
-		<File PathPattern="Output\${config}\PhonEnvValidatorTest.dll.config"/>
-		<File PathPattern="Output\${config}\PhonEnvValidatorTest.pdb"/>
-		<File PathPattern="Output\${config}\ProjectUnpacker.dll-results.xml"/>
-		<File PathPattern="Output\${config}\TestLangProj.bak"/>
-		<File PathPattern="Output\${config}\TestLangProj.fwdata"/>
-		<File PathPattern="Output\${config}\TestManager.dll-results.xml"/>
-		<File PathPattern="Output\${config}\TestUtils.dll"/>
-		<File PathPattern="Output\${config}\TestUtils.pdb"/>
-		<File PathPattern="Output\${config}\TLP.bak"/>
-		<File PathPattern="Output\${config}\TLP.fwdata"/>
-		<File PathPattern="Output\${config}\TLP_New.bak"/>
-		<File PathPattern="Output\${config}\TLP_New.fwdata"/>
-		<File PathPattern="Output\${config}\whitepixel.bmp"/>
-		<File PathPattern="Output\${config}\TestLangProj.db4o"/>
-		<File PathPattern="Output\${config}\TestLangProjCS.db4o"/>
-		<File PathPattern="Output\${config}\TLP.db4o"/>
-		<File PathPattern="Output\${config}\TLPCS.db4o"/>
-		<File PathPattern="Output\${config}\TLPCS_New.db4o"/>
-		<File PathPattern="Output\${config}\TLP_New.db4o"/>
-		<File PathPattern="Output\${config}\ScrChecks.dll"/> <!-- this will be taken from Distfiles\Editorial Checks -->
-		<File PathPattern="Output\${config}\ScrChecks.pdb"/> <!-- this will be taken from Distfiles\Editorial Checks -->
-		<File PathPattern="Output\${config}\MigrateSqlDbs.pdb"/>
-		<File PathPattern="Output\${config}\FormsTester.dll"/>
+		<File PathPattern="Output\Release\asserts.log"/>
+		<File PathPattern="Output\Release\DefaultIcon.ico"/>
+		<File PathPattern="Output\Release\basicTest.xml"/>
+		<File PathPattern="Output\Release\Good.xml"/>
+		<File PathPattern="Output\Release\includeTest.xml"/>
+		<File PathPattern="Output\Release\listitems.bmp"/>
+		<File PathPattern="Output\Release\PhonEnvValidatorTest.dll"/>
+		<File PathPattern="Output\Release\PhonEnvValidatorTest.dll-results.xml"/>
+		<File PathPattern="Output\Release\PhonEnvValidatorTest.dll.config"/>
+		<File PathPattern="Output\Release\PhonEnvValidatorTest.pdb"/>
+		<File PathPattern="Output\Release\ProjectUnpacker.dll-results.xml"/>
+		<File PathPattern="Output\Release\TestLangProj.bak"/>
+		<File PathPattern="Output\Release\TestLangProj.fwdata"/>
+		<File PathPattern="Output\Release\TestManager.dll-results.xml"/>
+		<File PathPattern="Output\Release\TestUtils.dll"/>
+		<File PathPattern="Output\Release\TestUtils.pdb"/>
+		<File PathPattern="Output\Release\TLP.bak"/>
+		<File PathPattern="Output\Release\TLP.fwdata"/>
+		<File PathPattern="Output\Release\TLP_New.bak"/>
+		<File PathPattern="Output\Release\TLP_New.fwdata"/>
+		<File PathPattern="Output\Release\whitepixel.bmp"/>
+		<File PathPattern="Output\Release\TestLangProj.db4o"/>
+		<File PathPattern="Output\Release\TestLangProjCS.db4o"/>
+		<File PathPattern="Output\Release\TLP.db4o"/>
+		<File PathPattern="Output\Release\TLPCS.db4o"/>
+		<File PathPattern="Output\Release\TLPCS_New.db4o"/>
+		<File PathPattern="Output\Release\TLP_New.db4o"/>
+		<File PathPattern="Output\Release\ScrChecks.dll"/> <!-- this will be taken from DistFiles\Editorial Checks -->
+		<File PathPattern="Output\Release\ScrChecks.pdb"/> <!-- this will be taken from DistFiles\Editorial Checks -->
+		<File PathPattern="Output\Release\MigrateSqlDbs.pdb"/>
+		<File PathPattern="Output\Release\FormsTester."/>
+		<File PathPattern="Output\Release\ProjectUnpacker."/>
+		<File PathPattern="Output\Release\xCoreInterfaces.XmlSerializers."/>
+		<File PathPattern="Output\Release\CacheLight."/>
+		<File PathPattern="Output\Release\RBRExtensions."/>
+		<File PathPattern="Output\Release\TestManager."/> <!-- A related file is omitted above. -->
+		<File PathPattern="XceedZip.dll"/>
 		<!-- Define pairs of file paths known (and allowed) to be similar. This suppresses warnings about omitted files that look like other included files: -->
 		<!-- Format: <SuppressSimilarityWarning Path1="*path of first file of matching pair*" Path2="*path of second file of matching pair*"/> -->
-		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.dll" Path2="Output\${config}\ScrChecks.dll"/>
-		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.pdb" Path2="Output\${config}\ScrChecks.pdb"/>
+		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.dll" Path2="Output\Release\ScrChecks.dll"/>
+		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.pdb" Path2="Output\Release\ScrChecks.pdb"/>
 	</Omissions>
 	<FolderRedirections>
 		<!-- Define list of folders that will be redirected to some other folder on the end-user's machine: -->
@@ -440,7 +451,7 @@
 		<File PathPattern="DistFiles\ReleaseData"/>
 	</WritableFiles>
 	<ForceOverwrite>
-		<!-- Define list of (partial) paths of files that have to have older versions forceably removed prior to installing: -->
+		<!-- Define list of (partial) paths of files that have to have older versions forcibly removed prior to installing: -->
 		<!-- Format: <File PathPattern="*partial path of any file that must be installed on top of a pre-existing version, even if that means downgrading*"/> -->
 		<!-- Example: <File PathPattern="DistFiles\ReleaseData"/> -->
 		<!-- WARNING! This is very dangerous, because future patches may simply delete these files outright. -->
@@ -448,10 +459,10 @@
 	<IgnoreRegistration>
 		<!-- Define list of paths of executable files that crash and burn if you try to register them: -->
 		<!-- Format: <File Path="*relative path from FW folder of a file that registration should not be attempted on*"/> -->
-		<File Path="Output\${config}\Language.dll"/>
-		<File Path="Output\${config}\Graphite.dll"/>
-		<File Path="Output\${config}\Views.dll"/>
-		<File Path="Output\${config}\FwKernel.dll"/>
+		<File Path="Output\Release\Language.dll"/>
+		<File Path="Output\Release\Graphite.dll"/>
+		<File Path="Output\Release\Views.dll"/>
+		<File Path="Output\Release\FwKernel.dll"/>
 		<File Path="DistFiles\Keyboards\IPA\MSKLC\ipa101\amd64\IPA101.dll"/>
 		<File Path="DistFiles\Keyboards\IPA\MSKLC\ipa101\ia64\IPA101.dll"/>
 		<File Path="DistFiles\iconv.dll"/>
@@ -500,7 +511,7 @@
 		<IgnoreNonP4DistFiles PathPattern="DistFiles\Templates\LocalizedLists"/>
 		<!-- Define list of (partial) paths of files that are allowed to have a version of 0.0.0.0: -->
 		<!-- Format: <IgnoreZeroVersionedFiles PathPattern="*partial path of any file that is allowed to have a version of 0.0.0.0*"/> -->
-		<IgnoreZeroVersionedFiles PathPattern="Output\${config}\MsHtmHstInterop.dll"/>
+		<IgnoreZeroVersionedFiles PathPattern="Output\Release\MsHtmHstInterop.dll"/>
 	</IntegrityChecks>
 	<FailureNotification>
 		<!-- Define list of machines to email people if something goes wrong: -->

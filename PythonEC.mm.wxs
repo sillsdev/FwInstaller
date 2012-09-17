@@ -11,10 +11,10 @@
 			<Directory Id="CommonFilesFolder" Name="Common">
 				<Directory Id="SIL" Name="SIL">
 					<Component Id="PythonEC27.dll" Guid="4F5366DF-4EED-4B1C-A833-0C71C16E5E0C">
-						<File Id="PythonEC27.dll" Name="PythonEC27.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Output\${config}\PythonEC27.dll"/>
+						<File Id="PythonEC27.dll" Name="PythonEC27.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Output\Release\PythonEC27.dll"/>
 					</Component>
 					<Component Id="PythonEC27.tlb" Guid="8EB5FEA0-3668-4B72-9D10-2CE46DD948DB">
-						<File Id="PythonEC27.tlb" Name="PythonEC27.tlb" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Output\${config}\PythonEC27.tlb">
+						<File Id="PythonEC27.tlb" Name="PythonEC27.tlb" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Output\Release\PythonEC27.tlb">
 							<TypeLib Id="28A1F0A9-82F2-4B95-A3A6-BB69DB118D9C" Language="0" MajorVersion="4" MinorVersion="0" Description="Python IEncConverter implementation 4.0 Type Library" />
 						</File>
 					</Component>

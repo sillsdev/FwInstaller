@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateFilesSource", "GenerateFilesSource\GenerateFilesSource.csproj", "{EFEA1C1A-1CAA-430C-8BE0-FB004E57C315}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessFiles", "ProcessFiles\ProcessFiles.csproj", "{E96BFFB9-E68B-4B7C-A586-04B9B9FF5124}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestInstallerIntegrity", "TestInstallerIntegrity\TestInstallerIntegrity.csproj", "{AAA147BB-8371-4AF5-8BD0-89A3422896F5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchiveAndBuildPatch", "ArchiveAndBuildPatch\ArchiveAndBuildPatch.csproj", "{9EBF5E56-DD6D-46E7-8BE1-8974F57061EA}"
@@ -19,8 +17,6 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{EFEA1C1A-1CAA-430C-8BE0-FB004E57C315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EFEA1C1A-1CAA-430C-8BE0-FB004E57C315}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E96BFFB9-E68B-4B7C-A586-04B9B9FF5124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E96BFFB9-E68B-4B7C-A586-04B9B9FF5124}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAA147BB-8371-4AF5-8BD0-89A3422896F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AAA147BB-8371-4AF5-8BD0-89A3422896F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EBF5E56-DD6D-46E7-8BE1-8974F57061EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

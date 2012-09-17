@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+	<ProductVersion>3.5</ProductVersion>
+	<ProjectGuid>{bae39ae8-bd8a-4edc-9525-bf31468744df}</ProjectGuid>
+	<SchemaVersion>2.0</SchemaVersion>
+	<OutputName>SetupFW</OutputName>
+	<OutputType>Package</OutputType>
+	<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+	<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+	<OutputPath>.\</OutputPath>
+	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+	<DefineConstants>Debug</DefineConstants>
+	<SuppressIces>ICE03;ICE47;ICE48;ICE57;ICE60;ICE69;ICE82;ICE83</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+	<OutputPath>.\</OutputPath>
+	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+	<SuppressIces>ICE03;ICE47;ICE48;ICE57;ICE60;ICE69;ICE82;ICE83</SuppressIces>
+	<SuppressSpecificWarnings>1055;1056</SuppressSpecificWarnings>
+	<VerboseOutput>True</VerboseOutput>
+  </PropertyGroup>
+  <ItemGroup>
+	<Compile Include="Actions.wxs" />
+	<Compile Include="AutoFiles.wxs" />
+	<Compile Include="CopyFiles.wxs" />
+	<Compile Include="Environment.wxs" />
+	<Compile Include="Features.wxs" />
+	<Compile Include="Files.wxs" />
+	<Compile Include="FW.wxs" />
+	<Compile Include="FwUI.wxs" />
+	<Compile Include="MergeModules.wxs" />
+	<Compile Include="PatchCorrections.wxs" />
+	<Compile Include="Registry.wxs" />
+	<Compile Include="Shortcuts.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+	<WixExtension Include="WixUtilExtension">
+	  <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+	  <Name>WixUtilExtension</Name>
+	</WixExtension>
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+	<PreBuildEvent>GenerateFilesSource.exe check AddOrphans</PreBuildEvent>
+  </PropertyGroup>
+  <!--
+	To modify your build process, add your task inside one of the targets below and uncomment it.
+	Other similar extension points exist, see Wix.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>
