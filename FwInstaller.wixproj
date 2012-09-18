@@ -16,12 +16,13 @@
 	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
 	<DefineConstants>Debug</DefineConstants>
 	<SuppressIces>ICE03;ICE47;ICE48;ICE57;ICE60;ICE69;ICE82;ICE83</SuppressIces>
+	<SuppressSpecificWarnings>1055;1056;1076</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
 	<OutputPath>.\</OutputPath>
 	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
 	<SuppressIces>ICE03;ICE47;ICE48;ICE57;ICE60;ICE69;ICE82;ICE83</SuppressIces>
-	<SuppressSpecificWarnings>1055;1056</SuppressSpecificWarnings>
+	<SuppressSpecificWarnings>1055;1056;1076</SuppressSpecificWarnings>
 	<VerboseOutput>True</VerboseOutput>
   </PropertyGroup>
   <ItemGroup>
@@ -56,4 +57,10 @@
 	<Target Name="AfterBuild">
 	</Target>
 	-->
+  <Target Name="default" DependsOnTargets="BuildProjectReferences">
+	<Message Text="Building FW Installer" />
+  </Target>
+  <Target Name="BuildProjectReferences">
+	<MSBuild Projects="@(ProjectReference)" BuildInParallel="true" />
+  </Target>
 </Project>

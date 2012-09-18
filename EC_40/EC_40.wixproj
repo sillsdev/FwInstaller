@@ -20,7 +20,7 @@
 	<SuppressSpecificWarnings>1072</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-	<OutputPath>.\</OutputPath>
+	<OutputPath>..\</OutputPath>
 	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
 	<SuppressSpecificWarnings>1072</SuppressSpecificWarnings>
   </PropertyGroup>

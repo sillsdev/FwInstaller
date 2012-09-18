@@ -4,9 +4,9 @@
 	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 	<Platform Condition=" '$(Platform)' == '' ">x86</Platform>
 	<ProductVersion>3.5</ProductVersion>
-	<ProjectGuid>{96144522-7067-44b1-9486-5dcb6554345e}</ProjectGuid>
+	<ProjectGuid>{996f8846-09ec-4f91-a639-b22bb2f18bbe}</ProjectGuid>
 	<SchemaVersion>2.0</SchemaVersion>
-	<OutputName>ICUECHelp</OutputName>
+	<OutputName>SetPath</OutputName>
 	<OutputType>Module</OutputType>
 	<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
 	<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
@@ -15,13 +15,15 @@
 	<OutputPath>.\</OutputPath>
 	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
 	<DefineConstants>Debug</DefineConstants>
+	<SuppressSpecificWarnings>1079</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-	<OutputPath>.\</OutputPath>
+	<OutputPath>..\</OutputPath>
 	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+	<SuppressSpecificWarnings>1079</SuppressSpecificWarnings>
   </PropertyGroup>
   <ItemGroup>
-	<Compile Include="ICUECHelp.mm.wxs" />
+	<Compile Include="SetPath.mm.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <!--
