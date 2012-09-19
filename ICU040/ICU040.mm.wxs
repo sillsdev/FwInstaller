@@ -4330,7 +4330,7 @@
 			</Directory>
 		</Directory>
 		<CustomAction Id="DelIcuFiles" Return="ignore" BinaryKey="WixIcuHelperDll" DllEntry="CleanupICU" />
-		<Binary Id="WixIcuHelperDll" SourceFile="WIX Helper DLL\release\WIX ICU Helper DLL.dll"/>
+		<Binary Id="WixIcuHelperDll" SourceFile="..\WIX Helper DLL\release\WIX ICU Helper DLL.dll"/>
 		<Property Id="SIL_ICU_DEL_DATA" SuppressModularization="yes" />
 		<UI>
 			<ProgressText Action="DelIcuFiles"><![CDATA[Deleting ICU files]]></ProgressText>

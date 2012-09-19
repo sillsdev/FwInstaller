@@ -641,6 +641,18 @@ namespace GenerateFilesSource
 							".mm.wxs";
 						if (File.Exists(mergeModuleWixFile))
 							_wixFileSources.Add(mergeModuleWixFile);
+						else
+						{
+							// If the merge module source file is not in the Installer folder, it is probably in a subfolder
+							// of the same name:
+							var mergeModuleFolderPath = Path.Combine(_installerFolderAbsolutePath, Path.GetFileNameWithoutExtension(msmFilePath));
+							mergeModuleFile = Path.Combine(mergeModuleFolderPath, msmFilePath);
+							mergeModuleWixFile =
+								Path.Combine(Path.GetDirectoryName(mergeModuleFile), Path.GetFileNameWithoutExtension(mergeModuleFile)) +
+								".mm.wxs";
+							if (File.Exists(mergeModuleWixFile))
+								_wixFileSources.Add(mergeModuleWixFile);
+						}
 					}
 				}
 			}
@@ -853,8 +865,8 @@ namespace GenerateFilesSource
 				{
 					foreach (XmlElement fileNode in customFileNodes)
 					{
-						string sourcePath = fileNode.GetAttribute("Source");
-						if (sourcePath.StartsWith(@"..\"))
+						var sourcePath = fileNode.GetAttribute("Source");
+						while (sourcePath.StartsWith(@"..\"))
 							sourcePath = sourcePath.Substring(3);
 						_fileOmissions.Add(sourcePath, "already included in WIX source " + xmlFilesPath);
 					}

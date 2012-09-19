@@ -4,28 +4,40 @@
 	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 	<Platform Condition=" '$(Platform)' == '' ">x86</Platform>
 	<ProductVersion>3.5</ProductVersion>
-	<ProjectGuid>{996f8846-09ec-4f91-a639-b22bb2f18bbe}</ProjectGuid>
+	<ProjectGuid>{a370ce38-c7f8-402e-881a-f898610e60f8}</ProjectGuid>
 	<SchemaVersion>2.0</SchemaVersion>
-	<OutputName>SetPath</OutputName>
+	<OutputName>ICU040</OutputName>
 	<OutputType>Module</OutputType>
 	<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
 	<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-	<OutputPath>.\</OutputPath>
+	<OutputPath>..\</OutputPath>
 	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
 	<DefineConstants>Debug</DefineConstants>
-	<SuppressSpecificWarnings>1079</SuppressSpecificWarnings>
+	<SuppressSpecificWarnings>1006;1086;1072</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-	<OutputPath>.\</OutputPath>
+	<OutputPath>..\</OutputPath>
 	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-	<SuppressSpecificWarnings>1079</SuppressSpecificWarnings>
+	<SuppressSpecificWarnings>1006;1086;1072</SuppressSpecificWarnings>
   </PropertyGroup>
   <ItemGroup>
-	<Compile Include="SetPath.mm.wxs" />
+	<None Include="ICU040.mm.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+	<WixExtension Include="WixUtilExtension">
+	  <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+	  <Name>WixUtilExtension</Name>
+	</WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+	<Compile Include="ICU040.mmp.wxs" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
+  <PropertyGroup>
+	<PreBuildEvent>WScript.exe $(SolutionDir)ProcessWixMMs.js $(ProjectDir)$(TargetName).mm.wxs</PreBuildEvent>
+  </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
 	Other similar extension points exist, see Wix.targets.

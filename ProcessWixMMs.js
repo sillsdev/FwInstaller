@@ -36,8 +36,8 @@ var shellObj = new ActiveXObject("WScript.Shell");
 var iLastBackslash = WScript.ScriptFullName.lastIndexOf("\\");
 var ScriptPath = WScript.ScriptFullName.slice(0, iLastBackslash);
 var RootFolder = ScriptPath;
-// If the script is in a subfolder called Installer, then set the root folder back one notch:
-iLastBackslash = ScriptPath.lastIndexOf("\\");
+// If the script path contains a subfolder called Installer, then set the root folder back one notch before that:
+iLastBackslash = ScriptPath.lastIndexOf("\\Installer");
 if (iLastBackslash > 0)
 {
 	if (ScriptPath.slice(iLastBackslash + 1) == "Installer")
@@ -356,7 +356,7 @@ function AddSpecificRegInfo(FileNode, TallowCmd)
 		ComponentNode.appendChild(NewFragment.createTextNode("\n"));
 	}
 
-	// Graft Errpr nodes into ComponentNode:
+	// Graft Error nodes into ComponentNode:
 	for (b = 0; b < ErrorNodes.length; b++)
 		ComponentNode.appendChild(ErrorNodes[b].cloneNode(false));
 }

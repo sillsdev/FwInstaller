@@ -4,9 +4,9 @@
 	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
 	<Platform Condition=" '$(Platform)' == '' ">x86</Platform>
 	<ProductVersion>3.5</ProductVersion>
-	<ProjectGuid>{e2bfb40a-4a09-48b3-a92e-46d917c886b9}</ProjectGuid>
+	<ProjectGuid>{ad530e2a-8c9f-468e-978d-b4c5e77b01c0}</ProjectGuid>
 	<SchemaVersion>2.0</SchemaVersion>
-	<OutputName>PythonEC</OutputName>
+	<OutputName>EcFolderACLs</OutputName>
 	<OutputType>Module</OutputType>
 	<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
 	<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
@@ -17,17 +17,22 @@
 	<DefineConstants>Debug</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-	<OutputPath>.\</OutputPath>
+	<OutputPath>..\</OutputPath>
 	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-	<SuppressIces>ICE03</SuppressIces>
+	<SuppressSpecificWarnings>1072;1079</SuppressSpecificWarnings>
   </PropertyGroup>
-  <ItemGroup>
-	<None Include="PythonEC.mm.wxs" />
-	<Compile Include="PythonEC.mmp.wxs" />
-  </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
+  <ItemGroup>
+	<Compile Include="EcFolderACLs.mm.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+	<WixExtension Include="WixUtilExtension">
+	  <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+	  <Name>WixUtilExtension</Name>
+	</WixExtension>
+  </ItemGroup>
   <PropertyGroup>
-	<PreBuildEvent>WScript.exe ProcessWixMMs.js $(TargetDir)$(TargetName).mm.wxs</PreBuildEvent>
+	<PreBuildEvent />
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
