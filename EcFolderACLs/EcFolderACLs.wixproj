@@ -12,9 +12,10 @@
 	<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-	<OutputPath>.\</OutputPath>
+	<OutputPath>..\</OutputPath>
 	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
 	<DefineConstants>Debug</DefineConstants>
+	<SuppressSpecificWarnings>1072;1079</SuppressSpecificWarnings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
 	<OutputPath>..\</OutputPath>
