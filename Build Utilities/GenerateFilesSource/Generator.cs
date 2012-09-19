@@ -1128,7 +1128,7 @@ namespace GenerateFilesSource
 					_fwTargets.SelectSingleNode("/msbuild:Project/msbuild:Target[@Name='" + vsProj + "']", _xmlnsManager) as XmlElement;
 				if (targetNode == null)
 				{
-					_parent.AddReportLine("Error " + _description + ": could not find MSBuild Target " + vsProj + " (referenced by " + parentProj?? "nothing" + ") in " + _fwTargetsPath);
+					_parent.AddReportLine("Error " + _description + ": could not find MSBuild Target " + vsProj + " (referenced by " + (parentProj?? "nothing") + ") in " + _fwTargetsPath);
 					return assembliesToReturn;
 				}
 
@@ -2259,7 +2259,7 @@ namespace GenerateFilesSource
 					foreach (XmlElement newFileNode in newAddendaFiles)
 					{
 						// See if current new file can be found in previous file library addenda
-						XmlElement node = newFileNode;
+						var node = newFileNode;
 						if (!previousAddendaFiles.Cast<XmlElement>().Any(f => f.GetAttribute("Path") == node.GetAttribute("Path")))
 							report += "New file: " + newFileNode.GetAttribute("Path") + Environment.NewLine;
 					}
@@ -2268,7 +2268,7 @@ namespace GenerateFilesSource
 					foreach (XmlElement previousFileNode in previousAddendaFiles)
 					{
 						// See if current previous file can be found in new file library addenda
-						XmlElement node = previousFileNode;
+						var node = previousFileNode;
 						if (!newAddendaFiles.Cast<XmlElement>().Any(f => f.GetAttribute("Path") == node.GetAttribute("Path")))
 							report += "Deleted file: " + previousFileNode.GetAttribute("Path") + Environment.NewLine;
 					}
