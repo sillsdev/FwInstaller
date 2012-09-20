@@ -42,18 +42,27 @@ namespace GenerateFilesSource
 		{
 			public readonly string RelativePath;
 			public readonly string Reason;
+			public readonly bool CaseSensitive;
 
 			public FileOmission(string path, string reason)
 			{
 				RelativePath = path;
 				Reason = reason;
+				CaseSensitive = false;
+			}
+
+			public FileOmission(string path, string reason, bool caseSensitive)
+			{
+				RelativePath = path;
+				Reason = reason;
+				CaseSensitive = caseSensitive;
 			}
 		}
 		class FileOmissionList : List<FileOmission>
 		{
-			public void Add(string path)
+			public void Add(string path, bool caseSensitive)
 			{
-				Add(new FileOmission(path, "listed in the Omissions section of InstallerConfig.xml."));
+				Add(new FileOmission(path, "listed in the Omissions section of InstallerConfig.xml.", caseSensitive));
 			}
 			public void Add(string path, string reason)
 			{
@@ -165,7 +174,7 @@ namespace GenerateFilesSource
 		// Set of collected installable TE files:
 		private HashSet<InstallerFile> _teFiles;
 		// Set of files rejected as duplicates:
-		private HashSet<InstallerFile> _rejectedFiles;
+		private readonly HashSet<InstallerFile> _duplicateFiles = new HashSet<InstallerFile>();
 
 		// Set of files for FLEx feature:
 		private IEnumerable<InstallerFile> _flexFeatureFiles;
@@ -503,7 +512,7 @@ namespace GenerateFilesSource
 
 			// Define conditions to apply to specified components:
 			// Format: <File Path="*partial path of a file that is conditionally installed*" Condition="*MSI Installer condition that must be true to install file*"/>
-			// Beware! This XML is double-interpretted, so for example a 'less than' sign must be represented as &amp;lt;
+			// Beware! This XML is double-interpreted, so for example a 'less than' sign must be represented as &amp;lt;
 			var fileConditions = configuration.SelectNodes("//FileConditions/File");
 			if (fileConditions != null)
 				foreach (XmlElement file in fileConditions)
@@ -514,7 +523,7 @@ namespace GenerateFilesSource
 			var omittedFiles = configuration.SelectNodes("//Omissions/File");
 			if (omittedFiles != null)
 				foreach (XmlElement file in omittedFiles)
-					_fileOmissions.Add(file.GetAttribute("PathPattern"));
+					_fileOmissions.Add(file.GetAttribute("PathPattern"), file.GetAttribute("CaseSensitive") == "true");
 
 			// Define pairs of file paths known (and allowed) to be similar. This suppresses warnings about omitted files that look like other included files:
 			// Format: <SuppressSimilarityWarning Path1="*path of first file of matching pair*" Path2="*path of second file of matching pair*"/>
@@ -884,7 +893,7 @@ namespace GenerateFilesSource
 			// 2) Collect files from the LexTextExe target and all its dependencies;
 			// 3) Collect files from the TeExe target and all its dependencies.
 			Parallel.Invoke(
-				GetAllFilesFiltered, // fills up _allFilesFiltered and _rejectedFiles sets
+				GetAllFilesFiltered, // fills up _allFilesFiltered and _duplicateFiles sets
 				GetFlexFiles, // fills up _flexFiles set
 				GetTeFiles // fills up _teFiles set
 			);
@@ -933,7 +942,7 @@ namespace GenerateFilesSource
 		private void CleanUpFileSet(HashSet<InstallerFile> fileSet, string fileSetName)
 		{
 			var initialFiles = fileSet;
-			foreach (var file in _rejectedFiles.Where(fileSet.Contains))
+			foreach (var file in _duplicateFiles.Where(fileSet.Contains))
 				fileSet.Remove(file);
 
 			lock (_reportSectionMutexToken)
@@ -1003,14 +1012,13 @@ namespace GenerateFilesSource
 				);
 
 			// Merge all collected files together:
-			_rejectedFiles = new HashSet<InstallerFile>(); // must set this up before MergeFileSets() starts adding to it!
 			_allFilesFiltered = MergeFileSets(_builtFilesFiltered, _distFilesFiltered);
 
 			// Report on removed duplicate files:
 			lock (_reportSectionMutexToken)
 			{
-				AddReportLine("Found " + _rejectedFiles.Count + @" duplicate files between Output\Release and DistFiles:");
-				foreach (var file in _rejectedFiles)
+				AddReportLine("Found " + _duplicateFiles.Count + @" duplicate files between Output\Release and DistFiles:");
+				foreach (var file in _duplicateFiles)
 					AddReportLine("    " + file.RelativeSourcePath);
 			}
 		}
@@ -1243,7 +1251,8 @@ namespace GenerateFilesSource
 															{
 																if (_completedTargets.Contains(target))
 																	doneTargetAlready = true;
-																_completedTargets.Add(target);
+																else
+																	_completedTargets.Add(target);
 															}
 															if (!doneTargetAlready)
 															{
@@ -1457,8 +1466,9 @@ namespace GenerateFilesSource
 			var returnSet = new HashSet<InstallerFile>();
 			foreach (var f in fileSet)
 			{
-				var relPathLower = f.RelativeSourcePath.ToLowerInvariant();
-				var fOk = _fileOmissions.All(om => !relPathLower.Contains(om.RelativePath.ToLowerInvariant()));
+				var relPath = f.RelativeSourcePath;
+				var relPathLower = relPath.ToLowerInvariant();
+				var fOk = _fileOmissions.All(om => om.CaseSensitive ? !relPath.Contains(om.RelativePath) : !relPathLower.Contains(om.RelativePath.ToLowerInvariant()));
 				if (fOk)
 					returnSet.Add(f);
 			}
@@ -1486,8 +1496,8 @@ namespace GenerateFilesSource
 
 			var returnSet = new HashSet<InstallerFile>();
 
-			returnSet.UnionWith(preferredSet.Except(_rejectedFiles));
-			returnSet.UnionWith(otherSet.Except(_rejectedFiles));
+			returnSet.UnionWith(preferredSet.Except(_duplicateFiles));
+			returnSet.UnionWith(otherSet.Except(_duplicateFiles));
 
 			return returnSet;
 		}
@@ -1532,12 +1542,12 @@ namespace GenerateFilesSource
 				// one with the deeper target path:
 				if (candidateTargetPath == fileTargetPath || candidateTargetPath.Length >= fileTargetPath.Length)
 				{
-					_rejectedFiles.Add(file);
+					_duplicateFiles.Add(file);
 					candidate.Comment += "(preferred over " + file.RelativeSourcePath + ")";
 				}
 				else
 				{
-					_rejectedFiles.Add(candidate);
+					_duplicateFiles.Add(candidate);
 					file.Comment += "(preferred over " + candidate.RelativeSourcePath + ")";
 					return;
 				}
@@ -1940,13 +1950,14 @@ namespace GenerateFilesSource
 		{
 			InitOutputFile();
 
-			OutputFileTreeNode(_rootDirectory, 2);
+			OutputDirectoryTreeWix(_rootDirectory, 2);
+
 			// Output the redirected folders, removing them from the _redirectedFolders list
-			// as we go, so that they don't get rejected by the OutputFileTreeNode method:
+			// as we go, so that they don't get rejected by the OutputDirectoryTreeWix method:
 			foreach (var redirectedFolder in _redirectedFolders.ToArray())
 			{
 				_redirectedFolders.Remove(redirectedFolder);
-				OutputFileTreeNode(redirectedFolder, 2);
+				OutputDirectoryTreeWix(redirectedFolder, 2);
 			}
 
 			OutputFeatureRefs();
@@ -1980,11 +1991,11 @@ namespace GenerateFilesSource
 		}
 
 		/// <summary>
-		/// Outputs given directory tree (including files) to the WIX source file.
+		/// Writes WIX source (to _autoFiles) for the given directory tree (including files).
 		/// </summary>
 		/// <param name="dtn">Current root node of directory tree</param>
 		/// <param name="indentLevel">Number of indentation tabs needed to line up tree children</param>
-		private void OutputFileTreeNode(DirectoryTreeNode dtn, int indentLevel)
+		private void OutputDirectoryTreeWix(DirectoryTreeNode dtn, int indentLevel)
 		{
 			if (!dtn.ContainsUsedFiles())
 				return;
@@ -2004,129 +2015,13 @@ namespace GenerateFilesSource
 			}
 
 			// Iterate over all local files:
-			foreach (var file in dtn.LocalFiles.Where(file => file.Features.Count != 0 && !file.OnlyUsedInUnusedFeatures))
-			{
-				// See if the file looks like a file that is specifically omitted:
-				foreach (var omission in _fileOmissions)
-				{
-					if (!omission.RelativePath.EndsWith(file.Name))
-						continue;
-
-					// Don't fuss over files that might match if they are already specified as a permitted matching pair in
-					// a SuppressSimilarityWarning node of InstallerConfig.xml:
-					var suppressWarning = false;
-					foreach (var pair in _similarFilePairs)
-					{
-						var path1 = pair.Path1.ToLowerInvariant();
-						var path2 = pair.Path2.ToLowerInvariant();
-						var filePath = file.RelativeSourcePath.ToLowerInvariant();
-						var omissionPath = omission.RelativePath.ToLowerInvariant();
-
-						if (path1 == filePath && path2 == omissionPath)
-						{
-							suppressWarning = true;
-							break;
-						}
-						if (path1 == omissionPath && path2 == filePath)
-						{
-							suppressWarning = true;
-							break;
-						}
-					}
-					if (suppressWarning)
-						continue;
-
-					var fileFullPath = MakeFullPath(file.RelativeSourcePath);
-					if (!File.Exists(fileFullPath))
-					{
-						_seriousIssues += file.RelativeSourcePath + " does not exist at expected place (" + fileFullPath + ").";
-						break;
-					}
-
-					var omissionFullPath = MakeFullPath(omission.RelativePath);
-					if (!File.Exists(omissionFullPath))
-						continue;
-
-					var omissionMd5 = CalcFileMd5(omissionFullPath);
-					var fileCurrentMd5 = CalcFileMd5(fileFullPath);
-					if (omissionMd5 == fileCurrentMd5)
-					{
-						_seriousIssues += file.RelativeSourcePath +
-										   " is included in the installer, but is identical to a file that was omitted [" +
-										   omission.RelativePath + "] because it was " + omission.Reason + Environment.NewLine;
-						break;
-					}
-
-					var omissionFileSize = (new FileInfo(omissionFullPath)).Length;
-					var fileSize = (new FileInfo(fileFullPath)).Length;
-					if (omissionFileSize == fileSize)
-					{
-						_seriousIssues += file.RelativeSourcePath +
-										   " is included in the installer, but is similar to a file that was omitted [" +
-										   omission.RelativePath + "] because it was " + omission.Reason + Environment.NewLine;
-					}
-					break;
-				}
-
-				// Replace build type with variable equivalent:
-				var relativeSource = file.RelativeSourcePath;
-
-				SynchWithFileLibrary(file);
-
-				_autoFiles.Write(indentation + "	<Component Id=\"" + file.Id + "\" Guid=\"" + file.ComponentGuid + "\"");
-
-				// Configure component to never overwrite an existing instance, if specified in _neverOverwriteList:
-				_autoFiles.Write(_neverOverwriteList.Where(relativeSource.Contains).Count() > 0
-									? " NeverOverwrite=\"yes\""
-									: "");
-
-				_autoFiles.Write(">");
-				_autoFiles.WriteLine((file.Comment.Length > 0) ? " <!-- " + file.Comment + " -->" : "");
-
-				// Add condition, if one applies:
-				var matchingKeys = _fileSourceConditions.Keys.Where(key => relativeSource.ToLowerInvariant().Contains(key.ToLowerInvariant()));
-				foreach (var matchingKey in matchingKeys)
-				{
-					string condition;
-					if (_fileSourceConditions.TryGetValue(matchingKey, out condition))
-						_autoFiles.WriteLine(indentation + "		<Condition>" + condition + "</Condition>");
-				}
-
-				_autoFiles.Write(indentation + "		<File Id=\"" + file.Id + "\"");
-
-				// Fill in file details:
-				_autoFiles.Write(" Name=\"" + file.Name + "\" ");
-
-				// Add in a ReadOnly attribute, configured according to what's in the _makeWritableList:
-				_autoFiles.Write(_makeWritableList.Where(relativeSource.Contains).Count() > 0
-									? "ReadOnly=\"no\""
-									: "ReadOnly=\"yes\"");
-
-				_autoFiles.Write(" Checksum=\"yes\" KeyPath=\"yes\"");
-				_autoFiles.Write(" DiskId=\"" + file.DiskId + "\"");
-				_autoFiles.Write(" Source=\"" + file.FullPath + "\"");
-
-				if (IsDotNetAssembly(file.FullPath))
-					_autoFiles.Write(" Assembly=\".net\" AssemblyApplication=\"" + file.Id + "\" AssemblyManifest=\"" + file.Id + "\"");
-
-				if (file.PatchGroup > 0)
-					_autoFiles.Write(" PatchGroup=\"" + file.PatchGroup + "\"");
-				_autoFiles.WriteLine(" />");
-
-				// If file has to be forcibly overwritten, then add a RemoveFile element:
-				if (_forceOverwriteList.Where(relativeSource.Contains).Count() > 0)
-				{
-					_autoFiles.Write(indentation + "		<RemoveFile Id=\"_" + file.Id + "\"");
-					_autoFiles.WriteLine(" Name=\"" + file.Name + "\" On=\"install\"/>");
-				}
-
-				_autoFiles.WriteLine(indentation + "	</Component>");
-				file.UsedInComponent = true;
-			}
+			var localFiles = dtn.LocalFiles.Where(file => file.Features.Count != 0 && !file.OnlyUsedInUnusedFeatures).ToArray();
+			foreach (var file in localFiles)
+				OutputFileWix(file, indentation);
 
 			// Recurse over all child folders:
 			foreach (var child in dtn.Children)
-				OutputFileTreeNode(child, indentLevel + 1);
+				OutputDirectoryTreeWix(child, indentLevel + 1);
 
 			if (dtn.IsDirReference)
 				_autoFiles.WriteLine(indentation + "</DirectoryRef>");
@@ -2135,7 +2030,145 @@ namespace GenerateFilesSource
 		}
 
 		/// <summary>
-		/// Returns string containing given number of tab charaters.
+		/// Writes WIX source (to _autoFiles) for the given file.
+		/// </summary>
+		/// <param name="file">File to write WIX source for</param>
+		/// <param name="indentation">Number of indentation tabs needed to line up with rest of WIX source</param>
+		private void OutputFileWix(InstallerFile file, string indentation)
+		{
+			CheckFileAgainstOmissionList(file);
+
+			// Replace build type with variable equivalent:
+			var relativeSource = file.RelativeSourcePath;
+
+			SynchWithFileLibrary(file);
+
+			_autoFiles.Write(indentation + "	<Component Id=\"" + file.Id + "\" Guid=\"" + file.ComponentGuid + "\"");
+
+			// Configure component to never overwrite an existing instance, if specified in _neverOverwriteList:
+			_autoFiles.Write(_neverOverwriteList.Where(relativeSource.Contains).Count() > 0
+							? " NeverOverwrite=\"yes\""
+							: "");
+
+			_autoFiles.Write(">");
+			_autoFiles.WriteLine((file.Comment.Length > 0) ? " <!-- " + file.Comment + " -->" : "");
+
+			// Add condition, if one applies:
+			var matchingKeys = _fileSourceConditions.Keys.Where(key => relativeSource.ToLowerInvariant().Contains(key.ToLowerInvariant()));
+			foreach (var matchingKey in matchingKeys)
+			{
+				string condition;
+				if (_fileSourceConditions.TryGetValue(matchingKey, out condition))
+					_autoFiles.WriteLine(indentation + "		<Condition>" + condition + "</Condition>");
+			}
+
+			_autoFiles.Write(indentation + "		<File Id=\"" + file.Id + "\"");
+
+			// Fill in file details:
+			_autoFiles.Write(" Name=\"" + file.Name + "\" ");
+
+			// Add in a ReadOnly attribute, configured according to what's in the _makeWritableList:
+			_autoFiles.Write(_makeWritableList.Where(relativeSource.Contains).Count() > 0
+							? "ReadOnly=\"no\""
+							: "ReadOnly=\"yes\"");
+
+			_autoFiles.Write(" Checksum=\"yes\" KeyPath=\"yes\"");
+			_autoFiles.Write(" DiskId=\"" + file.DiskId + "\"");
+			_autoFiles.Write(" Source=\"" + file.FullPath + "\"");
+
+			if (IsDotNetAssembly(file.FullPath))
+				_autoFiles.Write(" Assembly=\".net\" AssemblyApplication=\"" + file.Id + "\" AssemblyManifest=\"" + file.Id + "\"");
+
+			if (file.PatchGroup > 0)
+				_autoFiles.Write(" PatchGroup=\"" + file.PatchGroup + "\"");
+			_autoFiles.WriteLine(" />");
+
+			// If file has to be forcibly overwritten, then add a RemoveFile element:
+			if (_forceOverwriteList.Where(relativeSource.Contains).Count() > 0)
+			{
+				_autoFiles.Write(indentation + "		<RemoveFile Id=\"_" + file.Id + "\"");
+				_autoFiles.WriteLine(" Name=\"" + file.Name + "\" On=\"install\"/>");
+			}
+
+			_autoFiles.WriteLine(indentation + "	</Component>");
+			file.UsedInComponent = true;
+		}
+
+		/// <summary>
+		/// Examines given file for possible matches in the _fileOmissions list. Reports
+		/// anything suspicious in the _seriousIssues string.
+		/// </summary>
+		/// <param name="file">File to be examined</param>
+		private void CheckFileAgainstOmissionList(InstallerFile file)
+		{
+			var fileNameLower = file.Name.ToLowerInvariant();
+			var filePathLower = file.RelativeSourcePath.ToLowerInvariant();
+
+			foreach (var omission in _fileOmissions)
+			{
+				var omissionRelPathLower = omission.RelativePath.ToLowerInvariant();
+
+				if (!omissionRelPathLower.EndsWith(fileNameLower))
+					continue;
+
+				// Don't fuss over files that might match if they are already specified as a permitted matching pair in
+				// a SuppressSimilarityWarning node of InstallerConfig.xml:
+				var suppressWarning = false;
+				foreach (var pair in _similarFilePairs)
+				{
+					var path1 = pair.Path1.ToLowerInvariant();
+					var path2 = pair.Path2.ToLowerInvariant();
+					var filePath = filePathLower;
+
+					if (path1 == filePath && path2 == omissionRelPathLower)
+					{
+						suppressWarning = true;
+						break;
+					}
+					if (path1 == omissionRelPathLower && path2 == filePath)
+					{
+						suppressWarning = true;
+						break;
+					}
+				}
+				if (suppressWarning)
+					continue;
+
+				var fileFullPath = MakeFullPath(file.RelativeSourcePath);
+				if (!File.Exists(fileFullPath))
+				{
+					_seriousIssues += file.RelativeSourcePath + " does not exist at expected place (" + fileFullPath + ").";
+					break;
+				}
+
+				var omissionFullPath = MakeFullPath(omission.RelativePath);
+				if (!File.Exists(omissionFullPath))
+					continue;
+
+				var omissionMd5 = CalcFileMd5(omissionFullPath);
+				var fileCurrentMd5 = CalcFileMd5(fileFullPath);
+				if (omissionMd5 == fileCurrentMd5)
+				{
+					_seriousIssues += file.RelativeSourcePath +
+									  " is included in the installer, but is identical to a file that was omitted [" +
+									  omission.RelativePath + "] because it was " + omission.Reason + Environment.NewLine;
+					break;
+				}
+
+				var omissionFileSize = (new FileInfo(omissionFullPath)).Length;
+				var fileSize = (new FileInfo(fileFullPath)).Length;
+				if (omissionFileSize == fileSize)
+				{
+					_seriousIssues += file.RelativeSourcePath +
+									  " is included in the installer, but is similar to a file that was omitted [" +
+									  omission.RelativePath + "] because it was " + omission.Reason + Environment.NewLine;
+				}
+				break;
+			}
+		}
+
+		/// <summary>
+		/// Returns string containing given number of tab characters.
 		/// </summary>
 		/// <param name="indentLevel">Number of tabs required</param>
 		/// <returns>String of tabs</returns>
@@ -2154,10 +2187,10 @@ namespace GenerateFilesSource
 		{
 			// Iterate over all features that are defined in Features.wxs (files that claim to belong to
 			// other features will get omitted):
-			foreach (string feature in _representedFeatures)
+			foreach (var feature in _representedFeatures)
 			{
 				_autoFiles.WriteLine("		<FeatureRef Id=\"" + feature + "\">");
-				foreach (InstallerFile file in _allFilesFiltered)
+				foreach (var file in _allFilesFiltered)
 				{
 					if (file.Features.Contains(feature))
 					{
