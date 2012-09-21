@@ -68,7 +68,7 @@
 		</TeLocalization>
 		<!-- The following heuristics apply over all files, not just DistFiles. -->
 		<CoreFileOrphans>
-			<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed or directly referenced by either TE or FLEx: -->
+			<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed or not directly referenced by either TE or FLEx: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is not needed by TE or FLEx but is needed in the FW installation*"/> -->
 			<File PathPattern="Output\Release\UnicodeCharEditor."/>
 			<File PathPattern="Output\Release\ObjectBrowser."/>
@@ -78,6 +78,10 @@
 			<File PathPattern="Output\Release\Graphite."/>
 			<File PathPattern="Output\Release\Views."/>
 			<File PathPattern="Output\Release\remoting_tcp_server.config"/>
+			<File PathPattern="Output\Release\EC\Plugins\EC 4.0.0.0 Plugin Details.xml"/>
+			<File PathPattern="Output\Release\EC\Plugins\IcuEC40 4.0.0.0 Plugin Details.xml"/>
+			<File PathPattern="Output\Release\EC\Plugins\PerlEC512 4.0.0.0 Plugin Details.xml"/>
+			<File PathPattern="Output\Release\EC\Plugins\PythonEC27 4.0.0.0 Plugin Details.xml"/>
 		</CoreFileOrphans>
 		<ForceBuiltFilesIntoTE>
 			<!-- Define list of path patterns of built files known to be needed in TE but which are not part of the TeExe FieldWorks.targets dependency chain: -->
@@ -371,10 +375,12 @@
 		<File Path="DistFiles\ReleaseData\" Condition="NOT Installed"/>
 	</FileConditions>
 	<Omissions>
-		<!-- Define list of file patterns to be filtered out. Any file whose path contains (anywhere) one of these strings will be filtered out: -->
-		<!-- Format: <File PathPattern="*partial path of any file that is not needed in the FW installation*"/> -->
+		<!-- Define list of file patterns to be filtered out. Any file whose path contains (anywhere) one of these strings will be filtered out, case-insensitive by default: -->
+		<!-- Format: <File CaseSensitive="*true if path is to be interpreted with case-sensitivity*" PathPattern="*partial path of any file that is not needed in the FW installation*"/> -->
 		<File PathPattern="nunit"/>
 		<File PathPattern="tests"/>
+		<File CaseSensitive="true" PathPattern="\test"/>
+		<File CaseSensitive="true" PathPattern="\Test"/>
 		<File PathPattern="mock"/>
 		<File PathPattern="DistFiles\Icu40.zip"/>
 		<File PathPattern="DistFiles\Windows"/>
@@ -408,18 +414,11 @@
 		<File PathPattern="Output\Release\PhonEnvValidatorTest.dll.config"/>
 		<File PathPattern="Output\Release\PhonEnvValidatorTest.pdb"/>
 		<File PathPattern="Output\Release\ProjectUnpacker.dll-results.xml"/>
-		<File PathPattern="Output\Release\TestLangProj.bak"/>
-		<File PathPattern="Output\Release\TestLangProj.fwdata"/>
-		<File PathPattern="Output\Release\TestManager.dll-results.xml"/>
-		<File PathPattern="Output\Release\TestUtils.dll"/>
-		<File PathPattern="Output\Release\TestUtils.pdb"/>
 		<File PathPattern="Output\Release\TLP.bak"/>
 		<File PathPattern="Output\Release\TLP.fwdata"/>
 		<File PathPattern="Output\Release\TLP_New.bak"/>
 		<File PathPattern="Output\Release\TLP_New.fwdata"/>
 		<File PathPattern="Output\Release\whitepixel.bmp"/>
-		<File PathPattern="Output\Release\TestLangProj.db4o"/>
-		<File PathPattern="Output\Release\TestLangProjCS.db4o"/>
 		<File PathPattern="Output\Release\TLP.db4o"/>
 		<File PathPattern="Output\Release\TLPCS.db4o"/>
 		<File PathPattern="Output\Release\TLPCS_New.db4o"/>
@@ -432,7 +431,6 @@
 		<File PathPattern="Output\Release\xCoreInterfaces.XmlSerializers."/>
 		<File PathPattern="Output\Release\CacheLight."/>
 		<File PathPattern="Output\Release\RBRExtensions."/>
-		<File PathPattern="Output\Release\TestManager."/> <!-- A related file is omitted above. -->
 		<File PathPattern="XceedZip.dll"/>
 		<!-- Define pairs of file paths known (and allowed) to be similar. This suppresses warnings about omitted files that look like other included files: -->
 		<!-- Format: <SuppressSimilarityWarning Path1="*path of first file of matching pair*" Path2="*path of second file of matching pair*"/> -->
