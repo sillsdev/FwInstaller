@@ -98,7 +98,7 @@ namespace ComponentInstallerGenerator
 	class InstallerGenerator
 	{
 		private const string AutoFilesFileName = "AutoFiles.wxs";
-		private const string InstallerTemplateFileName = "ComponentInstallerTemplate.wxs";
+		private const string DefaultInstallerTemplateFileName = "ComponentInstallerTemplate.wxs";
 
 		private readonly InstallerInfo m_installerInfo;
 		private string m_statusReport;
@@ -112,8 +112,6 @@ namespace ComponentInstallerGenerator
 		{
 			if (!File.Exists(AutoFilesFileName))
 				throw new Exception(AutoFilesFileName + " is missing.");
-			if (!File.Exists(InstallerTemplateFileName))
-				throw new Exception(InstallerTemplateFileName + " is missing.");
 		}
 
 		/// <summary>
@@ -226,8 +224,16 @@ namespace ComponentInstallerGenerator
 		private string GenerateParentInstallerFile(XmlElement installerDefinitionElement)
 		{
 			// Create XML document for main WIX file we will be generating:
+			var wixTemplateFileName = DefaultInstallerTemplateFileName;
+			var templateNode = installerDefinitionElement.SelectSingleNode("Template");
+			if (templateNode != null)
+				wixTemplateFileName = templateNode.InnerText;
+
+			if (!File.Exists(wixTemplateFileName))
+				throw new Exception(wixTemplateFileName + " is missing.");
+
 			var mainWix = new XmlDocument();
-			mainWix.Load(InstallerTemplateFileName);
+			mainWix.Load(wixTemplateFileName);
 			// Set up WIX namespace stuff:
 			var xmlnsManager = new XmlNamespaceManager(mainWix.NameTable);
 			// Add the namespace used in WIX file to the XmlNamespaceManager:
@@ -264,7 +270,7 @@ namespace ComponentInstallerGenerator
 				productNode.AppendChild(featureNode);
 			}
 
-			// Save the modufied template to a new file name:
+			// Save the modified template to a new file name:
 			var fileName = name + ".wxs";
 			mainWix.Save(fileName);
 			return fileName;
@@ -303,18 +309,19 @@ namespace ComponentInstallerGenerator
 				Report("Error while running this DOS command: " + cmd);
 			}
 
-			return dosError ? error : output;
+			return dosError ? error + Environment.NewLine + output : "";
 		}
 
 		/// <summary>
 		/// Uses WIX Candle tool to compile a WIX source file.
 		/// </summary>
 		/// <param name="fileName">Name of WIX source file</param>
+		/// <param name="wixExtensions">Command-line options for WIX extensions</param>
 		/// <returns>Any text sent to standard output</returns>
-		private void Candle(string fileName)
+		private void Candle(string fileName, string wixExtensions)
 		{
 			var candlePath = Path.Combine(Environment.GetEnvironmentVariable("WIX"), "bin\\candle.exe");
-			var args = " -nologo -sw1044 \"" + fileName + "\"";
+			var args = " -nologo -sw1044 " + wixExtensions + "\"" + fileName + "\"";
 			var output = RunDosCmd(candlePath, args);
 			if (output.ToLowerInvariant() != fileName.ToLowerInvariant() + Environment.NewLine)
 				Report(output);
@@ -334,19 +341,30 @@ namespace ComponentInstallerGenerator
 			var installerDefinitionElement = m_installerInfo.GetSelectedComponent(index);
 
 			// Generate the WIX files sources:
-			var fileList = new List<string>();
-			fileList.Add(GenerateComponentAutoFiles(installerDefinitionElement));
+			var autoFilesWix = GenerateComponentAutoFiles(installerDefinitionElement);
+			var parentWix = GenerateParentInstallerFile(installerDefinitionElement);
 
-			// Generate the parent WIX file:
-			fileList.Add(GenerateParentInstallerFile(installerDefinitionElement));
+			// Check if any WIX extensions are required in the build:
+			var extensionNodes = installerDefinitionElement.SelectNodes("Extension");
+			var extensionSyntax = "";
+			if (extensionNodes != null)
+			{
+				foreach (XmlElement extensionNode in extensionNodes)
+					extensionSyntax += "-ext \"" +
+									   Path.Combine(Path.Combine(Environment.GetEnvironmentVariable("WIX"), "bin"),
+													extensionNode.InnerText) +
+									   "\" ";
+			}
 
 			// Compile each WIX source, recording the names of the output files:
-			var wixobjFileList = new List<string>();
-			foreach (var f in fileList)
+			Candle(parentWix, extensionSyntax);
+			Candle(autoFilesWix, "");
+
+			var wixobjFileList = new List<string>
 			{
-				Candle(f);
-				wixobjFileList.Add(Path.GetFileNameWithoutExtension(f) + ".wixobj");
-			}
+				Path.GetFileNameWithoutExtension(parentWix) + ".wixobj",
+				Path.GetFileNameWithoutExtension(autoFilesWix) + ".wixobj"
+			};
 
 			// Get the required .msi name:
 			var msiFileName = installerDefinitionElement.SelectSingleNode("Installer").InnerText + "." + m_installerInfo.FwVersion.Replace(".", "") + ".msi";
@@ -354,7 +372,7 @@ namespace ComponentInstallerGenerator
 			// Link each WIX intermediate file:
 			var wixobjFiles = wixobjFileList.Aggregate("", (current, wixobjFile) => current + (" \"" + wixobjFile + "\""));
 			var lightPath = Path.Combine(Environment.GetEnvironmentVariable("WIX"), "bin\\light.exe");
-			Report(RunDosCmd(lightPath, " -nologo -sice:ICE40 -sice:ICE48 " + wixobjFiles + " -out \"" + msiFileName + "\""));
+			Report(RunDosCmd(lightPath, " -nologo -sice:ICE40 -sice:ICE48 " + extensionSyntax + wixobjFiles + " -out \"" + msiFileName + "\""));
 
 			if (m_statusReport == "")
 			{

@@ -2,13 +2,13 @@
 <FieldWorksComponents>
 	<!--
 	How to add new installers:
-	<Component> Delimits the details of an installer to be build with a subset of main installer resources.
+	<Component> Delimits the details of an installer to be built with a subset of main installer resources.
 	<Name> The Name becomes part of the name of the installation as it appears in Add/Remove Programs: "SIL FieldWorks <version> <Name>"
 	<Description> The Description is displayed in the tooltip if you hover the mouse over the .msi file
 	<ProductCode> The ProductCode should not be altered unless you know exactly what you are doing, and what the repercussions are.
 	<UpgradeCode> Likewise the UpgradeCode
-	<Feature> Any number of Feature nodes can appear, each one identifies a feature in the main FW installer that is to be included in this subset installer
-	<Installer> The Installer node is a fragment of the file name of the resulting installer; it will be appended with ".693.msi"
+	<Feature> Any number of Feature nodes can appear, each one identifies a feature in the main FW installer that is to be included in this subset installer.
+	<Installer> The Installer node is a fragment of the file name of the resulting installer; it will be appended with ".<version>.msi"
 	</Component>
 	-->
 	<Component>
@@ -18,6 +18,16 @@
 		<UpgradeCode>F7BD2F6A-7C6E-48e2-A76A-02FF9B9A9115</UpgradeCode>
 		<Feature>FlexMovies</Feature>
 		<Installer>SetupFlexMovies</Installer>
+	</Component>
+	<Component>
+		<Name>Sample Data</Name>
+		<Template>SampleDataInstallerTemplate.wxs</Template>
+		<Extension>WixUtilExtension.dll</Extension>
+		<Description>Sample projects (Sena, Lela-Teli) for FieldWorks</Description>
+		<ProductCode>9CDE0013-E791-43ED-9964-B4BF86A84CC6</ProductCode>
+		<UpgradeCode>08F9D134-415E-4D9B-B299-10370CD15B2E</UpgradeCode>
+		<Feature>SampleData</Feature>
+		<Installer>SetupFwSampleData</Installer>
 	</Component>
 	<Component>
 		<Name>Chinese Localization</Name>
