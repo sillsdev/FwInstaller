@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+	<ProductVersion>3.5</ProductVersion>
+	<ProjectGuid>{d1e25b9b-9d26-498a-85b4-87eb77843f8c}</ProjectGuid>
+	<SchemaVersion>2.0</SchemaVersion>
+	<OutputName>SetupFW_SE</OutputName>
+	<OutputType>Package</OutputType>
+	<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+	<WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+	<OutputPath>.\</OutputPath>
+	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+	<DefineConstants>Debug</DefineConstants>
+	<SuppressSpecificWarnings>1044;1055;1056</SuppressSpecificWarnings>
+	<SuppressIces>ICE03;ICE47;ICE48;ICE57;ICE60;ICE69;ICE82;ICE83</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+	<OutputPath>.\</OutputPath>
+	<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+	<SuppressSpecificWarnings>1044;1055;1056</SuppressSpecificWarnings>
+	<SuppressIces>ICE03;ICE47;ICE48;ICE57;ICE60;ICE69;ICE82;ICE83</SuppressIces>
+  </PropertyGroup>
+  <Import Project="$(WixTargetsPath)" />
+  <ItemGroup>
+	<WixExtension Include="WixUtilExtension">
+	  <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+	  <Name>WixUtilExtension</Name>
+	</WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+	<Compile Include="Actions.wxs">
+	  <Link>Actions.wxs</Link>
+	</Compile>
+	<Compile Include="AutoFiles_No_TE.wxs" />
+	<Compile Include="CopyFiles_No_TE.wxs" />
+	<Compile Include="Environment.wxs">
+	  <Link>Environment.wxs</Link>
+	</Compile>
+	<Compile Include="Features_No_TE.wxs" />
+	<Compile Include="Files_No_TE.wxs" />
+	<Compile Include="FwUI_No_TE.wxs" />
+	<Compile Include="FW_No_TE.wxs" />
+	<Compile Include="MergeModules.wxs">
+	  <Link>MergeModules.wxs</Link>
+	</Compile>
+	<Compile Include="PatchCorrections_No_TE.wxs" />
+	<Compile Include="Registry_No_TE.wxs" />
+	<Compile Include="Shortcuts_No_TE.wxs" />
+  </ItemGroup>
+  <PropertyGroup>
+	<PreBuildEvent>wscript "$(ProjectDir)StripOutTE.js"</PreBuildEvent>
+  </PropertyGroup>
+  <!--
+	To modify your build process, add your task inside one of the targets below and uncomment it.
+	Other similar extension points exist, see Wix.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>
