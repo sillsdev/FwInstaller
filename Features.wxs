@@ -54,7 +54,7 @@
 				<ComponentRef Id="ShortcutFlex"/>
 				<ComponentRef Id="ShortcutFlexHelp"/>
 				<Feature Id="FlexMovies" Title="Demo Movies" Description="Language Explorer demonstration movies" Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">FLEX_MOVIES_CAB_FOUND OR REMOVE</Condition>
+					<Condition Level="3">(FLEX_MOVIES_CAB1_FOUND AND FLEX_MOVIES_CAB2_FOUND AND FLEX_MOVIES_CAB3_FOUND) OR REMOVE</Condition>
 				</Feature>
 			</Feature>
 			<Feature Id="TE" Title="Translation Editor" Description="FieldWorks Translation Editor" Display="expand" Level="3" AllowAdvertise="no">
@@ -66,6 +66,9 @@
 				<ComponentRef Id="ShortcutTEManual"/>
 				<ComponentRef Id="ShortcutTEHelp"/>
 				<ComponentRef Id="ShortcutTEMovies"/>
+			</Feature>
+			<Feature Id="SampleData" Title="Sample Data" Description="Leli-Teli and Sena databases useful for training and practice" Display="expand" Level="0" AllowAdvertise="no">
+				<Condition Level="3">SAMPLE_DATA_CAB_FOUND OR REMOVE</Condition>
 			</Feature>
 			<Feature Id="LOC" Title="Language Packs" Description="Additional languages for the user interface." Display="expand" Level="3" AllowAdvertise="no">
 				<Feature Id="Indonesian" Title="Bahasa Indonesia" Description="Allows the software to have an Indonesian user interface." Display="expand" Level="4" AllowAdvertise="no">

@@ -97,7 +97,7 @@ namespace ComponentInstallerGenerator
 
 	class InstallerGenerator
 	{
-		private const string ProcessedFilesFileName = "ProcessedAutoFiles.wxs";
+		private const string AutoFilesFileName = "AutoFiles.wxs";
 		private const string InstallerTemplateFileName = "ComponentInstallerTemplate.wxs";
 
 		private readonly InstallerInfo m_installerInfo;
@@ -110,15 +110,15 @@ namespace ComponentInstallerGenerator
 
 		public void Init()
 		{
-			if (!File.Exists(ProcessedFilesFileName))
-				throw new Exception(ProcessedFilesFileName + " is missing.");
+			if (!File.Exists(AutoFilesFileName))
+				throw new Exception(AutoFilesFileName + " is missing.");
 			if (!File.Exists(InstallerTemplateFileName))
 				throw new Exception(InstallerTemplateFileName + " is missing.");
 		}
 
 		/// <summary>
 		/// For the given component definition, generates one file for each feature included
-		/// in the component, with each file being a subset of ProcessedAutoFiles.wxs
+		/// in the component, with each file being a subset of AutoFiles.wxs
 		/// that includes only the files needed for that feature.
 		/// </summary>
 		/// <param name="definition">The Component node of the definitions XML file whose installer we are building</param>
@@ -131,23 +131,23 @@ namespace ComponentInstallerGenerator
 		}
 
 		/// <summary>
-		/// Generates a file that is a subset of ProcessedAutoFiles.wxs, where the elements
+		/// Generates a file that is a subset of AutoFiles.wxs, where the elements
 		/// are all part of the given feature.
 		/// </summary>
 		/// <param name="features">Main installer features to be included in file</param>
 		/// <returns>The file name of the generated file.</returns>
 		private string GenerateComponentAutoFile(IList<string> features)
 		{
-			// Create a working copy of the main ProcessedAutoFiles.wxs structure:
+			// Create a working copy of the main AutoFiles.wxs structure:
 			var xmlFiles = new XmlDocument();
-			xmlFiles.Load(ProcessedFilesFileName);
+			xmlFiles.Load(AutoFilesFileName);
 
 			// Set up WIX namespace stuff:
 			var xmlnsManager = new XmlNamespaceManager(xmlFiles.NameTable);
-			// Add the namespace used in ProcessedAutoFiles.wxs to the XmlNamespaceManager:
+			// Add the namespace used in AutoFiles.wxs to the XmlNamespaceManager:
 			xmlnsManager.AddNamespace("wix", InstallerInfo.WixNsUri);
 
-			// Iterate over every feature in the main ProcessedAutoFiles.wxs file:
+			// Iterate over every feature in the main AutoFiles.wxs file:
 			var mainFeatureNodes = xmlFiles.SelectNodes("//wix:FeatureRef", xmlnsManager);
 			var mainFeatures = (from XmlElement featureNode in mainFeatureNodes select featureNode.GetAttribute("Id")).ToList();
 			foreach (var mainFeature in mainFeatures)
@@ -190,7 +190,7 @@ namespace ComponentInstallerGenerator
 				fileNode.SetAttribute("DiskId", "1");
 
 			// Save the new XML file:
-			var fileName = "ProcessedAutoFiles_" + features[0] + ".wxs";
+			var fileName = "AutoFiles_" + features[0] + ".wxs";
 			xmlFiles.Save(fileName);
 
 			if (fileNodes.Count == 0)

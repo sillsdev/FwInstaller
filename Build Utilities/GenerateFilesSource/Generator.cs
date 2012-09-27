@@ -19,7 +19,7 @@ namespace GenerateFilesSource
 		private readonly bool _addOrphans;
 		private string _report = ""; // Report of significant decisions we make, and anomalies of interest to installer developers.
 		private readonly object _reportSectionMutexToken = new object(); // Locked when several lines of the report need to be written without interruption by other threads' reports.
-		private string _seriousIssues; // Report of problems that could result in bad installer.
+		private string _seriousIssues = ""; // Report of problems that could result in bad installer.
 
 		// List of machines which will email people if something goes wrong:
 		private readonly List<string> _emailingMachineNames = new List<string>();
@@ -29,7 +29,57 @@ namespace GenerateFilesSource
 		private readonly List<string> _fileNotificationEmailList = new List<string>();
 
 		// List of mappings of Features to DiskId, so we can assign files to cabinets based on features:
-		readonly Dictionary<string, int> _featureCabinetMappings = new Dictionary<string, int>();
+		internal class CabinetMappingData
+		{
+			private readonly int _index;
+			private readonly int[] _indexes;
+			private readonly string[] _divisions;
+
+			public CabinetMappingData(string index, string indexes, string divisions)
+			{
+				if (index.Length == 0)
+				{
+					if (indexes.Length == 0 || divisions.Length == 0)
+						throw new InvalidDataException(
+							"Invalid CabinetAssignment node: when CabinetIndex is not assigned, both CabinetIndexes and CabinetDivisions must be assigned.");
+					_index = 0;
+
+					var indexStrings = indexes.Split(new[] { ',', ';' });
+
+					_indexes = new int[indexStrings.Length];
+					for (var i = 0; i < indexStrings.Length; i++)
+						_indexes[i] = int.Parse(indexStrings[i]);
+
+					_divisions = divisions.ToLowerInvariant().Split(new[] { ',', ';' });
+
+					if (_indexes.Length != _divisions.Length + 1)
+						throw new InvalidDataException("Invalid CabinetAssignment node: \"CabinetIndexes=\"" + indexes +
+													   " \"CabinetDivisions=\"" + divisions +
+													   "\" is wrong because there must be one more index than division.");
+					return;
+				}
+
+				if (indexes.Length != 0 || divisions.Length != 0)
+					throw new InvalidDataException(
+						"Invalid CabinetAssignment node: when CabinetIndex is assigned, neither CabinetIndexes nor CabinetDivisions may be assigned.");
+
+				_index = int.Parse(index);
+			}
+
+			internal int GetCabinet(InstallerFile file)
+			{
+				if (_index != 0)
+					return _index;
+
+				for (var index = 0; index < _divisions.Length; index++)
+				{
+					if (file.Name.ToLowerInvariant().CompareTo(_divisions[index]) < 0)
+						return _indexes[index];
+				}
+				return _indexes.Last();
+			}
+		}
+		readonly Dictionary<string, CabinetMappingData> _featureCabinetMappings = new Dictionary<string, CabinetMappingData>();
 
 		// Variable used to control file sequencing in patches:
 		private int _newPatchGroup;
@@ -144,6 +194,7 @@ namespace GenerateFilesSource
 		}
 		private readonly FileHeuristics _flexFileHeuristics = new FileHeuristics();
 		private readonly FileHeuristics _flexMovieFileHeuristics = new FileHeuristics();
+		private readonly FileHeuristics _sampleDataFileHeuristics = new FileHeuristics();
 		private readonly FileHeuristics _teFileHeuristics = new FileHeuristics();
 		private readonly Dictionary<string, FileHeuristics> _localizationHeuristics = new Dictionary<string, FileHeuristics>();
 		private readonly Dictionary<string, FileHeuristics> _teLocalizationHeuristics = new Dictionary<string, FileHeuristics>();
@@ -180,6 +231,8 @@ namespace GenerateFilesSource
 		private IEnumerable<InstallerFile> _flexFeatureFiles;
 		// Set of files for FlexMovies feature:
 		private IEnumerable<InstallerFile> _flexMoviesFeatureFiles;
+		// Set of files for SampleData feature:
+		private IEnumerable<InstallerFile> _sampleDataFeatureFiles;
 		// Set of files for TE feature:
 		private IEnumerable<InstallerFile> _teFeatureFiles;
 		// Set of files for FW Core feature:
@@ -231,7 +284,7 @@ namespace GenerateFilesSource
 		/// <summary>
 		/// Structure to hold details about a file being considered for the installer.
 		/// </summary>
-		class InstallerFile
+		internal class InstallerFile
 		{
 			public string Id;
 			public string Name;
@@ -419,8 +472,8 @@ namespace GenerateFilesSource
 				reportFile.WriteLine(_report);
 				reportFile.Close();
 				Process.Start(tempFileName);
-				// Wait 10 seconds to give the report a good chance of being opened in NotePad:
-				System.Threading.Thread.Sleep(10000);
+				// Wait 2 seconds to give the report a good chance of being opened in NotePad:
+				System.Threading.Thread.Sleep(2000);
 				File.Delete(tempFileName);
 			}
 		}
@@ -546,7 +599,7 @@ namespace GenerateFilesSource
 				foreach (XmlElement file in writableFiles)
 					_makeWritableList.Add(file.GetAttribute("PathPattern"));
 
-			// Define list of (partial) paths of files that have to have older versions forceably removed prior to installing:
+			// Define list of (partial) paths of files that have to have older versions forcibly removed prior to installing:
 			// Format: <File PathPattern="*partial path of any file that must be installed on top of a pre-existing version, even if that means downgrading*"/>
 			var forceOverwriteFiles = configuration.SelectNodes("//ForceOverwrite/File");
 			if (forceOverwriteFiles != null)
@@ -557,6 +610,7 @@ namespace GenerateFilesSource
 			ConfigureHeuristics(configuration, _flexFileHeuristics, "//FeatureAllocation/FlexOnly");
 			ConfigureHeuristics(configuration, _flexMovieFileHeuristics, "//FeatureAllocation/FlexMoviesOnly");
 			ConfigureHeuristics(configuration, _teFileHeuristics, "//FeatureAllocation/TeOnly");
+			ConfigureHeuristics(configuration, _sampleDataFileHeuristics, "//FeatureAllocation/SampleDataOnly");
 
 			// Do the same for localization files.
 			// Prerequisite: _languages already configured with all languages:
@@ -690,16 +744,18 @@ namespace GenerateFilesSource
 			{
 				var defaultAssignment = cabinetAssignments.SelectSingleNode("Default") as XmlElement;
 				if (defaultAssignment != null)
-					_featureCabinetMappings.Add("Default", int.Parse(defaultAssignment.GetAttribute("CabinetIndex")));
+					_featureCabinetMappings.Add("Default", new CabinetMappingData(defaultAssignment.GetAttribute("CabinetIndex"), defaultAssignment.GetAttribute("CabinetIndexes"), defaultAssignment.GetAttribute("CabinetDivisions")));
 
 				var assignments = cabinetAssignments.SelectNodes("Cabinet");
 				foreach (XmlElement assignment in assignments)
 				{
 					var feature = assignment.GetAttribute("Feature");
-					var index = int.Parse(assignment.GetAttribute("CabinetIndex"));
-					_featureCabinetMappings.Add(feature, index);
+					var index = assignment.GetAttribute("CabinetIndex");
+					var indexes = assignment.GetAttribute("CabinetIndexes");
+					var divisions = assignment.GetAttribute("CabinetDivisions");
+					_featureCabinetMappings.Add(feature, new CabinetMappingData(index, indexes, divisions));
 					if (_languages.Any(language => language.LanguageName == feature))
-						_featureCabinetMappings.Add(feature + "_TE", index);
+						_featureCabinetMappings.Add(feature + "_TE", new CabinetMappingData(index, indexes, divisions));
 				}
 			}
 		}
@@ -1136,7 +1192,7 @@ namespace GenerateFilesSource
 					_fwTargets.SelectSingleNode("/msbuild:Project/msbuild:Target[@Name='" + vsProj + "']", _xmlnsManager) as XmlElement;
 				if (targetNode == null)
 				{
-					_parent.AddReportLine("Error " + _description + ": could not find MSBuild Target " + vsProj + " (referenced by " + (parentProj?? "nothing") + ") in " + _fwTargetsPath);
+					_parent.AddSeriousIssue("Error " + _description + ": could not find MSBuild Target " + vsProj + " (referenced by " + (parentProj ?? "nothing") + ") in " + _fwTargetsPath);
 					return assembliesToReturn;
 				}
 
@@ -1149,7 +1205,7 @@ namespace GenerateFilesSource
 				var msBuildNode = targetNode.SelectSingleNode("msbuild:MSBuild", _xmlnsManager) as XmlElement;
 				if (msBuildNode == null)
 				{
-					_parent.AddReportLine("Error " + _description + ": could not find MSBuild node in FieldWorks Target " + vsProj + " in file " + _fwTargetsPath);
+					_parent.AddSeriousIssue("Error " + _description + ": could not find MSBuild node in FieldWorks Target " + vsProj + " in file " + _fwTargetsPath);
 					return assembliesToReturn;
 				}
 				var projectPath = msBuildNode.GetAttribute("Projects");
@@ -1163,7 +1219,7 @@ namespace GenerateFilesSource
 															 _xmlnsManager);
 				if (assemblyNameNode == null)
 				{
-					_parent.AddReportLine("Error " + _description + ": could not find AssemblyName node in Visual Studio project " + projectPath);
+					_parent.AddSeriousIssue("Error " + _description + ": could not find AssemblyName node in Visual Studio project " + projectPath);
 					return assembliesToReturn;
 				}
 				var assemblyName = assemblyNameNode.InnerText;
@@ -1172,7 +1228,7 @@ namespace GenerateFilesSource
 														   _xmlnsManager);
 				if (outputTypeNode == null)
 				{
-					_parent.AddReportLine("Error " + _description + ": could not find OutputType node in Visual Studio project " + projectPath);
+					_parent.AddSeriousIssue("Error " + _description + ": could not find OutputType node in Visual Studio project " + projectPath);
 					return assembliesToReturn;
 				}
 				var outputType = outputTypeNode.InnerText;
@@ -1189,12 +1245,12 @@ namespace GenerateFilesSource
 						builtAssemblyPath += ".dll";
 						break;
 					default:
-						_parent.AddReportLine("Error " + _description + ": unknown Output Type '" + outputType + "' in VS project " + projectPath);
+						_parent.AddSeriousIssue("Error " + _description + ": unknown Output Type '" + outputType + "' in VS project " + projectPath);
 						return assembliesToReturn;
 				}
 				if (!File.Exists(builtAssemblyPath))
 				{
-					_parent.AddReportLine("Error " + _description + ": cannot find " + builtAssemblyPath + " referenced in VS project " + projectPath);
+					_parent.AddSeriousIssue("Error " + _description + ": cannot find " + builtAssemblyPath + " referenced in VS project " + projectPath);
 					return assembliesToReturn;
 				}
 
@@ -1220,12 +1276,12 @@ namespace GenerateFilesSource
 						var hintPath = node.InnerText;
 						var refAssemblyName = Path.GetFileName(hintPath);
 						if (!refAssemblyName.EndsWith(".dll") && !refAssemblyName.EndsWith(".exe"))
-							_parent.AddReportLine("Error " + _description + ": unexpected HintPath does not reference a .dll; in project " + projectPath);
+							_parent.AddSeriousIssue("Error " + _description + ": unexpected HintPath does not reference a .dll; in project " + projectPath);
 						else
 						{
 							var refAssemblyPath = Path.Combine(_assemblyFolderPath, refAssemblyName);
 							if (!File.Exists(refAssemblyPath))
-								_parent.AddReportLine("Warning " + _description + ": could not find reference " + refAssemblyPath + " in project " + projectPath);
+								_parent.AddSeriousIssue("Error " + _description + ": could not find reference " + refAssemblyPath + " in project " + projectPath);
 							else
 							{
 								var newRefDescription = "AR:" + projectName;
@@ -1593,6 +1649,10 @@ namespace GenerateFilesSource
 			_flexMoviesFeatureFiles = from file in usedDistFiles
 									   where FileIsForFlexMoviesOnly(file)
 									   select file;
+			_sampleDataFeatureFiles = from file in usedDistFiles
+									  where FileIsForSampleDataOnly(file)
+									  select file;
+
 			var localizationFiles = from file in usedDistFiles
 									where FileIsForLocalization(file)
 									select file;
@@ -1600,7 +1660,7 @@ namespace GenerateFilesSource
 			var teOnlyDistFiles = from file in usedDistFiles
 								  where FileIsForTeOnly(file)
 								  select file;
-			var coreDistFiles = usedDistFiles.Except(flexOnlyDistFiles).Except(teOnlyDistFiles).Except(_flexMoviesFeatureFiles).Except(localizationFiles);
+			var coreDistFiles = usedDistFiles.Except(flexOnlyDistFiles).Except(teOnlyDistFiles).Except(_flexMoviesFeatureFiles).Except(_sampleDataFeatureFiles).Except(localizationFiles);
 
 			var coreBuiltFiles = _flexFiles.Intersect(_teFiles);
 			var flexOnlyBuiltFiles = _flexFiles.Except(coreBuiltFiles);
@@ -1662,6 +1722,8 @@ namespace GenerateFilesSource
 				file.Features.Add("FLEx");
 			foreach (var file in _flexMoviesFeatureFiles)
 				file.Features.Add("FlexMovies");
+			foreach (var file in _sampleDataFeatureFiles)
+				file.Features.Add("SampleData");
 			foreach (var file in _teFeatureFiles)
 				file.Features.Add("TE");
 			foreach (var file in _fwCoreFeatureFiles)
@@ -1693,9 +1755,9 @@ namespace GenerateFilesSource
 				// Assign a DiskId for the file's cabinet:
 				var firstFeature = file.Features.First();
 				if (_featureCabinetMappings.ContainsKey(firstFeature))
-					file.DiskId = _featureCabinetMappings[firstFeature];
+					file.DiskId = _featureCabinetMappings[firstFeature].GetCabinet(file);
 				else
-					file.DiskId = _featureCabinetMappings["Default"];
+					file.DiskId = _featureCabinetMappings["Default"].GetCabinet(file);
 			}
 		}
 
@@ -1746,13 +1808,24 @@ namespace GenerateFilesSource
 
 		/// <summary>
 		/// Determines heuristically whether a given installer file is for use in FLEx Movies only.
-		/// Currently uses hard-coded heuristics, and examines file name and relative path.
+		/// Examines file name and relative path.
 		/// </summary>
 		/// <param name="file">the candidate installer file</param>
 		/// <returns>true if the file is for FLEx Movies only</returns>
 		private bool FileIsForFlexMoviesOnly(InstallerFile file)
 		{
 			return _flexMovieFileHeuristics.IsFileIncluded(file.RelativeSourcePath);
+		}
+
+		/// <summary>
+		/// Determines heuristically whether a given installer file is for use in Sample Data only.
+		/// Examines file name and relative path.
+		/// </summary>
+		/// <param name="file">the candidate installer file</param>
+		/// <returns>true if the file is for FLEx Movies only</returns>
+		private bool FileIsForSampleDataOnly(InstallerFile file)
+		{
+			return _sampleDataFileHeuristics.IsFileIncluded(file.RelativeSourcePath);
 		}
 
 		/// <summary>
@@ -2590,6 +2663,18 @@ namespace GenerateFilesSource
 			lock (_report)
 			{
 				_report += line + Environment.NewLine;
+			}
+		}
+
+		/// <summary>
+		/// Adds a line of text to the _seriousIssues report
+		/// </summary>
+		/// <param name="line">Text to add to report</param>
+		private void AddSeriousIssue(string line)
+		{
+			lock (_seriousIssues)
+			{
+				_seriousIssues += line + Environment.NewLine;
 			}
 		}
 
