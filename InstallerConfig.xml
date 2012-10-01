@@ -45,6 +45,10 @@
 			<File PathContains="Language Explorer\Movies"/>
 			<Except PathContains="Language Explorer\Movies\notfound.html"/>
 		</FlexMoviesOnly>
+		<SampleDataOnly>
+			<!-- Define heuristics for FLEx movie files: -->
+			<File PathContains="ReleaseData\"/>
+		</SampleDataOnly>
 		<TeOnly>
 			<!-- Define heuristics for TE files: -->
 			<File PathContains="Editorial Checks"/>
@@ -545,26 +549,31 @@
 	<!-- Define output file: -->
 	<Output File="AutoFiles.wxs"/>
 	<CabinetAssignments>
-		<Default CabinetIndex="2"/>
-		<Cabinet Feature="FlexMovies" CabinetIndex="1"/>
-		<Cabinet Feature="French" CabinetIndex="3"/>
-		<Cabinet Feature="Spanish" CabinetIndex="4"/>
-		<Cabinet Feature="Indonesian" CabinetIndex="5"/>
-		<Cabinet Feature="Portuguese" CabinetIndex="6"/>
-		<Cabinet Feature="Russian" CabinetIndex="7"/>
-		<Cabinet Feature="Chinese" CabinetIndex="8"/>
-		<Cabinet Feature="Hindi" CabinetIndex="9"/>
-		<Cabinet Feature="Malay" CabinetIndex="10"/>
-		<Cabinet Feature="Telugu" CabinetIndex="11"/>
-		<Cabinet Feature="Korean" CabinetIndex="12"/>
-		<Cabinet Feature="Turkish" CabinetIndex="13"/>
-		<Cabinet Feature="Vietnamese" CabinetIndex="14"/>
-		<Cabinet Feature="Persian" CabinetIndex="15"/>
-		<Cabinet Feature="Nepali" CabinetIndex="16"/>
-		<Cabinet Feature="Bengali" CabinetIndex="17"/>
-		<Cabinet Feature="Kinyarwanda" CabinetIndex="18"/>
-		<Cabinet Feature="Thai" CabinetIndex="19"/>
-		<Cabinet Feature="Khmer" CabinetIndex="20"/>
-		<Cabinet Feature="Urdu" CabinetIndex="21"/>
+		<!-- CabinetDivisions are the starts of file name strings signifying the break between one cabinet and the next. -->
+		<!-- By dividing files roughly equally (size-wise) over 3 cabinets, we significantly reduce the installer build time. -->
+		<!-- Bear in mind that these settings affect only files in AutoFiles.wxs. Files from merge modules and Files.wxs all -->
+		<!-- go into cabinets specified in MergeModules.wxs or Files.wxs respectively, typically cabinet 1. -->
+		<Default CabinetIndexes="1,2,3" CabinetDivisions="f,m"/>
+		<Cabinet Feature="FlexMovies" CabinetIndexes="4,5,6" CabinetDivisions="28,49"/>
+		<Cabinet Feature="SampleData" CabinetIndex="7"/>
+		<Cabinet Feature="French" CabinetIndex="8"/>
+		<Cabinet Feature="Spanish" CabinetIndex="9"/>
+		<Cabinet Feature="Indonesian" CabinetIndex="10"/>
+		<Cabinet Feature="Portuguese" CabinetIndex="11"/>
+		<Cabinet Feature="Russian" CabinetIndex="12"/>
+		<Cabinet Feature="Chinese" CabinetIndex="13"/>
+		<Cabinet Feature="Hindi" CabinetIndex="14"/>
+		<Cabinet Feature="Malay" CabinetIndex="15"/>
+		<Cabinet Feature="Telugu" CabinetIndex="16"/>
+		<Cabinet Feature="Korean" CabinetIndex="17"/>
+		<Cabinet Feature="Turkish" CabinetIndex="18"/>
+		<Cabinet Feature="Vietnamese" CabinetIndex="19"/>
+		<Cabinet Feature="Persian" CabinetIndex="20"/>
+		<Cabinet Feature="Nepali" CabinetIndex="21"/>
+		<Cabinet Feature="Bengali" CabinetIndex="22"/>
+		<Cabinet Feature="Kinyarwanda" CabinetIndex="23"/>
+		<Cabinet Feature="Thai" CabinetIndex="24"/>
+		<Cabinet Feature="Khmer" CabinetIndex="25"/>
+		<Cabinet Feature="Urdu" CabinetIndex="26"/>
 	</CabinetAssignments>
 </InstallerConfig>

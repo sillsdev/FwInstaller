@@ -24,21 +24,21 @@ AutoFiles.wxs.
 						</Directory>
 						<!-- The following component GUID is required by the master installer to locate and launch the migration utility: -->
 						<Component Id="MigrateSqlDbs.exe" Guid="D25017CC-66F5-4BEE-B7BA-39BE8AE3698F">
-							<File Id="MigrateSqlDbs.exe" Name="MigrateSqlDbs.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="2" Source="..\Output\Release\MigrateSqlDbs.exe" />
+							<File Id="MigrateSqlDbs.exe" Name="MigrateSqlDbs.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\Output\Release\MigrateSqlDbs.exe" />
 						</Component>
 						<!-- The following file has to be installed as a service: -->
 						<Component Id="FwRemoteDatabaseConnectorService.exe" Guid="A3EB2B09-8600-4017-8B04-9DA7B5F2142A">
-							<File Id="FwRemoteDatabaseConnectorService.exe" Name="FwRemoteDatabaseConnectorService.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="2" Source="..\Output\Release\FwRemoteDatabaseConnectorService.exe" />
+							<File Id="FwRemoteDatabaseConnectorService.exe" Name="FwRemoteDatabaseConnectorService.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\Output\Release\FwRemoteDatabaseConnectorService.exe" />
 							<ServiceInstall Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" DisplayName="FieldWorks Remote Database Connector Service" Type="ownProcess" Interactive="yes" Start="auto" ErrorControl="ignore" Description="Allows connection to local FieldWorks projects from other machines on the network." />
 							<ServiceControl Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
 						</Component>
 						<Component Id="EncConvertersAppDataMover40.exe" Guid="5819C8CA-9422-4c21-98F0-9C2D6F56E442">
-							<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" DiskId="2" Source="..\Output\Release\EncConvertersAppDataMover40.exe"/>
+							<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" DiskId="1" Source="..\Output\Release\EncConvertersAppDataMover40.exe"/>
 						</Component>
 						<Directory Id="AddOnInstallers" Name="Installers">
 							<!-- The following component GUID is required by the master installer to locate and launch the FLEx Bridge installer: -->
 							<Component Id="FLExBridgeInstaller.msi" Guid="9442BF43-4A64-4885-9593-43DD7E927290">
-								<File Id="FLExBridgeInstaller.msi" Name="FLExBridgeInstaller.msi" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="2" Source="..\DistFiles\Installers\FLExBridgeInstaller.msi" />
+								<File Id="FLExBridgeInstaller.msi" Name="FLExBridgeInstaller.msi" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\DistFiles\Installers\FLExBridgeInstaller.msi" />
 							</Component>
 						</Directory>
 					</Directory>
@@ -64,7 +64,7 @@ AutoFiles.wxs.
 			</Directory>
 			<Directory Id="FontsFolder" SourceName="Fonts">
 				<Component Id="Quivira.ttf" Guid="E4A47C8C-2B96-4186-97A8-B2AFC3150A9C">
-					<File Id="Quivira.ttf" Name="Quivira.ttf" DiskId="2" Source="..\DistFiles\Fonts\Raw\Quivira.ttf" TrueType="yes" />
+					<File Id="Quivira.ttf" Name="Quivira.ttf" DiskId="1" Source="..\DistFiles\Fonts\Raw\Quivira.ttf" TrueType="yes" />
 				</Component>
 			</Directory>
 			<Directory Id="SystemFolder" SourceName="System32">
@@ -72,7 +72,7 @@ AutoFiles.wxs.
 			<Directory Id="CommonFilesFolder" Name="Common">
 				<Directory Id="SIL" Name="SIL">
 					<Component Id="vs_piaredist.exe" Guid="69E34503-AFF1-455d-8B02-38EC1EC156C2">
-						<File Id="vs_piaredist.exe" Name="vs_piaredist.exe" ReadOnly="yes" Source="..\DistFiles\vs_piaredist.exe" DiskId="2"/>
+						<File Id="vs_piaredist.exe" Name="vs_piaredist.exe" ReadOnly="yes" Source="..\DistFiles\vs_piaredist.exe" DiskId="1"/>
 					</Component>
 					<!-- Place holder for some EC merge modules -->
 				</Directory>
