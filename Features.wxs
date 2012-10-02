@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+	<Fragment Id="FeaturesFragment">
+		<Feature Id="FW_Core" Title="FieldWorks" Description="Files common to all FieldWorks applications" Display="expand" Level="3" AllowAdvertise="no">
+			<ComponentRef Id="CreateFwFolder"/>
+			<ComponentRef Id="CreateProjectsFolder"/>
+			<ComponentRef Id="CopyLicenseTechReadme"/>
+			<ComponentRef Id="vs_piaredist.exe"/>
+			<ComponentRef Id="MigrateSqlDbs.exe"/>
+			<ComponentRef Id="FwRemoteDatabaseConnectorService.exe"/>
+			<ComponentRef Id="Quivira.ttf"/>
+			<ComponentRef Id="FwPath"/>
+			<ComponentRef Id="RegHyperLinks"/>
+			<ComponentRef Id="RegFwBackupFiles"/>
+			<ComponentRef Id="RegFwDbFiles"/>
+			<ComponentRef Id="RegFwDataFiles"/>
+			<ComponentRef Id="RegLangPack"/>
+			<ComponentRef Id="RegRootCodeDir"/>
+			<ComponentRef Id="RegProjectsDir"/>
+			<ComponentRef Id="RegInitIcu"/>
+			<ComponentRef Id="RegDotNetCategory"/>
+			<ComponentRef Id="ShortcutFieldWorksSuite"/>
+			<ComponentRef Id="ShortcutMorphIntro"/>
+			<ComponentRef Id="ShortcutLicense"/>
+			<ComponentRef Id="ShortcutTechSupport"/>
+			<ComponentRef Id="ShortcutReadMe"/>
+			<ComponentRef Id="ShortcutUnicodeCharEditor"/>
+			<MergeRef Id="ATL"/>
+			<MergeRef Id="ATL_Policy"/>
+			<MergeRef Id="CRT"/>
+			<MergeRef Id="CRT_Policy"/>
+			<MergeRef Id="MFC"/>
+			<MergeRef Id="MFC_Policy"/>
+			<MergeRef Id="PerlEC"/>
+	  <MergeRef Id="FW_PerlEC"/>
+			<MergeRef Id="PythonEC"/>
+	  <MergeRef Id="FW_PythonEC"/>
+	  <MergeRef Id="EncConverters_Common"/>
+			<MergeRef Id="FW_EC"/>
+			<MergeRef Id="EcFolderACLs"/>
+			<MergeRef Id="Set_Path_EC"/>
+			<MergeRef Id="Managed_Install_Fix"/>
+			<MergeRef Id="TECkit_DLLs"/>
+			<MergeRef Id="CC_DLL"/>
+			<MergeRef Id="ICU_4_0"/>
+	  <MergeRef Id="FW_ICU"/>
+			<MergeRef Id="ICUECHelp"/>
+			<Feature Id="FLEx" Title="Language Explorer (FLEx)" Description="FieldWorks Language Explorer" Display="expand" Level="3" AllowAdvertise="no">
+				<ComponentRef Id="CopyFlexWhatsNew"/>
+				<ComponentRef Id="CopyFLExReadMe"/>
+				<ComponentRef Id="UnregFlex"/>
+				<ComponentRef Id="DeskShortcutFlex"/>
+				<ComponentRef Id="DelOldDeskShortcutFlex"/>
+				<ComponentRef Id="ShortcutFlexManual"/>
+				<ComponentRef Id="ShortcutFlexInstructorGuide"/>
+				<ComponentRef Id="ShortcutFlexExercises"/>
+				<ComponentRef Id="ShortcutFlexIntroLex"/>
+				<ComponentRef Id="ShortcutFlexImportSFMHelp"/>
+				<ComponentRef Id="ShortcutFlexImportHelp"/>
+				<ComponentRef Id="ShortcutFlexWriSys"/>
+				<ComponentRef Id="ShortcutFlex"/>
+				<ComponentRef Id="ShortcutFLExReadMe"/>
+				<ComponentRef Id="ShortcutFlexHelp"/>
+				<Feature Id="FlexMovies" Title="Demo Movies" Description="Language Explorer demonstration movies" Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">FLEX_MOVIES_CAB_FOUND OR REMOVE</Condition>
+				</Feature>
+			</Feature>
+			<Feature Id="TE" Title="Translation Editor" Description="FieldWorks Translation Editor" Display="expand" Level="3" AllowAdvertise="no">
+				<ComponentRef Id="CopyTEReadMe"/>
+				<ComponentRef Id="ParatextProjectsFolder"/>
+				<ComponentRef Id="RegScrChecks"/>
+				<ComponentRef Id="DeskShortcutTE"/>
+				<ComponentRef Id="DelOldDeskShortcutTE"/>
+				<ComponentRef Id="ShortcutTE"/>
+				<ComponentRef Id="ShortcutTEReadMe"/>
+				<ComponentRef Id="ShortcutTEManual"/>
+				<ComponentRef Id="ShortcutTEHelp"/>
+				<ComponentRef Id="ShortcutTEMovies"/>
+			</Feature>
+			<Feature Id="LOC" Title="Language Packs" Description="Additional languages for the user interface." Display="expand" Level="3" AllowAdvertise="no">
+				<Feature Id="Chinese" Title="Chinese" Description="Allows the software to have a Chinese user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 3076 OR UserLanguageID = 5124 OR UserLanguageID = 2052 OR UserLanguageID = 1028</Condition>
+					<Feature Id="Chinese_TE" Title="Chinese_TE" Description="Chinese user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+						<Condition Level="3">UserLanguageID = 3076 OR UserLanguageID = 5124 OR UserLanguageID = 2052 OR UserLanguageID = 1028</Condition>
+					</Feature>
+				</Feature>
+				<Feature Id="French" Title="French" Description="Allows the software to have a French user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1036</Condition>
+					<Feature Id="French_TE" Title="French_TE" Description="French user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+					</Feature>
+				</Feature>
+				<Feature Id="Indonesian" Title="Indonesian" Description="Allows the software to have an Indonesian user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Feature Id="Indonesian_TE" Title="Indonesian_TE" Description="Indonesian user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+					</Feature>
+				</Feature>
+				<Feature Id="Portuguese" Title="Portuguese" Description="Allows the software to have a Portuguese user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1046 OR UserLanguageID = 2070</Condition>
+					<Feature Id="Portuguese_TE" Title="Portuguese_TE" Description="Portuguese user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+					</Feature>
+				</Feature>
+				<Feature Id="Russian" Title="Russian" Description="Allows the software to have a Russian user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1049</Condition>
+					<Feature Id="Russian_TE" Title="Russian_TE" Description="Russian user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+					</Feature>
+				</Feature>
+				<Feature Id="Spanish" Title="Spanish" Description="Allows the software to have a Spanish user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1034 OR UserLanguageID = 11274 OR UserLanguageID = 16394 OR UserLanguageID = 13322 OR UserLanguageID = 9226 OR UserLanguageID = 5130 OR UserLanguageID = 7178 OR UserLanguageID = 12298 OR UserLanguageID = 17418 OR UserLanguageID = 4106 OR UserLanguageID = 18442 OR UserLanguageID = 19466 OR UserLanguageID = 6154 OR UserLanguageID = 15370 OR UserLanguageID = 10250 OR UserLanguageID = 20490 OR UserLanguageID = 3082 OR UserLanguageID = 14346 OR UserLanguageID = 8202</Condition>
+					<Feature Id="Spanish_TE" Title="Spanish_TE" Description="Spanish user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+						<Condition Level="3">UserLanguageID = 1034 OR UserLanguageID = 11274 OR UserLanguageID = 16394 OR UserLanguageID = 13322 OR UserLanguageID = 9226 OR UserLanguageID = 5130 OR UserLanguageID = 7178 OR UserLanguageID = 12298 OR UserLanguageID = 17418 OR UserLanguageID = 4106 OR UserLanguageID = 18442 OR UserLanguageID = 19466 OR UserLanguageID = 6154 OR UserLanguageID = 15370 OR UserLanguageID = 10250 OR UserLanguageID = 20490 OR UserLanguageID = 3082 OR UserLanguageID = 14346 OR UserLanguageID = 8202</Condition>
+					</Feature>
+				</Feature>
+				<Feature Id="Korean" Title="Korean" Description="Allows the software to have a Korean user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">KOREAN_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Korean_TE" Title="Korean_TE" Description="Korean user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">KOREAN_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
+				<Feature Id="Turkish" Title="Turkish" Description="Allows the software to have a Turkish user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">TURKISH_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Turkish_TE" Title="Turkish_TE" Description="Turkish user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">TURKISH_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
+				<Feature Id="Hindi" Title="Hindi" Description="Allows the software to have a Hindi user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">HINDI_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Hindi_TE" Title="Hindi_TE" Description="Hindi user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">HINDI_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
+				<Feature Id="Vietnamese" Title="Vietnamese" Description="Allows the software to have a Vietnamese user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">VIETNAMESE_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Vietnamese_TE" Title="Vietnamese_TE" Description="Vietnamese user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">VIETNAMESE_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
+				<Feature Id="Persian" Title="Persian" Description="Allows the software to have a Persian user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">PERSIAN_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Persian_TE" Title="Persian_TE" Description="Persian user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">PERSIAN_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
+			</Feature>
+		</Feature>
+	</Fragment>
+</Wix>

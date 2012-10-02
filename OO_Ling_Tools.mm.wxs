@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+	<Module Id="OOLingTools3" Guid="3BE7C9A6-536A-487f-9969-D70FE7E5C66F" Language="1033" Version="4.0.0.0">
+		<Package Id="????????-????-????-????-????????????" Keywords="SIL; Encoding Conversion; OpenOffice; LibreOffice; Grammar Examples; Phonology Examples; FLex; EncConverters" Description="Linguistic Tools for OpenOffice/LibreOffice Merge Module" Comments="installer module for the SIL OpenOffice/LibreOffice Linguistic Tools extension" Manufacturer="SIL International" InstallerVersion="200" Platforms="Intel" Languages="1033" SummaryCodepage="1252" />
+		<Directory Id="TARGETDIR" Name="SourceDir">
+	  <Directory Id="ProgramFilesFolder" SourceName="ProgramF" LongSource="Program Files">
+		<Directory Id="OoSIL" Name="SIL">
+		  <Directory Id="INSTALLDIR" Name="SILConve" LongName="SILConverters">
+			<Directory Id="SILConvOO" Name="OpenOffi" LongName="OpenOffice.org">
+			  <Component Id="LinguisticTools12oxt" Guid="C9134A5F-CF12-4ffe-916B-270483A1A0E2">
+				<File Id="LinguisticTools12oxt" Name="Linguist" LongName="LinguisticTools-1.2.oxt" Vital="yes" KeyPath="yes" Source="Lib\${config}\LinguisticTools-1.2.oxt" />
+			  </Component>
+			</Directory>
+		  </Directory>
+		</Directory>
+	  </Directory>
+	  <Directory Id="ProgramMenuFolder" Name="Program">
+		<Directory Id="SIL_Converters" Name="SILConve" LongName="SIL Converters">
+		  <Directory Id="MenuSILConvOO" Name="OpenOffi" LongName="OpenOffice.org">
+			<Component Id="OoShortcuts" Guid="B19AEC84-B1CA-4127-A992-A165FC0A66C5" KeyPath="yes">
+			  <Shortcut Id="OoLinguisticTools" Directory="MenuSILConvOO" Name="Linguist" LongName="LinguisticTools extension (v1.2)" Target="[#LinguisticTools12oxt]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="OpenOffice.org"/>
+			  <!-- The next item is junk to make validation pass on ICE18 -->
+			  <CreateFolder />
+			</Component>
+		  </Directory>
+		</Directory>
+	  </Directory>
+	</Directory>
+
+	<!--Put the path to the Unopkg (Open office extension installer) into a property-->
+	<Property Id="OO_UNOPKG_CMDPATH">
+	  <RegistrySearch
+		Id="QueryUnoPkgCmdPath"
+		Type="raw"
+		Root="HKLM"
+		Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\unopkg.exe" />
+	</Property>
+
+	<!--launch the unopkg installer with the file we just installed-->
+	<CustomAction
+	  Id="LaunchUnoPkg"
+	  Property="OO_UNOPKG_CMDPATH"
+	  ExeCommand=' add "[#LinguisticTools12oxt]"'
+	  Return="asyncNoWait" />
+
+	<!--trigger the launch after InstallFinalize-->
+	<InstallExecuteSequence>
+	  <Custom Action="LaunchUnoPkg" After="InstallFinalize">OO_UNOPKG_CMDPATH And Not Installed</Custom>
+		</InstallExecuteSequence>
+
+	</Module>
+</Wix>

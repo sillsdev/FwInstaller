@@ -1,0 +1,2 @@
+del WixLink.log
+light -nologo wixca.wixlib Actions.wixobj CopyFiles.wixobj Environment.wixobj Features.wixobj FW.wixobj FwUI.wixobj PatchCorrections.wixobj ProcessedMergeModules.wixobj ProcessedAutoFiles.wixobj ProcessedFiles.wixobj Registry.wixobj Shortcuts.wixobj -out SetupFW.msi >WixLink.log

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+	<Module Id="FWPythonEC" Guid="316FC7B9-2FB1-4c31-B794-EC273738131E" Language="1033" Version="4.0.0.0">
+		<Package Id="????????-????-????-????-????????????" Keywords="SIL; Encoding Conversion; Python EncConverter" Description="Python EncConverter Merge Module -- for use in SILConverters" Comments="Python EncConverter Plug-in details for use of Python in Fieldworks 7" Manufacturer="SIL International" InstallerVersion="200" Platforms="Intel" Languages="1033" SummaryCodepage="1252" />
+
+		<IgnoreModularization Name="INSTALLDIR" Type="Directory"/>
+
+		<Directory Id="INSTALLDIR" Name="FieldWor" LongName="FieldWorks 7">
+			<Directory Id="PythonECFolder" Name="EC">
+				<Directory Id="PythonPluginsFolder" Name="Plugins">
+					<Component Id="FWPython_3.1.0.0_Plugin_Details.xml" Guid="CACDAF0D-012B-4da0-9839-83517C6580B4">
+						<File Id="PythonEC25_3.1.0.0PluginDetails.xml" Name="PythonEC" LongName="PythonEC25 3.1.0.0 Plugin Details.xml" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="Lib\release\EC\Plugins\PythonEC25 3.1.0.0 Plugin Details.xml"/>
+					</Component>
+				</Directory>
+			</Directory>
+		</Directory>
+	</Module>
+</Wix>

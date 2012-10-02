@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!--
+
+IMPORTANT NOTE:
+
+This file is not compiled directly when the installer is built. It is first
+preprocessed into a file called ProcessedFiles.wxs, which is the file that gets
+compiled.
+
+Therefore, when making changes to this file, it is not sufficient to run
+"WIX Installer Compile and Link.bat". You must first preprocess this file. This
+can be done with ProcessFiles.exe. However, this will also preprocess
+AutoFiles.wxs.
+
+-->
+<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+	<Fragment Id="FilesFragment">
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder" SourceName="ProgramF" LongSource="Program Files">
+				<Directory Id="PFSIL" Name="SIL">
+					<Directory Id="INSTALLDIR" Name="FIELDW~1" LongName="FieldWorks 7">
+						<Directory Id="OLDDATAMIGRATIONDIR" Name="OLDDAT~1" LongName="OldDataMigrationScripts">
+						</Directory>
+						<!-- The following component GUID is required by the master istaller to locate and launch the migration utility: -->
+						<Component Id="MigrateSqlDbs.exe" Guid="D25017CC-66F5-4BEE-B7BA-39BE8AE3698F">
+							<File Id="MigrateSqlDbs.exe" Name="MIGRAT~1.EXE" LongName="MigrateSqlDbs.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="2" Source="Output\${config}\MigrateSqlDbs.exe" />
+						</Component>
+						<!-- The following file has to be installed as a service: -->
+						<Component Id="FwRemoteDatabaseConnectorService.exe" Guid="A3EB2B09-8600-4017-8B04-9DA7B5F2142A">
+							<File Id="FwRemoteDatabaseConnectorService.exe" Name="FWREMO~1.EXE" LongName="FwRemoteDatabaseConnectorService.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="2" Source="Output\${config}\FwRemoteDatabaseConnectorService.exe" />
+							<ServiceInstall Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" DisplayName="FieldWorks Remote Database Connector Service" Type="ownProcess" Interactive="yes" Start="auto" ErrorControl="ignore" Description="Allows connection to local FieldWorks projects from other machines on the network." />
+							<ServiceControl Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
+						</Component>
+					</Directory>
+				</Directory>
+			</Directory>
+			<Directory Id="CommonAppDataFolder" SourceName="AppData">
+				<Directory Id="AppDataSIL" Name="SIL">
+					<Directory Id="AppDataSilFw" Name="FIELDW~1" LongName="FieldWorks 7">
+						<Component Id="CreateFwFolder" Guid="8C7C6A6A-68E9-45ee-96F1-9C08E9F269F7">
+							<CreateFolder>
+								<Permission Extended="yes" User="AuthenticatedUser" GenericAll="yes"/>
+							</CreateFolder>
+						</Component>
+						<Directory Id="PROJECTSDIR" Name="Projects">
+							<Component Id="CreateProjectsFolder" Guid="B42972B9-B700-47b9-950E-56B1E35E8759">
+								<CreateFolder>
+									<Permission Extended="yes" User="AuthenticatedUser" GenericAll="yes"/>
+								</CreateFolder>
+							</Component>
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+			<Directory Id="FontsFolder" SourceName="Fonts">
+				<Component Id="Quivira.ttf" Guid="E4A47C8C-2B96-4186-97A8-B2AFC3150A9C">
+					<File Id="Quivira.ttf" Name="Quivira.ttf" DiskId="2" Source="DistFiles\Fonts\Raw\Quivira.ttf" TrueType="yes" />
+				</Component>
+			</Directory>
+			<Directory Id="SystemFolder" SourceName="System32">
+			</Directory>
+			<Directory Id="CommonFilesFolder" SourceName="CommonFi" LongSource="Common Files">
+				<Directory Id="SIL" Name="SIL">
+					<Component Id="vs_piaredist.exe" Guid="69E34503-AFF1-455d-8B02-38EC1EC156C2">
+						<File Id="vs_piaredist.exe" Name="VS_PIA~1.EXE" LongName="vs_piaredist.exe" ReadOnly="yes" Source="DistFiles\vs_piaredist.exe" DiskId="2"/>
+					</Component>
+					<!-- Place holder for some EC merge modules -->
+				</Directory>
+			</Directory>
+			<Directory Id="MyParatextProjects" Name="MYPARA~1" LongName="MyParatextProjects">
+				<Component Id="ParatextProjectsFolder" Permanent="yes" Guid="9E72BB0B-A61C-4b87-8DA5-C535F81EA386">
+					<Condition><![CDATA[NOT SCR_CHECKS_REG_FOUND]]></Condition>
+					<CreateFolder/>
+				</Component>
+			</Directory>
+		</Directory>
+		<Property Id="MyParatextProjects"><![CDATA[C:\My Paratext Projects]]></Property>
+	</Fragment>
+</Wix>

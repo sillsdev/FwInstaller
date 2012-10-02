@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2003/01/wi">
+	<Module Id="SECPerlEC" Guid="BDC70667-DE2C-4209-82DE-347AF3A77B77" Language="1033" Version="4.0.0.0">
+		<Package Id="????????-????-????-????-????????????" Keywords="SIL; Encoding Conversion; Perl EncConverter" Description="Perl EncConverter Merge Module -- for use in SILConverters" Comments="Perl EncConverter Plug-in details for use of Perl in SILConverters 4.0" Manufacturer="SIL International" InstallerVersion="200" Platforms="Intel" Languages="1033" SummaryCodepage="1252" />
+
+		<IgnoreModularization Name="INSTALLDIR" Type="Directory"/>
+
+		<Directory Id="INSTALLDIR" Name="SILConve" LongName="SILConverters">
+			<Directory Id="PerlECFolder" Name="EC">
+				<Directory Id="PerlPluginsFolder" Name="Plugins">
+					<Component Id="SECPerl_3.1.0.0_Plugin_Details.xml" Guid="5A95D502-FBF8-4c8c-AF4B-8E34D0C81F1C">
+						<File Id="PerlEC510_3.1.0.0PluginDetails.xml" Name="PERLEC51" LongName="PerlEC510 3.1.0.0 Plugin Details.xml" Vital="yes" KeyPath="yes" Source="Lib\release\EC\Plugins\PerlEC510 3.1.0.0 Plugin Details.xml"/>
+					</Component>
+				</Directory>
+			</Directory>
+		</Directory>
+	</Module>
+</Wix>

@@ -1,0 +1,483 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<InstallerConfig>
+	<Languages>
+		<!-- Define localization languages: -->
+		<!-- Format: <Language Name="*language name*" Id="*folder in output\release where localized DLLs get built*"/> -->
+		<Language Name="Spanish" Id="es"/>
+		<Language Name="French" Id="fr"/>
+		<Language Name="Indonesian" Id="id"/>
+		<Language Name="Portuguese" Id="pt"/>
+		<Language Name="Russian" Id="ru"/>
+		<Language Name="Chinese" Id="zh-CN"/>
+		<Language Name="Korean" Id="ko"/>
+		<Language Name="Turkish" Id="tr"/>
+		<Language Name="Hindi" Id="hi"/>
+		<Language Name="Vietnamese" Id="vi"/>
+		<Language Name="Persian" Id="fa"/>
+	</Languages>
+	<CoreFiles>
+		<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed in either TE or FLEx: -->
+		<!-- Format: <File PathPattern="*partial path of any file that is not needed by TE or FLEx but is needed in the FW installation*"/> -->
+		<File PathPattern="Output\${config}\UnicodeCharEditor."/>
+		<File PathPattern="Output\${config}\ObjectBrowser."/>
+		<File PathPattern="Output\${config}\WeifenLuo.WinFormsUI.Docking.dll"/>
+		<File PathPattern="DistFiles\MSSQLMigration\OldMigrationScripts"/>
+	</CoreFiles>
+	<FileConditions>
+		<!-- Define conditions to apply to specified components: -->
+		<!-- Format: <File Path="*partial path of a file that is conditionally installed*" Condition="*MSI Installer condition that must be true to install file*"/> -->
+		<!-- Beware! This XML is double-interpretted, so for example a 'less than' sign must be represented as &amp;lt; -->
+		<!-- This first bunch is to make sure we only install migration scripts that do not already exist: -->
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200005To200006.sql" Condition="MAX_DBMIG_VER &amp;lt; 200006"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200006To200007.sql" Condition="MAX_DBMIG_VER &amp;lt; 200007"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200007To200008.sql" Condition="MAX_DBMIG_VER &amp;lt; 200008"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200008To200009.sql" Condition="MAX_DBMIG_VER &amp;lt; 200009"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200009To200010.sql" Condition="MAX_DBMIG_VER &amp;lt; 200010"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200010To200011.sql" Condition="MAX_DBMIG_VER &amp;lt; 200011"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200011To200012.sql" Condition="MAX_DBMIG_VER &amp;lt; 200012"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200012To200013.sql" Condition="MAX_DBMIG_VER &amp;lt; 200013"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200013To200014.sql" Condition="MAX_DBMIG_VER &amp;lt; 200014"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200014To200015.sql" Condition="MAX_DBMIG_VER &amp;lt; 200015"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200015To200016.sql" Condition="MAX_DBMIG_VER &amp;lt; 200016"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200016To200017.sql" Condition="MAX_DBMIG_VER &amp;lt; 200017"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200017To200018.sql" Condition="MAX_DBMIG_VER &amp;lt; 200018"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200018To200019.sql" Condition="MAX_DBMIG_VER &amp;lt; 200019"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200019To200020.sql" Condition="MAX_DBMIG_VER &amp;lt; 200020"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200020To200021.sql" Condition="MAX_DBMIG_VER &amp;lt; 200021"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200021To200022.sql" Condition="MAX_DBMIG_VER &amp;lt; 200022"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200022To200023.sql" Condition="MAX_DBMIG_VER &amp;lt; 200023"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200023To200024.sql" Condition="MAX_DBMIG_VER &amp;lt; 200024"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200024To200025.sql" Condition="MAX_DBMIG_VER &amp;lt; 200025"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200025To200026.sql" Condition="MAX_DBMIG_VER &amp;lt; 200026"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200026To200027.sql" Condition="MAX_DBMIG_VER &amp;lt; 200027"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200027To200028.sql" Condition="MAX_DBMIG_VER &amp;lt; 200028"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200028To200029.sql" Condition="MAX_DBMIG_VER &amp;lt; 200029"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200029To200030.sql" Condition="MAX_DBMIG_VER &amp;lt; 200030"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200030To200031.sql" Condition="MAX_DBMIG_VER &amp;lt; 200031"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200031To200032.sql" Condition="MAX_DBMIG_VER &amp;lt; 200032"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200032To200033.sql" Condition="MAX_DBMIG_VER &amp;lt; 200033"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200033To200034.sql" Condition="MAX_DBMIG_VER &amp;lt; 200034"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200034To200035.sql" Condition="MAX_DBMIG_VER &amp;lt; 200035"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200035To200036.sql" Condition="MAX_DBMIG_VER &amp;lt; 200036"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200036To200037.sql" Condition="MAX_DBMIG_VER &amp;lt; 200037"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200037To200038.sql" Condition="MAX_DBMIG_VER &amp;lt; 200038"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200038To200039.sql" Condition="MAX_DBMIG_VER &amp;lt; 200039"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200039To200040.sql" Condition="MAX_DBMIG_VER &amp;lt; 200040"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200040To200041.sql" Condition="MAX_DBMIG_VER &amp;lt; 200041"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200041To200042.sql" Condition="MAX_DBMIG_VER &amp;lt; 200042"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200042To200043.sql" Condition="MAX_DBMIG_VER &amp;lt; 200043"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200043To200044.sql" Condition="MAX_DBMIG_VER &amp;lt; 200044"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200044To200045.sql" Condition="MAX_DBMIG_VER &amp;lt; 200045"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200045To200046.sql" Condition="MAX_DBMIG_VER &amp;lt; 200046"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200046To200047.sql" Condition="MAX_DBMIG_VER &amp;lt; 200047"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200047To200048.sql" Condition="MAX_DBMIG_VER &amp;lt; 200048"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200048To200049.sql" Condition="MAX_DBMIG_VER &amp;lt; 200049"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200049To200050.sql" Condition="MAX_DBMIG_VER &amp;lt; 200050"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200050To200051.sql" Condition="MAX_DBMIG_VER &amp;lt; 200051"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200051To200052.sql" Condition="MAX_DBMIG_VER &amp;lt; 200052"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200052To200053.sql" Condition="MAX_DBMIG_VER &amp;lt; 200053"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200053To200054.sql" Condition="MAX_DBMIG_VER &amp;lt; 200054"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200054To200055.sql" Condition="MAX_DBMIG_VER &amp;lt; 200055"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200055To200056.sql" Condition="MAX_DBMIG_VER &amp;lt; 200056"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200056To200057.sql" Condition="MAX_DBMIG_VER &amp;lt; 200057"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200057To200058.sql" Condition="MAX_DBMIG_VER &amp;lt; 200058"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200058To200059.sql" Condition="MAX_DBMIG_VER &amp;lt; 200059"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200059To200060.sql" Condition="MAX_DBMIG_VER &amp;lt; 200060"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200060To200061.sql" Condition="MAX_DBMIG_VER &amp;lt; 200061"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200061To200062.sql" Condition="MAX_DBMIG_VER &amp;lt; 200062"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200062To200063.sql" Condition="MAX_DBMIG_VER &amp;lt; 200063"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200063To200064.sql" Condition="MAX_DBMIG_VER &amp;lt; 200064"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200064To200065.sql" Condition="MAX_DBMIG_VER &amp;lt; 200065"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200065To200066.sql" Condition="MAX_DBMIG_VER &amp;lt; 200066"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200066To200067.sql" Condition="MAX_DBMIG_VER &amp;lt; 200067"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200067To200068.sql" Condition="MAX_DBMIG_VER &amp;lt; 200068"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200068To200069.sql" Condition="MAX_DBMIG_VER &amp;lt; 200069"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200069To200070.sql" Condition="MAX_DBMIG_VER &amp;lt; 200070"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200070To200071.sql" Condition="MAX_DBMIG_VER &amp;lt; 200071"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200071To200072.sql" Condition="MAX_DBMIG_VER &amp;lt; 200072"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200072To200073.sql" Condition="MAX_DBMIG_VER &amp;lt; 200073"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200073To200074.sql" Condition="MAX_DBMIG_VER &amp;lt; 200074"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200074To200075.sql" Condition="MAX_DBMIG_VER &amp;lt; 200075"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200075To200076.sql" Condition="MAX_DBMIG_VER &amp;lt; 200076"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200076To200077.sql" Condition="MAX_DBMIG_VER &amp;lt; 200077"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200077To200078.sql" Condition="MAX_DBMIG_VER &amp;lt; 200078"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200078To200079.sql" Condition="MAX_DBMIG_VER &amp;lt; 200079"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200079To200080.sql" Condition="MAX_DBMIG_VER &amp;lt; 200080"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200080To200081.sql" Condition="MAX_DBMIG_VER &amp;lt; 200081"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200081To200082.sql" Condition="MAX_DBMIG_VER &amp;lt; 200082"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200082To200083.sql" Condition="MAX_DBMIG_VER &amp;lt; 200083"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200083To200084.sql" Condition="MAX_DBMIG_VER &amp;lt; 200084"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200084To200085.sql" Condition="MAX_DBMIG_VER &amp;lt; 200085"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200085To200086.sql" Condition="MAX_DBMIG_VER &amp;lt; 200086"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200086To200087.sql" Condition="MAX_DBMIG_VER &amp;lt; 200087"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200087To200088.sql" Condition="MAX_DBMIG_VER &amp;lt; 200088"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200088To200089.sql" Condition="MAX_DBMIG_VER &amp;lt; 200089"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200089To200090.sql" Condition="MAX_DBMIG_VER &amp;lt; 200090"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200090To200091.sql" Condition="MAX_DBMIG_VER &amp;lt; 200091"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200091To200092.sql" Condition="MAX_DBMIG_VER &amp;lt; 200092"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200092To200093.sql" Condition="MAX_DBMIG_VER &amp;lt; 200093"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200093To200094.sql" Condition="MAX_DBMIG_VER &amp;lt; 200094"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200094To200095.sql" Condition="MAX_DBMIG_VER &amp;lt; 200095"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200095To200096.sql" Condition="MAX_DBMIG_VER &amp;lt; 200096"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200096To200097.sql" Condition="MAX_DBMIG_VER &amp;lt; 200097"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200097To200098.sql" Condition="MAX_DBMIG_VER &amp;lt; 200098"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200098To200099.sql" Condition="MAX_DBMIG_VER &amp;lt; 200099"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200099To200100.sql" Condition="MAX_DBMIG_VER &amp;lt; 200100"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200100To200101.sql" Condition="MAX_DBMIG_VER &amp;lt; 200101"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200101To200102.sql" Condition="MAX_DBMIG_VER &amp;lt; 200102"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200102To200103.sql" Condition="MAX_DBMIG_VER &amp;lt; 200103"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200103To200104.sql" Condition="MAX_DBMIG_VER &amp;lt; 200104"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200104To200105.sql" Condition="MAX_DBMIG_VER &amp;lt; 200105"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200105To200106.sql" Condition="MAX_DBMIG_VER &amp;lt; 200106"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200106To200107.sql" Condition="MAX_DBMIG_VER &amp;lt; 200107"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200107To200108.sql" Condition="MAX_DBMIG_VER &amp;lt; 200108"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200108To200109.sql" Condition="MAX_DBMIG_VER &amp;lt; 200109"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200109To200110.sql" Condition="MAX_DBMIG_VER &amp;lt; 200110"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200110To200111.sql" Condition="MAX_DBMIG_VER &amp;lt; 200111"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200111To200112.sql" Condition="MAX_DBMIG_VER &amp;lt; 200112"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200112To200113.sql" Condition="MAX_DBMIG_VER &amp;lt; 200113"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200113To200114.sql" Condition="MAX_DBMIG_VER &amp;lt; 200114"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200114To200115.sql" Condition="MAX_DBMIG_VER &amp;lt; 200115"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200115To200116.sql" Condition="MAX_DBMIG_VER &amp;lt; 200116"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200116To200117.sql" Condition="MAX_DBMIG_VER &amp;lt; 200117"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200117To200118.sql" Condition="MAX_DBMIG_VER &amp;lt; 200118"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200118To200119.sql" Condition="MAX_DBMIG_VER &amp;lt; 200119"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200119To200120.sql" Condition="MAX_DBMIG_VER &amp;lt; 200120"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200120To200121.sql" Condition="MAX_DBMIG_VER &amp;lt; 200121"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200121To200122.sql" Condition="MAX_DBMIG_VER &amp;lt; 200122"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200122To200123.sql" Condition="MAX_DBMIG_VER &amp;lt; 200123"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200123To200124.sql" Condition="MAX_DBMIG_VER &amp;lt; 200124"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200124To200125.sql" Condition="MAX_DBMIG_VER &amp;lt; 200125"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200125To200126.sql" Condition="MAX_DBMIG_VER &amp;lt; 200126"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200126To200127.sql" Condition="MAX_DBMIG_VER &amp;lt; 200127"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200127To200128.sql" Condition="MAX_DBMIG_VER &amp;lt; 200128"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200128To200129.sql" Condition="MAX_DBMIG_VER &amp;lt; 200129"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200129To200130.sql" Condition="MAX_DBMIG_VER &amp;lt; 200130"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200130To200131.sql" Condition="MAX_DBMIG_VER &amp;lt; 200131"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200131To200132.sql" Condition="MAX_DBMIG_VER &amp;lt; 200132"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200132To200133.sql" Condition="MAX_DBMIG_VER &amp;lt; 200133"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200133To200134.sql" Condition="MAX_DBMIG_VER &amp;lt; 200134"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200134To200135.sql" Condition="MAX_DBMIG_VER &amp;lt; 200135"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200135To200136.sql" Condition="MAX_DBMIG_VER &amp;lt; 200136"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200136To200137.sql" Condition="MAX_DBMIG_VER &amp;lt; 200137"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200137To200138.sql" Condition="MAX_DBMIG_VER &amp;lt; 200138"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200138To200139.sql" Condition="MAX_DBMIG_VER &amp;lt; 200139"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200139To200140.sql" Condition="MAX_DBMIG_VER &amp;lt; 200140"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200140To200141.sql" Condition="MAX_DBMIG_VER &amp;lt; 200141"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200141To200142.sql" Condition="MAX_DBMIG_VER &amp;lt; 200142"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200142To200143.sql" Condition="MAX_DBMIG_VER &amp;lt; 200143"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200143To200144.sql" Condition="MAX_DBMIG_VER &amp;lt; 200144"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200144To200145.sql" Condition="MAX_DBMIG_VER &amp;lt; 200145"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200145To200146.sql" Condition="MAX_DBMIG_VER &amp;lt; 200146"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200146To200147.sql" Condition="MAX_DBMIG_VER &amp;lt; 200147"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200147To200148.sql" Condition="MAX_DBMIG_VER &amp;lt; 200148"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200148To200149.sql" Condition="MAX_DBMIG_VER &amp;lt; 200149"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200149To200150.sql" Condition="MAX_DBMIG_VER &amp;lt; 200150"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200150To200151.sql" Condition="MAX_DBMIG_VER &amp;lt; 200151"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200151To200152.sql" Condition="MAX_DBMIG_VER &amp;lt; 200152"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200152To200153.sql" Condition="MAX_DBMIG_VER &amp;lt; 200153"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200153To200154.sql" Condition="MAX_DBMIG_VER &amp;lt; 200154"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200154To200155.sql" Condition="MAX_DBMIG_VER &amp;lt; 200155"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200155To200156.sql" Condition="MAX_DBMIG_VER &amp;lt; 200156"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200156To200157.sql" Condition="MAX_DBMIG_VER &amp;lt; 200157"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200157To200158.sql" Condition="MAX_DBMIG_VER &amp;lt; 200158"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200158To200159.sql" Condition="MAX_DBMIG_VER &amp;lt; 200159"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200159To200160.sql" Condition="MAX_DBMIG_VER &amp;lt; 200160"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200160To200161.sql" Condition="MAX_DBMIG_VER &amp;lt; 200161"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200161To200162.sql" Condition="MAX_DBMIG_VER &amp;lt; 200162"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200162To200163.sql" Condition="MAX_DBMIG_VER &amp;lt; 200163"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200163To200164.sql" Condition="MAX_DBMIG_VER &amp;lt; 200164"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200164To200165.sql" Condition="MAX_DBMIG_VER &amp;lt; 200165"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200165To200166.sql" Condition="MAX_DBMIG_VER &amp;lt; 200166"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200166To200167.sql" Condition="MAX_DBMIG_VER &amp;lt; 200167"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200167To200168.sql" Condition="MAX_DBMIG_VER &amp;lt; 200168"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200168To200169.sql" Condition="MAX_DBMIG_VER &amp;lt; 200169"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200169To200170.sql" Condition="MAX_DBMIG_VER &amp;lt; 200170"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200170To200171.sql" Condition="MAX_DBMIG_VER &amp;lt; 200171"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200171To200172.sql" Condition="MAX_DBMIG_VER &amp;lt; 200172"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200172To200173.sql" Condition="MAX_DBMIG_VER &amp;lt; 200173"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200173To200174.sql" Condition="MAX_DBMIG_VER &amp;lt; 200174"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200174To200175.sql" Condition="MAX_DBMIG_VER &amp;lt; 200175"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200175To200176.sql" Condition="MAX_DBMIG_VER &amp;lt; 200176"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200176To200177.sql" Condition="MAX_DBMIG_VER &amp;lt; 200177"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200177To200178.sql" Condition="MAX_DBMIG_VER &amp;lt; 200178"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200178To200179.sql" Condition="MAX_DBMIG_VER &amp;lt; 200179"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200179To200180.sql" Condition="MAX_DBMIG_VER &amp;lt; 200180"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200180To200181.sql" Condition="MAX_DBMIG_VER &amp;lt; 200181"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200181To200182.sql" Condition="MAX_DBMIG_VER &amp;lt; 200182"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200182To200183.sql" Condition="MAX_DBMIG_VER &amp;lt; 200183"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200183To200184.sql" Condition="MAX_DBMIG_VER &amp;lt; 200184"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200184To200185.sql" Condition="MAX_DBMIG_VER &amp;lt; 200185"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200185To200186.sql" Condition="MAX_DBMIG_VER &amp;lt; 200186"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200186To200187.sql" Condition="MAX_DBMIG_VER &amp;lt; 200187"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200187To200188.sql" Condition="MAX_DBMIG_VER &amp;lt; 200188"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200188To200189.sql" Condition="MAX_DBMIG_VER &amp;lt; 200189"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200189To200190.sql" Condition="MAX_DBMIG_VER &amp;lt; 200190"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200190To200191.sql" Condition="MAX_DBMIG_VER &amp;lt; 200191"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200191To200192.sql" Condition="MAX_DBMIG_VER &amp;lt; 200192"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200192To200193.sql" Condition="MAX_DBMIG_VER &amp;lt; 200193"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200193To200194.sql" Condition="MAX_DBMIG_VER &amp;lt; 200194"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200194To200195.sql" Condition="MAX_DBMIG_VER &amp;lt; 200195"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200195To200196.sql" Condition="MAX_DBMIG_VER &amp;lt; 200196"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200196To200197.sql" Condition="MAX_DBMIG_VER &amp;lt; 200197"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200197To200198.sql" Condition="MAX_DBMIG_VER &amp;lt; 200198"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200198To200199.sql" Condition="MAX_DBMIG_VER &amp;lt; 200199"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200199To200200.sql" Condition="MAX_DBMIG_VER &amp;lt; 200200"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200200To200201.sql" Condition="MAX_DBMIG_VER &amp;lt; 200201"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200201To200202.sql" Condition="MAX_DBMIG_VER &amp;lt; 200202"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200202To200203.sql" Condition="MAX_DBMIG_VER &amp;lt; 200203"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200203To200204.sql" Condition="MAX_DBMIG_VER &amp;lt; 200204"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200204To200205.sql" Condition="MAX_DBMIG_VER &amp;lt; 200205"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200205To200206.sql" Condition="MAX_DBMIG_VER &amp;lt; 200206"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200206To200207.sql" Condition="MAX_DBMIG_VER &amp;lt; 200207"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200207To200208.sql" Condition="MAX_DBMIG_VER &amp;lt; 200208"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200208To200209.sql" Condition="MAX_DBMIG_VER &amp;lt; 200209"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200209To200210.sql" Condition="MAX_DBMIG_VER &amp;lt; 200210"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200210To200211.sql" Condition="MAX_DBMIG_VER &amp;lt; 200211"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200211To200212.sql" Condition="MAX_DBMIG_VER &amp;lt; 200212"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200212To200213.sql" Condition="MAX_DBMIG_VER &amp;lt; 200213"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200213To200214.sql" Condition="MAX_DBMIG_VER &amp;lt; 200214"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200214To200215.sql" Condition="MAX_DBMIG_VER &amp;lt; 200215"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200215To200216.sql" Condition="MAX_DBMIG_VER &amp;lt; 200216"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200216To200217.sql" Condition="MAX_DBMIG_VER &amp;lt; 200217"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200217To200218.sql" Condition="MAX_DBMIG_VER &amp;lt; 200218"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200218To200219.sql" Condition="MAX_DBMIG_VER &amp;lt; 200219"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200219To200220.sql" Condition="MAX_DBMIG_VER &amp;lt; 200220"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200220To200221.sql" Condition="MAX_DBMIG_VER &amp;lt; 200221"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200221To200222.sql" Condition="MAX_DBMIG_VER &amp;lt; 200222"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200222To200223.sql" Condition="MAX_DBMIG_VER &amp;lt; 200223"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200223To200224.sql" Condition="MAX_DBMIG_VER &amp;lt; 200224"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200224To200225.sql" Condition="MAX_DBMIG_VER &amp;lt; 200225"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200225To200226.sql" Condition="MAX_DBMIG_VER &amp;lt; 200226"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200226To200227.sql" Condition="MAX_DBMIG_VER &amp;lt; 200227"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200227To200228.sql" Condition="MAX_DBMIG_VER &amp;lt; 200228"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200228To200229.sql" Condition="MAX_DBMIG_VER &amp;lt; 200229"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200229To200230.sql" Condition="MAX_DBMIG_VER &amp;lt; 200230"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200230To200231.sql" Condition="MAX_DBMIG_VER &amp;lt; 200231"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200231To200232.sql" Condition="MAX_DBMIG_VER &amp;lt; 200232"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200232To200233.sql" Condition="MAX_DBMIG_VER &amp;lt; 200233"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200233To200234.sql" Condition="MAX_DBMIG_VER &amp;lt; 200234"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200234To200235.sql" Condition="MAX_DBMIG_VER &amp;lt; 200235"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200235To200236.sql" Condition="MAX_DBMIG_VER &amp;lt; 200236"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200236To200237.sql" Condition="MAX_DBMIG_VER &amp;lt; 200237"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200237To200238.sql" Condition="MAX_DBMIG_VER &amp;lt; 200238"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200238To200239.sql" Condition="MAX_DBMIG_VER &amp;lt; 200239"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200239To200240.sql" Condition="MAX_DBMIG_VER &amp;lt; 200240"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200240To200241.sql" Condition="MAX_DBMIG_VER &amp;lt; 200241"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200241To200242.sql" Condition="MAX_DBMIG_VER &amp;lt; 200242"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200242To200243.sql" Condition="MAX_DBMIG_VER &amp;lt; 200243"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200243To200244.sql" Condition="MAX_DBMIG_VER &amp;lt; 200244"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200244To200245.sql" Condition="MAX_DBMIG_VER &amp;lt; 200245"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200245To200246.sql" Condition="MAX_DBMIG_VER &amp;lt; 200246"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200246To200247.sql" Condition="MAX_DBMIG_VER &amp;lt; 200247"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200247To200248.sql" Condition="MAX_DBMIG_VER &amp;lt; 200248"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200248To200249.sql" Condition="MAX_DBMIG_VER &amp;lt; 200249"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200249To200250.sql" Condition="MAX_DBMIG_VER &amp;lt; 200250"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200250To200251.sql" Condition="MAX_DBMIG_VER &amp;lt; 200251"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200251To200252.sql" Condition="MAX_DBMIG_VER &amp;lt; 200252"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200252To200253.sql" Condition="MAX_DBMIG_VER &amp;lt; 200253"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200253To200254.sql" Condition="MAX_DBMIG_VER &amp;lt; 200254"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200254To200255.sql" Condition="MAX_DBMIG_VER &amp;lt; 200255"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200255To200256.sql" Condition="MAX_DBMIG_VER &amp;lt; 200256"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200256To200257.sql" Condition="MAX_DBMIG_VER &amp;lt; 200257"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200257To200258.sql" Condition="MAX_DBMIG_VER &amp;lt; 200258"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200258To200259.sql" Condition="MAX_DBMIG_VER &amp;lt; 200259"/>
+		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200259To200260.sql" Condition="MAX_DBMIG_VER &amp;lt; 200260"/>
+		<!-- This next one is to make sure we only install the sample data on a new (clean) install: -->
+		<File Path="DistFiles\ReleaseData\" Condition="NOT Installed"/>
+	</FileConditions>
+	<Omissions>
+		<!-- Define list of file patterns to be filtered out. Any file whose path contains (anywhere) one of these strings will be filtered out: -->
+		<!-- Format: <File PathPattern="*partial path of any file that is not needed in the FW installation*"/> -->
+		<File PathPattern="nunit"/>
+		<File PathPattern="tests"/>
+		<File PathPattern="mock"/>
+		<File PathPattern="DistFiles\Icu40.zip"/>
+		<File PathPattern="DistFiles\Windows"/>
+		<File PathPattern="DistFiles\Linux"/>
+		<File PathPattern="DistFiles\Projects"/>
+		<File PathPattern="DistFiles\Fonts\Raw"/>
+		<File PathPattern="DistFiles\TECkit_"/>
+		<File PathPattern="DistFiles\CC32.dll"/>
+		<File PathPattern="IcuEC40a"/>
+		<File PathPattern="icuin40"/>
+		<File PathPattern="icuuc40"/>
+		<File PathPattern="icudt40"/>
+		<File PathPattern="DistFiles\CC32.dll"/>
+		<File PathPattern="DistFiles\perl510.dll"/>
+		<File PathPattern="DistFiles\PXPerlWrap510"/>
+		<File PathPattern="DistFiles\python25.dll"/>
+		<File PathPattern="DistFiles\pythoncom25.dll"/>
+		<File PathPattern="DistFiles\pywintypes25.dll"/>
+		<File PathPattern="DistFiles\DropTEC.exe"/>
+		<File PathPattern="DistFiles\SFconv.exe"/>
+		<File PathPattern="DistFiles\TECkit Mapping Editor.exe"/>
+		<File PathPattern="DistFiles\TxtConv.exe"/>
+		<File PathPattern="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder"/>
+		<!-- SilEncConverters30 is old: -->
+		<File PathPattern="SilEncConverters30"/>
+		<!-- SilEncConverters40 and ECInterfaces are taken from lib\\release and put into merge modules: -->
+		<File PathPattern="Output\${config}\SilEncConverters40.dll"/>
+		<File PathPattern="Output\${config}\SilEncConverters40.pdb"/>
+		<File PathPattern="Output\${config}\ECInterfaces.dll"/>
+		<File PathPattern="Output\${config}\ECInterfaces.pdb"/>
+		<File PathPattern="Output\${config}\asserts.log"/>
+		<File PathPattern="Output\${config}\DefaultIcon.ico"/>
+		<File PathPattern="Output\${config}\basicTest.xml"/>
+		<File PathPattern="Output\${config}\Good.xml"/>
+		<File PathPattern="Output\${config}\includeTest.xml"/>
+		<File PathPattern="Output\${config}\listitems.bmp"/>
+		<File PathPattern="Output\${config}\PhonEnvValidatorTest.dll"/>
+		<File PathPattern="Output\${config}\PhonEnvValidatorTest.dll-results.xml"/>
+		<File PathPattern="Output\${config}\PhonEnvValidatorTest.dll.config"/>
+		<File PathPattern="Output\${config}\PhonEnvValidatorTest.pdb"/>
+		<File PathPattern="Output\${config}\ProjectUnpacker.dll-results.xml"/>
+		<File PathPattern="Output\${config}\TestLangProj.bak"/>
+		<File PathPattern="Output\${config}\TestLangProj.fwdata"/>
+		<File PathPattern="Output\${config}\TestManager.dll-results.xml"/>
+		<File PathPattern="Output\${config}\TestUtils.dll"/>
+		<File PathPattern="Output\${config}\TestUtils.pdb"/>
+		<File PathPattern="Output\${config}\TLP.bak"/>
+		<File PathPattern="Output\${config}\TLP.fwdata"/>
+		<File PathPattern="Output\${config}\TLP_New.bak"/>
+		<File PathPattern="Output\${config}\TLP_New.fwdata"/>
+		<File PathPattern="Output\${config}\whitepixel.bmp"/>
+		<File PathPattern="Output\${config}\TestLangProj.db4o"/>
+		<File PathPattern="Output\${config}\TestLangProjCS.db4o"/>
+		<File PathPattern="Output\${config}\TLP.db4o"/>
+		<File PathPattern="Output\${config}\TLPCS.db4o"/>
+		<File PathPattern="Output\${config}\TLPCS_New.db4o"/>
+		<File PathPattern="Output\${config}\TLP_New.db4o"/>
+		<File PathPattern="Output\${config}\ScrChecks.dll"/> <!-- this will be taken from Distfiles\Editorial Checks -->
+		<File PathPattern="Output\${config}\ScrChecks.pdb"/> <!-- this will be taken from Distfiles\Editorial Checks -->
+		<File PathPattern="Output\${config}\MigrateSqlDbs.pdb"/>
+		<!-- Define pairs of file paths known (and allowed) to be similar. This suppresses warnings about omitted files that look like other included files: -->
+		<!-- Format: <SuppressSimilarityWarning Path1="*path of first file of matching pair*" Path2="*path of second file of matching pair*"/> -->
+		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.dll" Path2="Output\${config}\ScrChecks.dll"/>
+		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.pdb" Path2="Output\${config}\ScrChecks.pdb"/>
+	</Omissions>
+	<FolderRedirections>
+		<!-- Define list of folders that will be redirected to some other folder on the end-user's machine: -->
+		<!-- Format: <Redirect Folder="*folder whose contents will be installed to a different folder*" InstallDir="*MSI Installer folder variable where the affected files will be installed*"/> -->
+		<Redirect Folder="DistFiles\ReleaseData" InstallerDir="PROJECTSDIR"/>
+		<Redirect Folder="DistFiles\MSSQLMigration\OldMigrationScripts" InstallerDir="OLDDATAMIGRATIONDIR"/>
+	</FolderRedirections>
+	<WritableFiles>
+		<!-- Define list of (partial) paths of files that must not be set to read-only: -->
+		<!-- Format: <File PathPattern="*partial path of any file that must not have the read-only flag set*"/> -->
+		<File PathPattern="DistFiles\ReleaseData"/>
+	</WritableFiles>
+	<ForceOverwrite>
+		<!-- Define list of (partial) paths of files that have to have older versions forceably removed prior to installing: -->
+		<!-- Format: <File PathPattern="*partial path of any file that must be installed on top of a pre-existing version, even if that means downgrading*"/> -->
+		<!-- Example: <File PathPattern="DistFiles\ReleaseData"/> -->
+		<!-- WARNING! This is very dangerous, because future patches may simply delete these files outright. -->
+	</ForceOverwrite>
+	<IgnoreRegistration>
+		<!-- Define list of paths of executable files that crash and burn if you try to register them: -->
+		<!-- Format: <File Path="*relative path from FW folder of a file that registration should not be attempted on*"/> -->
+		<File Path="Output\${config}\Language.dll"/>
+		<File Path="Output\${config}\Graphite.dll"/>
+		<File Path="Output\${config}\Views.dll"/>
+		<File Path="Output\${config}\FwKernel.dll"/>
+		<File Path="DistFiles\Keyboards\IPA\MSKLC\ipa101\amd64\IPA101.dll"/>
+		<File Path="DistFiles\Keyboards\IPA\MSKLC\ipa101\ia64\IPA101.dll"/>
+		<File Path="DistFiles\iconv.dll"/>
+		<File Path="DistFiles\intl.dll"/>
+		<File Path="DistFiles\Editorial Checks\ScrChecks.dll"/>
+		<File Path="DistFiles\Scripting\Add To Python Installation Folder\clr.dll"/>
+		<File Path="DistFiles\Scripting\Add To Python Installation Folder\python.runtime.dll"/>
+		<File Path="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
+		<File Path="PalasoUIWindowsForms.dll"/>
+	</IgnoreRegistration>
+	<TeFileNameHeuristics>
+		<!-- Define list of regular expressions serving as heuristics for detecting if a file is meant only for TE: -->
+		<!-- Format: <Heuristic RegExp="*regular expression matching paths of files that belong exclusively to TE*"/> -->
+		<Heuristic RegExp="[sS]cripture"/>
+		<Heuristic RegExp="[bB]ible"/>
+		<Heuristic RegExp="Scr[A-Z]"/>
+		<Heuristic RegExp="^Te[A-Z]"/>
+	</TeFileNameHeuristics>
+	<NotTeOnly>
+		<!-- Define list of specific files that may look like TE-only files but aren't really: -->
+		<!-- Format: <File Path="*relative path from FW folder of a file looks like it is TE-exclusive but isn't*"/> -->
+		<File Path="Output\${config}\ScrUtilsInterfaces.dll"/>
+		<File Path="Output\${config}\SharedScrUtils.dll"/>
+		<File Path="Output\${config}\SharedScrUtils.pdb"/>
+		<File Path="Output\${config}\SharedScrUtils.pdb"/>
+	</NotTeOnly>
+	<ErrorReporting>
+		<!-- Define list of features that are allowed to be missing yet have components assigned to them: -->
+		<!-- (This just suppresses the warning in the final report; the feature and its components will be omitted from the installer) -->
+		<!-- Format: <IgnoreMissingFeature Name="*Name of feature to suppress reporting about when missing yet components are assigned to it*"/> -->
+		<!--<IgnoreMissingFeature Name="Turkish"/>
+		<IgnoreMissingFeature Name="Turkish_TE"/>-->
+	</ErrorReporting>
+	<IntegrityChecks>
+		<!-- Define list of (partial) paths of files that are OK in DistFiles folder without being in Perforce: -->
+		<!-- Format: <IgnoreNonP4DistFiles PathPattern="*partial path of any file that may exist in DistFiles without being checked into Perforce*"/> -->
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Icu40"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Editorial Checks\ScrChecks.dll"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Editorial Checks\ScrChecks.pdb"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-es.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-fr.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-id.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-pt.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ru.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-zh-CN.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-fa.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-hi.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ko.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-tr.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-vi.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\GeneratedLayouts.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\GeneratedParts.xml"/>
+		<IgnoreNonP4DistFiles PathPattern="DistFiles\Templates\LocalizedLists"/>
+		<!-- Define list of (partial) paths of files that are allowed to have a version of 0.0.0.0: -->
+		<!-- Format: <IgnoreZeroVersionedFiles PathPattern="*partial path of any file that is allowed to have a version of 0.0.0.0*"/> -->
+		<IgnoreZeroVersionedFiles PathPattern="Output\${config}\MsHtmHstInterop.dll"/>
+	</IntegrityChecks>
+	<FailureNotification>
+		<!-- Define list of machines to email people if something goes wrong: -->
+		<!-- Format: <EmailingMachine Name="*name of machine (within current domain) which is required to email people if there is a problem*"/> -->
+		<EmailingMachine Name="ls-builder-0910"/>
+		<!-- Define list of people to email if something goes wrong: -->
+		<!-- Format: <Recipient Email="*email address of someone to notify if there is a problem*"/> -->
+		<Recipient Email="alistair_imrie@sil.org"/>
+		<Recipient Email="ken_zook@sil.org"/>
+		<Recipient Email="ann_bush@sil.org"/>
+		<Recipient Email="john_wickberg@jaars.org"/>
+		<Recipient Email="bryan_wussow@jaars.org"/>
+	</FailureNotification>
+	<FilesSources>
+		<!-- Define folders from which files are to be collected for the installer: -->
+		<!-- (Only two entries are possible: BuiltFiles and StaticFiles) -->
+		<BuiltFiles Path="Output"/>
+		<StaticFiles Path="DistFiles"/>
+		<!-- Define list of WIX files that list files explicitly: -->
+		<!-- Format: <WixSource File="*name of WIX source file in Installer folder that contains <File> definitions inside <Component> definitions*"/> -->
+		<WixSource File="Files.wxs"/>
+		<!-- Define list of files that list merge modules to be included. (The files in any merge modules will be taken into account.) -->
+		<!-- Format: <MergeModules File="*name of WIX source file in Installer folder that contains <Merge> definitions*"/> -->
+		<!-- Merge modules defined in such files must have WIX source file names formed by substituting the .msm extension with .mm.wxs -->
+		<MergeModules File="MergeModules.wxs"/>
+	</FilesSources>
+	<FileLibrary>
+		<!-- Define File Library details: -->
+		<!-- (Only two entries are possible: Library and Addenda) -->
+		<Library File="FileLibrary.xml"/>
+		<Addenda File="FileLibraryAddenda.xml"/>
+	</FileLibrary>
+	<!-- Define output file: -->
+	<Output File="AutoFiles.wxs"/>
+	<CabinetAssignments>
+		<Default CabinetIndex="2"/>
+		<Cabinet Feature="FlexMovies" CabinetIndex="1"/>
+		<Cabinet Feature="Korean" CabinetIndex="3"/>
+		<Cabinet Feature="Turkish" CabinetIndex="4"/>
+		<Cabinet Feature="Hindi" CabinetIndex="5"/>
+		<Cabinet Feature="Vietnamese" CabinetIndex="6"/>
+		<Cabinet Feature="Persian" CabinetIndex="7"/>
+	</CabinetAssignments>
+</InstallerConfig>
