@@ -1,0 +1,2 @@
+del WixLink.log
+"%WIX%bin\light" -ext "%WIX%bin\WixUtilExtension.dll" -sw1055 -sw1056 -sice:ICE03;ICE47;ICE48;ICE57;ICE60;ICE69;ICE82;ICE83 -nologo Actions.wixobj CopyFiles.wixobj Environment.wixobj Features.wixobj FW.wixobj FwUI.wixobj PatchCorrections.wixobj ProcessedMergeModules.wixobj ProcessedAutoFiles.wixobj ProcessedFiles.wixobj Registry.wixobj Shortcuts.wixobj -out SetupFW.msi >WixLink.log

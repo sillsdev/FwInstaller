@@ -1,0 +1,87 @@
+<?xml version='1.0'?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product UpgradeCode="1092269F-9EA1-419B-8685-90203F83E254" Id="8E80F1ED-826A-46d5-A59A-D8A203F2F0D9" Name='SIL FieldWorks 7.2' Language='1033'
+			 Version='7.2.0' Manufacturer='SIL International'>
+		<Package Id='*'
+				  Description='FieldWorks Installer'
+				  Manufacturer='SIL International' InstallerVersion='300' Compressed='yes' />
+		<Condition Message="You need to be an administrator to install this product.">Privileged</Condition>
+		<Condition Message="[ProductName] will only run on Windows 2000 or better. You cannot intall it on this machine.">
+			<![CDATA[(NOT Version9X) OR (NOT VersionNT OR (VersionNT >= 500))]]>
+		</Condition>
+
+		<Media Id='1' Cabinet='Flex_M.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='2' Cabinet='FW.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='3' Cabinet='French.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='4' Cabinet='Spanish.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='5' Cabinet='Indonesian.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='6' Cabinet='Portuguese.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='7' Cabinet='Russian.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='8' Cabinet='Chinese.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='9' Cabinet='Hindi.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='10' Cabinet='Malay.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='11' Cabinet='Telugu.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='12' Cabinet='Korean.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='13' Cabinet='Turkish.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='14' Cabinet='Vietnam.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='15' Cabinet='Persian.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='16' Cabinet='Nepali.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='17' Cabinet='Bengali.cab' EmbedCab='no' CompressionLevel='high'/>
+
+		<Property Id="FLEX_MOVIES_CAB_FOUND">
+			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindFlexMoviesCabFile">
+				<FileSearch Name="Flex_M.cab"/>
+			</DirectorySearch>
+		</Property>
+		<Property Id="KOREAN_CAB_FOUND">
+			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindKoreanCabFile">
+				<FileSearch Name="Korean.cab"/>
+			</DirectorySearch>
+		</Property>
+		<Property Id="TURKISH_CAB_FOUND">
+			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindTurkishCabFile">
+				<FileSearch Name="Turkish.cab"/>
+			</DirectorySearch>
+		</Property>
+		<Property Id="VIETNAMESE_CAB_FOUND">
+			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindVietnameseCabFile">
+				<FileSearch Name="Vietnam.cab"/>
+			</DirectorySearch>
+		</Property>
+		<Property Id="PERSIAN_CAB_FOUND">
+			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindPersianCabFile">
+				<FileSearch Name="Persian.cab"/>
+			</DirectorySearch>
+		</Property>
+		<Property Id="NEPALI_CAB_FOUND">
+			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindNepaliCabFile">
+				<FileSearch Name="Nepali.cab"/>
+			</DirectorySearch>
+		</Property>
+		<Property Id="BENGALI_CAB_FOUND">
+			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindBengaliCabFile">
+				<FileSearch Name="Bengali.cab"/>
+			</DirectorySearch>
+		</Property>
+
+
+		<Property Id="OLDER_FW_INSTALL_PATH">
+			<RegistrySearch Id="SearchOldeFwReg" Root="HKLM" Key="SOFTWARE\SIL\FieldWorks" Name="RootCodeDir" Type="raw" />
+		</Property>
+
+		<Property Id="ALLUSERS"><![CDATA[1]]></Property>
+
+	<PropertyRef Id='FwUI'/>
+	<PropertyRef Id='AutoFilesFragment'/>
+	<PropertyRef Id='FilesFragment'/>
+	<PropertyRef Id='FeaturesFragment'/>
+	<PropertyRef Id='RegistryFragment'/>
+	<PropertyRef Id='CopyFilesFragment'/>
+	<PropertyRef Id='EnvironmentVarsFragment'/>
+	<PropertyRef Id='ShortcutsFragment'/>
+	<PropertyRef Id='MergeModulesFragment'/>
+	<PropertyRef Id='ActionsFragment'/>
+	<PropertyRef Id='PatchCorrectionsFragment'/>
+
+	</Product>
+</Wix>

@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<!-- This file specifies ad hoc components (with associated feature references) to compensate -->
+	<!-- for components removed since earlier versions of the installer. -->
+	<!-- Any component removed in a subsequent installer will cause the corresponding patch installer -->
+	<!-- to fail spectacularly while giving the appearance of working correctly. -->
+	<!-- Consequently, any component found to be missing must be re-instated here, and the resource(s) -->
+	<!-- installed by that component must be expressly deleted. -->
+	<Fragment Id="PatchCorrectionsFragment">
+	<Property  Id='PatchCorrectionsFragment' Value='1'/>
+
+	<!-- Patch from 7.1.1 to ??? -->
+
+	</Fragment>
+</Wix>
