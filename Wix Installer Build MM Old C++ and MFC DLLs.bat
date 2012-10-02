@@ -1,0 +1,5 @@
+del "Old C++ and MFC DLLs.mmp.wxs.log"
+del "WixLinkOld C++ and MFC DLLs.log"
+ProcessWixMMs.js "Old C++ and MFC DLLs.mm.wxs"
+candle -nologo "Old C++ and MFC DLLs.mmp.wxs" >"Old C++ and MFC DLLs.mmp.wxs.log"
+light -nologo "Old C++ and MFC DLLs.mmp.wixobj" -out "Old C++ and MFC DLLs.msm" >"WixLinkOld C++ and MFC DLLs.log"
