@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Module Id="FWEC40" Language="1033" Version="4.0.0.0">
+		<Package Id="82356AAF-C0F5-43b2-ACC9-432A27F2BDD6" Keywords="SIL; Encoding Conversion; Transliteration; EncConverters" Description="EncConverter core 4.0 Merge Module for FieldWorks only" Comments="FW version 4.0 of EncConverter core" Manufacturer="SIL International" InstallerVersion="200" Platform="x86" Languages="1033" SummaryCodepage="1252" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id='MyModuleDirectory' Name='.'>
+				<Component Id="ECInterfaces.dll" Guid="B87608D6-7EEA-4c54-89A8-76AF83E2C2B1">
+					<File Id="ECInterfaces.dll" Name="ECInterfaces.dll" Vital="yes" KeyPath="yes" AssemblyManifest="ECInterfaces.dll" AssemblyApplication="ECInterfaces.dll" Assembly=".net" Source="Lib\${config}\ECInterfaces.dll" />
+				</Component>
+				<Component Id="SilEncConverters40.dll" Guid="4D011740-D869-479b-80DE-021998A087E5">
+					<File Id="SilEncConverters40.dll" Name="SilEncConverters40.dll" Vital="yes" KeyPath="yes" AssemblyManifest="SilEncConverters40.dll" AssemblyApplication="SilEncConverters40.dll" Assembly=".net" Source="Lib\${config}\SilEncConverters40.dll" />
+				</Component>
+				<Component Id="EncConvertersAppDataMover40.exe" Guid="5819C8CA-9422-4c21-98F0-9C2D6F56E442">
+					<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" Source="Lib\${config}\EncConvertersAppDataMover40.exe"/>
+				</Component>
+				<Directory Id="ECFolder" Name="EC">
+					<Directory Id="PluginsFolder" Name="Plugins">
+						<Component Id="EC4.0.0.0PluginDetails.xml" Guid="BDCDF48B-B632-4d72-AC33-859ED9B4A06D">
+							<File Id="EC4.0.0.0PluginDetails.xml" Name="EC 4.0.0.0 Plugin Details.xml" KeyPath="yes" Source="Lib\release\EC\Plugins\EC 4.0.0.0 Plugin Details.xml"/>
+						</Component>
+					</Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<CustomAction Id="LaunchAppDataMover" Execute="deferred" Impersonate="no" FileKey="EncConvertersAppDataMover40.exe" ExeCommand="" Return="ignore" />
+		<InstallExecuteSequence>
+			<Custom Action="LaunchAppDataMover" After="PublishComponents"><![CDATA[NOT Installed]]></Custom>
+		</InstallExecuteSequence>
+
+	</Module>
+</Wix>

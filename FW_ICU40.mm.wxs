@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Module Id="FWICU40" Language="1033" Version="4.0.0.0">
+		<Package Id="8F6316EC-4950-4c1e-9AC0-FB0672CC974A" Keywords="Fieldworks; SIL; ICU Transliterators/Converters" Description="ICU 4.0 Merge Module -- for use in Fieldworks" Comments="ICU Plug-in details for use of ICU in Fieldworks" Manufacturer="SIL International" InstallerVersion="200" Platform="x86" Languages="1033" SummaryCodepage="1252" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ICUECFolder" Name="EC">
+				<Directory Id="ICUPluginsFolder" Name="Plugins">
+					<!-- Component and File IDs have been truncated to prevent ICE03 String Overflow warnings: -->
+					<Component Id="FWIcuEC40_3.1.0.0_Plugin_Details.xm" Guid="3E89869B-0B85-492b-8F05-188AA1EA1653">
+						<File Id="IcuEC40_3.1.0.0_Plugin_Details.xm" Name="IcuEC40 3.1.0.0 Plugin Details.xml" KeyPath="yes" Source="Lib\release\EC\Plugins\IcuEC40 3.1.0.0 Plugin Details.xml" />
+					</Component>
+				</Directory>
+			</Directory>
+		</Directory>
+	</Module>
+</Wix>

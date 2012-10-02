@@ -1,0 +1,5 @@
+LIBRARY	"Main DLL"
+
+EXPORTS
+   CheckForFwResidueFiles		@1
+   GetHighestDbMigrationVersion	@2
