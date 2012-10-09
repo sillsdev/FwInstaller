@@ -436,6 +436,7 @@
 		<File PathPattern="Output\Release\CacheLight."/>
 		<File PathPattern="Output\Release\RBRExtensions."/>
 		<File PathPattern="XceedZip.dll"/>
+		<File PathPattern="Output\Release\DebugProcs."/>
 		<!-- Define pairs of file paths known (and allowed) to be similar. This suppresses warnings about omitted files that look like other included files: -->
 		<!-- Format: <SuppressSimilarityWarning Path1="*path of first file of matching pair*" Path2="*path of second file of matching pair*"/> -->
 		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.dll" Path2="Output\Release\ScrChecks.dll"/>
