@@ -526,7 +526,7 @@
 		<Recipient Email="ken_zook@sil.org" NotifyFileChanges="true"/>
 		<Recipient Email="ann_bush@sil.org" NotifyFileChanges="true"/>
 		<Recipient Email="john_wickberg@jaars.org"/>
-		<Recipient Email="bryan_wussow@jaars.org"/>
+		<!--<Recipient Email="bryan_wussow@jaars.org"/>-->
 	</FailureNotification>
 	<FilesSources>
 		<!-- Define folders from which files are to be collected for the installer: -->
