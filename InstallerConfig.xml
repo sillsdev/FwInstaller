@@ -436,6 +436,7 @@
 		<File PathPattern="Output\Release\CacheLight."/>
 		<File PathPattern="Output\Release\RBRExtensions."/>
 		<File PathPattern="XceedZip.dll"/>
+		<File PathPattern="Output\Release\DebugProcs."/>
 		<!-- Define pairs of file paths known (and allowed) to be similar. This suppresses warnings about omitted files that look like other included files: -->
 		<!-- Format: <SuppressSimilarityWarning Path1="*path of first file of matching pair*" Path2="*path of second file of matching pair*"/> -->
 		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.dll" Path2="Output\Release\ScrChecks.dll"/>
@@ -525,7 +526,7 @@
 		<Recipient Email="ken_zook@sil.org" NotifyFileChanges="true"/>
 		<Recipient Email="ann_bush@sil.org" NotifyFileChanges="true"/>
 		<Recipient Email="john_wickberg@jaars.org"/>
-		<Recipient Email="bryan_wussow@jaars.org"/>
+		<!--<Recipient Email="bryan_wussow@jaars.org"/>-->
 	</FailureNotification>
 	<FilesSources>
 		<!-- Define folders from which files are to be collected for the installer: -->
