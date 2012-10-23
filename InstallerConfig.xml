@@ -387,7 +387,7 @@
 		<File CaseSensitive="true" PathPattern="\test"/>
 		<File CaseSensitive="true" PathPattern="\Test"/>
 		<File PathPattern="mock"/>
-		<File PathPattern="DistFiles\Icu40.zip"/>
+		<File PathPattern="DistFiles\Icu50.zip"/>
 		<File PathPattern="DistFiles\Windows"/>
 		<File PathPattern="DistFiles\Linux"/>
 		<File PathPattern="DistFiles\Projects"/>
@@ -398,10 +398,8 @@
 		<File PathPattern="SilEncConverters40.pdb"/>
 		<File PathPattern="ECInterfaces.tlb"/>
 		<File PathPattern="SilEncConverters40.tlb"/>
-		<File PathPattern="IcuEC40b"/>
-		<File PathPattern="icuin40"/>
-		<File PathPattern="icuuc40"/>
-		<File PathPattern="icudt40"/>
+		<File PathPattern="icuin50d.dll"/>
+		<File PathPattern="icuuc50d.dll"/>
 		<File PathPattern="DistFiles\PXPerlWrap-d.dll"/>
 		<File PathPattern="DistFiles\DropTEC.exe"/>
 		<File PathPattern="DistFiles\SFconv.exe"/>

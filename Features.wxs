@@ -21,6 +21,7 @@
 			<ComponentRef Id="RegRootCodeDir"/>
 			<ComponentRef Id="RegProjectsDir"/>
 			<ComponentRef Id="RegInitIcu"/>
+			<ComponentRef Id="RegisterICUFolder"/>
 			<ComponentRef Id="RegDotNetCategory"/>
 			<ComponentRef Id="ShortcutMorphIntro"/>
 			<ComponentRef Id="ShortcutLicense"/>
@@ -38,7 +39,6 @@
 			<MergeRef Id="Managed_Install_Fix"/>
 			<MergeRef Id="TECkit_DLLs"/>
 			<MergeRef Id="CC_DLL"/>
-			<MergeRef Id="ICU_4_0"/>
 			<MergeRef Id="ICUECHelp"/>
 			<Feature Id="FLEx" Title="Language Explorer (FLEx)" Description="FieldWorks Language Explorer" Display="expand" Level="3" AllowAdvertise="no">
 				<ComponentRef Id="UnregFlex"/>

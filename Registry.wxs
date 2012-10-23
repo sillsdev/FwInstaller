@@ -38,6 +38,9 @@
 			<Component Id="RegInitIcu" Guid="E4A17048-1543-4eec-9554-A9668282E3BC">
 				<RegistryValue Id="RegInitIcu" Root="HKLM" Key="SOFTWARE\SIL" Type="integer" Value="1" Name="InitIcu" />
 			</Component>
+			<Component Id="RegisterICUFolder" Guid="FD94075E-CB26-4C7A-ADF4-B920FC1B25D1">
+				<RegistryValue Name="ICU50DataDir" Root="HKLM"  Key="Software\SIL" Type="string" KeyPath="yes" Value="[INSTALLDIR]ICU50" />
+			</Component>
 			<Component Id="RegScrChecks" Permanent="yes" Guid="2DB8302C-6C11-4270-BA26-D457B03B04E1">
 				<Condition><![CDATA[NOT SCR_CHECKS_REG_FOUND]]></Condition>
 				<RegistryValue Id="RegScrChecks" Root="HKLM" Key="SOFTWARE\ScrChecks\1.0\Settings_Directory" Type="string" Value="C:\My Paratext Projects" />
