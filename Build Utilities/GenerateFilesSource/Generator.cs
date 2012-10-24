@@ -2680,29 +2680,29 @@ namespace GenerateFilesSource
 
 		/// <summary>
 		/// Collect some details about this build to help distinguish it from
-		/// other Perforce branches etc.
+		/// other source control branches etc.
 		/// </summary>
 		/// <returns>Build details</returns>
-		private static string GetBuildDetails()
+		private string GetBuildDetails()
 		{
 			var details = "";
 
-			// Collect P4 registry variables:
-			const string p4VarListPath = "__P4Set__.txt";
+			// Collect source control branch details:
+			var branchListPath = Path.Combine(_exeFolder, "__Branch__.txt");
 
-			RunDosCmd("p4 set >" + p4VarListPath);
-			var p4VarList = new StreamReader(p4VarListPath);
+			RunDosCmd("git branch >\"" + branchListPath + "\"", _projRootPath);
+			var branchList = new StreamReader(branchListPath);
 			string line;
-			while ((line = p4VarList.ReadLine()) != null)
+			while ((line = branchList.ReadLine()) != null)
 			{
 				if (line.Length == 0) continue;
 
-				// We're interested in the client workspace name:
-				if (line.StartsWith("P4CLIENT"))
-					details += "Perforce registry variable " + line + Environment.NewLine;
+				// We're interested in the current branch which starts with a '*' character:
+				if (line.StartsWith("*"))
+					details += "Current source control branch: " + line.Substring(2) + Environment.NewLine;
 			}
-			p4VarList.Close();
-			File.Delete(p4VarListPath);
+			branchList.Close();
+			File.Delete(branchListPath);
 
 			return details;
 		}
@@ -2711,14 +2711,16 @@ namespace GenerateFilesSource
 		/// Runs the given DOS command. Waits for it to terminate.
 		/// </summary>
 		/// <param name="cmd">A DOS command</param>
-		private static void RunDosCmd(string cmd)
+		/// <param name="workingDirectory">Directory to start execution in</param>
+		private static void RunDosCmd(string cmd, string workingDirectory = "")
 		{
 			const string dosCmdIntro = "/Q /D /C ";
 			cmd = dosCmdIntro + cmd;
 			try
 			{
-				var dosProc = Process.Start("cmd", cmd);
-				if (dosProc != null) dosProc.WaitForExit();
+				var startInfo = new ProcessStartInfo { FileName = "cmd", Arguments = cmd, WorkingDirectory = workingDirectory, UseShellExecute = false };
+				var dosProc = Process.Start(startInfo);
+				dosProc.WaitForExit();
 			}
 			catch (Exception)
 			{
