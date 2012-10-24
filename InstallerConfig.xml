@@ -381,6 +381,7 @@
 	<Omissions>
 		<!-- Define list of file patterns to be filtered out. Any file whose path contains (anywhere) one of these strings will be filtered out, case-insensitive by default: -->
 		<!-- Format: <File CaseSensitive="*true if path is to be interpreted with case-sensitivity*" PathPattern="*partial path of any file that is not needed in the FW installation*"/> -->
+		<File PathPattern=".git"/>
 		<File PathPattern="nunit"/>
 		<File PathPattern="tests"/>
 		<File CaseSensitive="true" PathPattern="\test"/>
@@ -484,37 +485,37 @@
 		<IgnoreMissingFeature Name="Turkish_TE"/>-->
 	</ErrorReporting>
 	<IntegrityChecks>
-		<!-- Define list of (partial) paths of files that are OK in DistFiles folder without being in Perforce: -->
-		<!-- Format: <IgnoreNonP4DistFiles PathPattern="*partial path of any file that may exist in DistFiles without being checked into Perforce*"/> -->
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Icu40"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Editorial Checks\ScrChecks.dll"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Editorial Checks\ScrChecks.pdb"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-es.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-fr.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-id.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-pt.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ru.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-zh-CN.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-fa.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-hi.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ko.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-tr.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-vi.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ne.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ms.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-te.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-bn.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ro.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-th.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-km.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\strings-ur.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\Generated.fwlayout"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Parts\GeneratedParts.xml"/>
-		<IgnoreNonP4DistFiles PathPattern="DistFiles\Templates\LocalizedLists"/>
+		<!-- Define list of (partial) paths of files that are OK in DistFiles folder without being in source control: -->
+		<!-- Format: <IgnoreNonVersionedDistFiles PathPattern="*partial path of any file that may exist in DistFiles without being checked into version control*"/> -->
+		<IgnoreNonVersionedDistFiles PathPattern="Icu40"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Editorial Checks\ScrChecks.dll"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Editorial Checks\ScrChecks.pdb"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-es.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-fr.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-id.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-pt.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-ru.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-zh-CN.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-fa.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-hi.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-ko.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-tr.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-vi.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-ne.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-ms.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-te.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-bn.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-ro.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-th.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-km.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-ur.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Parts\Generated.fwlayout"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Parts\GeneratedParts.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Templates\LocalizedLists"/>
 		<!-- Define list of (partial) paths of files that are allowed to have a version of 0.0.0.0: -->
-		<!-- Format: <IgnoreZeroVersionedFiles PathPattern="*partial path of any file that is allowed to have a version of 0.0.0.0*"/> -->
-		<IgnoreZeroVersionedFiles PathPattern="Output\Release\MsHtmHstInterop.dll"/>
+		<!-- Format: <IgnoreVersionZeroFiles PathPattern="*partial path of any file that is allowed to have a version of 0.0.0.0*"/> -->
+		<IgnoreVersionZeroFiles PathPattern="Output\Release\MsHtmHstInterop.dll"/>
 	</IntegrityChecks>
 	<FailureNotification>
 		<!-- Define list of machines to email people if something goes wrong: -->

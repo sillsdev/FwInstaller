@@ -25,23 +25,22 @@ namespace TestInstallerIntegrity
 
 	// Warning messages:
 	// 1: There is no FileLibrary. [Deprecated.]
-	// 2: The following files are present in DistFiles but not checked into Perforce...
-	// 3: The following files are checked into Perforce but not present in DistFiles...
-	// 4: File XXXX has a version number of 0.0.0.0.
-	// 5: Could not determine if DistFiles folder is consistent with Perforce: XXXX
+	// 2: The following files are present in DistFiles but not checked into source control...
+	// 3: File XXXX has a version number of 0.0.0.0.
+	// 4: Could not determine if DistFiles folder is consistent with source control: XXXX
 
 	class InstallerIntegrityTester
 	{
 		// Controls set via command line:
-		private readonly string m_buildType;
-		private readonly bool m_silent;
+		private readonly string _buildType;
+		private readonly bool _silent;
 
 		private const string LogFileName = "TestInstallerIntegrity.log";
-		private string m_errorLog;
-		private string m_exeFolder;
-		private string m_projRootPath;
-		private XmlNodeList m_fileNodes;
-		private XmlNodeList m_regNodes;
+		private string _errorLog;
+		private string _exeFolder;
+		private string _projRootPath;
+		private XmlNodeList _fileNodes;
+		private XmlNodeList _regNodes;
 		private class WixSource
 		{
 			public readonly XmlDocument XmlDoc;
@@ -54,25 +53,25 @@ namespace TestInstallerIntegrity
 				XmlnsMan.AddNamespace("wix", "http://schemas.microsoft.com/wix/2006/wi");
 			}
 		}
-		private List<WixSource> m_wixFilesSources;
+		private List<WixSource> _wixFilesSources;
 
 		// List of file patterns of files that may legitimately exist in DistFiles
-		// without being checked into Perforce:
-		private readonly List<string> m_nonP4DistFiles = new List<string>();
+		// without being checked into source control:
+		private readonly List<string> _nonVersionedDistFiles = new List<string>();
 		// List of file patterns of files that may legitimately have a version number of 0.0.0.0:
-		private readonly List<string> m_zeroVersionedFiles = new List<string>();
+		private readonly List<string> _versionZeroFiles = new List<string>();
 		// List of file name fragments whose files should be omitted:
-		private readonly List<string> m_fileOmissions = new List<string>();
+		private readonly List<string> _fileOmissions = new List<string>();
 
 		// List of machines which will email people if something goes wrong:
-		private readonly List<string> m_emailingMachineNames = new List<string>();
+		private readonly List<string> _emailingMachineNames = new List<string>();
 		// List of people to email if something goes wrong:
-		private readonly List<string> m_emailList = new List<string>();
+		private readonly List<string> _emailList = new List<string>();
 
 		public InstallerIntegrityTester(bool silent, string buildType)
 		{
-			m_silent = silent;
-			m_buildType = buildType;
+			_silent = silent;
+			_buildType = buildType;
 		}
 
 		internal void Run()
@@ -91,18 +90,18 @@ namespace TestInstallerIntegrity
 			if (File.Exists(LogFileName))
 				File.Delete(LogFileName);
 
-			m_errorLog = "";
+			_errorLog = "";
 
 			// Get FW root path:
 			var exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 			if (exePath == null)
 				throw new Exception("So sorry, don't know where we are!");
-			m_exeFolder = Path.GetDirectoryName(exePath);
-			if (m_exeFolder == null)
+			_exeFolder = Path.GetDirectoryName(exePath);
+			if (_exeFolder == null)
 				throw new Exception("So sorry, don't know where we are!");
 
 			// Get development project root path:
-			m_projRootPath = m_exeFolder.ToLowerInvariant().EndsWith("installer") ? Path.GetDirectoryName(m_exeFolder) : m_exeFolder;
+			_projRootPath = _exeFolder.ToLowerInvariant().EndsWith("installer") ? Path.GetDirectoryName(_exeFolder) : _exeFolder;
 
 			ConfigureFromXml();
 
@@ -111,7 +110,7 @@ namespace TestInstallerIntegrity
 			{
 				var xmlFileLibrary = new XmlDocument();
 				xmlFileLibrary.Load("FileLibrary.xml");
-				m_fileNodes = xmlFileLibrary.SelectNodes("FileLibrary/File");
+				_fileNodes = xmlFileLibrary.SelectNodes("FileLibrary/File");
 			}
 
 			// Load Registry Library:
@@ -119,13 +118,13 @@ namespace TestInstallerIntegrity
 			{
 				var xmlRegLibrary = new XmlDocument();
 				xmlRegLibrary.Load("RegLibrary.xml");
-				m_regNodes = xmlRegLibrary.SelectNodes("RegLibrary/Component");
+				_regNodes = xmlRegLibrary.SelectNodes("RegLibrary/Component");
 			}
 
-			// Load all .wxs files containging files definitions into a List for iterative processing:
-			m_wixFilesSources = new List<WixSource> {new WixSource("Files.wxs"), new WixSource("ProcessedAutoFiles.wxs")};
+			// Load all .wxs files containing files definitions into a List for iterative processing:
+			_wixFilesSources = new List<WixSource> {new WixSource("Files.wxs"), new WixSource("AutoFiles.wxs")};
 			if (File.Exists("PatchCorrections.wxs"))
-				m_wixFilesSources.Add(new WixSource("PatchCorrections.wxs"));
+				_wixFilesSources.Add(new WixSource("PatchCorrections.wxs"));
 		}
 
 		/// <summary>
@@ -136,26 +135,26 @@ namespace TestInstallerIntegrity
 			var configuration = new XmlDocument();
 			configuration.Load("InstallerConfig.xml");
 
-			// Define list of (partial) paths of files that are OK in DistFiles folder without being in Perforce:
-			// Format: <IgnoreNonP4DistFiles PathPattern="*partial path of any file may exist in DistFiles without being checked into Perforce*"/>
-			var ignoreNonP4DistFiles = configuration.SelectNodes("//IntegrityChecks/IgnoreNonP4DistFiles");
-			if (ignoreNonP4DistFiles != null)
-				foreach (XmlElement file in ignoreNonP4DistFiles)
-					m_nonP4DistFiles.Add(file.GetAttribute("PathPattern"));
+			// Define list of (partial) paths of files that are OK in DistFiles folder without being in source control:
+			// Format: <IgnoreNonVersionedDistFiles PathPattern="*partial path of any file may exist in DistFiles without being checked into version control*"/>
+			var ignoreNonVersionedDistFiles = configuration.SelectNodes("//IntegrityChecks/IgnoreNonVersionedDistFiles");
+			if (ignoreNonVersionedDistFiles != null)
+				foreach (XmlElement file in ignoreNonVersionedDistFiles)
+					_nonVersionedDistFiles.Add(file.GetAttribute("PathPattern"));
 
 			// Define list of (partial) paths of files that are allowed to have a version number of 0.0.0.0:
-			// Format: <IgnoreZeroVersionedDistFiles PathPattern="*partial path of any file may exist in DistFiles without being checked into Perforce*"/>
-			var ignoreZeroVersionedDFiles = configuration.SelectNodes("//IntegrityChecks/IgnoreZeroVersionedFiles");
-			if (ignoreZeroVersionedDFiles != null)
-				foreach (XmlElement file in ignoreZeroVersionedDFiles)
-					m_zeroVersionedFiles.Add(file.GetAttribute("PathPattern"));
+			// Format: <IgnoreVersionZeroFiles PathPattern="*partial path of any file allowed to have a version number of 0.0.0.0*"/>
+			var ignoreVersionZeroFiles = configuration.SelectNodes("//IntegrityChecks/IgnoreVersionZeroFiles");
+			if (ignoreVersionZeroFiles != null)
+				foreach (XmlElement file in ignoreVersionZeroFiles)
+					_versionZeroFiles.Add(file.GetAttribute("PathPattern"));
 
 			// Define list of file patterns to be filtered out. Any file whose path contains (anywhere) one of these strings will be filtered out:
 			// Format: <File PathPattern="*partial path of any file that is not needed in the FW installation*"/>
 			var omittedFiles = configuration.SelectNodes("//Omissions/File");
 			if (omittedFiles != null)
 				foreach (XmlElement file in omittedFiles)
-					m_fileOmissions.Add(file.GetAttribute("PathPattern"));
+					_fileOmissions.Add(file.GetAttribute("PathPattern"));
 
 			// Define list of machines to email people if something goes wrong:
 			// Format: <EmailingMachine Name="*name of machine (within current domain) which is required to email people if there is a problem*"/>
@@ -167,27 +166,27 @@ namespace TestInstallerIntegrity
 				var emailingMachines = failureNotification.SelectNodes("EmailingMachine");
 				if (emailingMachines != null)
 					foreach (XmlElement emailingMachine in emailingMachines)
-						m_emailingMachineNames.Add(emailingMachine.GetAttribute("Name"));
+						_emailingMachineNames.Add(emailingMachine.GetAttribute("Name"));
 
 				// Define list of people to email if something goes wrong:
 				// Format: <Recipient Email="*email address of someone to notify if there is a problem*"/>
 				var failureReportRecipients = failureNotification.SelectNodes("Recipient");
 				if (failureReportRecipients != null)
 					foreach (XmlElement recipient in failureReportRecipients)
-						m_emailList.Add(recipient.GetAttribute("Email"));
+						_emailList.Add(recipient.GetAttribute("Email"));
 			}
 
 		}
 
 		private void TestFileLibrary()
 		{
-			if (m_fileNodes == null)
+			if (_fileNodes == null)
 			{
 				// Report("WARNING #1: There is no FileLibrary.");
 				// We no longer bother to report this, as it is a normal occurrence when no prior releases exist.
 				return;
 			}
-			foreach (XmlElement file in m_fileNodes)
+			foreach (XmlElement file in _fileNodes)
 			{
 				TestLibraryFileStillPresent(file);
 				TestLibraryFileFeatureMembership(file);
@@ -205,7 +204,7 @@ namespace TestInstallerIntegrity
 		private void TestLibraryFileDetails(XmlElement file)
 		{
 			var filePath = file.GetAttribute("Path");
-			var fullFilePath = Path.Combine(m_projRootPath, filePath.Replace("\\${config}\\", "\\" + m_buildType + "\\"));
+			var fullFilePath = Path.Combine(_projRootPath, filePath.Replace("\\${config}\\", "\\" + _buildType + "\\"));
 
 			if (!File.Exists(fullFilePath))
 				return; // This should have been dealt with in Patchcorrections.wxs by now.
@@ -261,10 +260,10 @@ namespace TestInstallerIntegrity
 			if (timeBetweenVersions.TotalHours < -24)
 				Report("ERROR #2: File " + filePath + " has a date/time stamp (" + realDateTime + ") that is earlier than a previously released version (" + libDate + "). Patching may fail.");
 
-			if (realVersion == "0.0.0.0" && !m_zeroVersionedFiles.Any(path => fullFilePath.ToLowerInvariant().Contains(path.Replace("\\${config}\\", "\\" + m_buildType + "\\").ToLowerInvariant())))
-				Report("WARNING #4: File " + filePath + " has a version number of 0.0.0.0. That is very silly, and I don't like it. You'll only regret it later.");
+			if (realVersion == "0.0.0.0" && !_versionZeroFiles.Any(path => fullFilePath.ToLowerInvariant().Contains(path.Replace("\\${config}\\", "\\" + _buildType + "\\").ToLowerInvariant())))
+				Report("WARNING #3: File " + filePath + " has a version number of 0.0.0.0. That is very silly, and I don't like it. You'll only regret it later.");
 
-			// The version number must not be lower in the latest verison than it was in the previous one:
+			// The version number must not be lower in the latest version than it was in the previous one:
 			if (libVersion.Length > 0 && realVersion.Length == 0)
 			{
 				Report("ERROR #9: File " + filePath + " had a version of " + libVersion +
@@ -333,7 +332,7 @@ namespace TestInstallerIntegrity
 				var newFileSource = FindSameFileElsewhere(file);
 
 				// Report missing file:
-				Report("<!-- File component " + guid + " [" + filePath + "] is missing from (ProcessedAuto)Files.wxs -->");
+				Report("<!-- File component " + guid + " [" + filePath + "] is missing from (Auto)Files.wxs -->");
 				if (newFileSource != null)
 					Report("<!-- However, same file is now sourced from " + newFileSource + ". -->");
 
@@ -393,7 +392,7 @@ namespace TestInstallerIntegrity
 					}
 					else
 						Report("<!-- WARNING: No features specified for above component(s) -->");
-					m_errorLog += Environment.NewLine;
+					_errorLog += Environment.NewLine;
 				}
 				else
 					Report("<!-- WARNING: Could not locate DirectoryId -->");
@@ -426,7 +425,7 @@ namespace TestInstallerIntegrity
 				return; // This case is dealt with in TestLibraryFileStillPresent()
 
 			XmlElement component = null;
-			foreach (var wixSource in m_wixFilesSources)
+			foreach (var wixSource in _wixFilesSources)
 			{
 				component =
 					wixSource.XmlDoc.SelectSingleNode("//wix:Component[@Guid='" + guid + "']", wixSource.XmlnsMan) as XmlElement;
@@ -441,7 +440,7 @@ namespace TestInstallerIntegrity
 			// Get set of features from WIX sources that currently contain the file's parent component:
 			var wixFeatureSet = new HashSet<string>();
 			foreach (XmlElement featureRef in
-				m_wixFilesSources.Select(
+				_wixFilesSources.Select(
 					wixSource =>
 					wixSource.XmlDoc.SelectNodes("//wix:FeatureRef[wix:ComponentRef[@Id=\"" + compId + "\"]]", wixSource.XmlnsMan)).
 					SelectMany(featureRefs => featureRefs.Cast<XmlElement>()))
@@ -466,12 +465,12 @@ namespace TestInstallerIntegrity
 
 		private void TestRegLibrary()
 		{
-			if (m_regNodes == null)
+			if (_regNodes == null)
 			{
 				//Report("<!-- There is no RegLibrary -->");
 				return;
 			}
-			foreach (XmlElement reg in m_regNodes)
+			foreach (XmlElement reg in _regNodes)
 			{
 				var guid = reg.GetAttribute("ComponentGuid");
 
@@ -482,7 +481,7 @@ namespace TestInstallerIntegrity
 					var regRoot = reg.GetAttribute("Root");
 					var regKey = reg.GetAttribute("KeyHeader");
 					// Report missing file:
-					Report("<!-- Registry component " + guid + " [" + regRoot + "\\" + regKey + "] is missing from (ProcessedAuto)Files.wxs -->");
+					Report("<!-- Registry component " + guid + " [" + regRoot + "\\" + regKey + "] is missing from (Auto)Files.wxs -->");
 					// Get Directory ID of registry data:
 					var dirId = reg.GetAttribute("DirectoryId");
 					if (dirId != "")
@@ -535,75 +534,52 @@ namespace TestInstallerIntegrity
 		}
 
 		/// <summary>
-		/// Compares files collected under DistFiles with files in Perforce under DistFiles.
+		/// Reports presence of files under DistFiles that are not in source control.
 		/// </summary>
 		private void TestUnversionedDistFiles()
 		{
-			const string p4ListFilePath = "P4DistFilesList.txt";
-			const string p4ListFileErrs = "P4DistFilesErrs.txt";
-			const string dosListFilePath = "DosDistFiles.txt";
-			const string p4LineHeader = "... clientfile ";
+			var distFilePath = Path.Combine(_projRootPath, "DistFiles");
+			var sourceControlUnversionedListFilePath = Path.Combine(_exeFolder, "SourceControlDistFilesList.txt");
+			var sourceControlListFileErrs = Path.Combine(_exeFolder, "SourceControlDistFilesErrs.txt");
 
-			// Collect from Perforce a list of files it thinks are in DistFiles (synced to the client):
-			RunDosCmd("p4 fstat -T clientFile -Rh ../DistFiles/... >" + p4ListFilePath + " 2>" + p4ListFileErrs);
+			// Collect from source control a list of files in DistFiles it thinks are not being tracked:
+			RunDosCmd("git ls-files --other --exclude-standard >\"" + sourceControlUnversionedListFilePath + "\" 2>\"" + sourceControlListFileErrs + "\"", distFilePath);
 
-			var p4ListFileErrors = ConvertTextFileToLowerCaseStringList(p4ListFileErrs);
-			if (p4ListFileErrors.Count > 0)
+			var sourceControlListFileErrors = ConvertTextFileToStringList(sourceControlListFileErrs);
+			if (sourceControlListFileErrors.Count > 0)
 			{
-				Report(p4ListFileErrors.Aggregate("Warning #5: Could not determine if DistFiles folder is consistent with Perforce:" + Environment.NewLine, (current, error) => current + error));
+				Report(sourceControlListFileErrors.Aggregate("Warning #4: Could not determine if DistFiles folder is consistent with source Control:" + Environment.NewLine, (current, error) => current + error));
 				return;
 			}
-			var p4DistFiles = ConvertTextFileToLowerCaseStringList(p4ListFilePath);
-			for (var i = 0; i < p4DistFiles.Count; i++)
-			{
-				if (p4DistFiles[i].StartsWith(p4LineHeader))
-					p4DistFiles[i] = p4DistFiles[i].Substring(p4LineHeader.Length);
+			var distFilesNotInSourceControl = ConvertTextFileToStringList(sourceControlUnversionedListFilePath);
+			for (var i = 0; i < distFilesNotInSourceControl.Count; i++)
+				distFilesNotInSourceControl[i] = distFilesNotInSourceControl[i].Replace('/', '\\');
 
-				// The following substitution was found necessary on the build machine,
-				// but not on Alistair's machine, and shows that Perforce output can be
-				// inconsistent on different machines:
-				p4DistFiles[i] = p4DistFiles[i].Replace('/', '\\');
-			}
-
-			// Collect from DOS a list of files it thinks are in DistFiles:
-			RunDosCmd("dir /S /B /A-D ..\\DistFiles >" + dosListFilePath);
-			var dosDistFiles = ConvertTextFileToLowerCaseStringList(dosListFilePath);
-
-			// Create list of files in DistFiles folder that are not checked into Perforce's DistFiles:
-			var distFilesNotInP4 = dosDistFiles.Except(p4DistFiles);
-
-			// Filter out files that are allowed to exist in DistFiles without being in Perforce:
+			// Filter out files that are allowed to exist in DistFiles without being in source control:
 			// (specified in InstallerConfig.xml in the IntegrityChecks element)
-			distFilesNotInP4 = (from file in distFilesNotInP4
-								where !m_nonP4DistFiles.Any(f => file.ToLowerInvariant().Contains(f.ToLowerInvariant()))
+			distFilesNotInSourceControl = (from file in distFilesNotInSourceControl
+								where !_nonVersionedDistFiles.Any(f => file.ToLowerInvariant().Contains(f.ToLowerInvariant()))
 								select file).ToList();
 
 			// Filter out files that were specifically to be omitted from the installer:
-			distFilesNotInP4 = (from file in distFilesNotInP4
-							where m_fileOmissions.All(f => !file.ToLowerInvariant().Contains(f.Replace("\\${config}\\", "\\" + m_buildType + "\\").ToLowerInvariant()))
+			distFilesNotInSourceControl = (from file in distFilesNotInSourceControl
+							where _fileOmissions.All(f => !file.ToLowerInvariant().Contains(f.Replace("\\${config}\\", "\\" + _buildType + "\\").ToLowerInvariant()))
 							select file).ToList();
 
-			if (distFilesNotInP4.Count() > 0)
+			if (distFilesNotInSourceControl.Count() > 0)
 			{
-				Report("WARNING #2: The following files are present in DistFiles but not checked into Perforce: " + Environment.NewLine + "    " +
-					   string.Join(Environment.NewLine + "    ", distFilesNotInP4.ToArray()));
-			}
-
-			var filesNotInDos = p4DistFiles.Except(dosDistFiles);
-			if (filesNotInDos.Count() > 0)
-			{
-				Report("WARNING #3: The following files are checked into Perforce but not present in DistFiles: " + Environment.NewLine + "    " +
-					   string.Join(Environment.NewLine + "    ", filesNotInDos.ToArray()));
+				Report("WARNING #2: The following files are present in DistFiles but not checked into source control: " + Environment.NewLine + "    " +
+					   string.Join(Environment.NewLine + "    ", distFilesNotInSourceControl.ToArray()));
 			}
 		}
 
 		/// <summary>
 		/// Creates a list of strings from a text file, one string per line.
-		/// Omits blank lines. Converts strings to lower case.
+		/// Omits blank lines. Deletes file when done.
 		/// </summary>
 		/// <param name="listFilePath">Path to text file</param>
 		/// <returns>List of strings</returns>
-		private static List<string> ConvertTextFileToLowerCaseStringList(string listFilePath)
+		private static List<string> ConvertTextFileToStringList(string listFilePath)
 		{
 			string line;
 			var list = new List<string>();
@@ -615,7 +591,7 @@ namespace TestInstallerIntegrity
 				while ((line = listFile.ReadLine()) != null)
 				{
 					if (line.Length == 0) continue;
-					list.Add(line.ToLowerInvariant());
+					list.Add(line);
 				}
 				listFile.Close();
 				File.Delete(listFilePath);
@@ -627,14 +603,16 @@ namespace TestInstallerIntegrity
 		/// Runs the given DOS command. Waits for it to terminate.
 		/// </summary>
 		/// <param name="cmd">A DOS command</param>
-		private static void RunDosCmd(string cmd)
+		/// <param name="workingDirectory">Directory to start execution in</param>
+		private static void RunDosCmd(string cmd, string workingDirectory = "")
 		{
 			const string dosCmdIntro = "/Q /D /C ";
 			cmd = dosCmdIntro + cmd;
 			try
 			{
-				var nantProc = Process.Start("cmd", cmd);
-				if (nantProc != null) nantProc.WaitForExit();
+				var startInfo = new ProcessStartInfo {FileName = "cmd", Arguments = cmd, WorkingDirectory = workingDirectory, UseShellExecute = false};
+				var dosProc = Process.Start(startInfo);
+				dosProc.WaitForExit();
 			}
 			catch (Exception)
 			{
@@ -647,32 +625,32 @@ namespace TestInstallerIntegrity
 		/// </summary>
 		private void OutputLog()
 		{
-			if (m_errorLog.Length > 0)
+			if (_errorLog.Length > 0)
 			{
 				// Prepend log with build-specific details:
-				m_errorLog = GetBuildDetails() + m_errorLog;
+				_errorLog = GetBuildDetails() + _errorLog;
 
 				// Save the report to LogFileName:
 				var reportFile = new StreamWriter(LogFileName);
-				reportFile.WriteLine(m_errorLog);
+				reportFile.WriteLine(_errorLog);
 				reportFile.Close();
 
-				if (m_emailingMachineNames.Any(name => name.ToLowerInvariant() == Environment.MachineName.ToLowerInvariant()))
+				if (_emailingMachineNames.Any(name => name.ToLowerInvariant() == Environment.MachineName.ToLowerInvariant()))
 				{
 					// Email the report to the key people who need to know:
 					var message = new System.Net.Mail.MailMessage();
-					foreach (var recipient in m_emailList)
+					foreach (var recipient in _emailList)
 						message.To.Add(recipient);
 					message.Subject = "Automatic Installer Integrity Report from FW Installer Build";
 					message.From = new System.Net.Mail.MailAddress("alistair_imrie@sil.org");
-					message.Body = m_errorLog;
+					message.Body = _errorLog;
 					var smtp = new System.Net.Mail.SmtpClient("mail.jaars.org");
 					smtp.Send(message);
 				}
 				else
 				{
 					// Open the report for the user to see:
-					if (!m_silent)
+					if (!_silent)
 						Process.Start(LogFileName);
 				}
 			}
@@ -680,29 +658,29 @@ namespace TestInstallerIntegrity
 
 		/// <summary>
 		/// Collect some details about this build to help distinguish it from
-		/// other Perforce branches etc.
+		/// other source control branches etc.
 		/// </summary>
 		/// <returns>Build details</returns>
-		private static string GetBuildDetails()
+		private string GetBuildDetails()
 		{
 			var details = "";
 
-			// Collect P4 registry variables:
-			const string p4VarListPath = "__P4Set__.txt";
+			// Collect source control branch details:
+			var branchListPath = Path.Combine(_exeFolder, "__Branch__.txt");
 
-			RunDosCmd("p4 set >" + p4VarListPath);
-			var p4VarList = new StreamReader(p4VarListPath);
+			RunDosCmd("git branch >\"" + branchListPath + "\"", _projRootPath);
+			var branchList = new StreamReader(branchListPath);
 			string line;
-			while ((line = p4VarList.ReadLine()) != null)
+			while ((line = branchList.ReadLine()) != null)
 			{
 				if (line.Length == 0) continue;
 
-				// We're interested in the client workspace name:
-				if (line.StartsWith("P4CLIENT"))
-					details += "Perforce registry variable " + line + Environment.NewLine;
+				// We're interested in the current branch which starts with a '*' character:
+				if (line.StartsWith("*"))
+					details += "Current source control branch: " + line.Substring(2) + Environment.NewLine;
 			}
-			p4VarList.Close();
-			File.Delete(p4VarListPath);
+			branchList.Close();
+			File.Delete(branchListPath);
 
 			return details;
 		}
@@ -731,7 +709,7 @@ namespace TestInstallerIntegrity
 		/// Identifiers may contain ASCII characters A-Z, a-z, digits, underscores (_), or periods (.).
 		/// Every identifier must begin with either a letter or an underscore.
 		/// Invalid characters are filtered out of the name (spaces, etc.)
-		/// The unique data is turned into an MD5 hash and appended to the mame.
+		/// The unique data is turned into an MD5 hash and appended to the name.
 		/// Space is limited to 72 chars, so if the name is more than 40 characters, it is truncated
 		/// before appending the 32-character MD5 hash.
 		/// </summary>
@@ -794,7 +772,7 @@ namespace TestInstallerIntegrity
 		/// <returns>true if the component was found</returns>
 		private bool FoundComponent(string guid)
 		{
-			return m_wixFilesSources.Any(wixSource => wixSource.XmlDoc.SelectSingleNode("//wix:Component[@Guid='" + guid + "']", wixSource.XmlnsMan) != null);
+			return _wixFilesSources.Any(wixSource => wixSource.XmlDoc.SelectSingleNode("//wix:Component[@Guid='" + guid + "']", wixSource.XmlnsMan) != null);
 		}
 
 		/// <summary>
@@ -813,7 +791,7 @@ namespace TestInstallerIntegrity
 			var fileName = libraryFileNode.GetAttribute("LongName");
 			var directoryId = libraryFileNode.GetAttribute("DirectoryId");
 
-			foreach (var wixSource in m_wixFilesSources)
+			foreach (var wixSource in _wixFilesSources)
 			{
 				// Collect all File nodes in this file that have the right file name:
 				var matchingNodes = wixSource.XmlDoc.SelectNodes("//wix:File[@LongName='" + fileName + "' or @Name='" + fileName + "']", wixSource.XmlnsMan);
@@ -842,11 +820,11 @@ namespace TestInstallerIntegrity
 		/// <returns>Full path minus FW bit.</returns>
 		private string MakeRelativePath(string path)
 		{
-			if (path.StartsWith(m_projRootPath))
+			if (path.StartsWith(_projRootPath))
 			{
-				string p = path.Remove(0, m_projRootPath.Length);
+				string p = path.Remove(0, _projRootPath.Length);
 				if (p.EndsWith("\\"))
-					p = p.Remove(m_projRootPath.Length - 1, 1);
+					p = p.Remove(_projRootPath.Length - 1, 1);
 				if (p.StartsWith("\\"))
 					p = p.Remove(0, 1);
 				return p;
@@ -860,7 +838,7 @@ namespace TestInstallerIntegrity
 		/// <param name="msg">Text to add.</param>
 		private void Report(string msg)
 		{
-			m_errorLog += msg + Environment.NewLine;
+			_errorLog += msg + Environment.NewLine;
 		}
 	}
 }
