@@ -276,41 +276,7 @@ namespace ComponentInstallerGenerator
 			return fileName;
 		}
 
-		/// <summary>
-		/// Runs the given DOS command. Waits for it to terminate.
-		/// </summary>
-		/// <param name="cmd">A DOS command</param>
-		/// <param name="args">Arguments to be sent to cmd</param>
-		/// <returns>Any text sent to standard output</returns>
-		private string RunDosCmd(string cmd, string args)
-		{
-			var dosError = false;
-			var output = "";
-			var error = "";
-			try
-			{
-				var startInfo = new ProcessStartInfo(cmd);
-				startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-				startInfo.CreateNoWindow = true;
-				startInfo.Arguments = args;
-				startInfo.UseShellExecute = false;
-				startInfo.RedirectStandardOutput = true;
-				startInfo.RedirectStandardError = true;
 
-				var dosProc = Process.Start(startInfo);
-				dosProc.WaitForExit();
-				if (dosProc.ExitCode != 0)
-					dosError = true;
-				output = dosProc.StandardOutput.ReadToEnd();
-				error = dosProc.StandardError.ReadToEnd();
-			}
-			catch (Exception)
-			{
-				Report("Error while running this DOS command: " + cmd);
-			}
-
-			return dosError ? error + Environment.NewLine + output : "";
-		}
 
 		/// <summary>
 		/// Uses WIX Candle tool to compile a WIX source file.
@@ -322,7 +288,7 @@ namespace ComponentInstallerGenerator
 		{
 			var candlePath = Path.Combine(Environment.GetEnvironmentVariable("WIX"), "bin\\candle.exe");
 			var args = " -nologo -sw1044 " + wixExtensions + "\"" + fileName + "\"";
-			var output = RunDosCmd(candlePath, args);
+			var output = InstallerBuildUtilities.Tools.RunDosCmd(candlePath, args);
 			if (output.ToLowerInvariant() != fileName.ToLowerInvariant() + Environment.NewLine)
 				Report(output);
 		}
@@ -372,7 +338,7 @@ namespace ComponentInstallerGenerator
 			// Link each WIX intermediate file:
 			var wixobjFiles = wixobjFileList.Aggregate("", (current, wixobjFile) => current + (" \"" + wixobjFile + "\""));
 			var lightPath = Path.Combine(Environment.GetEnvironmentVariable("WIX"), "bin\\light.exe");
-			Report(RunDosCmd(lightPath, " -nologo -sice:ICE40 -sice:ICE48 " + extensionSyntax + wixobjFiles + " -out \"" + msiFileName + "\""));
+			Report(InstallerBuildUtilities.Tools.RunDosCmd(lightPath, " -nologo -sice:ICE40 -sice:ICE48 " + extensionSyntax + wixobjFiles + " -out \"" + msiFileName + "\""));
 
 			if (m_statusReport == "")
 			{

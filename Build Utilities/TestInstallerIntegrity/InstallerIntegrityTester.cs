@@ -539,19 +539,20 @@ namespace TestInstallerIntegrity
 		private void TestUnversionedDistFiles()
 		{
 			var distFilePath = Path.Combine(_projRootPath, "DistFiles");
-			var sourceControlUnversionedListFilePath = Path.Combine(_exeFolder, "SourceControlDistFilesList.txt");
-			var sourceControlListFileErrs = Path.Combine(_exeFolder, "SourceControlDistFilesErrs.txt");
 
 			// Collect from source control a list of files in DistFiles it thinks are not being tracked:
-			RunDosCmd("git ls-files --other --exclude-standard >\"" + sourceControlUnversionedListFilePath + "\" 2>\"" + sourceControlListFileErrs + "\"", distFilePath);
-
-			var sourceControlListFileErrors = ConvertTextFileToStringList(sourceControlListFileErrs);
-			if (sourceControlListFileErrors.Count > 0)
+			string distFilesNotInSourceControlRaw;
+			try
 			{
-				Report(sourceControlListFileErrors.Aggregate("Warning #4: Could not determine if DistFiles folder is consistent with source Control:" + Environment.NewLine, (current, error) => current + error));
+				distFilesNotInSourceControlRaw = InstallerBuildUtilities.Tools.RunDosCmd("git", "ls-files --others --exclude-standard", distFilePath);
+			}
+			catch (Exception ex)
+			{
+				Report("Warning #4: Could not determine if DistFiles folder is consistent with source Control:" + Environment.NewLine + ex.Message);
 				return;
 			}
-			var distFilesNotInSourceControl = ConvertTextFileToStringList(sourceControlUnversionedListFilePath);
+			var distFilesNotInSourceControl = new List<string> (distFilesNotInSourceControlRaw.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None));
+
 			for (var i = 0; i < distFilesNotInSourceControl.Count; i++)
 				distFilesNotInSourceControl[i] = distFilesNotInSourceControl[i].Replace('/', '\\');
 
@@ -600,27 +601,6 @@ namespace TestInstallerIntegrity
 		}
 
 		/// <summary>
-		/// Runs the given DOS command. Waits for it to terminate.
-		/// </summary>
-		/// <param name="cmd">A DOS command</param>
-		/// <param name="workingDirectory">Directory to start execution in</param>
-		private static void RunDosCmd(string cmd, string workingDirectory = "")
-		{
-			const string dosCmdIntro = "/Q /D /C ";
-			cmd = dosCmdIntro + cmd;
-			try
-			{
-				var startInfo = new ProcessStartInfo {FileName = "cmd", Arguments = cmd, WorkingDirectory = workingDirectory, UseShellExecute = false};
-				var dosProc = Process.Start(startInfo);
-				dosProc.WaitForExit();
-			}
-			catch (Exception)
-			{
-				throw new Exception("Error while running this DOS command: " + cmd);
-			}
-		}
-
-		/// <summary>
 		/// Writes the error log to file, or emails it to key people.
 		/// </summary>
 		private void OutputLog()
@@ -628,7 +608,7 @@ namespace TestInstallerIntegrity
 			if (_errorLog.Length > 0)
 			{
 				// Prepend log with build-specific details:
-				_errorLog = GetBuildDetails() + _errorLog;
+				_errorLog = InstallerBuildUtilities.Tools.GetBuildDetails(_projRootPath) + _errorLog;
 
 				// Save the report to LogFileName:
 				var reportFile = new StreamWriter(LogFileName);
@@ -654,35 +634,6 @@ namespace TestInstallerIntegrity
 						Process.Start(LogFileName);
 				}
 			}
-		}
-
-		/// <summary>
-		/// Collect some details about this build to help distinguish it from
-		/// other source control branches etc.
-		/// </summary>
-		/// <returns>Build details</returns>
-		private string GetBuildDetails()
-		{
-			var details = "";
-
-			// Collect source control branch details:
-			var branchListPath = Path.Combine(_exeFolder, "__Branch__.txt");
-
-			RunDosCmd("git branch >\"" + branchListPath + "\"", _projRootPath);
-			var branchList = new StreamReader(branchListPath);
-			string line;
-			while ((line = branchList.ReadLine()) != null)
-			{
-				if (line.Length == 0) continue;
-
-				// We're interested in the current branch which starts with a '*' character:
-				if (line.StartsWith("*"))
-					details += "Current source control branch: " + line.Substring(2) + Environment.NewLine;
-			}
-			branchList.Close();
-			File.Delete(branchListPath);
-
-			return details;
 		}
 
 		private static string CalcFileMd5(string filePath)

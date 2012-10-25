@@ -2383,7 +2383,7 @@ namespace GenerateFilesSource
 
 			if (report.Length > 0)
 			{
-				report = GetBuildDetails() + Environment.NewLine + report;
+				report = InstallerBuildUtilities.Tools.GetBuildDetails(_projRootPath) + Environment.NewLine + report;
 
 				if (_emailingMachineNames.Any(name => name.ToLowerInvariant() == Environment.MachineName.ToLowerInvariant()))
 				{
@@ -2616,7 +2616,7 @@ namespace GenerateFilesSource
 			if (failureReport.Length > 0)
 			{
 				// Prepend log with build-specific details:
-				failureReport = GetBuildDetails() + Environment.NewLine + failureReport;
+				failureReport = InstallerBuildUtilities.Tools.GetBuildDetails(_projRootPath) + Environment.NewLine + failureReport;
 
 				if (_needReport)
 				{
@@ -2675,56 +2675,6 @@ namespace GenerateFilesSource
 			lock (_seriousIssues)
 			{
 				_seriousIssues += line + Environment.NewLine;
-			}
-		}
-
-		/// <summary>
-		/// Collect some details about this build to help distinguish it from
-		/// other source control branches etc.
-		/// </summary>
-		/// <returns>Build details</returns>
-		private string GetBuildDetails()
-		{
-			var details = "";
-
-			// Collect source control branch details:
-			var branchListPath = Path.Combine(_exeFolder, "__Branch__.txt");
-
-			RunDosCmd("git branch >\"" + branchListPath + "\"", _projRootPath);
-			var branchList = new StreamReader(branchListPath);
-			string line;
-			while ((line = branchList.ReadLine()) != null)
-			{
-				if (line.Length == 0) continue;
-
-				// We're interested in the current branch which starts with a '*' character:
-				if (line.StartsWith("*"))
-					details += "Current source control branch: " + line.Substring(2) + Environment.NewLine;
-			}
-			branchList.Close();
-			File.Delete(branchListPath);
-
-			return details;
-		}
-
-		/// <summary>
-		/// Runs the given DOS command. Waits for it to terminate.
-		/// </summary>
-		/// <param name="cmd">A DOS command</param>
-		/// <param name="workingDirectory">Directory to start execution in</param>
-		private static void RunDosCmd(string cmd, string workingDirectory = "")
-		{
-			const string dosCmdIntro = "/Q /D /C ";
-			cmd = dosCmdIntro + cmd;
-			try
-			{
-				var startInfo = new ProcessStartInfo { FileName = "cmd", Arguments = cmd, WorkingDirectory = workingDirectory, UseShellExecute = false };
-				var dosProc = Process.Start(startInfo);
-				dosProc.WaitForExit();
-			}
-			catch (Exception)
-			{
-				throw new Exception("Error while running this DOS command: " + cmd);
 			}
 		}
 	}
