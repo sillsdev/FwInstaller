@@ -6,8 +6,8 @@
 			so they are being moved out of the main ICU merge module wix script. However, this merge
 			module totally depends on that other merge module (id=SILICU40) or this won't do anything.
 		  -->
-  <Module Id="SILICUECHELP40" Language="0" Version="4.0">
-		<Package Id="3DAFE62A-D816-4d02-BDB5-8645ECE89BE4" Keywords="MergeModule, MSI, ICU EncConverters Help Files" Description="SIL's ICU 4.0 EncConverter Help Installation" Comments="Common installer module for SIL's version 4.0 of ICU (for EncConverters components--requires ICU040.msm also)" Manufacturer="SIL International" InstallerVersion="110" Platform="x86" Languages="0" SummaryCodepage="1252"/>
+  <Module Id="SILICUECHELP50" Language="0" Version="5.0">
+		<Package Id="3DAFE62A-D816-4d02-BDB5-8645ECE89BE4" Keywords="MergeModule, MSI, ICU EncConverters Help Files" Description="SIL's ICU 5.0 EncConverter Help Installation" Comments="Common installer module for SIL's ICU EncConverters Helps" Manufacturer="SIL International" InstallerVersion="110" Platform="x86" Languages="0" SummaryCodepage="1252"/>
 	<Directory Id="TARGETDIR" Name="SourceDir">
 	  <Directory Id="CommonFilesFolder" Name="Common">
 		<Directory Id="SIL" Name="SIL">
