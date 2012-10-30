@@ -1,0 +1,8 @@
+Code-Review+2: Eberhard Beilharz <eb1@sil.org>
+Verified+1: Alistair Imrie <alistair_imrie@sil.org>
+Verified-Linux+1: Alistair Imrie <alistair_imrie@sil.org>
+Submitted-by: Alistair Imrie <alistair_imrie@sil.org>
+Submitted-at: Tue, 30 Oct 2012 16:26:40 +0000
+Reviewed-on: https://gerrit.lsdev.sil.org/223
+Project: FwInstaller
+Branch: refs/heads/develop
