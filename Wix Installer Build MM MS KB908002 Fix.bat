@@ -1,5 +1,0 @@
-del "MS KB908002 Fix.mmp.wxs.log"
-del "WixLinkMS KB908002 Fix.log"
-ProcessWixMMs.js "MS KB908002 Fix.mm.wxs"
-"%WIX%bin\candle" -nologo "MS KB908002 Fix.mmp.wxs" >"MS KB908002 Fix.mmp.wxs.log"
-"%WIX%bin\light" -nologo "MS KB908002 Fix.mmp.wixobj" -out "MS KB908002 Fix.msm" >"WixLinkMS KB908002 Fix.log"
