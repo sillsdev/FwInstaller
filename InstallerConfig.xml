@@ -61,7 +61,6 @@
 			<!-- Define heuristics for (non-TE) localization files, where the {0} parameter is replaced by the language code: -->
 			<File PathContains="\{0}\"/>
 			<File PathEnds="\strings-{0}.xml"/>
-			<File PathEnds="\LocalizedLists-{0}.xml"/>
 		</Localization>
 		<TeLocalization>
 			<!-- Define heuristics for TE localization files, where the {0} parameter is replaced by the language code: -->
