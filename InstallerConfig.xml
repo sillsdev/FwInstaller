@@ -458,23 +458,6 @@
 		<!-- Example: <File PathPattern="DistFiles\ReleaseData"/> -->
 		<!-- WARNING! This is very dangerous, because future patches may simply delete these files outright. -->
 	</ForceOverwrite>
-	<IgnoreRegistration>
-		<!-- Define list of paths of executable files that crash and burn if you try to register them: -->
-		<!-- Format: <File Path="*relative path from FW folder of a file that registration should not be attempted on*"/> -->
-		<File Path="Output\Release\Language.dll"/>
-		<File Path="Output\Release\Graphite.dll"/>
-		<File Path="Output\Release\Views.dll"/>
-		<File Path="Output\Release\FwKernel.dll"/>
-		<File Path="DistFiles\Keyboards\IPA\MSKLC\ipa101\amd64\IPA101.dll"/>
-		<File Path="DistFiles\Keyboards\IPA\MSKLC\ipa101\ia64\IPA101.dll"/>
-		<File Path="DistFiles\iconv.dll"/>
-		<File Path="DistFiles\intl.dll"/>
-		<File Path="DistFiles\Editorial Checks\ScrChecks.dll"/>
-		<File Path="DistFiles\Scripting\Add To Python Installation Folder\clr.dll"/>
-		<File Path="DistFiles\Scripting\Add To Python Installation Folder\python.runtime.dll"/>
-		<File Path="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
-		<File Path="PalasoUIWindowsForms.dll"/>
-	</IgnoreRegistration>
 	<ErrorReporting>
 		<!-- Define list of features that are allowed to be missing yet have components assigned to them: -->
 		<!-- (This just suppresses the warning in the final report; the feature and its components will be omitted from the installer) -->
@@ -485,7 +468,6 @@
 	<IntegrityChecks>
 		<!-- Define list of (partial) paths of files that are OK in DistFiles folder without being in source control: -->
 		<!-- Format: <IgnoreNonVersionedDistFiles PathPattern="*partial path of any file that may exist in DistFiles without being checked into version control*"/> -->
-		<IgnoreNonVersionedDistFiles PathPattern="Icu40"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Editorial Checks\ScrChecks.dll"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Editorial Checks\ScrChecks.pdb"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-es.xml"/>

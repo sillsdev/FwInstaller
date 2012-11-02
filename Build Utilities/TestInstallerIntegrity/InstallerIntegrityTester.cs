@@ -40,7 +40,6 @@ namespace TestInstallerIntegrity
 		private string _exeFolder;
 		private string _projRootPath;
 		private XmlNodeList _fileNodes;
-		private XmlNodeList _regNodes;
 		private class WixSource
 		{
 			public readonly XmlDocument XmlDoc;
@@ -79,7 +78,6 @@ namespace TestInstallerIntegrity
 			Init();
 
 			TestFileLibrary();
-			TestRegLibrary();
 			TestUnversionedDistFiles();
 
 			OutputLog();
@@ -111,14 +109,6 @@ namespace TestInstallerIntegrity
 				var xmlFileLibrary = new XmlDocument();
 				xmlFileLibrary.Load("FileLibrary.xml");
 				_fileNodes = xmlFileLibrary.SelectNodes("FileLibrary/File");
-			}
-
-			// Load Registry Library:
-			if (File.Exists("RegLibrary.xml"))
-			{
-				var xmlRegLibrary = new XmlDocument();
-				xmlRegLibrary.Load("RegLibrary.xml");
-				_regNodes = xmlRegLibrary.SelectNodes("RegLibrary/Component");
 			}
 
 			// Load all .wxs files containing files definitions into a List for iterative processing:
@@ -460,76 +450,6 @@ namespace TestInstallerIntegrity
 				Report("ERROR #5: File " + filePath +
 					   " has been removed from the following features since the last release: " +
 					   string.Join(", ", obsoleteFeatureMemberships.ToArray()) + ". Patching will fail.");
-			}
-		}
-
-		private void TestRegLibrary()
-		{
-			if (_regNodes == null)
-			{
-				//Report("<!-- There is no RegLibrary -->");
-				return;
-			}
-			foreach (XmlElement reg in _regNodes)
-			{
-				var guid = reg.GetAttribute("ComponentGuid");
-
-				if (!FoundComponent(guid))
-				{
-					// The registry library contains a component GUID that is not in any of our expected source files.
-					// Get registry details:
-					var regRoot = reg.GetAttribute("Root");
-					var regKey = reg.GetAttribute("KeyHeader");
-					// Report missing file:
-					Report("<!-- Registry component " + guid + " [" + regRoot + "\\" + regKey + "] is missing from (Auto)Files.wxs -->");
-					// Get Directory ID of registry data:
-					var dirId = reg.GetAttribute("DirectoryId");
-					if (dirId != "")
-					{
-						Report("<!-- Suggested PatchCorrections.wxs snippet: -->");
-						// Create WIX snippet to remedy the problem:
-						Report("<DirectoryRef Id=\"" + dirId + "\">");
-						var compId = reg.GetAttribute("Id");
-						if (compId == "")
-							compId = "[unknown]";
-
-						// By reinstating the component with the transitive attribute, its condition will
-						// always be re-evaluated:
-						Report("	<Component Id=\"" + compId + "\" Transitive=\"yes\" Guid=\"" + guid + "\">");
-						// By setting the condition to false, we tell the installer we don"t need this component:
-						Report("		<Condition>FALSE</Condition>");
-						Report("		<CreateFolder/>"); // Junk needed to pass ICE18
-						Report("	</Component>");
-
-						// Unfortunately, we also need a new component to proactively delete the existing registry data
-						// from the end-user's machine:
-						var newGuid = Guid.NewGuid().ToString().ToUpperInvariant();
-						var newId = MakeId("Del" + compId, compId);
-						Report("	<Component Id=\"" + newId + "\" Guid=\"" + newGuid + "\">");
-						Report("		<Registry Root=\"" + regRoot + "\" Key=\"" + regKey + "\" Action=\"removeKeyOnInstall\" Id=\"" + newId + "\"/>");
-						Report("		<CreateFolder/>"); // Junk needed to pass ICE18
-						Report("	</Component>");
-
-						Report("</DirectoryRef>");
-						var featureList = reg.GetAttribute("FeatureList");
-						if (featureList != "")
-						{
-							var features = featureList.Split(new[] {','} );
-							foreach (var feature in features)
-							{
-								Report("<FeatureRef Id=\"" + feature + "\">");
-								Report("	<ComponentRef Id=\"" + compId + "\"/>");
-								Report("	<ComponentRef Id=\"" + newId + "\"/>");
-								Report("</FeatureRef>");
-							}
-						}
-						else
-							Report("<!-- WARNING: No features specified for above component(s) -->");
-						Report("");
-					}
-					else
-						Report("<!-- WARNING: Could not locate DirectoryId -->");
-				}
 			}
 		}
 
