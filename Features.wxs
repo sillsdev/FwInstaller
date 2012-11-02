@@ -79,12 +79,6 @@
 					<Feature Id="Malay_TE" Title="Malay_TE" Description="Malay user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
-				<Feature Id="Bengali" Title="Bengali" Description="Allows the software to have a Bengali user interface." Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">BENGALI_CAB_FOUND OR REMOVE</Condition>
-					<Feature Id="Bengali_TE" Title="Bengali_TE" Description="Bengali user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
-						<Condition Level="3">BENGALI_CAB_FOUND OR REMOVE</Condition>
-					</Feature>
-				</Feature>
 				<Feature Id="Chinese" Title="Chinese" Description="Allows the software to have a Chinese user interface." Display="expand" Level="4" AllowAdvertise="no">
 					<Condition Level="3">UserLanguageID = 3076 OR UserLanguageID = 5124 OR UserLanguageID = 2052 OR UserLanguageID = 1028</Condition>
 					<Feature Id="Chinese_TE" Title="Chinese_TE" Description="Chinese user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
@@ -100,16 +94,16 @@
 					<Feature Id="Hindi_TE" Title="Hindi_TE" Description="Hindi user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
+				<Feature Id="Kinyarwanda" Title="Kinyarwanda" Description="Allows the software to have a Kinyarwanda user interface." Display="expand" Level="0" AllowAdvertise="no">
+					<Condition Level="3">KINYARWANDA_CAB_FOUND OR REMOVE</Condition>
+					<Feature Id="Kinyarwanda_TE" Title="Kinyarwanda_TE" Description="Kinyarwanda user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
+						<Condition Level="3">KINYARWANDA_CAB_FOUND OR REMOVE</Condition>
+					</Feature>
+				</Feature>
 				<Feature Id="Korean" Title="Korean" Description="Allows the software to have a Korean user interface." Display="expand" Level="0" AllowAdvertise="no">
 					<Condition Level="3">KOREAN_CAB_FOUND OR REMOVE</Condition>
 					<Feature Id="Korean_TE" Title="Korean_TE" Description="Korean user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
 						<Condition Level="3">KOREAN_CAB_FOUND OR REMOVE</Condition>
-					</Feature>
-				</Feature>
-				<Feature Id="Nepali" Title="Nepali" Description="Allows the software to have a Nepali user interface." Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">NEPALI_CAB_FOUND OR REMOVE</Condition>
-					<Feature Id="Nepali_TE" Title="Nepali_TE" Description="Nepali user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
-						<Condition Level="3">NEPALI_CAB_FOUND OR REMOVE</Condition>
 					</Feature>
 				</Feature>
 				<Feature Id="Persian" Title="Persian" Description="Allows the software to have a Persian user interface." Display="expand" Level="4" AllowAdvertise="no">
@@ -149,30 +143,6 @@
 					<Condition Level="3">VIETNAMESE_CAB_FOUND OR REMOVE</Condition>
 					<Feature Id="Vietnamese_TE" Title="Vietnamese_TE" Description="Vietnamese user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
 						<Condition Level="3">VIETNAMESE_CAB_FOUND OR REMOVE</Condition>
-					</Feature>
-				</Feature>
-				<Feature Id="Kinyarwanda" Title="Kinyarwanda" Description="Allows the software to have a Kinyarwanda user interface." Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">KINYARWANDA_CAB_FOUND OR REMOVE</Condition>
-					<Feature Id="Kinyarwanda_TE" Title="Kinyarwanda_TE" Description="Kinyarwanda user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
-						<Condition Level="3">KINYARWANDA_CAB_FOUND OR REMOVE</Condition>
-					</Feature>
-				</Feature>
-				<Feature Id="Thai" Title="Thai" Description="Allows the software to have a Thai user interface." Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">THAI_CAB_FOUND OR REMOVE</Condition>
-					<Feature Id="Thai_TE" Title="Thai_TE" Description="Thai user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
-						<Condition Level="3">THAI_CAB_FOUND OR REMOVE</Condition>
-					</Feature>
-				</Feature>
-				<Feature Id="Khmer" Title="Khmer" Description="Allows the software to have a Khmer user interface." Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">KHMER_CAB_FOUND OR REMOVE</Condition>
-					<Feature Id="Khmer_TE" Title="Khmer_TE" Description="Khmer user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
-						<Condition Level="3">KHMER_CAB_FOUND OR REMOVE</Condition>
-					</Feature>
-				</Feature>
-				<Feature Id="Urdu" Title="Urdu" Description="Allows the software to have a Urdu user interface." Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">URDU_CAB_FOUND OR REMOVE</Condition>
-					<Feature Id="Urdu_TE" Title="Urdu_TE" Description="Urdu user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
-						<Condition Level="3">URDU_CAB_FOUND OR REMOVE</Condition>
 					</Feature>
 				</Feature>
 			</Feature>

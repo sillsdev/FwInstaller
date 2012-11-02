@@ -16,12 +16,7 @@
 		<Language Name="Persian" Id="fa"/>
 		<Language Name="Malay" Id="ms"/>
 		<Language Name="Telugu" Id="te"/>
-		<Language Name="Nepali" Id="ne"/>
-		<Language Name="Bengali" Id="bn"/>
 		<Language Name="Kinyarwanda" Id="ro"/>
-		<Language Name="Thai" Id="th"/>
-		<Language Name="Khmer" Id="km"/>
-		<Language Name="Urdu" Id="ur"/>
 	</Languages>
 	<FeatureAllocation>
 		<!-- Allocation of files in Output\Release is generally done by analyzing FieldWorks.targets -->
@@ -550,11 +545,6 @@
 		<Cabinet Feature="Turkish" CabinetIndex="18"/>
 		<Cabinet Feature="Vietnamese" CabinetIndex="19"/>
 		<Cabinet Feature="Persian" CabinetIndex="20"/>
-		<Cabinet Feature="Nepali" CabinetIndex="21"/>
-		<Cabinet Feature="Bengali" CabinetIndex="22"/>
-		<Cabinet Feature="Kinyarwanda" CabinetIndex="23"/>
-		<Cabinet Feature="Thai" CabinetIndex="24"/>
-		<Cabinet Feature="Khmer" CabinetIndex="25"/>
-		<Cabinet Feature="Urdu" CabinetIndex="26"/>
+		<Cabinet Feature="Kinyarwanda" CabinetIndex="21"/>
 	</CabinetAssignments>
 </InstallerConfig>
