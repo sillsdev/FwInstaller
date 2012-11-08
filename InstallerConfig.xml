@@ -462,6 +462,7 @@
 	<IntegrityChecks>
 		<!-- Define list of (partial) paths of files that are OK in DistFiles folder without being in source control: -->
 		<!-- Format: <IgnoreNonVersionedDistFiles PathPattern="*partial path of any file that may exist in DistFiles without being checked into version control*"/> -->
+		<!-- Important: Path patterns in this section can contain the standard DOS wildcards '?' and '*'. -->
 		<IgnoreNonVersionedDistFiles PathPattern="Editorial Checks\ScrChecks.dll"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Editorial Checks\ScrChecks.pdb"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-es.xml"/>
@@ -486,7 +487,7 @@
 		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Parts\Generated.fwlayout"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Parts\GeneratedParts.xml"/>
-		<IgnoreNonVersionedDistFiles PathPattern="Templates\LocalizedLists"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Templates\LocalizedLists-*.zip"/>
 		<!-- Define list of (partial) paths of files that are allowed to have a version of 0.0.0.0: -->
 		<!-- Format: <IgnoreVersionZeroFiles PathPattern="*partial path of any file that is allowed to have a version of 0.0.0.0*"/> -->
 		<IgnoreVersionZeroFiles PathPattern="Output\Release\MsHtmHstInterop.dll"/>

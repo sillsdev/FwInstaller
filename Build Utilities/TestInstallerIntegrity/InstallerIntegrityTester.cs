@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
+using InstallerBuildUtilities;
 
 namespace TestInstallerIntegrity
 {
@@ -464,7 +465,7 @@ namespace TestInstallerIntegrity
 			string distFilesNotInSourceControlRaw;
 			try
 			{
-				distFilesNotInSourceControlRaw = InstallerBuildUtilities.Tools.RunDosCmd("git", "ls-files --others --exclude-standard", distFilePath);
+				distFilesNotInSourceControlRaw = Tools.RunDosCmd("git", "ls-files --others --exclude-standard", distFilePath);
 			}
 			catch (Exception ex)
 			{
@@ -479,8 +480,8 @@ namespace TestInstallerIntegrity
 			// Filter out files that are allowed to exist in DistFiles without being in source control:
 			// (specified in InstallerConfig.xml in the IntegrityChecks element)
 			distFilesNotInSourceControl = (from file in distFilesNotInSourceControl
-								where !_nonVersionedDistFiles.Any(f => file.ToLowerInvariant().Contains(f.ToLowerInvariant()))
-								select file).ToList();
+										   where !_nonVersionedDistFiles.Any(pattern => FilePatternMatcher.PathMatchesPattern(file, pattern))
+										   select file).ToList();
 
 			// Filter out files that were specifically to be omitted from the installer:
 			distFilesNotInSourceControl = (from file in distFilesNotInSourceControl
@@ -528,7 +529,7 @@ namespace TestInstallerIntegrity
 			if (_errorLog.Length > 0)
 			{
 				// Prepend log with build-specific details:
-				_errorLog = InstallerBuildUtilities.Tools.GetBuildDetails(_projRootPath) + _errorLog;
+				_errorLog = Tools.GetBuildDetails(_projRootPath) + _errorLog;
 
 				// Save the report to LogFileName:
 				var reportFile = new StreamWriter(LogFileName);
