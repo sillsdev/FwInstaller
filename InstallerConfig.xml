@@ -76,10 +76,23 @@
 			<File PathPattern="Output\Release\Graphite."/>
 			<File PathPattern="Output\Release\Views."/>
 			<File PathPattern="Output\Release\remoting_tcp_server.config"/>
+			<File PathPattern="Output\Release\CcEC.dll"/>
+			<File PathPattern="Output\Release\IcuConvEC.dll"/>
+			<File PathPattern="Output\Release\IcuEC.dll"/>
+			<File PathPattern="Output\Release\IcuRegexEC.dll"/>
+			<File PathPattern="Output\Release\IcuTranslitEC.dll"/>
+			<File PathPattern="Output\Release\PerlExpressionEC.dll"/>
+			<File PathPattern="Output\Release\PyScriptEC.dll"/>
 			<File PathPattern="Output\Release\EC\Plugins\EC 4.0.0.0 Plugin Details.xml"/>
-			<File PathPattern="Output\Release\EC\Plugins\IcuEC40 4.0.0.0 Plugin Details.xml"/>
-			<File PathPattern="Output\Release\EC\Plugins\PerlEC512 4.0.0.0 Plugin Details.xml"/>
-			<File PathPattern="Output\Release\EC\Plugins\PythonEC27 4.0.0.0 Plugin Details.xml"/>
+			<File PathPattern="Output\Release\EC\Plugins\CC 4.0.0.0 Plugin Details.xml"/>
+			<File PathPattern="Output\Release\EC\Plugins\IcuEC 4.0.0.0 Plugin Details.xml"/>
+			<File PathPattern="Output\Release\EC\Plugins\PerlEC 4.0.0.0 Plugin Details.xml"/>
+			<File PathPattern="Output\Release\EC\Plugins\PythonEC 4.0.0.0 Plugin Details.xml"/>
+			<File PathPattern="Output\Release\EC\Plugins\SIEC 4.0.0.0 Plugin Details.xml"/>
+			<File PathPattern="Output\Release\icu.net.dll"/>
+			<File PathPattern="Output\Release\icudt50.dll"/>
+			<File PathPattern="Output\Release\icuin50.dll"/>
+			<File PathPattern="Output\Release\icuuc50.dll"/>
 		</CoreFileOrphans>
 		<ForceBuiltFilesIntoTE>
 			<!-- Define list of path patterns of built files known to be needed in TE but which are not part of the TeExe FieldWorks.targets dependency chain: -->
