@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Security.Cryptography;
+using InstallerBuildUtilities;
 
 namespace GenerateFilesSource
 {
@@ -655,7 +656,7 @@ namespace GenerateFilesSource
 				if (failureReportRecipients != null)
 					foreach (XmlElement recipient in failureReportRecipients)
 					{
-						var address = recipient.GetAttribute("Email");
+						var address = Tools.ElucidateEmailAddress(recipient.GetAttribute("Email"));
 						_emailList.Add(address);
 						// Test if this recipient is to be emailed regarding new and deleted files:
 						if (recipient.GetAttribute("NotifyFileChanges") == "true")
@@ -2383,7 +2384,7 @@ namespace GenerateFilesSource
 
 			if (report.Length > 0)
 			{
-				report = InstallerBuildUtilities.Tools.GetBuildDetails(_projRootPath) + Environment.NewLine + report;
+				report = Tools.GetBuildDetails(_projRootPath) + Environment.NewLine + report;
 
 				if (_emailingMachineNames.Any(name => name.ToLowerInvariant() == Environment.MachineName.ToLowerInvariant()))
 				{
@@ -2616,7 +2617,7 @@ namespace GenerateFilesSource
 			if (failureReport.Length > 0)
 			{
 				// Prepend log with build-specific details:
-				failureReport = InstallerBuildUtilities.Tools.GetBuildDetails(_projRootPath) + Environment.NewLine + failureReport;
+				failureReport = Tools.GetBuildDetails(_projRootPath) + Environment.NewLine + failureReport;
 
 				if (_needReport)
 				{

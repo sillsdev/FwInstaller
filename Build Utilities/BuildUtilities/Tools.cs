@@ -7,6 +7,20 @@ namespace InstallerBuildUtilities
 	public class Tools
 	{
 		/// <summary>
+		/// Undoes the obfuscation of email addresses stored in publicly-accessible files.
+		/// </summary>
+		/// <param name="obfuscatedAddress">Obfuscated email address</param>
+		/// <returns>Un-obfuscated email address</returns>
+		public static string ElucidateEmailAddress(string obfuscatedAddress)
+		{
+			var emailAddress = obfuscatedAddress.Replace(" underscore ", "_");
+			emailAddress = emailAddress.Replace(" at ", "@");
+			emailAddress = emailAddress.Replace(" dot ", ".");
+
+			return emailAddress;
+		}
+
+		/// <summary>
 		/// Collect some details about this build to help distinguish it from
 		/// other source control branches etc.
 		/// </summary>

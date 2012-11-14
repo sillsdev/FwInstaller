@@ -511,11 +511,11 @@
 		<EmailingMachine Name="ls-builder-0910"/>
 		<!-- Define list of people to email if something goes wrong: -->
 		<!-- Format: <Recipient Email="*email address of someone to notify if there is a problem*" NotifyFileChanges="*true if this recipient should receive a separate email detailing new and deleted files*"/> -->
-		<Recipient Email="alistair_imrie@sil.org" NotifyFileChanges="true"/>
-		<Recipient Email="ken_zook@sil.org" NotifyFileChanges="true"/>
-		<Recipient Email="ann_bush@sil.org" NotifyFileChanges="true"/>
-		<Recipient Email="john_wickberg@jaars.org"/>
-		<!--<Recipient Email="bryan_wussow@jaars.org"/>-->
+		<!-- Email addresses are stored with simple obfuscation to try to reduce spam emails -->
+		<Recipient Email="alistair underscore imrie at sil dot org" NotifyFileChanges="true"/>
+		<Recipient Email="ken underscore zook at sil dot org" NotifyFileChanges="true"/>
+		<Recipient Email="ann underscore bush at sil dot org" NotifyFileChanges="true"/>
+		<Recipient Email="john underscore wickberg at jaars dot org"/>
 	</FailureNotification>
 	<FilesSources>
 		<!-- Define folders from which files are to be collected for the installer: -->

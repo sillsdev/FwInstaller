@@ -164,7 +164,10 @@ namespace TestInstallerIntegrity
 				var failureReportRecipients = failureNotification.SelectNodes("Recipient");
 				if (failureReportRecipients != null)
 					foreach (XmlElement recipient in failureReportRecipients)
-						_emailList.Add(recipient.GetAttribute("Email"));
+					{
+						var address = Tools.ElucidateEmailAddress(recipient.GetAttribute("Email"));
+						_emailList.Add(address);
+					}
 			}
 
 		}
