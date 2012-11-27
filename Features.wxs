@@ -72,17 +72,18 @@
 			</Feature>
 			<Feature Id="LOC" Title="Language Packs" Description="Additional languages for the user interface." Display="expand" Level="3" AllowAdvertise="no">
 				<Feature Id="Indonesian" Title="Bahasa Indonesia" Description="Allows the software to have an Indonesian user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1057 OR REMOVE</Condition>
 					<Feature Id="Indonesian_TE" Title="Indonesian_TE" Description="Indonesian user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
 				<Feature Id="Malay" Title="Bahasa Malaysia" Description="Allows the software to have a Malay user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1086 OR REMOVE</Condition>
 					<Feature Id="Malay_TE" Title="Malay_TE" Description="Malay user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
 				<Feature Id="Chinese" Title="Chinese" Description="Allows the software to have a Chinese user interface." Display="expand" Level="4" AllowAdvertise="no">
-					<Condition Level="3">UserLanguageID = 3076 OR UserLanguageID = 5124 OR UserLanguageID = 2052 OR UserLanguageID = 1028</Condition>
+					<Condition Level="3">UserLanguageID = 3076 OR UserLanguageID = 5124 OR UserLanguageID = 2052 OR UserLanguageID = 1028 OR REMOVE</Condition>
 					<Feature Id="Chinese_TE" Title="Chinese_TE" Description="Chinese user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
-						<Condition Level="3">UserLanguageID = 3076 OR UserLanguageID = 5124 OR UserLanguageID = 2052 OR UserLanguageID = 1028</Condition>
 					</Feature>
 				</Feature>
 				<Feature Id="French" Title="French" Description="Allows the software to have a French user interface." Display="expand" Level="4" AllowAdvertise="no">
@@ -91,7 +92,13 @@
 					</Feature>
 				</Feature>
 				<Feature Id="Hindi" Title="Hindi" Description="Allows the software to have a Hindi user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1081 OR REMOVE</Condition>
 					<Feature Id="Hindi_TE" Title="Hindi_TE" Description="Hindi user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+					</Feature>
+				</Feature>
+				<Feature Id="Hungarian" Title="Hungarian" Description="Allows the software to have a Hungarian user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1038 OR REMOVE</Condition>
+					<Feature Id="Hungarian_TE" Title="Hungarian_TE" Description="Hungarian user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
 				<Feature Id="Kinyarwanda" Title="Kinyarwanda" Description="Allows the software to have a Kinyarwanda user interface." Display="expand" Level="0" AllowAdvertise="no">
@@ -109,13 +116,11 @@
 				<Feature Id="Persian" Title="Persian" Description="Allows the software to have a Persian user interface." Display="expand" Level="4" AllowAdvertise="no">
 					<Condition Level="3">UserLanguageID = 1065 OR REMOVE</Condition>
 					<Feature Id="Persian_TE" Title="Persian_TE" Description="Persian user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
-						<Condition Level="3">UserLanguageID = 1065 OR REMOVE</Condition>
 					</Feature>
 				</Feature>
 				<Feature Id="Portuguese" Title="Portuguese" Description="Allows the software to have a Portuguese user interface." Display="expand" Level="4" AllowAdvertise="no">
 					<Condition Level="3">UserLanguageID = 1046 OR UserLanguageID = 2070 OR REMOVE</Condition>
 					<Feature Id="Portuguese_TE" Title="Portuguese_TE" Description="Portuguese user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
-						<Condition Level="3">UserLanguageID = 1046 OR UserLanguageID = 2070 OR REMOVE</Condition>
 					</Feature>
 				</Feature>
 				<Feature Id="Russian" Title="Russian" Description="Allows the software to have a Russian user interface." Display="expand" Level="4" AllowAdvertise="no">
@@ -126,7 +131,6 @@
 				<Feature Id="Spanish" Title="Spanish" Description="Allows the software to have a Spanish user interface." Display="expand" Level="4" AllowAdvertise="no">
 					<Condition Level="3">UserLanguageID = 1034 OR UserLanguageID = 11274 OR UserLanguageID = 16394 OR UserLanguageID = 13322 OR UserLanguageID = 9226 OR UserLanguageID = 5130 OR UserLanguageID = 7178 OR UserLanguageID = 12298 OR UserLanguageID = 17418 OR UserLanguageID = 4106 OR UserLanguageID = 18442 OR UserLanguageID = 19466 OR UserLanguageID = 6154 OR UserLanguageID = 15370 OR UserLanguageID = 10250 OR UserLanguageID = 20490 OR UserLanguageID = 3082 OR UserLanguageID = 14346 OR UserLanguageID = 8202 OR REMOVE</Condition>
 					<Feature Id="Spanish_TE" Title="Spanish_TE" Description="Spanish user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
-						<Condition Level="3">UserLanguageID = 1034 OR UserLanguageID = 11274 OR UserLanguageID = 16394 OR UserLanguageID = 13322 OR UserLanguageID = 9226 OR UserLanguageID = 5130 OR UserLanguageID = 7178 OR UserLanguageID = 12298 OR UserLanguageID = 17418 OR UserLanguageID = 4106 OR UserLanguageID = 18442 OR UserLanguageID = 19466 OR UserLanguageID = 6154 OR UserLanguageID = 15370 OR UserLanguageID = 10250 OR UserLanguageID = 20490 OR UserLanguageID = 3082 OR UserLanguageID = 14346 OR UserLanguageID = 8202 OR REMOVE</Condition>
 					</Feature>
 				</Feature>
 				<Feature Id="Telugu" Title="Telugu" Description="Allows the software to have a Telugu user interface." Display="expand" Level="4" AllowAdvertise="no">

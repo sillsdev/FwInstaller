@@ -30,6 +30,15 @@
 		<Installer>SetupFwSampleData</Installer>
 	</Component>
 	<Component>
+		<Name>Bengali Localization</Name>
+		<Description>Bengali language pack for FieldWorks</Description>
+		<ProductCode>E919E200-1AAB-4351-ABE8-6237B507A3E9</ProductCode>
+		<UpgradeCode>91850F55-848F-4526-A230-06CC752102A2</UpgradeCode>
+		<Feature>Bengali</Feature>
+		<Feature>Bengali_TE</Feature>
+		<Installer>SetupFw-ms</Installer>
+	</Component>
+	<Component>
 		<Name>Chinese Localization</Name>
 		<Description>Chinese language pack for FieldWorks</Description>
 		<ProductCode>53C2895C-E4B7-402f-BDAB-62815E92047F</ProductCode>
@@ -48,6 +57,24 @@
 		<Installer>SetupFw-fr</Installer>
 	</Component>
 	<Component>
+		<Name>Hindi Localization</Name>
+		<Description>Hindi language pack for FieldWorks</Description>
+		<ProductCode>68843F1D-2E55-4263-B54C-C5057AEF26B1</ProductCode>
+		<UpgradeCode>A771F611-F8FB-45f1-8D01-6689814B94E3</UpgradeCode>
+		<Feature>Hindi</Feature>
+		<Feature>Hindi_TE</Feature>
+		<Installer>SetupFw-hi</Installer>
+	</Component>
+	<Component>
+		<Name>Hungarian Localization</Name>
+		<Description>Hungarian language pack for FieldWorks</Description>
+		<ProductCode>449795BB-9EE2-4ABD-8C18-6A8CD45F973A</ProductCode>
+		<UpgradeCode>C3DB00B9-2629-49BF-83DA-FE53F22337F5</UpgradeCode>
+		<Feature>Hungarian</Feature>
+		<Feature>Hungarian_TE</Feature>
+		<Installer>SetupFw-hu</Installer>
+	</Component>
+	<Component>
 		<Name>Indonesian Localization</Name>
 		<Description>Indonesian language pack for FieldWorks</Description>
 		<ProductCode>07A99D41-FADB-4c41-B22E-B079CACF2DF5</ProductCode>
@@ -55,6 +82,60 @@
 		<Feature>Indonesian</Feature>
 		<Feature>Indonesian_TE</Feature>
 		<Installer>SetupFw-id</Installer>
+	</Component>
+	<Component>
+		<Name>Khmer Localization</Name>
+		<Description>Khmer language pack for FieldWorks</Description>
+		<ProductCode>7A61D4AC-D96D-413D-925F-5CAD6C2EC6A8</ProductCode>
+		<UpgradeCode>83D830F6-0528-485D-A294-4F58D0A5E043</UpgradeCode>
+		<Feature>Khmer</Feature>
+		<Feature>Khmer_TE</Feature>
+		<Installer>SetupFw-km</Installer>
+	</Component>
+	<Component>
+		<Name>Kinyarwanda Localization</Name>
+		<Description>Kinyarwanda language pack for FieldWorks</Description>
+		<ProductCode>AB8FA75C-1616-4963-A4F8-2704FA48569E</ProductCode>
+		<UpgradeCode>B96478CA-2B15-4746-85AE-AABE987D3381</UpgradeCode>
+		<Feature>Kinyarwanda</Feature>
+		<Feature>Kinyarwanda_TE</Feature>
+		<Installer>SetupFw-ro</Installer>
+	</Component>
+	<Component>
+		<Name>Korean Localization</Name>
+		<Description>Korean language pack for FieldWorks</Description>
+		<ProductCode>FC7D9B12-6ECC-403e-AB11-7503C0E311F1</ProductCode>
+		<UpgradeCode>2541A0A3-8C8C-4dea-91BA-DA78FEB35D63</UpgradeCode>
+		<Feature>Korean</Feature>
+		<Feature>Korean_TE</Feature>
+		<Installer>SetupFw-ko</Installer>
+	</Component>
+	<Component>
+		<Name>Malay Localization</Name>
+		<Description>Malay language pack for FieldWorks</Description>
+		<ProductCode>94D81170-27B1-40d6-94D3-E6B40054989B</ProductCode>
+		<UpgradeCode>16948AC3-4BDC-4d27-8641-EF501950498F</UpgradeCode>
+		<Feature>Malay</Feature>
+		<Feature>Malay_TE</Feature>
+		<Installer>SetupFw-ms</Installer>
+	</Component>
+	<Component>
+		<Name>Nepali Localization</Name>
+		<Description>Nepali language pack for FieldWorks</Description>
+		<ProductCode>8A3DFD6D-B527-46ad-88E1-27A67CEF5CE8</ProductCode>
+		<UpgradeCode>3BE68716-FD23-4883-BC70-7A26D69E6D0C</UpgradeCode>
+		<Feature>Nepali</Feature>
+		<Feature>Nepali_TE</Feature>
+		<Installer>SetupFw-ne</Installer>
+	</Component>
+	<Component>
+		<Name>Persian Localization</Name>
+		<Description>Persian language pack for FieldWorks</Description>
+		<ProductCode>B4EC6D8E-6064-40f1-BDAD-29E6FBE5D396</ProductCode>
+		<UpgradeCode>216E947B-0AE6-447a-B58A-04BE08D98948</UpgradeCode>
+		<Feature>Persian</Feature>
+		<Feature>Persian_TE</Feature>
+		<Installer>SetupFw-fa</Installer>
 	</Component>
 	<Component>
 		<Name>Portuguese Localization</Name>
@@ -84,60 +165,6 @@
 		<Installer>SetupFw-es</Installer>
 	</Component>
 	<Component>
-		<Name>Korean Localization</Name>
-		<Description>Korean language pack for FieldWorks</Description>
-		<ProductCode>FC7D9B12-6ECC-403e-AB11-7503C0E311F1</ProductCode>
-		<UpgradeCode>2541A0A3-8C8C-4dea-91BA-DA78FEB35D63</UpgradeCode>
-		<Feature>Korean</Feature>
-		<Feature>Korean_TE</Feature>
-		<Installer>SetupFw-ko</Installer>
-	</Component>
-	<Component>
-		<Name>Turkish Localization</Name>
-		<Description>Turkish language pack for FieldWorks</Description>
-		<ProductCode>A464A6BA-6FC9-4576-A18C-524E1C9EBDCB</ProductCode>
-		<UpgradeCode>2F4E5C66-8AEA-44c4-84FC-5D869A3B1D3B</UpgradeCode>
-		<Feature>Turkish</Feature>
-		<Feature>Turkish_TE</Feature>
-		<Installer>SetupFw-tr</Installer>
-	</Component>
-	<Component>
-		<Name>Hindi Localization</Name>
-		<Description>Hindi language pack for FieldWorks</Description>
-		<ProductCode>68843F1D-2E55-4263-B54C-C5057AEF26B1</ProductCode>
-		<UpgradeCode>A771F611-F8FB-45f1-8D01-6689814B94E3</UpgradeCode>
-		<Feature>Hindi</Feature>
-		<Feature>Hindi_TE</Feature>
-		<Installer>SetupFw-hi</Installer>
-	</Component>
-	<Component>
-		<Name>Vietnamese Localization</Name>
-		<Description>Vietnamese language pack for FieldWorks</Description>
-		<ProductCode>B876A651-69D1-4cbc-9FB1-2C9FF8E40FB4</ProductCode>
-		<UpgradeCode>4D3EF929-C7FB-4fa1-8C99-B9B17E6ED7A1</UpgradeCode>
-		<Feature>Vietnamese</Feature>
-		<Feature>Vietnamese_TE</Feature>
-		<Installer>SetupFw-vi</Installer>
-	</Component>
-	<Component>
-		<Name>Persian Localization</Name>
-		<Description>Persian language pack for FieldWorks</Description>
-		<ProductCode>B4EC6D8E-6064-40f1-BDAD-29E6FBE5D396</ProductCode>
-		<UpgradeCode>216E947B-0AE6-447a-B58A-04BE08D98948</UpgradeCode>
-		<Feature>Persian</Feature>
-		<Feature>Persian_TE</Feature>
-		<Installer>SetupFw-fa</Installer>
-	</Component>
-	<Component>
-		<Name>Malay Localization</Name>
-		<Description>Malay language pack for FieldWorks</Description>
-		<ProductCode>94D81170-27B1-40d6-94D3-E6B40054989B</ProductCode>
-		<UpgradeCode>16948AC3-4BDC-4d27-8641-EF501950498F</UpgradeCode>
-		<Feature>Malay</Feature>
-		<Feature>Malay_TE</Feature>
-		<Installer>SetupFw-ms</Installer>
-	</Component>
-	<Component>
 		<Name>Telugu Localization</Name>
 		<Description>Telugu language pack for FieldWorks</Description>
 		<ProductCode>FB8E9808-4755-404b-924F-46A1198C673B</ProductCode>
@@ -145,33 +172,6 @@
 		<Feature>Telugu</Feature>
 		<Feature>Telugu_TE</Feature>
 		<Installer>SetupFw-te</Installer>
-	</Component>
-	<Component>
-		<Name>Nepali Localization</Name>
-		<Description>Nepali language pack for FieldWorks</Description>
-		<ProductCode>8A3DFD6D-B527-46ad-88E1-27A67CEF5CE8</ProductCode>
-		<UpgradeCode>3BE68716-FD23-4883-BC70-7A26D69E6D0C</UpgradeCode>
-		<Feature>Nepali</Feature>
-		<Feature>Nepali_TE</Feature>
-		<Installer>SetupFw-ne</Installer>
-	</Component>
-	<Component>
-		<Name>Bengali Localization</Name>
-		<Description>Bengali language pack for FieldWorks</Description>
-		<ProductCode>E919E200-1AAB-4351-ABE8-6237B507A3E9</ProductCode>
-		<UpgradeCode>91850F55-848F-4526-A230-06CC752102A2</UpgradeCode>
-		<Feature>Bengali</Feature>
-		<Feature>Bengali_TE</Feature>
-		<Installer>SetupFw-ms</Installer>
-	</Component>
-	<Component>
-		<Name>Kinyarwanda Localization</Name>
-		<Description>Kinyarwanda language pack for FieldWorks</Description>
-		<ProductCode>AB8FA75C-1616-4963-A4F8-2704FA48569E</ProductCode>
-		<UpgradeCode>B96478CA-2B15-4746-85AE-AABE987D3381</UpgradeCode>
-		<Feature>Kinyarwanda</Feature>
-		<Feature>Kinyarwanda_TE</Feature>
-		<Installer>SetupFw-ro</Installer>
 	</Component>
 	<Component>
 		<Name>Thai Localization</Name>
@@ -183,13 +183,13 @@
 		<Installer>SetupFw-th</Installer>
 	</Component>
 	<Component>
-		<Name>Khmer Localization</Name>
-		<Description>Khmer language pack for FieldWorks</Description>
-		<ProductCode>7A61D4AC-D96D-413D-925F-5CAD6C2EC6A8</ProductCode>
-		<UpgradeCode>83D830F6-0528-485D-A294-4F58D0A5E043</UpgradeCode>
-		<Feature>Khmer</Feature>
-		<Feature>Khmer_TE</Feature>
-		<Installer>SetupFw-km</Installer>
+		<Name>Turkish Localization</Name>
+		<Description>Turkish language pack for FieldWorks</Description>
+		<ProductCode>A464A6BA-6FC9-4576-A18C-524E1C9EBDCB</ProductCode>
+		<UpgradeCode>2F4E5C66-8AEA-44c4-84FC-5D869A3B1D3B</UpgradeCode>
+		<Feature>Turkish</Feature>
+		<Feature>Turkish_TE</Feature>
+		<Installer>SetupFw-tr</Installer>
 	</Component>
 	<Component>
 		<Name>Urdu Localization</Name>
@@ -199,5 +199,14 @@
 		<Feature>Urdu</Feature>
 		<Feature>Urdu_TE</Feature>
 		<Installer>SetupFw-ur</Installer>
+	</Component>
+	<Component>
+		<Name>Vietnamese Localization</Name>
+		<Description>Vietnamese language pack for FieldWorks</Description>
+		<ProductCode>B876A651-69D1-4cbc-9FB1-2C9FF8E40FB4</ProductCode>
+		<UpgradeCode>4D3EF929-C7FB-4fa1-8C99-B9B17E6ED7A1</UpgradeCode>
+		<Feature>Vietnamese</Feature>
+		<Feature>Vietnamese_TE</Feature>
+		<Installer>SetupFw-vi</Installer>
 	</Component>
 </FieldWorksComponents>

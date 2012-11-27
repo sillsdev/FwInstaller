@@ -17,6 +17,7 @@
 		<Language Name="Malay" Id="ms"/>
 		<Language Name="Telugu" Id="te"/>
 		<Language Name="Kinyarwanda" Id="ro"/>
+		<Language Name="Hungarian" Id="hu"/>
 	</Languages>
 	<FeatureAllocation>
 		<!-- Allocation of files in Output\Release is generally done by analyzing FieldWorks.targets -->
@@ -497,6 +498,7 @@
 		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-th.xml"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-km.xml"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-ur.xml"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\strings-hu.xml"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Language Explorer\Configuration\Available Plugins\Concorder\RBRExtensions.dll"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Parts\Generated.fwlayout"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Parts\GeneratedParts.xml"/>
@@ -560,5 +562,6 @@
 		<Cabinet Feature="Vietnamese" CabinetIndex="19"/>
 		<Cabinet Feature="Persian" CabinetIndex="20"/>
 		<Cabinet Feature="Kinyarwanda" CabinetIndex="21"/>
+		<Cabinet Feature="Hungarian" CabinetIndex="22"/>
 	</CabinetAssignments>
 </InstallerConfig>

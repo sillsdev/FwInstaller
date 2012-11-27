@@ -31,6 +31,7 @@
 		<Media Id='19' Cabinet='Vietnam.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='20' Cabinet='Persian.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='21' Cabinet='Kinyarwa.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='22' Cabinet='Hungaria.cab' EmbedCab='yes' CompressionLevel='high'/>
 
 		<Property Id="FLEX_MOVIES_CAB1_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindFlexMoviesCab1File">
