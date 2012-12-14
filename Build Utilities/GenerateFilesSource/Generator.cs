@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -154,6 +155,8 @@ namespace GenerateFilesSource
 		private readonly List<string> _neverOverwriteList = new List<string>();
 		// List of partial paths of files which are installed only if respective conditions are met:
 		private readonly Dictionary<string, string> _fileSourceConditions = new Dictionary<string, string>();
+		// List of URLs of files which have to be fetched from the internet:
+		private readonly Dictionary<string, string> _extraFiles = new Dictionary<string, string>();
 
 		class FileHeuristics
 		{
@@ -458,6 +461,7 @@ namespace GenerateFilesSource
 		internal void Run()
 		{
 			Initialize();
+			CopyExtraFiles();
 			CollectInstallableFiles();
 			BuildFeatureFileSets();
 			OutputResults();
@@ -571,6 +575,13 @@ namespace GenerateFilesSource
 			if (fileConditions != null)
 				foreach (XmlElement file in fileConditions)
 					_fileSourceConditions.Add(file.GetAttribute("Path"), file.GetAttribute("Condition"));
+
+			// Define files needed in the installer that are not built locally or part of source control:
+			// Format: <File URL="*URL of an extra file*" Destination="*Local relative path to download file to*"/>
+			var extraFiles = configuration.SelectNodes("//ExtraFiles/File");
+			if (extraFiles != null)
+				foreach (XmlElement file in extraFiles)
+					_extraFiles.Add(file.GetAttribute("URL"), file.GetAttribute("Destination"));
 
 			// Define list of file patterns to be filtered out. Any file whose path contains (anywhere) one of these strings will be filtered out:
 			// Format: <File PathPattern="*partial path of any file that is not needed in the FW installation*"/>
@@ -936,6 +947,27 @@ namespace GenerateFilesSource
 							sourcePath = sourcePath.Substring(3);
 						_fileOmissions.Add(sourcePath, "already included in WIX source " + xmlFilesPath);
 					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Pull in any additional files specified in the InstallerConfig.xml file
+		/// </summary>
+		private void CopyExtraFiles()
+		{
+			var webClient = new WebClient();
+
+			foreach (var file in _extraFiles)
+			{
+				var FullPath = MakeFullPath(file.Value);
+				try
+				{
+					webClient.DownloadFile(file.Key, FullPath);
+				}
+				catch (WebException e)
+				{
+					AddReportLine("Error: could not download file '" + file.Key + " (destined for " + file.Value + "): " + e.Message);
 				}
 			}
 		}

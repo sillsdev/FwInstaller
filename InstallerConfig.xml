@@ -122,7 +122,12 @@
 			<Except Path="Output\Release\SharedScrControls.dll"/>
 			<Except Path="Output\Release\SharedScrControls.pdb"/>
 		</TeFileNameTestHeuristics>
-</FeatureAllocation>
+	</FeatureAllocation>
+	<ExtraFiles>
+		<!-- Define files needed in the installer that are not built locally or part of source control: -->
+		<!-- Format: <File URL="*URL of an extra file*" Destination="*Local relative path to download file to*"/> -->
+		<File URL="http://downloads.palaso.org/FlexBridge/FLExBridgeInstaller.msi" Destination="DistFiles\Installers\FLExBridgeInstaller.msi"/>
+	</ExtraFiles>
 	<FileConditions>
 		<!-- Define conditions to apply to specified components: -->
 		<!-- Format: <File Path="*partial path of a file that is conditionally installed*" Condition="*MSI Installer condition that must be true to install file*"/> -->
