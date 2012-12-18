@@ -475,6 +475,9 @@ namespace TestInstallerIntegrity
 				Report("Warning #4: Could not determine if DistFiles folder is consistent with source Control:" + Environment.NewLine + ex.Message);
 				return;
 			}
+			while (distFilesNotInSourceControlRaw.EndsWith("\n"))
+				distFilesNotInSourceControlRaw = distFilesNotInSourceControlRaw.Substring(0, distFilesNotInSourceControlRaw.Length - 1);
+
 			var distFilesNotInSourceControl = new List<string> (distFilesNotInSourceControlRaw.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None));
 
 			for (var i = 0; i < distFilesNotInSourceControl.Count; i++)

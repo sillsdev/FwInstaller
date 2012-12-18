@@ -508,6 +508,7 @@
 		<IgnoreNonVersionedDistFiles PathPattern="Parts\Generated.fwlayout"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Parts\GeneratedParts.xml"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Templates\LocalizedLists-*.zip"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Installers\FLExBridgeInstaller.msi"/>
 		<!-- Define list of (partial) paths of files that are allowed to have a version of 0.0.0.0: -->
 		<!-- Format: <IgnoreVersionZeroFiles PathPattern="*partial path of any file that is allowed to have a version of 0.0.0.0*"/> -->
 		<IgnoreVersionZeroFiles PathPattern="Output\Release\MsHtmHstInterop.dll"/>

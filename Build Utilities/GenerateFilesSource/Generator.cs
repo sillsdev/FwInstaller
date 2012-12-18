@@ -960,10 +960,30 @@ namespace GenerateFilesSource
 
 			foreach (var file in _extraFiles)
 			{
-				var FullPath = MakeFullPath(file.Value);
+				var fullPath = MakeFullPath(file.Value);
+				if (File.Exists(fullPath))
+				{
+					try
+					{
+						File.SetAttributes(fullPath, FileAttributes.Normal);
+						File.Delete(fullPath);
+					}
+					catch (IOException e)
+					{
+						AddReportLine("Error: could not download file to '" + file.Value +
+										" because the file already exists and is in use. [" + e.Message + "]");
+						continue;
+					}
+					catch (UnauthorizedAccessException e)
+					{
+						AddReportLine("Error: could not download file to '" + file.Value +
+										" because the file already exists and cannot be deleted. [" + e.Message + "]");
+						continue;
+					}
+				}
 				try
 				{
-					webClient.DownloadFile(file.Key, FullPath);
+					webClient.DownloadFile(file.Key, fullPath);
 				}
 				catch (WebException e)
 				{
