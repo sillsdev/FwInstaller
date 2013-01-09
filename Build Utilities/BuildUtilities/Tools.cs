@@ -67,11 +67,13 @@ namespace InstallerBuildUtilities
 				};
 
 				var dosProc = Process.Start(startInfo);
+
+				output = dosProc.StandardOutput.ReadToEnd();
+				error = dosProc.StandardError.ReadToEnd();
+
 				dosProc.WaitForExit();
 				if (dosProc.ExitCode != 0)
 					dosError = true;
-				output = dosProc.StandardOutput.ReadToEnd();
-				error = dosProc.StandardError.ReadToEnd();
 			}
 			catch (Exception ex)
 			{

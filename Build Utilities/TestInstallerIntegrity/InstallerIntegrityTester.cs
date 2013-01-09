@@ -468,7 +468,7 @@ namespace TestInstallerIntegrity
 			string distFilesNotInSourceControlRaw;
 			try
 			{
-				distFilesNotInSourceControlRaw = Tools.RunDosCmd("git", "ls-files --others --exclude-standard", distFilePath);
+				distFilesNotInSourceControlRaw = Tools.RunDosCmd("git", "ls-files --others --exclude Helps --exclude Movies", distFilePath);
 			}
 			catch (Exception ex)
 			{
@@ -491,8 +491,8 @@ namespace TestInstallerIntegrity
 
 			// Filter out files that were specifically to be omitted from the installer:
 			distFilesNotInSourceControl = (from file in distFilesNotInSourceControl
-							where _fileOmissions.All(f => !file.ToLowerInvariant().Contains(f.Replace("\\${config}\\", "\\" + _buildType + "\\").ToLowerInvariant()))
-							select file).ToList();
+							where _fileOmissions.All(f => !Path.Combine("DistFiles", file).ToLowerInvariant().Contains(f.Replace("\\${config}\\", "\\" + _buildType + "\\").ToLowerInvariant()))
+							select Path.Combine("DistFiles", file)).ToList();
 
 			if (distFilesNotInSourceControl.Count() > 0)
 			{
