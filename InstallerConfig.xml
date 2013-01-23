@@ -82,8 +82,6 @@
 			<File PathPattern="Output\Release\IcuEC.dll"/>
 			<File PathPattern="Output\Release\IcuRegexEC.dll"/>
 			<File PathPattern="Output\Release\IcuTranslitEC.dll"/>
-			<File PathPattern="Output\Release\PerlExpressionEC.dll"/>
-			<File PathPattern="Output\Release\PyScriptEC.dll"/>
 			<File PathPattern="Output\Release\EC\Plugins\EC 4.0.0.0 Plugin Details.xml"/>
 			<File PathPattern="Output\Release\EC\Plugins\CC 4.0.0.0 Plugin Details.xml"/>
 			<File PathPattern="Output\Release\EC\Plugins\IcuEC 4.0.0.0 Plugin Details.xml"/>

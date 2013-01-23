@@ -121,7 +121,6 @@
 			<ProgressText Action="Rollback" Template="[1]"><![CDATA[Rolling back action:]]></ProgressText>
 			<ProgressText Action="GenerateScript" Template="[1]"><![CDATA[Generating script operations for action:]]></ProgressText>
 			<ProgressText Action="AddRegInfoToTechSupport"><![CDATA[Registering user for technical support]]></ProgressText>
-			<ProgressText Action="InitSqlServer"><![CDATA[Initializing SQL Server]]></ProgressText>
 			<ProgressText Action="InstallDoulosFont"><![CDATA[Installing Doulos SIL font]]></ProgressText>
 			<ProgressText Action="InstallCharisFont"><![CDATA[Installing Charis font]]></ProgressText>
 			<ProgressText Action="InstallEzraFont"><![CDATA[Installing Ezra SIL font]]></ProgressText>
@@ -162,7 +161,7 @@
 					<Text><![CDATA[[DialogFontDefault]&Retry]]></Text>
 					<Publish Event="EndDialog" Value="ErrorRetry"><![CDATA[1]]></Publish>
 				</Control>
-				<Control Id="Picture" Type="Bitmap" X="8" Y="10" Width="36" Height="30" ToolTip="picture of a violin" FixedSize="yes" Text="Music" />
+				<Control Id="Picture" Type="Bitmap" X="8" Y="10" Width="36" Height="30" ToolTip="picture" FixedSize="yes" Text="Music" />
 			</Dialog>
 			<Dialog Id="Cancel" Width="233" Height="127" Title="[ProductName] [DialogSuffix]" NoMinimize="yes">
 				<Control Id="No" Type="PushButton" X="101" Y="101" Width="56" Height="17" Default="yes">

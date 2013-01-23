@@ -10,25 +10,11 @@
 			</Component>
 			<Directory Id="CommonFilesFolder" Name="Common">
 				<Directory Id="SIL" Name="SIL">
-					<Component Id="PythonEC27.dll" Guid="4F5366DF-4EED-4B1C-A833-0C71C16E5E0C">
-						<File Id="PythonEC27.dll" Name="PythonEC27.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\Output\Release\PythonEC27.dll">
-							<TypeLib Id="{28A1F0A9-82F2-4B95-A3A6-BB69DB118D9C}" Description="Python IEncConverter implementation 4.0 Type Library" HelpDirectory="SIL" Language="0" MajorVersion="4" MinorVersion="0">
-								<AppId Description="PythonEC27" Id="{26FA74AE-AA6F-4486-8D3F-62E0E1B0FC81}">
-									<Class Id="{025E6162-9B43-4725-A8B2-2BFD451079AD}" Context="InprocServer32" Description="Python Script Configurator Class" ThreadingModel="apartment" Programmable="yes">
-										<ProgId Id="SilEncConverters40.PyScriptEncConverterConfig.27" Description="Python Script Configurator Class" />
-									</Class>
-									<Class Id="{EE62A6CB-B2CA-4D1F-90BE-FFA6569E550C}" Context="InprocServer32" Description="Python Script Converter Class" ThreadingModel="apartment" Programmable="yes">
-										<ProgId Id="SilEncConverters40.PyScriptEncConverter.27" Description="Python Script Converter Class" />
-									</Class>
-								</AppId>
-							</TypeLib>
-						</File>
-						<RegistryValue Root="HKCR" Key="AppID\PythonEC27.DLL" Name="AppID" Value="{26FA74AE-AA6F-4486-8D3F-62E0E1B0FC81}" Type="string" Action="write" />
+					<Component Id="PyScriptEC.dll" Guid="57A80269-60D2-4E7B-9D24-6399C5E3D01D">
+						<File Id="PyScriptEC.dll" KeyPath="yes" Source="..\..\Output\Release\PyScriptEC.dll" />
 					</Component>
-					<Component Id="PythonEC27.tlb" Guid="8EB5FEA0-3668-4B72-9D10-2CE46DD948DB">
-						<File Id="PythonEC27.tlb" Name="PythonEC27.tlb" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\Output\Release\PythonEC27.tlb">
-							<TypeLib Id="{28A1F0A9-82F2-4B95-A3A6-BB69DB118D9C}" Description="Python IEncConverter implementation 4.0 Type Library" HelpDirectory="SIL" Language="0" MajorVersion="4" MinorVersion="0" />
-						</File>
+					<Component Id="PyScriptEncConverter.dll" Guid="B57AD533-30EC-41B4-A3E2-0F115058493D">
+						<File Id="PyScriptEncConverter.dll" KeyPath="yes" Source="..\..\Output\Release\PyScriptEncConverter.dll" />
 					</Component>
 					<Component Id="pywintypes27.dll" Guid="BC618F76-2717-4EE0-86BE-F991C7897478">
 						<File Id="pywintypes27.dll" Name="pywintypes27.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\pywintypes27.dll"/>
