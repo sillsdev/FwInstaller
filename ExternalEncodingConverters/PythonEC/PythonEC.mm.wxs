@@ -10,49 +10,34 @@
 			</Component>
 			<Directory Id="CommonFilesFolder" Name="Common">
 				<Directory Id="SIL" Name="SIL">
-					<Component Id="PyScriptEC.dll" Guid="57A80269-60D2-4E7B-9D24-6399C5E3D01D">
-						<File Id="PyScriptEC.dll" KeyPath="yes" Source="..\..\Output\Release\PyScriptEC.dll" />
-					</Component>
-					<Component Id="PyScriptEncConverter.dll" Guid="B57AD533-30EC-41B4-A3E2-0F115058493D">
-						<File Id="PyScriptEncConverter.dll" KeyPath="yes" Source="..\..\Output\Release\PyScriptEncConverter.dll" />
-					</Component>
-					<Component Id="pywintypes27.dll" Guid="BC618F76-2717-4EE0-86BE-F991C7897478">
-						<File Id="pywintypes27.dll" Name="pywintypes27.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\pywintypes27.dll"/>
-					</Component>
-					<Component Id="python27.dll" Guid="05B13B4E-F294-4855-B01A-760252F447D1">
-						<File Id="python27.dll" Name="python27.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\python27.dll"/>
-					</Component>
-					<Component Id="pythoncom27.dll" Guid="67C7F75C-95ED-406B-8D3D-EFB21E5047FE">
-						<File Id="pythoncom27.dll" Name="pythoncom27.dll" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\pythoncom27.dll"/>
-					</Component>
 					<Directory Id="Help" Name="Help">
 						<Component Id="PythonScriptPluginAboutbox" Guid="082C4028-8388-7C6E-179B-16B2F088DE56">
-							<File Id="PythonScriptPluginAboutbox" Name="Python Script Plug-in About box.htm" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box.htm"/>
+							<File Id="PythonScriptPluginAboutbox" Name="Python Script Plug-in About box.htm" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box.htm"/>
 						</Component>
 						<Directory Id="PythonScriptPluginAboutboxFiles" Name="Python Script Plug-in About box_files">
 							<Component Id="PythonScriptPluginAboutboxFilesimage007.png" Guid="A6DADCBA-5BFE-227B-70FB-E8C26FEBBA34">
-								<File Id="PythonScriptPluginAboutboxFilesimage007.png" Name="image007.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image007.png"/>
+								<File Id="PythonScriptPluginAboutboxFilesimage007.png" Name="image007.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image007.png"/>
 							</Component>
 							<Component Id="PythonScriptPluginAboutboxFilesimage008.jpg" Guid="F1906D00-D34A-7E68-1D44-5213E4816634">
-								<File Id="PythonScriptPluginAboutboxFilesimage008.jpg" Name="image008.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image008.jpg"/>
+								<File Id="PythonScriptPluginAboutboxFilesimage008.jpg" Name="image008.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image008.jpg"/>
 							</Component>
 							<Component Id="PythonScriptPluginAboutboxFilesimage005.jpg" Guid="1C12C207-A0D9-4BFD-FE65-AAF2489E26B4">
-								<File Id="PythonScriptPluginAboutboxFilesimage005.jpg" Name="image005.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image005.jpg"/>
+								<File Id="PythonScriptPluginAboutboxFilesimage005.jpg" Name="image005.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image005.jpg"/>
 							</Component>
 							<Component Id="PythonScriptPluginAboutboxFilesheader.htm" Guid="D8D775B2-A9FB-CF00-37A4-02AC64806EBC">
-								<File Id="PythonScriptPluginAboutboxFilesheader.htm" Name="header.htm" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\header.htm"/>
+								<File Id="PythonScriptPluginAboutboxFilesheader.htm" Name="header.htm" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\header.htm"/>
 							</Component>
 							<Component Id="PythonScriptPluginAboutboxFilesimage003.png" Guid="2CBF4392-1C66-6285-80B4-405A6BE026FD">
-								<File Id="PythonScriptPluginAboutboxFilesimage003.png" Name="image003.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image003.png"/>
+								<File Id="PythonScriptPluginAboutboxFilesimage003.png" Name="image003.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image003.png"/>
 							</Component>
 							<Component Id="PythonScriptPluginAboutboxFilesimage001.png" Guid="B6952E13-A6FB-8807-64E5-0EC9ECA8D91C">
-								<File Id="PythonScriptPluginAboutboxFilesimage001.png" Name="image001.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image001.png"/>
+								<File Id="PythonScriptPluginAboutboxFilesimage001.png" Name="image001.png" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image001.png"/>
 							</Component>
 							<Component Id="PythonScriptPluginAboutboxFilesfilelist.xml" Guid="727B5515-9862-A9F2-2936-C84F9D6072DF">
-								<File Id="PythonScriptPluginAboutboxFilesfilelist.xml" Name="filelist.xml" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\filelist.xml"/>
+								<File Id="PythonScriptPluginAboutboxFilesfilelist.xml" Name="filelist.xml" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\filelist.xml"/>
 							</Component>
 							<Component Id="PythonScriptPluginAboutboxFilesimage004.jpg" Guid="850772D1-5C0F-4091-71FD-070BBA72BB5B">
-								<File Id="PythonScriptPluginAboutboxFilesimage004.jpg" Name="image004.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image004.jpg"/>
+								<File Id="PythonScriptPluginAboutboxFilesimage004.jpg" Name="image004.jpg" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\Python Script Plug-in About box_files\image004.jpg"/>
 							</Component>
 						</Directory>
 					</Directory>
@@ -74,7 +59,7 @@
 					<Directory Id="SILConverters40Folder" Name="SILConverters40">
 						<Directory Id="MapsTablesFolder" Name="MapsTables">
 							<Component Id="TestPyScript.py" Guid="3BB55FAA-AC2A-455b-8570-B000E483715E">
-								<File Id="TestPyScript.py" Name="TestPyScript.py" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\DistFiles\EncodingConverters\TestPyScript.py"/>
+								<File Id="TestPyScript.py" Name="TestPyScript.py" ReadOnly="yes" Vital="yes" KeyPath="yes" Source="..\..\..\DistFiles\EncodingConverters\TestPyScript.py"/>
 							</Component>
 						</Directory>
 					</Directory>

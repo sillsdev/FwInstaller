@@ -92,6 +92,9 @@
 			<File PathPattern="Output\Release\icudt50.dll"/>
 			<File PathPattern="Output\Release\icuin50.dll"/>
 			<File PathPattern="Output\Release\icuuc50.dll"/>
+			<File PathPattern="Output\Release\PerlExpressionEC.dll"/>
+			<File PathPattern="Output\Release\PyScriptEC.dll"/>
+			<File PathPattern="Output\Release\PyScriptEncConverter.dll"/>
 		</CoreFileOrphans>
 		<ForceBuiltFilesIntoTE>
 			<!-- Define list of path patterns of built files known to be needed in TE but which are not part of the TeExe FieldWorks.targets dependency chain: -->
