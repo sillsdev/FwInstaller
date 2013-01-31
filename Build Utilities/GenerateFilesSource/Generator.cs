@@ -970,24 +970,40 @@ namespace GenerateFilesSource
 					}
 					catch (IOException e)
 					{
-						AddReportLine("Error: could not download file to '" + file.Value +
+						AddSeriousIssue("Error: could not download file to '" + file.Value +
 										" because the file already exists and is in use. [" + e.Message + "]");
 						continue;
 					}
 					catch (UnauthorizedAccessException e)
 					{
-						AddReportLine("Error: could not download file to '" + file.Value +
+						AddSeriousIssue("Error: could not download file to '" + file.Value +
 										" because the file already exists and cannot be deleted. [" + e.Message + "]");
 						continue;
 					}
 				}
+
+				var destDirectory = Path.GetDirectoryName(fullPath);
+				if (!Directory.Exists(destDirectory))
+				{
+					try
+					{
+						Directory.CreateDirectory(destDirectory);
+					}
+					catch (Exception e)
+					{
+						AddSeriousIssue("Error: could not download file to '" + file.Value +
+										" because the folder it is destined for cannot be created. [" + e.Message + "]");
+						continue;
+					}
+				}
+
 				try
 				{
 					webClient.DownloadFile(file.Key, fullPath);
 				}
 				catch (WebException e)
 				{
-					AddReportLine("Error: could not download file '" + file.Key + " (destined for " + file.Value + "): " + e.Message);
+					AddSeriousIssue("Error: could not download file '" + file.Key + " (destined for " + file.Value + "): " + e.Message);
 				}
 			}
 		}
@@ -1639,9 +1655,10 @@ namespace GenerateFilesSource
 					// The files are different. If they were destined for the same target path,
 					// then we have a problem that needs to be reported:
 					if (MakeRelativeTargetPath(fileFullPath) == MakeRelativeTargetPath(candidateFullPath))
-						_seriousIssues += "WARNING: " + fileFullPath + " is supposed to be the same as " + candidateFullPath +
-										   ", but it isn't. Only one will get into the installer. You should check and see which one is correct, and do something about the other." +
-										   Environment.NewLine;
+					{
+						AddSeriousIssue("WARNING: " + fileFullPath + " is supposed to be the same as " + candidateFullPath +
+							", but it isn't. Only one will get into the installer. You should check and see which one is correct, and do something about the other.");
+					}
 					else
 						continue;
 				}
@@ -1835,10 +1852,9 @@ namespace GenerateFilesSource
 				var parameterizedPath = file.RelativeSourcePath;
 				if (!_teFileNameExceptions.Contains(parameterizedPath))
 				{
-					_seriousIssues += "WARNING: " + file.RelativeSourcePath +
-									   " looks like a file specific to TE, but it appears in the " + section +
-									   " section of the installer. This may adversely affect FLEx-only users in sensitive locations." +
-									   Environment.NewLine;
+					AddSeriousIssue("WARNING: " + file.RelativeSourcePath +
+						" looks like a file specific to TE, but it appears in the " + section +
+						" section of the installer. This may adversely affect FLEx-only users in sensitive locations.");
 				}
 			}
 		}
@@ -2263,7 +2279,7 @@ namespace GenerateFilesSource
 				var fileFullPath = MakeFullPath(file.RelativeSourcePath);
 				if (!File.Exists(fileFullPath))
 				{
-					_seriousIssues += file.RelativeSourcePath + " does not exist at expected place (" + fileFullPath + ").";
+					AddSeriousIssue(file.RelativeSourcePath + " does not exist at expected place (" + fileFullPath + ").");
 					break;
 				}
 
@@ -2275,9 +2291,9 @@ namespace GenerateFilesSource
 				var fileCurrentMd5 = CalcFileMd5(fileFullPath);
 				if (omissionMd5 == fileCurrentMd5)
 				{
-					_seriousIssues += file.RelativeSourcePath +
-									  " is included in the installer, but is identical to a file that was omitted [" +
-									  omission.RelativePath + "] because it was " + omission.Reason + Environment.NewLine;
+					AddSeriousIssue(file.RelativeSourcePath +
+						" is included in the installer, but is identical to a file that was omitted [" +
+						omission.RelativePath + "] because it was " + omission.Reason);
 					break;
 				}
 
@@ -2285,9 +2301,9 @@ namespace GenerateFilesSource
 				var fileSize = (new FileInfo(fileFullPath)).Length;
 				if (omissionFileSize == fileSize)
 				{
-					_seriousIssues += file.RelativeSourcePath +
-									  " is included in the installer, but is similar to a file that was omitted [" +
-									  omission.RelativePath + "] because it was " + omission.Reason + Environment.NewLine;
+					AddSeriousIssue(file.RelativeSourcePath +
+						" is included in the installer, but is similar to a file that was omitted [" +
+						omission.RelativePath + "] because it was " + omission.Reason);
 				}
 				break;
 			}
