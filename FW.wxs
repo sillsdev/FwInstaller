@@ -16,7 +16,7 @@
 		<Media Id='4' Cabinet='Flex_M1.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='5' Cabinet='Flex_M2.cab' EmbedCab='no' CompressionLevel='high'/>
 		<Media Id='6' Cabinet='Flex_M3.cab' EmbedCab='no' CompressionLevel='high'/>
-		<Media Id='7' Cabinet='SampData.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='7' Cabinet='SampData.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='8' Cabinet='French.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='9' Cabinet='Spanish.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='10' Cabinet='Indonesian.cab' EmbedCab='yes' CompressionLevel='high'/>
@@ -46,11 +46,6 @@
 		<Property Id="FLEX_MOVIES_CAB3_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindFlexMoviesCab3File">
 				<FileSearch Name="Flex_M3.cab"/>
-			</DirectorySearch>
-		</Property>
-		<Property Id="SAMPLE_DATA_CAB_FOUND">
-			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindSampleDataCabFile">
-				<FileSearch Name="SampData.cab"/>
 			</DirectorySearch>
 		</Property>
 		<Property Id="KOREAN_CAB_FOUND">

@@ -67,8 +67,7 @@
 				<ComponentRef Id="ShortcutTEHelp"/>
 				<ComponentRef Id="ShortcutTEMovies"/>
 			</Feature>
-			<Feature Id="SampleData" Title="Sample Data" Description="Leli-Teli and Sena databases useful for training and practice" Display="expand" Level="0" AllowAdvertise="no">
-				<Condition Level="3">SAMPLE_DATA_CAB_FOUND OR REMOVE</Condition>
+			<Feature Id="SampleData" Title="Sample Data" Description="Leli-Teli and Sena databases useful for training and practice" Display="expand" Level="3" AllowAdvertise="no">
 			</Feature>
 			<Feature Id="LOC" Title="Language Packs" Description="Additional languages for the user interface." Display="expand" Level="3" AllowAdvertise="no">
 				<Feature Id="Indonesian" Title="Bahasa Indonesia" Description="Allows the software to have an Indonesian user interface." Display="expand" Level="4" AllowAdvertise="no">
