@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -90,7 +91,7 @@ namespace GenerateFilesSource
 		private string _projRootPath;
 		private string _exeFolder;
 
-		class FileOmission
+		internal class FileOmission
 		{
 			public readonly string RelativePath;
 			public readonly string Reason;
@@ -110,11 +111,11 @@ namespace GenerateFilesSource
 				CaseSensitive = caseSensitive;
 			}
 		}
-		class FileOmissionList : List<FileOmission>
+		internal class FileOmissionList : List<FileOmission>
 		{
 			public void Add(string path, bool caseSensitive)
 			{
-				Add(new FileOmission(path, "listed in the Omissions section of InstallerConfig.xml.", caseSensitive));
+				Add(new FileOmission(path, "<Omissions PathPattern=\"" + path + "\">", caseSensitive));
 			}
 			public void Add(string path, string reason)
 			{
@@ -228,6 +229,10 @@ namespace GenerateFilesSource
 		private HashSet<InstallerFile> _flexFiles;
 		// Set of collected installable TE files:
 		private HashSet<InstallerFile> _teFiles;
+		// Set of collected installable files from build target "allCsharpNoTests":
+		private HashSet<InstallerFile> _allCsharpNoTestsFiles;
+		// Set of collected installable files from build target "allCppNoTest":
+		private HashSet<InstallerFile> _allCppNoTestFiles;
 		// Set of files rejected as duplicates:
 		private readonly HashSet<InstallerFile> _duplicateFiles = new HashSet<InstallerFile>();
 
@@ -299,6 +304,7 @@ namespace GenerateFilesSource
 			public string Version;
 			public string Md5;
 			public string Comment;
+			public string ReasonForRemoval;
 			public string ComponentGuid;
 			public int DiskId;
 			public int PatchGroup;
@@ -319,6 +325,7 @@ namespace GenerateFilesSource
 				Md5 = "unknown";
 
 				Comment = "unknown";
+				ReasonForRemoval = "";
 				ComponentGuid = "unknown";
 				DiskId = 0;
 				PatchGroup = 0; // Initial release files will have implied (but omitted) PatchGroup 0, those new in first update will have Patchgroup 1, etc.
@@ -1013,19 +1020,25 @@ namespace GenerateFilesSource
 		/// </summary>
 		private void CollectInstallableFiles()
 		{
-			// We do three tasks in parallel:
+			// We do these tasks in parallel:
 			// 1) Collect existing files from Output\Release and DistFiles;
 			// 2) Collect files from the LexTextExe target and all its dependencies;
-			// 3) Collect files from the TeExe target and all its dependencies.
-			Parallel.Invoke(
+			// 3) Collect files from the TeExe target and all its dependencies;
+			// 4) Collect files from the allCsharpNoTests target and all its dependencies;
+			// 5) Collect files from the allCppNoTest target and all its dependencies;
+			 Parallel.Invoke(
 				GetAllFilesFiltered, // fills up _allFilesFiltered and _duplicateFiles sets
 				GetFlexFiles, // fills up _flexFiles set
-				GetTeFiles // fills up _teFiles set
+				GetTeFiles, // fills up _teFiles set
+				GetAllCsharpNoTestsFiles, // fills up _allCsharpNoTestsFiles set
+				GetAllCppNoTestFiles // fills up _allCppNoTestFiles set
 			);
 
 			Parallel.Invoke(
 				CleanUpFlexFiles,
 				CleanUpTeFiles,
+				CleanUpAllCsharpNoTestsFiles,
+				CleanUpAllCppNoTestFiles,
 				CollectLocalizationFiles
 			);
 		}
@@ -1060,6 +1073,22 @@ namespace GenerateFilesSource
 		}
 
 		/// <summary>
+		/// Removes any _allCsharpNoTestsFiles that have already been rejected elsewhere.
+		/// </summary>
+		private void CleanUpAllCsharpNoTestsFiles()
+		{
+			CleanUpFileSet(_allCsharpNoTestsFiles, "allCsharpNoTests");
+		}
+
+		/// <summary>
+		/// Removes any _allCppNoTestFiles that have already been rejected elsewhere.
+		/// </summary>
+		private void CleanUpAllCppNoTestFiles()
+		{
+			CleanUpFileSet(_allCppNoTestFiles, "allCppNoTest");
+		}
+
+		/// <summary>
 		/// Removes any files that have already been rejected elsewhere.
 		/// </summary>
 		/// <param name="fileSet">Set of files to be cleaned up</param>
@@ -1068,7 +1097,10 @@ namespace GenerateFilesSource
 		{
 			var initialFiles = fileSet;
 			foreach (var file in _duplicateFiles.Where(fileSet.Contains))
+			{
+				file.ReasonForRemoval += " Duplicate file";
 				fileSet.Remove(file);
+			}
 
 			lock (_reportSectionMutexToken)
 			{
@@ -1086,11 +1118,27 @@ namespace GenerateFilesSource
 		}
 
 		/// <summary>
+		/// Assigns to _allCsharpNoTestsFiles the list of files built by target allCsharpNoTests.
+		/// </summary>
+		private void GetAllCsharpNoTestsFiles()
+		{
+			_allCsharpNoTestsFiles = GetSpecificTargetFiles("allCsharpNoTests", "from allCsharpNoTests target");
+		}
+
+		/// <summary>
+		/// Assigns to _allCppNoTestFiles the list of files built by target allCppNoTest.
+		/// </summary>
+		private void GetAllCppNoTestFiles()
+		{
+			_allCppNoTestFiles = GetSpecificTargetFiles("allCppNoTest", "from allCppNoTest target");
+		}
+
+		/// <summary>
 		/// Assigns to _flexFiles the list of files determined to be dependencies of FLEx.exe.
 		/// </summary>
 		private void GetFlexFiles()
 		{
-			_flexFiles = GetSpecificTargetFiles("LexTextExe", "from FLEx build");
+			_flexFiles = GetSpecificTargetFiles("LexTextExe", "from FLEx target");
 		}
 
 		/// <summary>
@@ -1098,7 +1146,7 @@ namespace GenerateFilesSource
 		/// </summary>
 		private void GetTeFiles()
 		{
-			_teFiles = GetSpecificTargetFiles("TeExe", "from TE build");
+			_teFiles = GetSpecificTargetFiles("TeExe", "from TE target");
 		}
 
 		/// <summary>
@@ -1180,9 +1228,9 @@ namespace GenerateFilesSource
 			var fileSetFiltered = FilterOutSpecifiedOmissions(fileSet);
 			lock (_reportSectionMutexToken)
 			{
-				AddReportLine("Removed " + (fileSet.Count - fileSetFiltered.Count) + " files from " + path + " file set because they were either in the <Omissions> section of InstallerConfig.xml, or they were in Files.wxs or a merge module source:");
+				AddReportLine("Removed " + (fileSet.Count - fileSetFiltered.Count) + " files from " + path + " file set:");
 				foreach (var file in fileSet.Except(fileSetFiltered))
-					AddReportLine("    " + file.RelativeSourcePath);
+					AddReportLine("    " + file.RelativeSourcePath + ": " + file.ReasonForRemoval);
 			}
 			return fileSetFiltered;
 		}
@@ -1196,33 +1244,52 @@ namespace GenerateFilesSource
 			private bool _initialized;
 			private readonly Generator _parent;
 			private readonly string _projRootPath;
-			private readonly string _fwTargetsPath;
 			private readonly string _assemblyFolderPath;
 			private readonly string _description;
 			private const string MsbuildUri = "http://schemas.microsoft.com/developer/msbuild/2003";
-			private readonly XmlDocument _fwTargets = new XmlDocument();
-			private XmlNamespaceManager _xmlnsManager;
 			private readonly HashSet<string> _completedTargets = new HashSet<string>();
 			private const string CommentDelimiter = "; ";
+			private readonly FileOmissionList _fileOmissions;
+
+
+			class TargetsFileData
+			{
+				public string FilePath;
+				public readonly XmlDocument XmlDoc = new XmlDocument();
+				public XmlNamespaceManager XmlnsManager;
+			}
+			private readonly List<TargetsFileData> _targetsFiles = new List<TargetsFileData>();
+			private readonly bool _foundFieldWorksTargetsFile;
 
 			public AssemblyDependencyProcessor(string projRootPath, string assemblyFolderPath, string description, Generator parent)
 			{
+				_fileOmissions = parent._fileOmissions;
 				_parent = parent;
 				_projRootPath = projRootPath;
 				_assemblyFolderPath = assemblyFolderPath;
 				_description = description;
-				_fwTargetsPath = Path.Combine(_projRootPath, @"Build\FieldWorks.targets");
+				_foundFieldWorksTargetsFile = false;
+
+				var targetsFiles = Directory.GetFiles(Path.Combine(_projRootPath, "Build"), "*.targets", SearchOption.TopDirectoryOnly);
+				foreach (var file in targetsFiles)
+				{
+					_targetsFiles.Add(new TargetsFileData {FilePath = file});
+					if (file.EndsWith(@"\FieldWorks.targets"))
+						_foundFieldWorksTargetsFile = true;
+				}
 			}
 
 			public void Init()
 			{
-				if (!File.Exists(_fwTargetsPath))
-					throw new FileNotFoundException("Could not find FieldWorks Targets file at path '" + _fwTargetsPath + "'.");
+				if (!_foundFieldWorksTargetsFile)
+					throw new FileNotFoundException("Could not find FieldWorks Targets file");
 
-				_fwTargets.Load(_fwTargetsPath);
-
-				_xmlnsManager = new XmlNamespaceManager(_fwTargets.NameTable);
-				_xmlnsManager.AddNamespace("msbuild", MsbuildUri);
+				foreach (var targetsFile in _targetsFiles)
+				{
+					targetsFile.XmlDoc.Load(targetsFile.FilePath);
+					targetsFile.XmlnsManager = new XmlNamespaceManager(targetsFile.XmlDoc.NameTable);
+					targetsFile.XmlnsManager.AddNamespace("msbuild", MsbuildUri);
+				}
 
 				_initialized = true;
 			}
@@ -1257,140 +1324,110 @@ namespace GenerateFilesSource
 			{
 				var assembliesToReturn = new Dictionary<string, string>();
 
-				var targetNode =
-					_fwTargets.SelectSingleNode("/msbuild:Project/msbuild:Target[@Name='" + vsProj + "']", _xmlnsManager) as XmlElement;
-				if (targetNode == null)
+				var foundTargetButItWasLinux = false;
+
+				foreach (var targetsFile in _targetsFiles)
 				{
-					_parent.AddSeriousIssue("Error " + _description + ": could not find MSBuild Target " + vsProj + " (referenced by " + (parentProj ?? "nothing") + ") in " + _fwTargetsPath);
-					return assembliesToReturn;
-				}
+					var targetNode =
+						targetsFile.XmlDoc.SelectSingleNode("/msbuild:Project/msbuild:Target[@Name='" + vsProj + "']", targetsFile.XmlnsManager) as XmlElement;
+					if (targetNode == null)
+						continue; // Not in current targetsFile
 
-				var dependsOnTargetsTxt = targetNode.GetAttribute("DependsOnTargets");
-				string[] dependsOnTargets = null;
-				if (dependsOnTargetsTxt.Length > 0)
-					dependsOnTargets = dependsOnTargetsTxt.Split(new[] {';'});
-
-				// We need to read the VS project file to see what assembly is built by it:
-				var msBuildNode = targetNode.SelectSingleNode("msbuild:MSBuild", _xmlnsManager) as XmlElement;
-				if (msBuildNode == null)
-				{
-					_parent.AddSeriousIssue("Error " + _description + ": could not find MSBuild node in FieldWorks Target " + vsProj + " in file " + _fwTargetsPath);
-					return assembliesToReturn;
-				}
-				var projectPath = msBuildNode.GetAttribute("Projects");
-				projectPath = projectPath.Replace("$(fwrt)", _projRootPath);
-				var projectName = Path.GetFileNameWithoutExtension(projectPath);
-
-				var proj = new XmlDocument();
-				proj.Load(projectPath);
-
-				var assemblyNameNode = proj.SelectSingleNode("//msbuild:Project/msbuild:PropertyGroup/msbuild:AssemblyName",
-															 _xmlnsManager);
-				if (assemblyNameNode == null)
-				{
-					_parent.AddSeriousIssue("Error " + _description + ": could not find AssemblyName node in Visual Studio project " + projectPath);
-					return assembliesToReturn;
-				}
-				var assemblyName = assemblyNameNode.InnerText;
-
-				var outputTypeNode = proj.SelectSingleNode("//msbuild:Project/msbuild:PropertyGroup/msbuild:OutputType",
-														   _xmlnsManager);
-				if (outputTypeNode == null)
-				{
-					_parent.AddSeriousIssue("Error " + _description + ": could not find OutputType node in Visual Studio project " + projectPath);
-					return assembliesToReturn;
-				}
-				var outputType = outputTypeNode.InnerText;
-
-				// Important: we are assuming that the built assembly will ultimately appear in Output\Release (_assemblyFolderPath):
-				var builtAssemblyPathNoExtension = Path.Combine(_assemblyFolderPath, assemblyName);
-				var builtAssemblyPath = builtAssemblyPathNoExtension;
-				switch (outputType)
-				{
-					case "WinExe":
-						builtAssemblyPath += ".exe";
-						break;
-					case "Library":
-						builtAssemblyPath += ".dll";
-						break;
-					default:
-						_parent.AddSeriousIssue("Error " + _description + ": unknown Output Type '" + outputType + "' in VS project " + projectPath);
-						return assembliesToReturn;
-				}
-				if (!File.Exists(builtAssemblyPath))
-				{
-					_parent.AddSeriousIssue("Error " + _description + ": cannot find " + builtAssemblyPath + " referenced in VS project " + projectPath);
-					return assembliesToReturn;
-				}
-
-				var newDescription = parentProj == null ? "" : "PD:" + parentProj;
-				AddOrAugmentDictionaryValue(assembliesToReturn, builtAssemblyPath, newDescription);
-
-				AddReleatedFileIfExists(assembliesToReturn, builtAssemblyPathNoExtension, ".pdb", newDescription);
-				AddReleatedFileIfExists(assembliesToReturn, builtAssemblyPathNoExtension, ".exe.config", newDescription);
-				AddReleatedFileIfExists(assembliesToReturn, builtAssemblyPathNoExtension, ".exe.manifest", newDescription);
-
-				// Add all referenced assemblies where a hint path is given, as these are probably part of the FW system,
-				// but may not necessarily be built by our build system:
-				var hintPathNodes = proj.SelectNodes("//msbuild:HintPath", _xmlnsManager);
-				if (hintPathNodes != null)
-				{
-					foreach (XmlNode node in hintPathNodes)
+					// If target is for Linux, then ignore:
+					var condition = targetNode.GetAttribute("Condition");
+					if (condition == "'$(OS)'=='Unix'")
 					{
-						// Make sure this isn't a Linux-only reference:
-						var parentRefNode = node.SelectSingleNode("..") as XmlElement;
-						var condition = parentRefNode.GetAttribute("Condition");
-						if (condition == "'$(OS)'=='Unix'")
-							break;
-						var hintPath = node.InnerText;
-						var refAssemblyName = Path.GetFileName(hintPath);
-						if (!refAssemblyName.EndsWith(".dll") && !refAssemblyName.EndsWith(".exe"))
-							_parent.AddSeriousIssue("Error " + _description + ": unexpected HintPath does not reference a .dll; in project " + projectPath);
-						else
-						{
-							var refAssemblyPath = Path.Combine(_assemblyFolderPath, refAssemblyName);
-							if (!File.Exists(refAssemblyPath))
-								_parent.AddSeriousIssue("Error " + _description + ": could not find reference " + refAssemblyPath + " in project " + projectPath);
-							else
-							{
-								var newRefDescription = "AR:" + projectName;
-								AddOrAugmentDictionaryValue(assembliesToReturn, refAssemblyPath, newRefDescription);
+						foundTargetButItWasLinux = true;
+						continue;
+					}
 
-								var refAssemblyNameNoExtension = Path.GetFileNameWithoutExtension(refAssemblyName);
-								var refAssemblyPathNoExtension = Path.Combine(_assemblyFolderPath, refAssemblyNameNoExtension);
-								AddReleatedFileIfExists(assembliesToReturn, refAssemblyPathNoExtension, ".pdb", newRefDescription);
-								AddReleatedFileIfExists(assembliesToReturn, refAssemblyPathNoExtension, ".exe.config", newRefDescription);
-								AddReleatedFileIfExists(assembliesToReturn, refAssemblyPathNoExtension, ".exe.manifest", newRefDescription);
-							}
+					// The target will have one or more MSBuild nodes or Make nodes that we will use to
+					// see what assemblies get built by it.
+					try
+					{
+						var buildSystemParsers = VisualStudioProjectParser.GetProjectParsers(targetNode, targetsFile.XmlnsManager, _projRootPath);
+						buildSystemParsers.AddRange(MakefileParser.GetMakefileParsers(targetNode, targetsFile.XmlnsManager, _projRootPath));
+
+						foreach (var buildSystemParser in buildSystemParsers)
+						{
+							// Important: we are assuming that the built assembly will ultimately appear
+							// in Output\Release (_assemblyFolderPath):
+							var builtAssemblyPath = buildSystemParser.GetOutputAssemblyPath(_assemblyFolderPath);
+							if (builtAssemblyPath == null)
+								continue;
+
+							var newDescription = parentProj == null ? "" : "ProjDep:" + parentProj;
+							AddAssemblyAndRelativesToDictionary(builtAssemblyPath, assembliesToReturn, newDescription);
+
+							// Add all referenced assemblies where given, as these are probably part of the FW system,
+							// but may not necessarily be built by our build system:
+							var referencedAssemblies = buildSystemParser.GetReferencedAssemblies(_assemblyFolderPath);
+							foreach (var assembly in referencedAssemblies)
+								AddAssemblyAndRelativesToDictionary(assembly, assembliesToReturn, "AssRef:" + buildSystemParser.GetSourceName());
 						}
 					}
+					catch (FileNotFoundException fnfe)
+					{
+						_parent.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + fnfe.Message);
+					}
+					catch (DataException de)
+					{
+						_parent.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + de.Message);
+					}
+
+					// Recurse through dependencies:
+					var dependsOnTargetsTxt = targetNode.GetAttribute("DependsOnTargets");
+					string[] dependsOnTargets = null;
+					if (dependsOnTargetsTxt.Length > 0)
+						dependsOnTargets = dependsOnTargetsTxt.Split(new[] { ';' });
+
+					if (dependsOnTargets != null)
+					{
+						Parallel.ForEach(dependsOnTargets, target =>
+						{
+							var doneTargetAlready = false;
+							lock (_completedTargets)
+							{
+								if (_completedTargets.Contains(target))
+									doneTargetAlready = true;
+								else
+									_completedTargets.Add(target);
+							}
+							if (!doneTargetAlready)
+							{
+								var dependencies = InternalGetAssemblySet(target, vsProj);
+								lock (assembliesToReturn)
+								{
+									foreach (var dependency in dependencies)
+										AddOrAugmentDictionaryValue(assembliesToReturn, dependency.Key, dependency.Value);
+								}
+							}
+						});
+					}
+					return assembliesToReturn;
 				}
 
-				// Recurse through dependencies:)
-				if (dependsOnTargets != null)
-				{
-					Parallel.ForEach(dependsOnTargets, target =>
-														{
-															var doneTargetAlready = false;
-															lock (_completedTargets)
-															{
-																if (_completedTargets.Contains(target))
-																	doneTargetAlready = true;
-																else
-																	_completedTargets.Add(target);
-															}
-															if (!doneTargetAlready)
-															{
-																var dependencies = InternalGetAssemblySet(target, vsProj);
-																lock (assembliesToReturn)
-																{
-																	foreach (var dependency in dependencies)
-																		AddOrAugmentDictionaryValue(assembliesToReturn, dependency.Key, dependency.Value);
-																}
-															}
-														});
-				}
+				if (!foundTargetButItWasLinux)
+					_parent.AddSeriousIssue("Error " + _description + ": could not find MSBuild Target " + vsProj + " (referenced by " + (parentProj ?? "nothing") + ") in any .targets file.");
+
 				return assembliesToReturn;
+			}
+
+			/// <summary>
+			/// Adds the given assembly path to the given dictionary, along with the .pdb, config and manifest files for
+			/// that assembly.
+			/// </summary>
+			/// <param name="fullPath">Full path to assembly</param>
+			/// <param name="dictionary">Dictionary to record data</param>
+			/// <param name="description">Description of dictionary entry</param>
+			private void AddAssemblyAndRelativesToDictionary(string fullPath, Dictionary<string, string> dictionary, string description)
+			{
+				var fullPathNoExtension = Path.Combine(Path.GetDirectoryName(fullPath), Path.GetFileNameWithoutExtension(fullPath));
+				AddOrAugmentDictionaryValue(dictionary, fullPath, description);
+
+				AddReleatedFileIfExists(dictionary, fullPathNoExtension, ".pdb", description);
+				AddReleatedFileIfExists(dictionary, fullPath, ".config", description);
+				AddReleatedFileIfExists(dictionary, fullPath, ".manifest", description);
 			}
 
 			/// <summary>
@@ -1399,13 +1436,27 @@ namespace GenerateFilesSource
 			/// <param name="dictionary">dictionary to modify</param>
 			/// <param name="key">key to look for or add</param>
 			/// <param name="value">data to be added to existing value, or used for new value</param>
-			private static void AddOrAugmentDictionaryValue(IDictionary<string, string> dictionary, string key, string value)
+			private void AddOrAugmentDictionaryValue(IDictionary<string, string> dictionary, string key, string value)
 			{
+				if (FileShouldBeOmitted(key))
+					return;
+
 				string existingValue;
 				if (dictionary.TryGetValue(key, out existingValue))
 					dictionary[key] = CombineStrings(existingValue, value);
 				else
 					dictionary.Add(key, value);
+			}
+
+			/// <summary>
+			/// Decides if the given path is referenced, even partially, by an element in the file omissions list.
+			/// </summary>
+			/// <param name="path">Path to be considered</param>
+			/// <returns>true if file matches an element in the omissions list</returns>
+			private bool FileShouldBeOmitted(string path)
+			{
+				var omissionsMatches = _fileOmissions.Where(om => om.CaseSensitive ? path.Contains(om.RelativePath) : path.ToLowerInvariant().Contains(om.RelativePath.ToLowerInvariant()));
+				return (omissionsMatches.Count() > 0);
 			}
 
 			/// <summary>
@@ -1435,9 +1486,13 @@ namespace GenerateFilesSource
 			/// <param name="fullPathNoExtension">full file path minus extension</param>
 			/// <param name="extension">file extension</param>
 			/// <param name="description">text to associate with file path in the dictionary</param>
-			private static void AddReleatedFileIfExists(IDictionary<string, string> dictionary, string fullPathNoExtension, string extension, string description)
+			private void AddReleatedFileIfExists(IDictionary<string, string> dictionary, string fullPathNoExtension, string extension, string description)
 			{
 				var fullPath = fullPathNoExtension + extension;
+
+				if (FileShouldBeOmitted(fullPath))
+					return;
+
 				if (File.Exists(fullPath))
 					AddOrAugmentDictionaryValue(dictionary, fullPath, description);
 			}
@@ -1542,6 +1597,11 @@ namespace GenerateFilesSource
 			instFile.Id = MakeId(instFile.Name, instFile.RelativeSourcePath);
 			instFile.DirId = dirId;
 
+			if (!File.Exists(file))
+			{
+				AddSeriousIssue("ERROR: file '" + file + "' [" + comment + "] could not be found");
+				return instFile;
+			}
 			var fileVersionInfo = FileVersionInfo.GetVersionInfo(file);
 			var fileVersion = "";
 			if (fileVersionInfo.FileVersion != null)
@@ -1593,9 +1653,11 @@ namespace GenerateFilesSource
 			{
 				var relPath = f.RelativeSourcePath;
 				var relPathLower = relPath.ToLowerInvariant();
-				var fOk = _fileOmissions.All(om => om.CaseSensitive ? !relPath.Contains(om.RelativePath) : !relPathLower.Contains(om.RelativePath.ToLowerInvariant()));
-				if (fOk)
+				var omissionsMatches = _fileOmissions.Where(om => om.CaseSensitive ? relPath.Contains(om.RelativePath) : relPathLower.Contains(om.RelativePath.ToLowerInvariant()));
+				if (omissionsMatches.Count() == 0)
 					returnSet.Add(f);
+				else
+					f.ReasonForRemoval += " " + omissionsMatches.First().Reason;
 			}
 			return returnSet;
 		}
@@ -1732,9 +1794,14 @@ namespace GenerateFilesSource
 								  select file;
 			var coreDistFiles = usedDistFiles.Except(flexOnlyDistFiles).Except(teOnlyDistFiles).Except(_flexMoviesFeatureFiles).Except(_sampleDataFeatureFiles).Except(localizationFiles);
 
-			var coreBuiltFiles = _flexFiles.Intersect(_teFiles);
-			var flexOnlyBuiltFiles = _flexFiles.Except(coreBuiltFiles);
-			var teOnlyBuiltFiles = _teFiles.Except(coreBuiltFiles);
+			var allCppAndCsharpFiles = _allCsharpNoTestsFiles.Union(_allCppNoTestFiles);
+
+			var flexButNotTeFiles = _flexFiles.Except(_teFiles);
+			var teButNotFlexFiles = _teFiles.Except(_flexFiles);
+
+			var coreBuiltFiles = allCppAndCsharpFiles.Except(flexButNotTeFiles).Except(teButNotFlexFiles);
+			var flexOnlyBuiltFiles = flexButNotTeFiles.Except(coreBuiltFiles);
+			var teOnlyBuiltFiles = teButNotFlexFiles.Except(coreBuiltFiles);
 
 			_flexFeatureFiles = flexOnlyBuiltFiles.Union(flexOnlyDistFiles);
 			_teFeatureFiles = teOnlyBuiltFiles.Union(teOnlyDistFiles);
@@ -1748,7 +1815,7 @@ namespace GenerateFilesSource
 								 where file.RelativeSourcePath.ToLowerInvariant().Contains(coreFile.ToLowerInvariant())
 								 select file)
 			{
-				file.Comment += " Orphaned: not needed in TE or FLEx. ";
+				file.Comment += " Listed in <CoreFileOrphans> ";
 				fwCoreFeatureFiles.Add(file);
 			}
 			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Union(fwCoreFeatureFiles);
@@ -2545,7 +2612,7 @@ namespace GenerateFilesSource
 			// Test that all files in _flexFeatureFiles were used:
 			var unusedFiles = from file in _flexFeatureFiles
 							  where !file.UsedInComponent && !file.OnlyUsedInUnusedFeatures
-							  select file.RelativeSourcePath;
+							  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
 
 			if (unusedFiles.Count() > 0)
 			{
@@ -2558,7 +2625,7 @@ namespace GenerateFilesSource
 			// Test that all files in _teFeatureFiles were used:
 			unusedFiles = from file in _teFeatureFiles
 						  where !file.UsedInComponent && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
 
 			if (unusedFiles.Count() > 0)
 			{
@@ -2571,7 +2638,7 @@ namespace GenerateFilesSource
 			// Test that all files in _fwCoreFeatureFiles were used:
 			unusedFiles = from file in _fwCoreFeatureFiles
 						  where !file.UsedInComponent && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
 
 			if (unusedFiles.Count() > 0)
 			{
@@ -2584,7 +2651,7 @@ namespace GenerateFilesSource
 			// Test that all files in _flexFeatureFiles were referenced:
 			unusedFiles = from file in _flexFeatureFiles
 						  where !file.UsedInFeatureRef && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
 
 			if (unusedFiles.Count() > 0)
 			{
@@ -2597,7 +2664,7 @@ namespace GenerateFilesSource
 			// Test that all files in _teFeatureFiles were referenced:
 			unusedFiles = from file in _teFeatureFiles
 						  where !file.UsedInFeatureRef && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
 
 			if (unusedFiles.Count() > 0)
 			{
@@ -2610,7 +2677,7 @@ namespace GenerateFilesSource
 			// Test that all files in _fwCoreFeatureFiles were referenced:
 			unusedFiles = from file in _fwCoreFeatureFiles
 						  where !file.UsedInFeatureRef && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
 
 			if (unusedFiles.Count() > 0)
 			{
@@ -2623,7 +2690,7 @@ namespace GenerateFilesSource
 			// Test that all files in _allFilesFiltered were used:
 			unusedFiles = from file in _allFilesFiltered
 						  where !file.UsedInComponent && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
 
 			if (unusedFiles.Count() > 0)
 			{
@@ -2636,7 +2703,7 @@ namespace GenerateFilesSource
 			// Test that all files in _allFilesFiltered were referenced exactly once:
 			unusedFiles = from file in _allFilesFiltered
 						  where !file.UsedInFeatureRef && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
 
 			if (unusedFiles.Count() > 0)
 			{
@@ -2648,7 +2715,7 @@ namespace GenerateFilesSource
 
 			var overusedFiles = from file in _allFilesFiltered
 								where file.Features.Count > 1
-								select file.RelativeSourcePath;
+								select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
 
 			if (overusedFiles.Count() > 0)
 			{
@@ -2661,7 +2728,7 @@ namespace GenerateFilesSource
 			// Test Features.Count to verify that all files in _allFilesFiltered were referenced exactly once:
 			unusedFiles = from file in _allFilesFiltered
 						  where file.Features.Count == 0
-						  select file.RelativeSourcePath;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
 
 			if (unusedFiles.Count() > 0)
 			{
@@ -2677,7 +2744,7 @@ namespace GenerateFilesSource
 			if (_addOrphans && _orphanFiles.Count() > 0)
 			{
 				failureReport += Environment.NewLine;
-				failureReport += "The following \"orphan\" files were added to FW_Core because the AddOrphans command line option was used and the files were found in Output\\Release, even though they were not referenced by any VS project or specified in InstallerConfig.xml:";
+				failureReport += "The following " + _orphanFiles.Count() + " \"orphan\" files were added to FW_Core because the AddOrphans command line option was used and the files were found in Output\\Release, even though they were not referenced by any VS project or specified in InstallerConfig.xml:";
 				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, from file in _orphanFiles select file.RelativeSourcePath);
 				failureReport += Environment.NewLine;
 			}

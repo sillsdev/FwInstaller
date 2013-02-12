@@ -69,37 +69,71 @@
 		<CoreFileOrphans>
 			<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed or not directly referenced by either TE or FLEx: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is not needed by TE or FLEx but is needed in the FW installation*"/> -->
-			<File PathPattern="Output\Release\UnicodeCharEditor."/>
-			<File PathPattern="Output\Release\ObjectBrowser."/>
-			<File PathPattern="Output\Release\WeifenLuo.WinFormsUI.Docking.dll"/>
-			<File PathPattern="DistFiles\MSSQLMigration\OldMigrationScripts"/>
-			<File PathPattern="Output\Release\FwKernel."/>
-			<File PathPattern="Output\Release\Graphite."/>
-			<File PathPattern="Output\Release\Views."/>
-			<File PathPattern="Output\Release\remoting_tcp_server.config"/>
+			<!-- Encoding Converters Stuff -->
 			<File PathPattern="Output\Release\CcEC.dll"/>
 			<File PathPattern="Output\Release\IcuConvEC.dll"/>
 			<File PathPattern="Output\Release\IcuEC.dll"/>
 			<File PathPattern="Output\Release\IcuRegexEC.dll"/>
 			<File PathPattern="Output\Release\IcuTranslitEC.dll"/>
-			<File PathPattern="Output\Release\EC\Plugins\EC 4.0.0.0 Plugin Details.xml"/>
+			<File PathPattern="Output\Release\PerlExpressionEC.dll"/>
+			<File PathPattern="Output\Release\PyScriptEC.dll"/>
+			<File PathPattern="Output\Release\PyScriptEncConverter.dll"/>
 			<File PathPattern="Output\Release\EC\Plugins\CC 4.0.0.0 Plugin Details.xml"/>
+			<File PathPattern="Output\Release\EC\Plugins\EC 4.0.0.0 Plugin Details.xml"/>
 			<File PathPattern="Output\Release\EC\Plugins\IcuEC 4.0.0.0 Plugin Details.xml"/>
 			<File PathPattern="Output\Release\EC\Plugins\PerlEC 4.0.0.0 Plugin Details.xml"/>
 			<File PathPattern="Output\Release\EC\Plugins\PythonEC 4.0.0.0 Plugin Details.xml"/>
 			<File PathPattern="Output\Release\EC\Plugins\SIEC 4.0.0.0 Plugin Details.xml"/>
+			<!-- ICU Stuff -->
 			<File PathPattern="Output\Release\icu.net.dll"/>
 			<File PathPattern="Output\Release\icudt50.dll"/>
 			<File PathPattern="Output\Release\icuin50.dll"/>
 			<File PathPattern="Output\Release\icuuc50.dll"/>
-			<File PathPattern="Output\Release\PerlExpressionEC.dll"/>
-			<File PathPattern="Output\Release\PyScriptEC.dll"/>
-			<File PathPattern="Output\Release\PyScriptEncConverter.dll"/>
+			<!-- Enchant Stuff -->
+			<File PathPattern="Output\Release\glib-2-vs10.dll"/>
+			<File PathPattern="Output\Release\gmodule-2-vs10.dll"/>
+			<File PathPattern="Output\Release\libenchant.dll"/>
+			<!-- Chorus Stuff -->
+			<File PathPattern="Output\Release\Vulcan.Uczniowie.HelpProvider.dll"/>
+			<File PathPattern="Output\Release\Autofac.dll"/>
+			<!-- These assemblies are possibly loaded using reflection, copied from DistFiles by target CopyDlls in mkall.targets -->
+			<File PathPattern="Output\Release\Interop.ResourceDriver.dll"/>
+			<File PathPattern="Output\Release\LinqBridge.dll"/>
+			<File PathPattern="Output\Release\log4net.dll"/>
+			<File PathPattern="Output\Release\Patr100.dll"/>
+			<File PathPattern="Output\Release\xample.dll"/>
+			<!-- Sundry files not picked up by other means but related to those that are -->
+			<File PathPattern="Output\Release\FDOBrowser.XML"/>
+			<File PathPattern="Output\Release\Microsoft.Practices.ServiceLocation.xml"/>
+			<!-- The following 8 may not be needed, but are copied to Output\Release by the project
+			Src\Common\FwUtils\FwUtils.csproj. In the old NAnt build system, the first 4 of these files
+			were described as being needed for the Paratext control that allows us to display USFM
+			resources. -->
+			<File PathPattern="Output\Release\FormattedEditor.dll"/>
+			<File PathPattern="Output\Release\HelpSystem.dll"/>
+			<File PathPattern="Output\Release\HtmlEditor.dll"/>
+			<File PathPattern="Output\Release\NetLoc.dll"/>
+			<File PathPattern="Output\Release\lib\enchant\libenchant_ispell.dll"/>
+			<File PathPattern="Output\Release\lib\enchant\libenchant_myspell.dll"/>
+			<File PathPattern="Output\Release\WriteKey.exe"/>
+			<File PathPattern="Output\Release\WriteKey.exe.manifest"/>
+			<!-- The following is copied from DistFiles by project Src\FDO\FDO.csproj although the project appears not to reference the assembly -->
+			<File PathPattern="Output\Release\Mono.Cecil.dll"/>
+			<!-- The following is copied from DistFiles by project Src\Common\FwRemoteDatabaseConnectorService\FwRemoteDatabaseConnectorService.csproj -->
+			<File PathPattern="Output\Release\remoting_tcp_server.config"/>
+			<!-- The following is copied from DistFiles by project Src\Common\Controls\Widgets\Widgets.csproj although the project appears not to reference the assembly -->
+			<File PathPattern="Output\Release\irrKlang.NET4.dll"/>
+			<!-- The following 4 are copied from DistFiles by project Src\TE\TeEditing\TeEditing.csproj although the project appears not to reference the assemblies -->
+			<File PathPattern="Output\Release\Interop.LibronixDLS.dll"/>
+			<File PathPattern="Output\Release\Interop.LibronixDLSUtility.dll"/>
+			<File PathPattern="Output\Release\Interop.Logos4Lib.dll"/>
+			<File PathPattern="Output\Release\Interop.Utility.dll"/>
 		</CoreFileOrphans>
 		<ForceBuiltFilesIntoTE>
 			<!-- Define list of path patterns of built files known to be needed in TE but which are not part of the TeExe FieldWorks.targets dependency chain: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is needed by TE*"/> -->
 			<File PathPattern="Output\Release\System.Drawing.Html.dll"/>
+			<File PathPattern="Output\Release\TeUIAdapters.dll"/>
 		</ForceBuiltFilesIntoTE>
 		<ForceBuiltFilesIntoFlex>
 			<!-- Define list of path patterns of built files known to be needed in FLEx but which are not part of the LexTextgExe FieldWorks.targets dependency chain: -->
@@ -406,7 +440,7 @@
 		<File PathPattern="DistFiles\Linux"/>
 		<File PathPattern="DistFiles\Projects"/>
 		<File PathPattern="DistFiles\Fonts\Raw"/>
-		<File PathPattern="DistFiles\TECkit_"/>
+		<File PathPattern="DistFiles\TECkit"/>
 		<File PathPattern="DistFiles\CC32.dll"/>
 		<File PathPattern="ECInterfaces.pdb"/>
 		<File PathPattern="SilEncConverters40.pdb"/>
@@ -414,32 +448,18 @@
 		<File PathPattern="SilEncConverters40.tlb"/>
 		<File PathPattern="icuin50d.dll"/>
 		<File PathPattern="icuuc50d.dll"/>
-		<File PathPattern="DistFiles\PXPerlWrap-d.dll"/>
 		<File PathPattern="DistFiles\DropTEC.exe"/>
 		<File PathPattern="DistFiles\SFconv.exe"/>
-		<File PathPattern="DistFiles\TECkit Mapping Editor.exe"/>
 		<File PathPattern="DistFiles\TxtConv.exe"/>
-		<File PathPattern="DistFiles\Language Explorer\Configuration\Available Plugins\Concorder"/>
 		<File PathPattern="Output\Release\asserts.log"/>
 		<File PathPattern="Output\Release\DefaultIcon.ico"/>
 		<File PathPattern="Output\Release\basicTest.xml"/>
 		<File PathPattern="Output\Release\Good.xml"/>
 		<File PathPattern="Output\Release\includeTest.xml"/>
 		<File PathPattern="Output\Release\listitems.bmp"/>
-		<File PathPattern="Output\Release\PhonEnvValidatorTest.dll"/>
-		<File PathPattern="Output\Release\PhonEnvValidatorTest.dll-results.xml"/>
-		<File PathPattern="Output\Release\PhonEnvValidatorTest.dll.config"/>
-		<File PathPattern="Output\Release\PhonEnvValidatorTest.pdb"/>
-		<File PathPattern="Output\Release\ProjectUnpacker.dll-results.xml"/>
-		<File PathPattern="Output\Release\TLP.bak"/>
-		<File PathPattern="Output\Release\TLP.fwdata"/>
-		<File PathPattern="Output\Release\TLP_New.bak"/>
-		<File PathPattern="Output\Release\TLP_New.fwdata"/>
+		<File PathPattern="Output\Release\PhonEnvValidatorTest"/>
+		<File PathPattern="Output\Release\TLP"/>
 		<File PathPattern="Output\Release\whitepixel.bmp"/>
-		<File PathPattern="Output\Release\TLP.db4o"/>
-		<File PathPattern="Output\Release\TLPCS.db4o"/>
-		<File PathPattern="Output\Release\TLPCS_New.db4o"/>
-		<File PathPattern="Output\Release\TLP_New.db4o"/>
 		<File PathPattern="Output\Release\ScrChecks.dll"/> <!-- this will be taken from DistFiles\Editorial Checks -->
 		<File PathPattern="Output\Release\ScrChecks.pdb"/> <!-- this will be taken from DistFiles\Editorial Checks -->
 		<File PathPattern="Output\Release\MigrateSqlDbs.pdb"/>
@@ -450,6 +470,11 @@
 		<File PathPattern="Output\Release\RBRExtensions."/>
 		<File PathPattern="XceedZip.dll"/>
 		<File PathPattern="Output\Release\DebugProcs."/>
+		<File PathPattern="Generic.lib"/>
+		<File PathPattern="Output\Release\Utilities.dll"/> <!-- Comment in CopyDlls target of mkall.targets says this is only needed for tests -->
+		<File PathPattern="DistFiles\Utilities.dll"/> <!-- Original source of above file -->
+		<File PathPattern="DistFiles\libxample32.so"/> <!-- Linux file -->
+		<File PathPattern="DistFiles\libxample64.so"/> <!-- Linux file -->
 		<!-- Define pairs of file paths known (and allowed) to be similar. This suppresses warnings about omitted files that look like other included files: -->
 		<!-- Format: <SuppressSimilarityWarning Path1="*path of first file of matching pair*" Path2="*path of second file of matching pair*"/> -->
 		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.dll" Path2="Output\Release\ScrChecks.dll"/>
