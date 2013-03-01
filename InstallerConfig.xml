@@ -485,11 +485,13 @@
 		<!-- Format: <Redirect Folder="*folder whose contents will be installed to a different folder*" InstallDir="*MSI Installer folder variable where the affected files will be installed*"/> -->
 		<Redirect Folder="DistFiles\ReleaseData" InstallerDir="PROJECTSDIR"/>
 		<Redirect Folder="DistFiles\MSSQLMigration\OldMigrationScripts" InstallerDir="OLDDATAMIGRATIONDIR"/>
+		<Redirect Folder="DistFiles\Icu50" InstallerDir="AppDataSilIcu"/>
 	</FolderRedirections>
 	<WritableFiles>
 		<!-- Define list of (partial) paths of files that must not be set to read-only: -->
 		<!-- Format: <File PathPattern="*partial path of any file that must not have the read-only flag set*"/> -->
 		<File PathPattern="DistFiles\ReleaseData"/>
+		<File PathPattern="DistFiles\Icu50"/>
 	</WritableFiles>
 	<ForceOverwrite>
 		<!-- Define list of (partial) paths of files that have to have older versions forcibly removed prior to installing: -->

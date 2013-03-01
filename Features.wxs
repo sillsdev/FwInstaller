@@ -5,6 +5,7 @@
 		<Feature Id="FW_Core" Title="FieldWorks" Description="Files common to all FieldWorks applications" Display="expand" Level="3" AllowAdvertise="no">
 			<ComponentRef Id="CreateFwFolder"/>
 			<ComponentRef Id="CreateProjectsFolder"/>
+			<ComponentRef Id="CreateIcuFolder"/>
 			<ComponentRef Id="CopyLicenseTechReadme"/>
 			<ComponentRef Id="vs_piaredist.exe"/>
 			<ComponentRef Id="MigrateSqlDbs.exe"/>

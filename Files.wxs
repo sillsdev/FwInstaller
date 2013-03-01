@@ -60,6 +60,13 @@ AutoFiles.wxs.
 							</Component>
 						</Directory>
 					</Directory>
+					<Directory Id="AppDataSilIcu" Name="Icu50">
+						<Component Id="CreateIcuFolder" Guid="DF251485-C17C-4185-8FA5-806436A423D2">
+							<CreateFolder>
+								<util:PermissionEx User="AuthenticatedUser" GenericAll="yes" />
+							</CreateFolder>
+						</Component>
+					</Directory>
 				</Directory>
 			</Directory>
 			<Directory Id="FontsFolder" SourceName="Fonts">
