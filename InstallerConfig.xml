@@ -89,6 +89,8 @@
 			<File PathPattern="Output\Release\icudt50.dll"/>
 			<File PathPattern="Output\Release\icuin50.dll"/>
 			<File PathPattern="Output\Release\icuuc50.dll"/>
+			<File PathPattern="Output\Release\gennorm2.exe"/>
+			<File PathPattern="Output\Release\icutu50.dll"/>
 			<!-- Enchant Stuff -->
 			<File PathPattern="Output\Release\glib-2-vs10.dll"/>
 			<File PathPattern="Output\Release\gmodule-2-vs10.dll"/>
