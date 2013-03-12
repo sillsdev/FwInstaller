@@ -91,10 +91,8 @@
 			<File PathPattern="Output\Release\icuuc50.dll"/>
 			<File PathPattern="Output\Release\gennorm2.exe"/>
 			<File PathPattern="Output\Release\icutu50.dll"/>
-			<!-- Enchant Stuff -->
-			<File PathPattern="Output\Release\glib-2-vs10.dll"/>
-			<File PathPattern="Output\Release\gmodule-2-vs10.dll"/>
-			<File PathPattern="Output\Release\libenchant.dll"/>
+			<!-- Spelling checker Stuff -->
+			<File PathPattern="Output\Release\libhunspell.dll"/>
 			<!-- Chorus Stuff -->
 			<File PathPattern="Output\Release\Vulcan.Uczniowie.HelpProvider.dll"/>
 			<File PathPattern="Output\Release\Autofac.dll"/>
@@ -104,10 +102,13 @@
 			<File PathPattern="Output\Release\log4net.dll"/>
 			<File PathPattern="Output\Release\Patr100.dll"/>
 			<File PathPattern="Output\Release\xample.dll"/>
+			<!-- Sundry utilities -->
+			<File PathPattern="Output\Release\FixFwData.exe"/>
+			<File PathPattern="Output\Release\FixFwData.pdb"/>
 			<!-- Sundry files not picked up by other means but related to those that are -->
 			<File PathPattern="Output\Release\FDOBrowser.XML"/>
 			<File PathPattern="Output\Release\Microsoft.Practices.ServiceLocation.xml"/>
-			<!-- The following 8 may not be needed, but are copied to Output\Release by the project
+			<!-- The following may not be needed, but are copied to Output\Release by the project
 			Src\Common\FwUtils\FwUtils.csproj. In the old NAnt build system, the first 4 of these files
 			were described as being needed for the Paratext control that allows us to display USFM
 			resources. -->
@@ -115,8 +116,6 @@
 			<File PathPattern="Output\Release\HelpSystem.dll"/>
 			<File PathPattern="Output\Release\HtmlEditor.dll"/>
 			<File PathPattern="Output\Release\NetLoc.dll"/>
-			<File PathPattern="Output\Release\lib\enchant\libenchant_ispell.dll"/>
-			<File PathPattern="Output\Release\lib\enchant\libenchant_myspell.dll"/>
 			<File PathPattern="Output\Release\WriteKey.exe"/>
 			<File PathPattern="Output\Release\WriteKey.exe.manifest"/>
 			<!-- The following is copied from DistFiles by project Src\FDO\FDO.csproj although the project appears not to reference the assembly -->
