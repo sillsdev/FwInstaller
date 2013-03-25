@@ -162,7 +162,7 @@
 	<ExtraFiles>
 		<!-- Define files needed in the installer that are not built locally or part of source control: -->
 		<!-- Format: <File URL="*URL of an extra file*" Destination="*Local relative path to download file to*"/> -->
-		<File URL="http://downloads.palaso.org/FlexBridge/FLExBridgeInstaller.msi" Destination="DistFiles\Installers\FLExBridgeInstaller.msi"/>
+		<File URL="http://downloads.palaso.org/FlexBridge/Beta/FLExBridgeInstaller.msi" Destination="DistFiles\Installers\FLExBridgeInstaller.msi"/>
 	</ExtraFiles>
 	<FileConditions>
 		<!-- Define conditions to apply to specified components: -->
