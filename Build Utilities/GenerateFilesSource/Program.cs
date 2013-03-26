@@ -29,22 +29,8 @@ namespace GenerateFilesSource
 						break;
 				}
 			}
-			var gen = new Generator(report, addOrphans);
+			var gen = new Generator(report, addOrphans, testIntegrity);
 			gen.Run();
-
-			if (testIntegrity)
-			{
-				// Run TestInstallerIntegrity.exe:
-				var procIntegrityTester = new Process
-				{
-					StartInfo =
-					{
-						FileName = "TestInstallerIntegrity.exe",
-					}
-				};
-				procIntegrityTester.Start();
-				procIntegrityTester.WaitForExit();
-			}
 		}
 	}
 }

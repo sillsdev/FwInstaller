@@ -8,7 +8,7 @@ using System.Text;
 using System.Xml;
 using InstallerBuildUtilities;
 
-namespace TestInstallerIntegrity
+namespace GenerateFilesSource
 {
 	// This utility tests the installer files for various problems, as described by the following summary
 	// of error and warning messages:
@@ -32,12 +32,10 @@ namespace TestInstallerIntegrity
 
 	class InstallerIntegrityTester
 	{
-		// Controls set via command line:
 		private readonly string _buildType;
-		private readonly bool _silent;
+		private readonly ReportSystem _report;
 
 		private const string LogFileName = "TestInstallerIntegrity.log";
-		private string _errorLog;
 		private string _exeFolder;
 		private string _projRootPath;
 		private XmlNodeList _fileNodes;
@@ -68,10 +66,10 @@ namespace TestInstallerIntegrity
 		// List of people to email if something goes wrong:
 		private readonly List<string> _emailList = new List<string>();
 
-		public InstallerIntegrityTester(bool silent, string buildType)
+		public InstallerIntegrityTester(string buildType, ReportSystem report)
 		{
-			_silent = silent;
 			_buildType = buildType;
+			_report = report;
 		}
 
 		internal void Run()
@@ -80,16 +78,12 @@ namespace TestInstallerIntegrity
 
 			TestFileLibrary();
 			TestUnversionedDistFiles();
-
-			OutputLog();
 		}
 
 		private void Init()
 		{
 			if (File.Exists(LogFileName))
 				File.Delete(LogFileName);
-
-			_errorLog = "";
 
 			// Get FW root path:
 			var exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
@@ -176,7 +170,7 @@ namespace TestInstallerIntegrity
 		{
 			if (_fileNodes == null)
 			{
-				// Report("WARNING #1: There is no FileLibrary.");
+				// _report.AddSeriousIssue("WARNING #1: There is no FileLibrary.");
 				// We no longer bother to report this, as it is a normal occurrence when no prior releases exist.
 				return;
 			}
@@ -226,7 +220,7 @@ namespace TestInstallerIntegrity
 			if (realMd5 != libMd5 && libVersion != "" && realVersion != "")
 			{
 				if (realVersion == libVersion)
-					Report("ERROR #1: File " + filePath + " has been modified since the last release, but its version remains at " + realVersion + ". Patching will fail.");
+					_report.AddSeriousIssue("ERROR #1: File " + filePath + " has been modified since the last release, but its version remains at " + realVersion + ". Patching will fail.");
 				else
 				{
 					// Although the version may have changed, the installer ignores the last segment (private part)
@@ -243,7 +237,7 @@ namespace TestInstallerIntegrity
 					}
 
 					if (realVersionTrunc == libVersionTrunc)
-						Report("ERROR #8: File " + filePath + " has a version number (" + realVersion + ") that has only changed in the 4th segment since the last release (" + libVersion + "). The 4th version segment is ignored by the installer. Patching will fail.");
+						_report.AddSeriousIssue("ERROR #8: File " + filePath + " has a version number (" + realVersion + ") that has only changed in the 4th segment since the last release (" + libVersion + "). The 4th version segment is ignored by the installer. Patching will fail.");
 				}
 			}
 
@@ -252,15 +246,15 @@ namespace TestInstallerIntegrity
 			var fileDateTime = DateTime.Parse(realDateTime);
 			var timeBetweenVersions = fileDateTime.Subtract(libDateTime);
 			if (timeBetweenVersions.TotalHours < -24)
-				Report("ERROR #2: File " + filePath + " has a date/time stamp (" + realDateTime + ") that is earlier than a previously released version (" + libDate + "). Patching may fail.");
+				_report.AddSeriousIssue("ERROR #2: File " + filePath + " has a date/time stamp (" + realDateTime + ") that is earlier than a previously released version (" + libDate + "). Patching may fail.");
 
 			if (realVersion == "0.0.0.0" && !_versionZeroFiles.Any(path => fullFilePath.ToLowerInvariant().Contains(path.Replace("\\${config}\\", "\\" + _buildType + "\\").ToLowerInvariant())))
-				Report("WARNING #3: File " + filePath + " has a version number of 0.0.0.0. That is very silly, and I don't like it. You'll only regret it later.");
+				_report.AddSeriousIssue("WARNING #3: File " + filePath + " has a version number of 0.0.0.0. That is very silly, and I don't like it. You'll only regret it later.");
 
 			// The version number must not be lower in the latest version than it was in the previous one:
 			if (libVersion.Length > 0 && realVersion.Length == 0)
 			{
-				Report("ERROR #9: File " + filePath + " had a version of " + libVersion +
+				_report.AddSeriousIssue("ERROR #9: File " + filePath + " had a version of " + libVersion +
 					   " in the last release. The version information has since been removed. Patching will fail.");
 			}
 			else
@@ -269,13 +263,13 @@ namespace TestInstallerIntegrity
 				{
 					if (ParseVersion(realVersion) < ParseVersion(libVersion))
 					{
-						Report("ERROR #6: File " + filePath + " had a version of " + libVersion +
+						_report.AddSeriousIssue("ERROR #6: File " + filePath + " had a version of " + libVersion +
 							   " in the last release. The version has since been lowered to " + realVersion + ". Patching will fail.");
 					}
 				}
 				catch (Exception e)
 				{
-					Report("ERROR #7: File " + filePath + " has invalid version number (possibly in FileLibrary.xml): " + e.Message);
+					_report.AddSeriousIssue("ERROR #7: File " + filePath + " has invalid version number (possibly in FileLibrary.xml): " + e.Message);
 				}
 			}
 		}
@@ -326,28 +320,28 @@ namespace TestInstallerIntegrity
 				var newFileSource = FindSameFileElsewhere(file);
 
 				// Report missing file:
-				Report("<!-- File component " + guid + " [" + filePath + "] is missing from (Auto)Files.wxs -->");
+				_report.AddSeriousIssue("<!-- File component " + guid + " [" + filePath + "] is missing from (Auto)Files.wxs -->");
 				if (newFileSource != null)
-					Report("<!-- However, same file is now sourced from " + newFileSource + ". -->");
+					_report.AddSeriousIssue("<!-- However, same file is now sourced from " + newFileSource + ". -->");
 
 				// Get Directory ID of file:
 				var dirId = file.GetAttribute("DirectoryId");
 				if (dirId != "")
 				{
-					Report("<!-- Suggested PatchCorrections.wxs snippet: -->");
+					_report.AddSeriousIssue("<!-- Suggested PatchCorrections.wxs snippet: -->");
 					// Create WIX snippet to remedy the problem:
-					Report("<DirectoryRef Id=\"" + dirId + "\">");
+					_report.AddSeriousIssue("<DirectoryRef Id=\"" + dirId + "\">");
 					var compId = file.GetAttribute("ComponentId");
 					if (compId == "")
 						compId = "[unknown]";
 
 					// By reinstating the component with the transitive attribute, its condition will
 					// always be re-evaluated:
-					Report("	<Component Id=\"" + compId + "\" Transitive=\"yes\" Guid=\"" + guid + "\">");
+					_report.AddSeriousIssue("	<Component Id=\"" + compId + "\" Transitive=\"yes\" Guid=\"" + guid + "\">");
 					// By setting the condition to false, we tell the installer we don't need this component:
-					Report("		<Condition>FALSE</Condition>");
-					Report("		<CreateFolder/>"); // Junk needed to pass ICE18
-					Report("	</Component>");
+					_report.AddSeriousIssue("		<Condition>FALSE</Condition>");
+					_report.AddSeriousIssue("		<CreateFolder/>"); // Junk needed to pass ICE18
+					_report.AddSeriousIssue("	</Component>");
 
 					string newId = null;
 					if (newFileSource == null)
@@ -361,35 +355,34 @@ namespace TestInstallerIntegrity
 						if (longName != shortName)
 							name = longName;
 						newId = MakeId("Del" + name, compId);
-						Report("	<Component Id=\"" + newId + "\" Guid=\"" + newGuid + "\">");
+						_report.AddSeriousIssue("	<Component Id=\"" + newId + "\" Guid=\"" + newGuid + "\">");
 
 						var nameSection = " Name=\"" + shortName + "\"";
 						if (longName != shortName)
 							nameSection += " LongName=\"" + longName + "\"";
-						Report("		<RemoveFile Id=\"" + newId + "\"" + nameSection + " On=\"install\"/>");
-						Report("		<CreateFolder/>"); // Junk needed to pass ICE18
-						Report("	</Component>");
+						_report.AddSeriousIssue("		<RemoveFile Id=\"" + newId + "\"" + nameSection + " On=\"install\"/>");
+						_report.AddSeriousIssue("		<CreateFolder/>"); // Junk needed to pass ICE18
+						_report.AddSeriousIssue("	</Component>");
 					}
-					Report("</DirectoryRef>");
+					_report.AddSeriousIssue("</DirectoryRef>");
 					var featureList = file.GetAttribute("FeatureList");
 					if (featureList != "")
 					{
 						var features = featureList.Split(new[] {','});
 						foreach (var feature in features)
 						{
-							Report("<FeatureRef Id=\"" + feature + "\">");
-							Report("	<ComponentRef Id=\"" + compId + "\"/>");
+							_report.AddSeriousIssue("<FeatureRef Id=\"" + feature + "\">");
+							_report.AddSeriousIssue("	<ComponentRef Id=\"" + compId + "\"/>");
 							if (newFileSource == null)
-								Report("	<ComponentRef Id=\"" + newId + "\"/>");
-							Report("</FeatureRef>");
+								_report.AddSeriousIssue("	<ComponentRef Id=\"" + newId + "\"/>");
+							_report.AddSeriousIssue("</FeatureRef>");
 						}
 					}
 					else
-						Report("<!-- WARNING: No features specified for above component(s) -->");
-					_errorLog += Environment.NewLine;
+						_report.AddSeriousIssue("<!-- WARNING: No features specified for above component(s) -->");
 				}
 				else
-					Report("<!-- WARNING: Could not locate DirectoryId -->");
+					_report.AddSeriousIssue("<!-- WARNING: Could not locate DirectoryId -->");
 			}
 		}
 
@@ -405,7 +398,7 @@ namespace TestInstallerIntegrity
 			var libFeatureList = file.GetAttribute("FeatureList");
 			if (libFeatureList == "")
 			{
-				Report("ERROR #3: Library contains file " + filePath + " with no FeatureList attribute.");
+				_report.AddSeriousIssue("ERROR #3: Library contains file " + filePath + " with no FeatureList attribute.");
 				return;
 			}
 			var libFeatures = libFeatureList.Split(new[] {','});
@@ -444,14 +437,14 @@ namespace TestInstallerIntegrity
 			var newFeatureMemberships = wixFeatureSet.Except(libFeatureSet);
 			if (newFeatureMemberships.Count() > 0)
 			{
-				Report("ERROR #4: File " + filePath +
+				_report.AddSeriousIssue("ERROR #4: File " + filePath +
 					   " has been added to the following features since the last release: " +
 					   string.Join(", ", newFeatureMemberships.ToArray()) + ". Patching will fail.");
 			}
 			var obsoleteFeatureMemberships = libFeatureSet.Except(wixFeatureSet);
 			if (obsoleteFeatureMemberships.Count() > 0)
 			{
-				Report("ERROR #5: File " + filePath +
+				_report.AddSeriousIssue("ERROR #5: File " + filePath +
 					   " has been removed from the following features since the last release: " +
 					   string.Join(", ", obsoleteFeatureMemberships.ToArray()) + ". Patching will fail.");
 			}
@@ -472,7 +465,7 @@ namespace TestInstallerIntegrity
 			}
 			catch (Exception ex)
 			{
-				Report("Warning #4: Could not determine if DistFiles folder is consistent with source Control:" + Environment.NewLine + ex.Message);
+				_report.AddSeriousIssue("Warning #4: Could not determine if DistFiles folder is consistent with source Control:" + Environment.NewLine + ex.Message);
 				return;
 			}
 			while (distFilesNotInSourceControlRaw.EndsWith("\n"))
@@ -496,70 +489,8 @@ namespace TestInstallerIntegrity
 
 			if (distFilesNotInSourceControl.Count() > 0)
 			{
-				Report("WARNING #2: The following files are present in DistFiles but not checked into source control: " + Environment.NewLine + "    " +
+				_report.AddSeriousIssue("WARNING #2: The following files are present in DistFiles but not checked into source control: " + Environment.NewLine + "    " +
 					   string.Join(Environment.NewLine + "    ", distFilesNotInSourceControl.ToArray()));
-			}
-		}
-
-		/// <summary>
-		/// Creates a list of strings from a text file, one string per line.
-		/// Omits blank lines. Deletes file when done.
-		/// </summary>
-		/// <param name="listFilePath">Path to text file</param>
-		/// <returns>List of strings</returns>
-		private static List<string> ConvertTextFileToStringList(string listFilePath)
-		{
-			string line;
-			var list = new List<string>();
-			if (File.Exists(listFilePath))
-			{
-				var listFile = new StreamReader(listFilePath);
-
-				// Put the file contents into a List structure:
-				while ((line = listFile.ReadLine()) != null)
-				{
-					if (line.Length == 0) continue;
-					list.Add(line);
-				}
-				listFile.Close();
-				File.Delete(listFilePath);
-			}
-			return list;
-		}
-
-		/// <summary>
-		/// Writes the error log to file, or emails it to key people.
-		/// </summary>
-		private void OutputLog()
-		{
-			if (_errorLog.Length > 0)
-			{
-				// Prepend log with build-specific details:
-				_errorLog = Tools.GetBuildDetails(_projRootPath) + _errorLog;
-
-				// Save the report to LogFileName:
-				var reportFile = new StreamWriter(LogFileName);
-				reportFile.WriteLine(_errorLog);
-				reportFile.Close();
-
-				if (_emailingMachineNames.Any(name => name.ToLowerInvariant() == Environment.MachineName.ToLowerInvariant()))
-				{
-					// Email the report to the key people who need to know:
-					var message = new System.Net.Mail.MailMessage();
-					foreach (var recipient in _emailList)
-						message.To.Add(recipient);
-					message.Subject = "Automatic Installer Integrity Report from FW Installer Build";
-					message.From = new System.Net.Mail.MailAddress("alistair_imrie@sil.org");
-					message.Body = _errorLog;
-					var smtp = new System.Net.Mail.SmtpClient("mail.jaars.org");
-					smtp.Send(message);
-				}
-				else
-				{
-					// Open the report for the user to see:
-					if (!_silent)
-						Process.Start(LogFileName);
-				}
 			}
 		}
 
@@ -708,15 +639,6 @@ namespace TestInstallerIntegrity
 				return p;
 			}
 			return path;
-		}
-
-		/// <summary>
-		/// Adds a line of text to the overall error log.
-		/// </summary>
-		/// <param name="msg">Text to add.</param>
-		private void Report(string msg)
-		{
-			_errorLog += msg + Environment.NewLine;
 		}
 	}
 }

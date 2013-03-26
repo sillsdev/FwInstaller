@@ -20,9 +20,8 @@ namespace GenerateFilesSource
 		// Controls set via command line:
 		private readonly bool _needReport;
 		private readonly bool _addOrphans;
-		private string _report = ""; // Report of significant decisions we make, and anomalies of interest to installer developers.
-		private readonly object _reportSectionMutexToken = new object(); // Locked when several lines of the report need to be written without interruption by other threads' reports.
-		private string _seriousIssues = ""; // Report of problems that could result in bad installer.
+		private readonly bool _testIntegrity;
+		private ReportSystem _overallReport;
 
 		// List of machines which will email people if something goes wrong:
 		private readonly List<string> _emailingMachineNames = new List<string>();
@@ -456,10 +455,12 @@ namespace GenerateFilesSource
 		/// </summary>
 		/// <param name="report"></param>
 		/// <param name="addOrphans"></param>
-		public Generator(bool report, bool addOrphans)
+		/// /// <param name="testIntegrity"></param>
+		public Generator(bool report, bool addOrphans, bool testIntegrity)
 		{
 			_needReport = report;
 			_addOrphans = addOrphans;
+			_testIntegrity = testIntegrity;
 		}
 
 		/// <summary>
@@ -467,6 +468,8 @@ namespace GenerateFilesSource
 		/// </summary>
 		internal void Run()
 		{
+			_overallReport = new ReportSystem();
+
 			Initialize();
 			CopyExtraFiles();
 			CollectInstallableFiles();
@@ -474,19 +477,31 @@ namespace GenerateFilesSource
 			OutputResults();
 			DoSanityChecks();
 
-			if (_needReport)
+			if (_testIntegrity)
 			{
-				// Save the report to a temporary file, then open it for the user to see:
-				var tempFileName = Path.GetTempFileName() + ".txt";
-				var reportFile = new StreamWriter(tempFileName);
-				reportFile.WriteLine("GenerateFilesSource Report");
-				reportFile.WriteLine("==========================");
-				reportFile.WriteLine(_report);
-				reportFile.Close();
-				Process.Start(tempFileName);
-				// Wait 2 seconds to give the report a good chance of being opened in NotePad:
-				System.Threading.Thread.Sleep(2000);
-				File.Delete(tempFileName);
+				var tester = new InstallerIntegrityTester("Release", _overallReport);
+				tester.Run();
+			}
+
+			if (!_overallReport.IsReportEmpty(_needReport))
+			{
+				if (_emailingMachineNames.Any(name => name.ToLowerInvariant() == Environment.MachineName.ToLowerInvariant()))
+				{
+					// Email the report to the key people who need to know:
+					var message = new System.Net.Mail.MailMessage();
+					foreach (var recipient in _emailList)
+						message.To.Add(recipient);
+					message.Subject = "Automatic Report from FW Installer Build";
+					message.From = new System.Net.Mail.MailAddress("alistair_imrie@sil.org");
+					message.Body = _overallReport.CombineReports(Tools.GetBuildDetails(_projRootPath), _needReport);
+					var smtp = new System.Net.Mail.SmtpClient("mail.jaars.org");
+					smtp.Send(message);
+				}
+				else
+				{
+					// Save the report to a temporary file, then open it in for the user to see:
+					_overallReport.DisplayReport(Tools.GetBuildDetails(_projRootPath), _needReport);
+				}
 			}
 		}
 
@@ -888,7 +903,7 @@ namespace GenerateFilesSource
 			var libraryFileNodes = _xmlFileLibrary.SelectNodes("//File");
 			if (libraryFileNodes != null && libraryFileNodes.Count > 0)
 			{
-				AddReportLine("File Library contains " + libraryFileNodes.Count + " items.");
+				_overallReport.AddReportLine("File Library contains " + libraryFileNodes.Count + " items.");
 				int maxPatchGroup = 0;
 				foreach (XmlElement libraryFileNode in libraryFileNodes)
 				{
@@ -900,12 +915,12 @@ namespace GenerateFilesSource
 							maxPatchGroup = currentPatchGroup;
 					}
 				}
-				AddReportLine("Maximum PatchGroup in File Library = " + maxPatchGroup);
+				_overallReport.AddReportLine("Maximum PatchGroup in File Library = " + maxPatchGroup);
 				_newPatchGroup = 1 + maxPatchGroup;
 			}
 			else
-				AddReportLine("No Library file nodes contained a PatchGroup attribute.");
-			AddReportLine("New PatchGroup value = " + _newPatchGroup);
+				_overallReport.AddReportLine("No Library file nodes contained a PatchGroup attribute.");
+			_overallReport.AddReportLine("New PatchGroup value = " + _newPatchGroup);
 
 			// Set up File Library Addenda:
 			_xmlPreviousFileLibraryAddenda = new XmlDocument();
@@ -913,11 +928,11 @@ namespace GenerateFilesSource
 			if (File.Exists(addendaPath))
 			{
 				_xmlPreviousFileLibraryAddenda.Load(addendaPath);
-				AddReportLine("Previous file library addenda contains " + _xmlPreviousFileLibraryAddenda.FirstChild.ChildNodes.Count + " items.");
+				_overallReport.AddReportLine("Previous file library addenda contains " + _xmlPreviousFileLibraryAddenda.FirstChild.ChildNodes.Count + " items.");
 			}
 			else
 			{
-				AddReportLine("No previous file library addenda.");
+				_overallReport.AddReportLine("No previous file library addenda.");
 			}
 
 			_xmlNewFileLibraryAddenda = new XmlDocument();
@@ -977,14 +992,14 @@ namespace GenerateFilesSource
 					}
 					catch (IOException e)
 					{
-						AddSeriousIssue("Error: could not download file to '" + file.Value +
-										" because the file already exists and is in use. [" + e.Message + "]");
+						_overallReport.AddSeriousIssue("Error: could not download file to '" + file.Value +
+							" because the file already exists and is in use. [" + e.Message + "]");
 						continue;
 					}
 					catch (UnauthorizedAccessException e)
 					{
-						AddSeriousIssue("Error: could not download file to '" + file.Value +
-										" because the file already exists and cannot be deleted. [" + e.Message + "]");
+						_overallReport.AddSeriousIssue("Error: could not download file to '" + file.Value +
+							" because the file already exists and cannot be deleted. [" + e.Message + "]");
 						continue;
 					}
 				}
@@ -998,8 +1013,8 @@ namespace GenerateFilesSource
 					}
 					catch (Exception e)
 					{
-						AddSeriousIssue("Error: could not download file to '" + file.Value +
-										" because the folder it is destined for cannot be created. [" + e.Message + "]");
+						_overallReport.AddSeriousIssue("Error: could not download file to '" + file.Value +
+							" because the folder it is destined for cannot be created. [" + e.Message + "]");
 						continue;
 					}
 				}
@@ -1010,7 +1025,8 @@ namespace GenerateFilesSource
 				}
 				catch (WebException e)
 				{
-					AddSeriousIssue("Error: could not download file '" + file.Key + " (destined for " + file.Value + "): " + e.Message);
+					_overallReport.AddSeriousIssue(
+						"Error: could not download file '" + file.Key + " (destined for " + file.Value + "): " + e.Message);
 				}
 			}
 		}
@@ -1102,15 +1118,15 @@ namespace GenerateFilesSource
 				fileSet.Remove(file);
 			}
 
-			lock (_reportSectionMutexToken)
+			lock (_overallReport)
 			{
 				var removedFiles = initialFiles.Count - fileSet.Count;
 				if (removedFiles > 0)
 				{
-					AddReportLine("Removed " + (removedFiles) +
+					_overallReport.AddReportLine("Removed " + (removedFiles) +
 								  " already rejected files from " + fileSetName + " file set:");
 					foreach (var file in initialFiles.Except(fileSet))
-						AddReportLine("    " + file.RelativeSourcePath);
+						_overallReport.AddReportLine("    " + file.RelativeSourcePath);
 				}
 			}
 			// Make sure fileSet references equivalent files from _allFilesFiltered:
@@ -1157,7 +1173,7 @@ namespace GenerateFilesSource
 		/// <returns>Set of dependencies of given target</returns>
 		private HashSet<InstallerFile> GetSpecificTargetFiles(string target, string description)
 		{
-			var assemblyProcessor = new AssemblyDependencyProcessor(_projRootPath, _outputReleaseFolderAbsolutePath, description, this);
+			var assemblyProcessor = new AssemblyDependencyProcessor(_projRootPath, _outputReleaseFolderAbsolutePath, description, _fileOmissions, _overallReport);
 			assemblyProcessor.Init();
 
 			var flexBuiltFilePaths = assemblyProcessor.GetAssemblySet(target);
@@ -1188,11 +1204,11 @@ namespace GenerateFilesSource
 			_allFilesFiltered = MergeFileSets(_builtFilesFiltered, _distFilesFiltered);
 
 			// Report on removed duplicate files:
-			lock (_reportSectionMutexToken)
+			lock (_overallReport)
 			{
-				AddReportLine("Found " + _duplicateFiles.Count + @" duplicate files between Output\Release and DistFiles:");
+				_overallReport.AddReportLine("Found " + _duplicateFiles.Count + @" duplicate files between Output\Release and DistFiles:");
 				foreach (var file in _duplicateFiles)
-					AddReportLine("    " + file.RelativeSourcePath);
+					_overallReport.AddReportLine("    " + file.RelativeSourcePath);
 			}
 		}
 
@@ -1222,15 +1238,15 @@ namespace GenerateFilesSource
 		private HashSet<InstallerFile> CollectAndFilterFiles(string path)
 		{
 			var fileSet = CollectFiles(path, _rootDirectory, "", true, false);
-			AddReportLine("Collected " + fileSet.Count + " files in total from " + path + ".");
+			_overallReport.AddReportLine("Collected " + fileSet.Count + " files in total from " + path + ".");
 
 			// Filter out known junk:
 			var fileSetFiltered = FilterOutSpecifiedOmissions(fileSet);
-			lock (_reportSectionMutexToken)
+			lock (_overallReport)
 			{
-				AddReportLine("Removed " + (fileSet.Count - fileSetFiltered.Count) + " files from " + path + " file set:");
+				_overallReport.AddReportLine("Removed " + (fileSet.Count - fileSetFiltered.Count) + " files from " + path + " file set:");
 				foreach (var file in fileSet.Except(fileSetFiltered))
-					AddReportLine("    " + file.RelativeSourcePath + ": " + file.ReasonForRemoval);
+					_overallReport.AddReportLine("    " + file.RelativeSourcePath + ": " + file.ReasonForRemoval);
 			}
 			return fileSetFiltered;
 		}
@@ -1242,7 +1258,6 @@ namespace GenerateFilesSource
 		internal class AssemblyDependencyProcessor
 		{
 			private bool _initialized;
-			private readonly Generator _parent;
 			private readonly string _projRootPath;
 			private readonly string _assemblyFolderPath;
 			private readonly string _description;
@@ -1250,7 +1265,7 @@ namespace GenerateFilesSource
 			private readonly HashSet<string> _completedTargets = new HashSet<string>();
 			private const string CommentDelimiter = "; ";
 			private readonly FileOmissionList _fileOmissions;
-
+			private readonly ReportSystem _report;
 
 			class TargetsFileData
 			{
@@ -1261,10 +1276,10 @@ namespace GenerateFilesSource
 			private readonly List<TargetsFileData> _targetsFiles = new List<TargetsFileData>();
 			private readonly bool _foundFieldWorksTargetsFile;
 
-			public AssemblyDependencyProcessor(string projRootPath, string assemblyFolderPath, string description, Generator parent)
+			public AssemblyDependencyProcessor(string projRootPath, string assemblyFolderPath, string description, FileOmissionList fileOmissions, ReportSystem report)
 			{
-				_fileOmissions = parent._fileOmissions;
-				_parent = parent;
+				_fileOmissions = fileOmissions;
+				_report = report;
 				_projRootPath = projRootPath;
 				_assemblyFolderPath = assemblyFolderPath;
 				_description = description;
@@ -1368,11 +1383,11 @@ namespace GenerateFilesSource
 					}
 					catch (FileNotFoundException fnfe)
 					{
-						_parent.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + fnfe.Message);
+						_report.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + fnfe.Message);
 					}
 					catch (DataException de)
 					{
-						_parent.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + de.Message);
+						_report.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + de.Message);
 					}
 
 					// Recurse through dependencies:
@@ -1408,7 +1423,7 @@ namespace GenerateFilesSource
 				}
 
 				if (!foundTargetButItWasLinux)
-					_parent.AddSeriousIssue("Error " + _description + ": could not find MSBuild Target " + vsProj + " (referenced by " + (parentProj ?? "nothing") + ") in any .targets file.");
+					_report.AddSeriousIssue("Error " + _description + ": could not find MSBuild Target " + vsProj + " (referenced by " + (parentProj ?? "nothing") + ") in any .targets file.");
 
 				return assembliesToReturn;
 			}
@@ -1599,7 +1614,7 @@ namespace GenerateFilesSource
 
 			if (!File.Exists(file))
 			{
-				AddSeriousIssue("ERROR: file '" + file + "' [" + comment + "] could not be found");
+				_overallReport.AddSeriousIssue("ERROR: file '" + file + "' [" + comment + "] could not be found");
 				return instFile;
 			}
 			var fileVersionInfo = FileVersionInfo.GetVersionInfo(file);
@@ -1718,7 +1733,7 @@ namespace GenerateFilesSource
 					// then we have a problem that needs to be reported:
 					if (MakeRelativeTargetPath(fileFullPath) == MakeRelativeTargetPath(candidateFullPath))
 					{
-						AddSeriousIssue("WARNING: " + fileFullPath + " is supposed to be the same as " + candidateFullPath +
+						_overallReport.AddSeriousIssue("WARNING: " + fileFullPath + " is supposed to be the same as " + candidateFullPath +
 							", but it isn't. Only one will get into the installer. You should check and see which one is correct, and do something about the other.");
 					}
 					else
@@ -1919,7 +1934,7 @@ namespace GenerateFilesSource
 				var parameterizedPath = file.RelativeSourcePath;
 				if (!_teFileNameExceptions.Contains(parameterizedPath))
 				{
-					AddSeriousIssue("WARNING: " + file.RelativeSourcePath +
+					_overallReport.AddSeriousIssue("WARNING: " + file.RelativeSourcePath +
 						" looks like a file specific to TE, but it appears in the " + section +
 						" section of the installer. This may adversely affect FLEx-only users in sensitive locations.");
 				}
@@ -2058,7 +2073,7 @@ namespace GenerateFilesSource
 		/// Identifiers may contain ASCII characters A-Z, a-z, digits, underscores (_), or periods (.).
 		/// Every identifier must begin with either a letter or an underscore.
 		/// Invalid characters are filtered out of the name (spaces, etc.)
-		/// The unique data is turned into an MD5 hash and appended to the mame.
+		/// The unique data is turned into an MD5 hash and appended to the name.
 		/// Space is limited to 72 chars, so if the name is more than 40 characters, it is truncated
 		/// before appending the 32-character MD5 hash.
 		private static string MakeId(string name, string uniqueData)
@@ -2346,7 +2361,7 @@ namespace GenerateFilesSource
 				var fileFullPath = MakeFullPath(file.RelativeSourcePath);
 				if (!File.Exists(fileFullPath))
 				{
-					AddSeriousIssue(file.RelativeSourcePath + " does not exist at expected place (" + fileFullPath + ").");
+					_overallReport.AddSeriousIssue(file.RelativeSourcePath + " does not exist at expected place (" + fileFullPath + ").");
 					break;
 				}
 
@@ -2358,7 +2373,7 @@ namespace GenerateFilesSource
 				var fileCurrentMd5 = CalcFileMd5(fileFullPath);
 				if (omissionMd5 == fileCurrentMd5)
 				{
-					AddSeriousIssue(file.RelativeSourcePath +
+					_overallReport.AddSeriousIssue(file.RelativeSourcePath +
 						" is included in the installer, but is identical to a file that was omitted [" +
 						omission.RelativePath + "] because it was " + omission.Reason);
 					break;
@@ -2368,7 +2383,7 @@ namespace GenerateFilesSource
 				var fileSize = (new FileInfo(fileFullPath)).Length;
 				if (omissionFileSize == fileSize)
 				{
-					AddSeriousIssue(file.RelativeSourcePath +
+					_overallReport.AddSeriousIssue(file.RelativeSourcePath +
 						" is included in the installer, but is similar to a file that was omitted [" +
 						omission.RelativePath + "] because it was " + omission.Reason);
 				}
@@ -2484,13 +2499,11 @@ namespace GenerateFilesSource
 			if (newAddendaFiles == null)
 				return;
 
-			var report = "";
-
 			var previousFileLibraryAddendaNode = _xmlPreviousFileLibraryAddenda.SelectSingleNode("FileLibrary");
 			if (previousFileLibraryAddendaNode == null)
 			{
 				foreach (XmlElement newFileNode in newAddendaFiles)
-					report += "New file: " + newFileNode.GetAttribute("Path") + Environment.NewLine;
+					_overallReport.AddNewFile(newFileNode.GetAttribute("Path"));
 			}
 			else
 			{
@@ -2503,7 +2516,7 @@ namespace GenerateFilesSource
 						// See if current new file can be found in previous file library addenda
 						var node = newFileNode;
 						if (!previousAddendaFiles.Cast<XmlElement>().Any(f => f.GetAttribute("Path") == node.GetAttribute("Path")))
-							report += "New file: " + newFileNode.GetAttribute("Path") + Environment.NewLine;
+							_overallReport.AddNewFile(newFileNode.GetAttribute("Path"));
 					}
 
 					// Iterate over files in the previous file library addenda:
@@ -2512,43 +2525,8 @@ namespace GenerateFilesSource
 						// See if current previous file can be found in new file library addenda
 						var node = previousFileNode;
 						if (!newAddendaFiles.Cast<XmlElement>().Any(f => f.GetAttribute("Path") == node.GetAttribute("Path")))
-							report += "Deleted file: " + previousFileNode.GetAttribute("Path") + Environment.NewLine;
+							_overallReport.AddDeletedFile(previousFileNode.GetAttribute("Path"));
 					}
-				}
-			}
-
-			if (report.Length > 0)
-			{
-				report = Tools.GetBuildDetails(_projRootPath) + Environment.NewLine + report;
-
-				if (_emailingMachineNames.Any(name => name.ToLowerInvariant() == Environment.MachineName.ToLowerInvariant()))
-				{
-					// Email the report to the people who need to know:
-					if (_fileNotificationEmailList.Count > 0)
-					{
-						var message = new System.Net.Mail.MailMessage();
-						foreach (var recipient in _fileNotificationEmailList)
-							message.To.Add(recipient);
-						message.Subject = "Automatic Report from FW Installer Build";
-						message.From = new System.Net.Mail.MailAddress("alistair_imrie@sil.org");
-						message.Body = report;
-						var smtp = new System.Net.Mail.SmtpClient("mail.jaars.org");
-						smtp.Send(message);
-					}
-				}
-				else
-				{
-					// Save the report to a temporary file, then open it in for the user to see:
-					var tempFileName = Path.GetTempFileName() + ".txt";
-					var reportFile = new StreamWriter(tempFileName);
-					reportFile.WriteLine("File Changes Report");
-					reportFile.WriteLine("");
-					reportFile.WriteLine(report);
-					reportFile.Close();
-					Process.Start(tempFileName);
-					// Wait 10 seconds to give the report a good chance of being opened in NotePad:
-					System.Threading.Thread.Sleep(10000);
-					File.Delete(tempFileName);
 				}
 			}
 		}
@@ -2593,33 +2571,30 @@ namespace GenerateFilesSource
 		/// </summary>
 		private void DoSanityChecks()
 		{
-			var failureReport = _seriousIssues ?? "";
 			const string indent = "    ";
 
 			// List all files that were only used in unused features:
-			var unusedFileSet = from file in _allFilesFiltered
-								where (file.OnlyUsedInUnusedFeatures && file.Features.Count > 0)
-								select file;
-
-			if (unusedFileSet.Count() > 0)
-			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following files were left out because the features they belong to are not defined in Features.wxs: ";
-				failureReport = unusedFileSet.Aggregate(failureReport, (current, unusedFile) => current + (Environment.NewLine + indent + unusedFile.RelativeSourcePath + " [" + string.Join(", ", unusedFile.Features.ToArray()) + "]"));
-				failureReport += Environment.NewLine;
-			}
-
-			// Test that all files in _flexFeatureFiles were used:
-			var unusedFiles = from file in _flexFeatureFiles
-							  where !file.UsedInComponent && !file.OnlyUsedInUnusedFeatures
-							  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
+			var unusedFiles = from file in _allFilesFiltered
+							  where file.OnlyUsedInUnusedFeatures && file.Features.Count > 0
+							  select file.RelativeSourcePath + " [" + string.Join(", ", file.Features.ToArray()) + "]";
 
 			if (unusedFiles.Count() > 0)
 			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following files were earmarked for FLEx only but got left out (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): ";
-				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray());
-				failureReport += Environment.NewLine;
+				_overallReport.AddSeriousIssue(
+					"The following files were left out because the features they belong to are not defined in Features.wxs: " +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
+			}
+
+			// Test that all files in _flexFeatureFiles were used:
+			unusedFiles = from file in _flexFeatureFiles
+						  where !file.UsedInComponent && !file.OnlyUsedInUnusedFeatures
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
+
+			if (unusedFiles.Count() > 0)
+			{
+				_overallReport.AddSeriousIssue(
+					"The following files were earmarked for FLEx only but got left out (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
 			// Test that all files in _teFeatureFiles were used:
@@ -2629,10 +2604,9 @@ namespace GenerateFilesSource
 
 			if (unusedFiles.Count() > 0)
 			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following files were earmarked for TE only but got left out (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): ";
-				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray());
-				failureReport += Environment.NewLine;
+				_overallReport.AddSeriousIssue(
+					"The following files were earmarked for TE only but got left out (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
 			// Test that all files in _fwCoreFeatureFiles were used:
@@ -2642,10 +2616,9 @@ namespace GenerateFilesSource
 
 			if (unusedFiles.Count() > 0)
 			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following files were earmarked for FW_Core but got left out (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): ";
-				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray());
-				failureReport += Environment.NewLine;
+				_overallReport.AddSeriousIssue(
+					"The following files were earmarked for FW_Core but got left out (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
 			// Test that all files in _flexFeatureFiles were referenced:
@@ -2655,10 +2628,9 @@ namespace GenerateFilesSource
 
 			if (unusedFiles.Count() > 0)
 			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following files were earmarked for FLEx only but were not referenced in any features (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): ";
-				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray());
-				failureReport += Environment.NewLine;
+				_overallReport.AddSeriousIssue(
+					"The following files were earmarked for FLEx only but were not referenced in any features (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
 			// Test that all files in _teFeatureFiles were referenced:
@@ -2668,10 +2640,9 @@ namespace GenerateFilesSource
 
 			if (unusedFiles.Count() > 0)
 			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following files were earmarked for TE only but were not referenced in any features (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): ";
-				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray());
-				failureReport += Environment.NewLine;
+				_overallReport.AddSeriousIssue(
+					"The following files were earmarked for TE only but were not referenced in any features (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
 			// Test that all files in _fwCoreFeatureFiles were referenced:
@@ -2681,10 +2652,9 @@ namespace GenerateFilesSource
 
 			if (unusedFiles.Count() > 0)
 			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following files were earmarked for FW_Core but were not referenced in any features (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): ";
-				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray());
-				failureReport += Environment.NewLine;
+				_overallReport.AddSeriousIssue(
+					"The following files were earmarked for FW_Core but were not referenced in any features (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
 			// Test that all files in _allFilesFiltered were used:
@@ -2694,10 +2664,9 @@ namespace GenerateFilesSource
 
 			if (unusedFiles.Count() > 0)
 			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following files were unused: they probably appear in the full build but are not used by either TE (dependency of TeExe target) or FLEx (dependency of LexTextExe target): ";
-				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray());
-				failureReport += Environment.NewLine;
+				_overallReport.AddSeriousIssue(
+					"The following files were unused: they probably appear in the full build but are not used by either TE (dependency of TeExe target) or FLEx (dependency of LexTextExe target): " +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
 			// Test that all files in _allFilesFiltered were referenced exactly once:
@@ -2707,10 +2676,9 @@ namespace GenerateFilesSource
 
 			if (unusedFiles.Count() > 0)
 			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following files were not referenced in any features (tested via UsedInFeatureRef flag): ";
-				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray());
-				failureReport += Environment.NewLine;
+				_overallReport.AddSeriousIssue(
+					"The following files were not referenced in any features (tested via UsedInFeatureRef flag): " +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
 			var overusedFiles = from file in _allFilesFiltered
@@ -2719,10 +2687,9 @@ namespace GenerateFilesSource
 
 			if (overusedFiles.Count() > 0)
 			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following files were referenced by more than one feature: ";
-				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, overusedFiles.ToArray());
-				failureReport += Environment.NewLine;
+				_overallReport.AddSeriousIssue(
+					"The following files were referenced by more than one feature: " +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, overusedFiles.ToArray()));
 			}
 
 			// Test Features.Count to verify that all files in _allFilesFiltered were referenced exactly once:
@@ -2732,85 +2699,19 @@ namespace GenerateFilesSource
 
 			if (unusedFiles.Count() > 0)
 			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following files were omitted because they were not referenced in any features (tested Features.Count==0):";
-				failureReport += Environment.NewLine;
-				failureReport += "(This is typical of files in " + _outputReleaseFolderRelativePath + " that are not part of the FLEx build or TE build and not referenced in the CoreFileOrphans section of InstallerConfig.xml)";
-				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray());
-				failureReport += Environment.NewLine;
+				_overallReport.AddSeriousIssue(
+					"The following files were omitted because they were not referenced in any features (tested Features.Count==0):" +
+					Environment.NewLine +
+					"(This is typical of files in " + _outputReleaseFolderRelativePath + " that are not part of the FLEx build or TE build and not referenced in the CoreFileOrphans section of InstallerConfig.xml)" +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
 			// Warn about orphaned files that were included:
 			if (_addOrphans && _orphanFiles.Count() > 0)
 			{
-				failureReport += Environment.NewLine;
-				failureReport += "The following " + _orphanFiles.Count() + " \"orphan\" files were added to FW_Core because the AddOrphans command line option was used and the files were found in Output\\Release, even though they were not referenced by any VS project or specified in InstallerConfig.xml:";
-				failureReport += Environment.NewLine + indent + string.Join(Environment.NewLine + indent, from file in _orphanFiles select file.RelativeSourcePath);
-				failureReport += Environment.NewLine;
-			}
-
-			if (failureReport.Length > 0)
-			{
-				// Prepend log with build-specific details:
-				failureReport = Tools.GetBuildDetails(_projRootPath) + Environment.NewLine + failureReport;
-
-				if (_needReport)
-				{
-					AddReportLine("");
-					AddReportLine("Sanity checks report:");
-					AddReportLine("=====================");
-					AddReportLine(failureReport);
-				}
-				else if (_emailingMachineNames.Any(name => name.ToLowerInvariant() == Environment.MachineName.ToLowerInvariant()))
-				{
-					// Email the report to the key people who need to know:
-					var message = new System.Net.Mail.MailMessage();
-					foreach (var recipient in _emailList)
-						message.To.Add(recipient);
-					message.Subject = "Automatic Report from FW Installer Build";
-					message.From = new System.Net.Mail.MailAddress("alistair_imrie@sil.org");
-					message.Body = failureReport;
-					var smtp = new System.Net.Mail.SmtpClient("mail.jaars.org");
-					smtp.Send(message);
-				}
-				else
-				{
-					// Save the report to a temporary file, then open it in for the user to see:
-					var tempFileName = Path.GetTempFileName() + ".txt";
-					var reportFile = new StreamWriter(tempFileName);
-					reportFile.WriteLine("GenerateFilesSource Report");
-					reportFile.WriteLine("==========================");
-					reportFile.WriteLine(failureReport);
-					reportFile.Close();
-					Process.Start(tempFileName);
-					// Wait 10 seconds to give the report a good chance of being opened in NotePad:
-					System.Threading.Thread.Sleep(10000);
-					File.Delete(tempFileName);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Adds a line of text to the overall report
-		/// </summary>
-		/// <param name="line">Text to add to report</param>
-		private void AddReportLine(string line)
-		{
-			lock (_report)
-			{
-				_report += line + Environment.NewLine;
-			}
-		}
-
-		/// <summary>
-		/// Adds a line of text to the _seriousIssues report
-		/// </summary>
-		/// <param name="line">Text to add to report</param>
-		private void AddSeriousIssue(string line)
-		{
-			lock (_seriousIssues)
-			{
-				_seriousIssues += line + Environment.NewLine;
+				_overallReport.AddSeriousIssue(
+					"The following " + _orphanFiles.Count() + " \"orphan\" files were added to FW_Core because the AddOrphans command line option was used and the files were found in Output\\Release, even though they were not referenced by any VS project or specified in InstallerConfig.xml:" +
+					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, from file in _orphanFiles select file.RelativeSourcePath));
 			}
 		}
 	}
