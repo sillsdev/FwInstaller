@@ -30,10 +30,10 @@
 				<RegistryValue Id="RegLangPack" Root="HKLM" Key="SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack" Type="integer" KeyPath="yes" Value="2" Name="Surrogate" />
 			</Component>
 			<Component Id="RegRootCodeDir" Guid="FF9768AE-C70F-4716-BDEF-4984C7755AC8">
-				<RegistryValue Id="RegRootCodeDir" Root="HKLM" Key="SOFTWARE\SIL\FieldWorks\7.0" Type="string" Value="[INSTALLDIR]" Name="RootCodeDir" />
+				<RegistryValue Id="RegRootCodeDir" Root="HKLM" Key="SOFTWARE\SIL\FieldWorks\8" Type="string" Value="[INSTALLDIR]" Name="RootCodeDir" />
 			</Component>
 			<Component Id="RegProjectsDir" Guid="62DB965A-6954-4578-B9FA-DEB7CD55D240">
-				<RegistryValue Id="RegProjectsDir" Root="HKLM" Key="SOFTWARE\SIL\FieldWorks\7.0" Type="string" Value="[PROJECTSDIR]" Name="ProjectsDir" />
+				<RegistryValue Id="RegProjectsDir" Root="HKLM" Key="SOFTWARE\SIL\FieldWorks\8" Type="string" Value="[PROJECTSDIR]" Name="ProjectsDir" />
 			</Component>
 			<Component Id="RegInitIcu" Guid="E4A17048-1543-4eec-9554-A9668282E3BC">
 				<RegistryValue Id="RegInitIcu" Root="HKLM" Key="SOFTWARE\SIL" Type="integer" Value="1" Name="InitIcu" />

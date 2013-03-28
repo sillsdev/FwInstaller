@@ -6,7 +6,7 @@
 			<Directory Id="DesktopFolder" SourceName="Desktop">
 				<Component Id="DeskShortcutFlex" Guid="AD6BD0ED-A730-4184-921F-E8FCEC0058FA">
 					<Condition><![CDATA[SIL_DESKTOP_ICONS]]></Condition>
-					<Shortcut Id="DeskShortcutFlex" Directory="DesktopFolder" Name="Language Explorer 7" Target="[#Flex.exe.FC28A9E5DCD6E8D3C3C2F909AF45C74A]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
+					<Shortcut Id="DeskShortcutFlex" Directory="DesktopFolder" Name="Language Explorer 8" Target="[#Flex.exe.FC28A9E5DCD6E8D3C3C2F909AF45C74A]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
 					<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
 					<CreateFolder />
 					<RemoveFolder Id='RF_DeskShortcutFlex' On='uninstall' />
@@ -20,7 +20,7 @@
 				</Component>
 				<Component Id="DeskShortcutTE" Guid="D6A665CC-9977-49f8-B390-23C9CFEB57AD">
 					<Condition><![CDATA[SIL_DESKTOP_ICONS]]></Condition>
-					<Shortcut Id="DeskShortcutTE" Directory="DesktopFolder" Name="Translation Editor 7" Target="[#TE.exe.F5642C6BE113D2E83EB790EFF901FBFB]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
+					<Shortcut Id="DeskShortcutTE" Directory="DesktopFolder" Name="Translation Editor 8" Target="[#TE.exe.F5642C6BE113D2E83EB790EFF901FBFB]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
 					<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
 					<CreateFolder />
 					<RemoveFolder Id='RF_DeskShortcutTE' On='uninstall' />
@@ -35,7 +35,7 @@
 			</Directory>
 			<Directory Id="StartMenuFolder" SourceName="Start Menu">
 				<Directory Id="ProgramMenuFolder" SourceName="Programs">
-					<Directory Id="FieldWorksMenu" Name="FieldWorks 7">
+					<Directory Id="FieldWorksMenu" Name="FieldWorks 8">
 						<Component Id="ShortcutLicense" Guid="256EB594-CFA8-48c3-8B12-4D5A994936BB">
 							<Shortcut Id="ShortcutLicense" Directory="FieldWorksMenu" Name="View the End User License Agreement" Target="[INSTALLDIR]License.rtf" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
 							<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->

@@ -19,7 +19,7 @@ AutoFiles.wxs.
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder" SourceName="Program Files">
 				<Directory Id="PFSIL" Name="SIL">
-					<Directory Id="INSTALLDIR" Name="FieldWorks 7">
+					<Directory Id="INSTALLDIR" Name="FieldWorks 8">
 						<Directory Id="OLDDATAMIGRATIONDIR" Name="OldDataMigrationScripts">
 						</Directory>
 						<!-- The following component GUID is required by the master installer to locate and launch the migration utility: -->
@@ -46,7 +46,7 @@ AutoFiles.wxs.
 			</Directory>
 			<Directory Id="CommonAppDataFolder" SourceName="AppData">
 				<Directory Id="AppDataSIL" Name="SIL">
-					<Directory Id="AppDataSilFw" Name="FieldWorks 7">
+					<Directory Id="AppDataSilFw" Name="FieldWorks">
 						<Component Id="CreateFwFolder" Guid="8C7C6A6A-68E9-45ee-96F1-9C08E9F269F7">
 							<CreateFolder>
 								<util:PermissionEx User="AuthenticatedUser" GenericAll="yes" />

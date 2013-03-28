@@ -12,8 +12,8 @@
 	<CustomAction Id="SetOldFwMigrationScriptFolder" Return="check" Property="OLDDATAMIGRATIONDIR" Value="[OLDER_FW_INSTALL_PATH]DataMigration\" />
 	<CustomAction Id="GetOlderFwMaxDbMig" BinaryKey="WixHelperDll" DllEntry="GetHighestDbMigrationVersion" />
 	<CustomAction Id="SetDelIcuDataFlag" Return="check" Property="SIL_ICU_DEL_DATA" Value="1" />
-		<CustomAction Id="SetFirewallDataFW" Return="check" Property="SetupFirewallFW" Value="[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]*FieldWorks 7*" />
-		<CustomAction Id="SetFirewallDataFwRemoteConnect" Return="check" Property="SetupFirewallFwRemoteConnect" Value="[#FwRemoteDatabaseConnectorService.exe]*FieldWorks 7 Remote Database Connector Service*" />
+		<CustomAction Id="SetFirewallDataFW" Return="check" Property="SetupFirewallFW" Value="[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]*FieldWorks*" />
+		<CustomAction Id="SetFirewallDataFwRemoteConnect" Return="check" Property="SetupFirewallFwRemoteConnect" Value="[#FwRemoteDatabaseConnectorService.exe]*FieldWorks Remote Database Connector Service*" />
 		<CustomAction Id="SetFirewallData" Return="check" Property="SetupFirewall" Value="[SetupFirewallFW][SetupFirewallFwRemoteConnect]" />
 		<CustomAction Id="SetupFirewall" Return="ignore" Impersonate="no" Execute="deferred" Script="vbscript">
 			<![CDATA[
