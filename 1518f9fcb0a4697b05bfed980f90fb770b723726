@@ -1,0 +1,8 @@
+Verified+1: Ken Zook <ken_zook@sil.org>
+Verified-Linux+1: Ken Zook <ken_zook@sil.org>
+Code-Review+2: John Thomson <john.thomson7540@gmail.com>
+Submitted-by: Ken Zook <ken_zook@sil.org>
+Submitted-at: Thu, 04 Apr 2013 19:47:03 +0000
+Reviewed-on: https://gerrit.lsdev.sil.org/937
+Project: FwInstaller
+Branch: refs/heads/release/8.0
