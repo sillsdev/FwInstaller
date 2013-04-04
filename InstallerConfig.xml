@@ -472,7 +472,6 @@
 		<File PathPattern="XceedZip.dll"/>
 		<File PathPattern="Output\Release\DebugProcs."/>
 		<File PathPattern="Generic.lib"/>
-		<File PathPattern="Output\Release\Utilities.dll"/> <!-- Comment in CopyDlls target of mkall.targets says this is only needed for tests -->
 		<File PathPattern="DistFiles\Utilities.dll"/> <!-- Original source of above file -->
 		<File PathPattern="DistFiles\libxample32.so"/> <!-- Linux file -->
 		<File PathPattern="DistFiles\libxample64.so"/> <!-- Linux file -->
