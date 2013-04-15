@@ -3,7 +3,6 @@
 	<Fragment Id="FeaturesFragment">
 	<Property  Id='FeaturesFragment' Value='1'/>
 		<Feature Id="FW_Core" Title="FieldWorks" Description="Files common to all FieldWorks applications" Display="expand" Level="3" AllowAdvertise="no">
-			<ComponentRef Id="CreateFwFolder"/>
 			<ComponentRef Id="CreateProjectsFolder"/>
 			<ComponentRef Id="CreateIcuFolder"/>
 			<ComponentRef Id="CopyLicenseTechReadme"/>
@@ -67,8 +66,6 @@
 				<ComponentRef Id="ShortcutTEManual"/>
 				<ComponentRef Id="ShortcutTEHelp"/>
 				<ComponentRef Id="ShortcutTEMovies"/>
-			</Feature>
-			<Feature Id="SampleData" Title="Sample Data" Description="Leli-Teli and Sena databases useful for training and practice" Display="expand" Level="3" AllowAdvertise="no">
 			</Feature>
 			<Feature Id="LOC" Title="Language Packs" Description="Additional languages for the user interface." Display="expand" Level="3" AllowAdvertise="no">
 				<Feature Id="Indonesian" Title="Bahasa Indonesia" Description="Allows the software to have an Indonesian user interface." Display="expand" Level="4" AllowAdvertise="no">

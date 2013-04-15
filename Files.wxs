@@ -1,18 +1,4 @@
 <?xml version="1.0"?>
-<!--
-
-IMPORTANT NOTE:
-
-This file is not compiled directly when the installer is built. It is first
-preprocessed into a file called ProcessedFiles.wxs, which is the file that gets
-compiled.
-
-Therefore, when making changes to this file, it is not sufficient to run
-"WIX Installer Compile and Link.bat". You must first preprocess this file. This
-can be done with ProcessFiles.exe. However, this will also preprocess
-AutoFiles.wxs.
-
--->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<Fragment Id="FilesFragment">
 		<Property  Id='FilesFragment' Value='1'/>
@@ -47,11 +33,6 @@ AutoFiles.wxs.
 			<Directory Id="CommonAppDataFolder" SourceName="AppData">
 				<Directory Id="AppDataSIL" Name="SIL">
 					<Directory Id="AppDataSilFw" Name="FieldWorks">
-						<Component Id="CreateFwFolder" Guid="8C7C6A6A-68E9-45ee-96F1-9C08E9F269F7">
-							<CreateFolder>
-								<util:PermissionEx User="AuthenticatedUser" GenericAll="yes" />
-							</CreateFolder>
-						</Component>
 						<Directory Id="PROJECTSDIR" Name="Projects">
 							<Component Id="CreateProjectsFolder" Guid="B42972B9-B700-47b9-950E-56B1E35E8759">
 								<CreateFolder>

@@ -42,8 +42,7 @@
 			<Except PathContains="Language Explorer\Movies\notfound.html"/>
 		</FlexMoviesOnly>
 		<SampleDataOnly>
-			<!-- Define heuristics for FLEx movie files: -->
-			<File PathContains="ReleaseData\"/>
+			<!-- We're no longer shipping sample data as an installer feature -->
 		</SampleDataOnly>
 		<TeOnly>
 			<!-- Define heuristics for TE files: -->
@@ -102,6 +101,7 @@
 			<File PathPattern="Output\Release\log4net.dll"/>
 			<File PathPattern="Output\Release\Patr100.dll"/>
 			<File PathPattern="Output\Release\xample.dll"/>
+			<File PathPattern="Output\Release\Utilities.dll"/>
 			<!-- Sundry utilities -->
 			<File PathPattern="Output\Release\FixFwData.exe"/>
 			<File PathPattern="Output\Release\FixFwData.pdb"/>
@@ -424,12 +424,11 @@
 		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200257To200258.sql" Condition="MAX_DBMIG_VER &amp;lt; 200258"/>
 		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200258To200259.sql" Condition="MAX_DBMIG_VER &amp;lt; 200259"/>
 		<File Path="DistFiles\MSSQLMigration\OldMigrationScripts\200259To200260.sql" Condition="MAX_DBMIG_VER &amp;lt; 200260"/>
-		<!-- This next one is to make sure we only install the sample data on a new (clean) install: -->
-		<File Path="DistFiles\ReleaseData\" Condition="NOT Installed"/>
 	</FileConditions>
 	<Omissions>
 		<!-- Define list of file patterns to be filtered out. Any file whose path contains (anywhere) one of these strings will be filtered out, case-insensitive by default: -->
 		<!-- Format: <File CaseSensitive="*true if path is to be interpreted with case-sensitivity*" PathPattern="*partial path of any file that is not needed in the FW installation*"/> -->
+		<File PathPattern="DistFiles\ReleaseData"/>
 		<File PathPattern=".git"/>
 		<File PathPattern="nunit"/>
 		<File PathPattern="tests"/>
@@ -472,7 +471,6 @@
 		<File PathPattern="XceedZip.dll"/>
 		<File PathPattern="Output\Release\DebugProcs."/>
 		<File PathPattern="Generic.lib"/>
-		<File PathPattern="DistFiles\Utilities.dll"/> <!-- Original source of above file -->
 		<File PathPattern="DistFiles\libxample32.so"/> <!-- Linux file -->
 		<File PathPattern="DistFiles\libxample64.so"/> <!-- Linux file -->
 		<File PathPattern="SIL\Repository"/>
@@ -484,14 +482,12 @@
 	<FolderRedirections>
 		<!-- Define list of folders that will be redirected to some other folder on the end-user's machine: -->
 		<!-- Format: <Redirect Folder="*folder whose contents will be installed to a different folder*" InstallDir="*MSI Installer folder variable where the affected files will be installed*"/> -->
-		<Redirect Folder="DistFiles\ReleaseData" InstallerDir="PROJECTSDIR"/>
 		<Redirect Folder="DistFiles\MSSQLMigration\OldMigrationScripts" InstallerDir="OLDDATAMIGRATIONDIR"/>
 		<Redirect Folder="DistFiles\Icu50" InstallerDir="AppDataSilIcu"/>
 	</FolderRedirections>
 	<WritableFiles>
 		<!-- Define list of (partial) paths of files that must not be set to read-only: -->
 		<!-- Format: <File PathPattern="*partial path of any file that must not have the read-only flag set*"/> -->
-		<File PathPattern="DistFiles\ReleaseData"/>
 		<File PathPattern="DistFiles\Icu50"/>
 	</WritableFiles>
 	<ForceOverwrite>
@@ -518,7 +514,6 @@
 		<IgnoreNonVersionedDistFiles PathPattern="Parts\Generated.fwlayout"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Parts\GeneratedParts.xml"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Installers\FLExBridgeInstaller.msi"/>-->
-		<IgnoreNonVersionedDistFiles PathPattern="ReleaseData\"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Icu50\UnicodeDataOverrides.txt"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Icu50\data\UnicodeDataOverrides.txt"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Icu50\data\nfc.txt"/>
