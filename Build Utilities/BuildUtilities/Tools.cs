@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace InstallerBuildUtilities
@@ -84,6 +85,44 @@ namespace InstallerBuildUtilities
 				throw new Exception("DOS error while running this command: " + cmd + Environment.NewLine + error);
 
 			return output;
+		}
+
+		/// <summary>
+		/// Uses the master version file to retrieve the version number built into FieldWorks.
+		/// </summary>
+		/// <returns>A version number string e.g. "8.0.1"</returns>
+		public static string GetFwBuildVersion()
+		{
+			string fwMajor = null;
+			string fwMinor = null;
+			string fwRevision = null;
+
+			// Assume the version number is stored in fw\Src\MasterVersionInfo.txt, and that we're in fw\Installer:
+			var versionInfoFile = new StreamReader(@"..\Src\MasterVersionInfo.txt");
+			var currLine = versionInfoFile.ReadLine();
+			while (currLine != null)
+			{
+				if (currLine.StartsWith("FWMAJOR="))
+					fwMajor = currLine.Substring(1 + currLine.IndexOf('=')).Trim();
+				else if (currLine.StartsWith("FWMINOR="))
+					fwMinor = currLine.Substring(1 + currLine.IndexOf('=')).Trim();
+				else if (currLine.StartsWith("FWREVISION="))
+					fwRevision = currLine.Substring(1 + currLine.IndexOf('=')).Trim();
+
+				if (fwMajor != null && fwMinor != null && fwRevision != null)
+					break;
+
+				currLine = versionInfoFile.ReadLine();
+			}
+
+			if (fwMajor == null)
+				throw new InvalidDataException(@"Src\MasterVersionInfo.txt does not include definition for FWMAJOR");
+			if (fwMinor == null)
+				throw new InvalidDataException(@"Src\MasterVersionInfo.txt does not include definition for FWMINOR");
+			if (fwRevision == null)
+				throw new InvalidDataException(@"Src\MasterVersionInfo.txt does not include definition for FWREVISION");
+
+			return fwMajor + "." + fwMinor + "." + fwRevision;
 		}
 	}
 

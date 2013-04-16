@@ -1,16 +1,16 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Microsoft.Tools.WindowsInstallerXml;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ArchiveAndBuildPatch")]
+[assembly: AssemblyTitle("FwWixExtension")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SIL International")]
-[assembly: AssemblyProduct("ArchiveAndBuildPatch")]
-[assembly: AssemblyCopyright("Copyright © SIL International 2010")]
+[assembly: AssemblyProduct("FwWixExtension")]
+[assembly: AssemblyCopyright("Copyright © SIL International 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1e588a1d-3c3b-4a02-b6cb-3f852667d8f6")]
+[assembly: Guid("bc3a2f67-fb39-4268-80a8-056abc80a041")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,3 +34,5 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+
+[assembly: AssemblyDefaultWixExtension(typeof(FwWixExtension.FwWixExtension))]
