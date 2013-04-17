@@ -17,6 +17,9 @@ namespace GenerateFilesSource
 {
 	public class Generator
 	{
+		private const string BuildsFolderFragment = "Builds"; // Folder to copy files for installer
+		private const string BuildConfig = "Release"; // No point in allowing a debug-based installer
+
 		// Controls set via command line:
 		private readonly bool _needReport;
 		private readonly bool _addOrphans;
@@ -214,9 +217,11 @@ namespace GenerateFilesSource
 		// Folders where installable files are to be collected from:
 		private string _outputFolderName;
 		private string _distFilesFolderName;
+		private string _distFilesFolderAbsolutePath;
 		private string _outputReleaseFolderRelativePath;
 		private string _outputReleaseFolderAbsolutePath;
 		private string _installerFolderAbsolutePath;
+		private string _installerFilesVersionedFolder;
 
 		// Set of collected DistFiles, junk filtered out:
 		private HashSet<InstallerFile> _distFilesFiltered;
@@ -472,14 +477,26 @@ namespace GenerateFilesSource
 
 			Initialize();
 			CopyExtraFiles();
-			CollectInstallableFiles();
-			BuildFeatureFileSets();
-			OutputResults();
-			DoSanityChecks();
+
+			Parallel.Invoke
+			(
+				delegate
+					{
+						CollectInstallableFiles();
+						BuildFeatureFileSets();
+						OutputResults();
+						DoSanityChecks();
+					},
+				delegate
+					{
+						DeleteExistingVersionedFolder();
+						CopyFilesToVersionedFolder();
+					}
+			);
 
 			if (_testIntegrity)
 			{
-				var tester = new InstallerIntegrityTester("Release", _overallReport);
+				var tester = new InstallerIntegrityTester(BuildConfig, _overallReport);
 				tester.Run();
 			}
 
@@ -506,6 +523,62 @@ namespace GenerateFilesSource
 		}
 
 		/// <summary>
+		/// Removes the copy of Output\Release files and DistFiles associated with the current
+		/// build version of FW.
+		/// </summary>
+		private void DeleteExistingVersionedFolder()
+		{
+			if (Directory.Exists(_installerFilesVersionedFolder))
+				Directory.Delete(_installerFilesVersionedFolder, true);
+		}
+
+		/// <summary>
+		/// Copies all DistFiles and Output\Release files to a subfolder named after the current
+		/// FW build version. This is so we can keep the files for building a patch later.
+		/// </summary>
+		private void CopyFilesToVersionedFolder()
+		{
+			DirectoryCopy(_outputReleaseFolderAbsolutePath, Path.Combine(Path.Combine(_installerFilesVersionedFolder, _outputFolderName), BuildConfig), true);
+			DirectoryCopy(_distFilesFolderAbsolutePath, Path.Combine(_installerFilesVersionedFolder, _distFilesFolderName), true);
+		}
+
+		private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+		{
+			if (sourceDirName.Contains(".git"))
+				return;
+
+			var dir = new DirectoryInfo(sourceDirName);
+			var dirs = dir.GetDirectories();
+
+			if (!dir.Exists)
+			{
+				throw new DirectoryNotFoundException(
+					"Source directory does not exist or could not be found: "
+					+ sourceDirName);
+			}
+
+			if (!Directory.Exists(destDirName))
+				Directory.CreateDirectory(destDirName);
+
+			var files = dir.GetFiles();
+			foreach (var file in files)
+			{
+				var temppath = Path.Combine(destDirName, file.Name);
+				file.CopyTo(temppath, false);
+			}
+
+			if (copySubDirs)
+			{
+				foreach (var subdir in dirs)
+				{
+					var temppath = Path.Combine(destDirName, subdir.Name);
+					DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+				}
+			}
+		}
+
+
+		/// <summary>
 		/// Initialize the class properly.
 		/// </summary>
 		private void Initialize()
@@ -523,14 +596,19 @@ namespace GenerateFilesSource
 				_projRootPath = Path.GetDirectoryName(_exeFolder);
 			else
 				_projRootPath = _exeFolder;
+
+			// This MUST happen before ConfigureFromXml():
 			_installerFolderAbsolutePath = Path.Combine(_projRootPath, "Installer");
 
 			// Read in the XML config file:
 			ConfigureFromXml();
 
 			// Define paths to folders we will be using:
-			_outputReleaseFolderRelativePath = Path.Combine(_outputFolderName, "Release");
+			_distFilesFolderAbsolutePath = Path.Combine(_projRootPath, _distFilesFolderName);
+			_outputReleaseFolderRelativePath = Path.Combine(_outputFolderName, BuildConfig);
 			_outputReleaseFolderAbsolutePath = Path.Combine(_projRootPath, _outputReleaseFolderRelativePath);
+			var fwVersion = Tools.GetFwBuildVersion();
+			_installerFilesVersionedFolder = Path.Combine(Path.Combine(_installerFolderAbsolutePath, BuildsFolderFragment), fwVersion);
 
 			// Set up File Library, either from XML file or from scratch if file doesn't exist:
 			InitFileLibrary();
@@ -947,6 +1025,8 @@ namespace GenerateFilesSource
 		/// </summary>
 		private void ParseWixFileSources()
 		{
+			var stringsToChop = new [] { @"..\", Path.Combine(BuildsFolderFragment, "$(var.Version)") + @"\" };
+
 			foreach (var wxs in _wixFileSources)
 			{
 				var xmlFilesPath = LocalFileFullPath(wxs);
@@ -965,8 +1045,11 @@ namespace GenerateFilesSource
 					foreach (XmlElement fileNode in customFileNodes)
 					{
 						var sourcePath = fileNode.GetAttribute("Source");
-						while (sourcePath.StartsWith(@"..\"))
-							sourcePath = sourcePath.Substring(3);
+						foreach (var chop in stringsToChop)
+						{
+							while (sourcePath.StartsWith(chop))
+								sourcePath = sourcePath.Substring(chop.Length);
+						}
 						_fileOmissions.Add(sourcePath, "already included in WIX source " + xmlFilesPath);
 					}
 				}
@@ -1218,7 +1301,7 @@ namespace GenerateFilesSource
 		/// </summary>
 		private void CollectDistFiles()
 		{
-			_distFilesFiltered = CollectAndFilterFiles(Path.Combine(_projRootPath, _distFilesFolderName));
+			_distFilesFiltered = CollectAndFilterFiles(_distFilesFolderAbsolutePath);
 		}
 
 		/// <summary>
@@ -2209,6 +2292,7 @@ namespace GenerateFilesSource
 			string autoFiles = LocalFileFullPath(_autoFilesName);
 			_autoFiles = new StreamWriter(autoFiles);
 			_autoFiles.WriteLine("<?xml version=\"1.0\"?>");
+			_autoFiles.WriteLine("<?define Version = $(Fw.Version) ?>");
 			_autoFiles.WriteLine("<Wix xmlns=\"http://schemas.microsoft.com/wix/2006/wi\">");
 			_autoFiles.WriteLine("	<Fragment Id=\"AutoFilesFragment\">");
 			_autoFiles.WriteLine("		<Property  Id=\"AutoFilesFragment\" Value=\"1\"/>");
@@ -2289,16 +2373,16 @@ namespace GenerateFilesSource
 			_autoFiles.Write(indentation + "		<File Id=\"" + file.Id + "\"");
 
 			// Fill in file details:
-			_autoFiles.Write(" Name=\"" + file.Name + "\" ");
+			_autoFiles.Write(" Name=\"" + file.Name + "\"");
+			_autoFiles.Write(" Source=\"" + file.FullPath.Replace(_projRootPath, Path.Combine(BuildsFolderFragment, "$(var.Version)")) + "\"");
 
 			// Add in a ReadOnly attribute, configured according to what's in the _makeWritableList:
 			_autoFiles.Write(_makeWritableList.Where(relativeSource.Contains).Count() > 0
-							? "ReadOnly=\"no\""
-							: "ReadOnly=\"yes\"");
+							? " ReadOnly=\"no\""
+							: " ReadOnly=\"yes\"");
 
 			_autoFiles.Write(" Checksum=\"yes\" KeyPath=\"yes\"");
 			_autoFiles.Write(" DiskId=\"" + file.DiskId + "\"");
-			_autoFiles.Write(" Source=\"" + file.FullPath + "\"");
 
 			if (IsDotNetAssembly(file.FullPath))
 				_autoFiles.Write(" Assembly=\".net\" AssemblyApplication=\"" + file.Id + "\" AssemblyManifest=\"" + file.Id + "\"");

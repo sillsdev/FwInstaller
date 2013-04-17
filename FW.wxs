@@ -1,7 +1,8 @@
 <?xml version='1.0'?>
+<?define Version = $(Fw.Version) ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product UpgradeCode="1092269F-9EA1-419B-8685-90203F83E254" Id="8E80F1ED-826A-46d5-A59A-D8A203F2F0D9" Name='SIL FieldWorks $(Fw.Version)' Language='1033'
-			 Version='$(Fw.Version)' Manufacturer='SIL International'>
+	<Product UpgradeCode="1092269F-9EA1-419B-8685-90203F83E254" Id="8E80F1ED-826A-46d5-A59A-D8A203F2F0D9" Name='SIL FieldWorks $(var.Version)' Language='1033'
+			 Version='$(var.Version)' Manufacturer='SIL International'>
 		<Package Id='*'
 				  Description='FieldWorks Installer'
 				  Manufacturer='SIL International' InstallerVersion='300' Compressed='yes' />
