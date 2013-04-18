@@ -1,0 +1,8 @@
+Code-Review+2: Jason Naylor <jason.naylor@gmail.com>
+Verified+1: Alistair Imrie <alistair_imrie@sil.org>
+Verified-Linux+1: Alistair Imrie <alistair_imrie@sil.org>
+Submitted-by: Alistair Imrie <alistair_imrie@sil.org>
+Submitted-at: Thu, 18 Apr 2013 15:28:31 +0000
+Reviewed-on: https://gerrit.lsdev.sil.org/1005
+Project: FwInstaller
+Branch: refs/heads/release/8.0
