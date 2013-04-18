@@ -143,6 +143,10 @@ namespace GenerateFilesSource
 		// List of file patterns of files known to be needed in the core files feature
 		// but which are not needed in either TE or FLEx:
 		private readonly List<string> _coreFileOrphans = new List<string>();
+		// List of file patterns of built files known to be needed by both TE and FLEx
+		// but where one or the other does not reference them properly, so they end up
+		// solely in the other:
+		private readonly List<string> _forceBuiltFilesIntoCore = new List<string>();
 		// List of file patterns of built files known to be needed by FLEx but which are not
 		// referenced in FLEx's dependencies:
 		private readonly List<string> _forceBuiltFilesIntoFlex = new List<string>();
@@ -653,6 +657,13 @@ namespace GenerateFilesSource
 			if (coreFileOrphans != null)
 				foreach (XmlElement file in coreFileOrphans)
 					_coreFileOrphans.Add(file.GetAttribute("PathPattern"));
+
+			// Define list of file patterns of built files known to be needed by both TE and FLEx but where one or the other does not reference them properly, so they end up solely in the other:
+			// Format: <File PathPattern="*partial path of any file that is needed by FLEx*"/>
+			var forceBuiltFilesIntoCore = configuration.SelectNodes("//FeatureAllocation/ForceBuiltFilesIntoCore/File");
+			if (forceBuiltFilesIntoCore != null)
+				foreach (XmlElement file in forceBuiltFilesIntoCore)
+					_forceBuiltFilesIntoCore.Add(file.GetAttribute("PathPattern"));
 
 			// Define list of path patterns of built files known to be needed by FLEx but which are not referenced in FLEx's dependencies:
 			// Format: <File PathPattern="*partial path of any file that is needed by FLEx*"/>
@@ -1917,6 +1928,22 @@ namespace GenerateFilesSource
 				fwCoreFeatureFiles.Add(file);
 			}
 			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Union(fwCoreFeatureFiles);
+
+			// Add to _fwCoreFeatureFiles any files specified in the _forceBuiltFilesIntoCore set:
+			// (Such files are needed by FLEx and TE but aren't referenced in the dependencies of one of them, so they would otherwise end up in the other.)
+			var forceBuiltFilesIntoCore = new HashSet<InstallerFile>();
+			foreach (var file in from file in _allFilesFiltered
+								 from coreFile in _forceBuiltFilesIntoCore
+								 where file.RelativeSourcePath.ToLowerInvariant().Contains(coreFile.ToLowerInvariant())
+								 select file)
+			{
+				file.Comment += " Specifically added to FW_Core via //FeatureAllocation/ForceBuiltFilesIntoCore in XML configuration. ";
+				forceBuiltFilesIntoCore.Add(file);
+			}
+			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Union(forceBuiltFilesIntoCore);
+			// Remove from the TE and FLex features the files we've just forced into FW_Core:
+			_flexFeatureFiles = _flexFeatureFiles.Except(forceBuiltFilesIntoCore);
+			_teFeatureFiles = _teFeatureFiles.Except(forceBuiltFilesIntoCore);
 
 			// Add to _flexFeatureFiles any files specified in the _forceBuiltFilesIntoFlex set:
 			// (Such files are needed by FLEx but aren't referenced in FLEx's dependencies.)

@@ -130,6 +130,12 @@
 			<File PathPattern="Output\Release\Interop.Logos4Lib.dll"/>
 			<File PathPattern="Output\Release\Interop.Utility.dll"/>
 		</CoreFileOrphans>
+		<ForceBuiltFilesIntoCore>
+			<!-- Define list of file patterns of built files known to be needed by both TE and FLEx but where one or the other does not reference them properly, so they end up solely in the other: -->
+			<!-- Format: <File PathPattern="*partial path of any file that is needed in the Core*"/> -->
+			<!-- The following is referenced by the TE target, but it is also needed by FLEx, which doesn't reference it -->
+			<File PathPattern="Output\Release\Commons.Xml.Relaxng.dll"/>
+		</ForceBuiltFilesIntoCore>
 		<ForceBuiltFilesIntoTE>
 			<!-- Define list of path patterns of built files known to be needed in TE but which are not part of the TeExe FieldWorks.targets dependency chain: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is needed by TE*"/> -->
