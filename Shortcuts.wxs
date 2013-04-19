@@ -37,7 +37,7 @@
 				<Directory Id="ProgramMenuFolder" SourceName="Programs">
 					<Directory Id="FieldWorksMenu" Name="FieldWorks 8">
 						<Component Id="ShortcutLicense" Guid="256EB594-CFA8-48c3-8B12-4D5A994936BB">
-							<Shortcut Id="ShortcutLicense" Directory="FieldWorksMenu" Name="View the End User License Agreement" Target="[INSTALLDIR]License.rtf" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
+							<Shortcut Id="ShortcutLicense" Directory="FieldWorksMenu" Name="View the End User License Agreement" Target="[INSTALLDIR]License.pdf" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
 							<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
 							<CreateFolder />
 							<RemoveFolder Id='RF_ShortcutLicense' On='uninstall' />
