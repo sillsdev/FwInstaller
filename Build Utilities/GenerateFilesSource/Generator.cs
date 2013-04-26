@@ -86,9 +86,6 @@ namespace GenerateFilesSource
 		}
 		readonly Dictionary<string, CabinetMappingData> _featureCabinetMappings = new Dictionary<string, CabinetMappingData>();
 
-		// Variable used to control file sequencing in patches:
-		private int _newPatchGroup;
-
 		// Important file/folder paths:
 		private string _projRootPath;
 		private string _exeFolder;
@@ -315,7 +312,6 @@ namespace GenerateFilesSource
 			public string ReasonForRemoval;
 			public string ComponentGuid;
 			public int DiskId;
-			public int PatchGroup;
 			public string DirId;
 			public readonly List<string> Features;
 			public bool OnlyUsedInUnusedFeatures;
@@ -336,7 +332,6 @@ namespace GenerateFilesSource
 				ReasonForRemoval = "";
 				ComponentGuid = "unknown";
 				DiskId = 0;
-				PatchGroup = 0; // Initial release files will have implied (but omitted) PatchGroup 0, those new in first update will have Patchgroup 1, etc.
 				DirId = "";
 				Features = new List<string>();
 				OnlyUsedInUnusedFeatures = false;
@@ -983,33 +978,9 @@ namespace GenerateFilesSource
 			else
 				_xmlFileLibrary.LoadXml("<FileLibrary>\r\n</FileLibrary>");
 
-			// Find the highest PatchGroup value so far so that we can know what PatchGroup
-			// to assign to any new files. (This has to be iterated with XPath 1.0.)
-			// If there were already files in the Library, but none had a PatchGroup
-			// value, then the current highest patch group is 0, and we want to assign a
-			// patch group of 1 to any new files discovered, so that they go at the end of
-			// the installer's file sequence.
 			var libraryFileNodes = _xmlFileLibrary.SelectNodes("//File");
 			if (libraryFileNodes != null && libraryFileNodes.Count > 0)
-			{
 				_overallReport.AddReportLine("File Library contains " + libraryFileNodes.Count + " items.");
-				int maxPatchGroup = 0;
-				foreach (XmlElement libraryFileNode in libraryFileNodes)
-				{
-					var group = libraryFileNode.GetAttribute("PatchGroup");
-					if (group.Length > 0)
-					{
-						int currentPatchGroup = Int32.Parse(group);
-						if (currentPatchGroup > maxPatchGroup)
-							maxPatchGroup = currentPatchGroup;
-					}
-				}
-				_overallReport.AddReportLine("Maximum PatchGroup in File Library = " + maxPatchGroup);
-				_newPatchGroup = 1 + maxPatchGroup;
-			}
-			else
-				_overallReport.AddReportLine("No Library file nodes contained a PatchGroup attribute.");
-			_overallReport.AddReportLine("New PatchGroup value = " + _newPatchGroup);
 
 			// Set up File Library Addenda:
 			_xmlPreviousFileLibraryAddenda = new XmlDocument();
@@ -1452,37 +1423,37 @@ namespace GenerateFilesSource
 
 					// The target will have one or more MSBuild nodes or Make nodes that we will use to
 					// see what assemblies get built by it.
-						var buildSystemParsers = VisualStudioProjectParser.GetProjectParsers(targetNode, targetsFile.XmlnsManager, _projRootPath);
+					try
+					{
+						var buildSystemParsers = VisualStudioProjectParser.GetProjectParsers(targetNode, targetsFile.XmlnsManager, _projRootPath, _report);
 						buildSystemParsers.AddRange(MakefileParser.GetMakefileParsers(targetNode, targetsFile.XmlnsManager, _projRootPath));
 
 						foreach (var buildSystemParser in buildSystemParsers)
 						{
-							try
-							{
-								// Important: we are assuming that the built assembly will ultimately appear
-								// in Output\Release (_assemblyFolderPath):
-								var builtAssemblyPath = buildSystemParser.GetOutputAssemblyPath(_assemblyFolderPath);
-								if (builtAssemblyPath == null)
-									continue;
+							// Important: we are assuming that the built assembly will ultimately appear
+							// in Output\Release (_assemblyFolderPath):
+							var builtAssemblyPath = buildSystemParser.GetOutputAssemblyPath(_assemblyFolderPath);
+							if (builtAssemblyPath == null)
+								continue;
 
-								var newDescription = parentProj == null ? "" : "ProjDep:" + parentProj;
-								AddAssemblyAndRelativesToDictionary(builtAssemblyPath, assembliesToReturn, newDescription);
+							var newDescription = parentProj == null ? "" : "ProjDep:" + parentProj;
+							AddAssemblyAndRelativesToDictionary(builtAssemblyPath, assembliesToReturn, newDescription);
 
-								// Add all referenced assemblies where given, as these are probably part of the FW system,
-								// but may not necessarily be built by our build system:
-								var referencedAssemblies = buildSystemParser.GetReferencedAssemblies(_assemblyFolderPath);
-								foreach (var assembly in referencedAssemblies)
-									AddAssemblyAndRelativesToDictionary(assembly, assembliesToReturn, "AssRef:" + buildSystemParser.GetSourceName());
-							}
-							catch (FileNotFoundException fnfe)
-							{
-								_report.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + fnfe.Message);
-							}
-							catch (DataException de)
-							{
-								_report.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + de.Message);
-							}
+							// Add all referenced assemblies where given, as these are probably part of the FW system,
+							// but may not necessarily be built by our build system:
+							var referencedAssemblies = buildSystemParser.GetReferencedAssemblies(_assemblyFolderPath);
+							foreach (var assembly in referencedAssemblies)
+								AddAssemblyAndRelativesToDictionary(assembly, assembliesToReturn, "AssRef:" + buildSystemParser.GetSourceName());
 						}
+					}
+					catch (FileNotFoundException fnfe)
+					{
+						_report.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + fnfe.Message);
+					}
+					catch (DataException de)
+					{
+						_report.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + de.Message);
+					}
 
 					// Recurse through dependencies:
 					var dependsOnTargetsTxt = targetNode.GetAttribute("DependsOnTargets");
@@ -2184,11 +2155,13 @@ namespace GenerateFilesSource
 		/// Every identifier must begin with either a letter or an underscore.
 		/// Invalid characters are filtered out of the name (spaces, etc.)
 		/// The unique data is turned into an MD5 hash and appended to the name.
-		/// Space is limited to 72 chars, so if the name is more than 40 characters, it is truncated
-		/// before appending the 32-character MD5 hash.
+		/// While the maximum permitted Id length of a regular installer is 72 chars, The Pyro tool
+		/// for creating patches complains if an Id it generates from that (by prefixing with"Patch.")
+		/// is more than just 62 characters. So here, if the name is more than 24 characters, it is
+		/// truncated before appending the 32-character MD5 hash.
 		private static string MakeId(string name, string uniqueData)
 		{
-			const int maxLen = 72;
+			const int maxLen = 56; // When prefixed with "Patch.", must not exceed 62 characters.
 			const string validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.";
 			const string validStartChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_";
 
@@ -2414,8 +2387,6 @@ namespace GenerateFilesSource
 			if (IsDotNetAssembly(file.FullPath))
 				_autoFiles.Write(" Assembly=\".net\" AssemblyApplication=\"" + file.Id + "\" AssemblyManifest=\"" + file.Id + "\"");
 
-			if (file.PatchGroup > 0)
-				_autoFiles.Write(" PatchGroup=\"" + file.PatchGroup + "\"");
 			_autoFiles.WriteLine(" />");
 
 			// If file has to be forcibly overwritten, then add a RemoveFile element:
@@ -2570,15 +2541,11 @@ namespace GenerateFilesSource
 			{
 				// File already exists in Library:
 				file.ComponentGuid = libSearch.GetAttribute("ComponentGuid");
-				var patchGroup = libSearch.GetAttribute("PatchGroup");
-				if (patchGroup.Length > 0)
-					file.PatchGroup = int.Parse(patchGroup);
 			}
 			else // No XML node found
 			{
 				// This is an unknown file:
 				file.ComponentGuid = Guid.NewGuid().ToString().ToUpperInvariant();
-				file.PatchGroup = _newPatchGroup;
 
 				// Add file to File Library Addenda:
 				var newFileElement = _xmlNewFileLibraryAddenda.CreateElement("File");

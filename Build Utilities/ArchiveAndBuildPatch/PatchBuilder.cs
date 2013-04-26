@@ -1,187 +1,127 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Xml;
+using InstallerBuildUtilities;
 
 namespace ArchiveAndBuildPatch
 {
 	class PatchBuilder
 	{
-		private readonly BuiltInstaller m_updateBuiltInstaller;
-		private readonly ArchiveFolderManager m_archiveFolderManager;
+		private readonly string _baseVersion;
+		private readonly string _updateVersion;
 
-		private readonly string m_baseVersion;
-		private readonly string m_updateVersion;
+		private readonly string _buildsFolder;
+		private readonly string _baseVersionFolder;
+		private readonly string _updateVersionFolder;
 
-		private readonly string m_wixSourcePath;
-		private readonly string m_wixObjectPath;
-		private readonly string m_pcpPath;
-		private readonly string m_msiMspLogPath;
-		private readonly string m_mspPath;
-		private readonly string m_mspTempFolderPath;
+		private readonly string _wixBinPath;
 
-		public PatchBuilder(string baseVersion, BuiltInstaller updateBuiltInstaller, ArchiveFolderManager archiveFolderManager)
+		private readonly string _startAndEnd;
+		private readonly string _baseWixpdbPath;
+		private readonly string _updateWixpdbPath;
+		private readonly string _wixSourcePath;
+		private readonly string _wixObjectPath;
+		private readonly string _wixmstPath;
+		private readonly string _wixmspPath;
+		private readonly string _mspPath;
+
+		public PatchBuilder(string baseVersion, string updateVersion, string buildsFolder)
 		{
-			if (baseVersion == null)
-				throw new ArgumentNullException("baseVersion", "PatchBuilder instantiated with no baseVersion defined.");
+			_baseVersion = baseVersion;
+			_updateVersion = updateVersion;
 
-			m_updateBuiltInstaller = updateBuiltInstaller;
-			m_archiveFolderManager = archiveFolderManager;
+			_buildsFolder = buildsFolder;
+			_baseVersionFolder = Path.Combine(_buildsFolder, baseVersion);
+			_updateVersionFolder = Path.Combine(_buildsFolder, updateVersion);
 
-			m_baseVersion = baseVersion;
-			m_updateVersion = m_updateBuiltInstaller.Version;
+			_wixBinPath = Path.Combine(Environment.GetEnvironmentVariable("WIX") ?? "", "bin");
 
-			var updateVersionFolder = archiveFolderManager.GetArchiveFolder(m_updateVersion);
-			var startAndEnd = Program.Squash(baseVersion) + "to" + Program.Squash(m_updateVersion);
-			var rootPatchName = "Patch" + startAndEnd;
+			_startAndEnd = Program.Squash(baseVersion) + "to" + Program.Squash(_updateVersion);
+			var rootPatchName = "Patch" + _startAndEnd;
 
-			m_wixSourcePath = Path.Combine(updateVersionFolder, rootPatchName + ".wxs");
-			m_wixObjectPath = Path.Combine(updateVersionFolder, rootPatchName + ".wixobj");
-			m_msiMspLogPath = Path.Combine(updateVersionFolder, "msimsp" + startAndEnd + ".log");
-			m_pcpPath = Path.Combine(updateVersionFolder, rootPatchName + ".pcp");
-			m_mspPath = Path.Combine(updateVersionFolder, rootPatchName + ".msp");
-			m_mspTempFolderPath = Path.Combine(updateVersionFolder, rootPatchName + ".tmp");
+			_baseWixpdbPath = Path.Combine(_baseVersionFolder, "SetupFW.wixpdb");
+			_updateWixpdbPath = Path.Combine(_updateVersionFolder, "SetupFW.wixpdb");
+			_wixSourcePath = Path.Combine(_updateVersionFolder, rootPatchName + ".wxs");
+			_wixObjectPath = Path.Combine(_updateVersionFolder, rootPatchName + ".wixobj");
+			_wixmstPath = Path.Combine(_updateVersionFolder, "Diff" + _startAndEnd + ".wixmst");
+			_wixmspPath = Path.Combine(_updateVersionFolder, rootPatchName + ".wixmsp");
+			_mspPath = Path.Combine(_updateVersionFolder, rootPatchName + ".msp");
 		}
 
 		public string BuildPatch()
 		{
-			if (File.Exists(m_msiMspLogPath))
-				File.Delete(m_msiMspLogPath);
-
+			Torch();
 			CreateWixSource();
-
 			Candle();
 			Light();
-			MsiMsp();
+			Pyro();
 
-			return m_mspPath;
+			return _mspPath;
 		}
 
-		private void Candle()
+		private static void RunAndOutputCmd(string cmd, string args)
 		{
-			var wixPath = Environment.GetEnvironmentVariable("WIX") ?? "";
-			var procCandle = new Process
-			{
-				StartInfo =
-				{
-					FileName = Path.Combine(wixPath, "bin\\Candle.exe"),
-					Arguments = "\"" + m_wixSourcePath + "\" -out \"" + m_wixObjectPath + "\"",
-					UseShellExecute = false
-				}
-			};
-			procCandle.Start();
-			procCandle.WaitForExit();
-
-			if (procCandle.ExitCode != 0)
-				throw new Exception("Could not compile " + m_wixSourcePath);
+			Console.WriteLine("\"" + cmd + "\" " + args);
+			var output = Tools.RunDosCmd(cmd, args);
+			Console.WriteLine(output);
 		}
 
-		private void Light()
+		private void Torch()
 		{
-			var wixPath = Environment.GetEnvironmentVariable("WIX") ?? "";
-			var procLight = new Process
-			{
-				StartInfo =
-				{
-					FileName = Path.Combine(wixPath, "bin\\Light.exe"),
-					Arguments = "\"" + m_wixObjectPath + "\" -out \"" + m_pcpPath + "\"",
-					UseShellExecute = false
-				}
-			};
-			procLight.Start();
-			procLight.WaitForExit();
-			if (procLight.ExitCode != 0)
-				throw new Exception("Could not link " + m_wixObjectPath);
-		}
-
-		private void MsiMsp()
-		{
-			if (Directory.Exists(m_mspTempFolderPath))
-				Program.ForceDeleteDirectory(m_mspTempFolderPath);
-
-			var archivesFolder = m_archiveFolderManager.GetArchiveFolder("");
-			var tempFolderRelativePath = m_mspTempFolderPath.Replace(archivesFolder + "\\", "");
-
-			var procMsiMsp = new Process
-			{
-				StartInfo =
-				{
-					FileName = "MsiMsp",
-					Arguments = "-s \"" + m_pcpPath + "\" -p \"" + m_mspPath + "\" -l \"" + m_msiMspLogPath + "\" -f \"" + tempFolderRelativePath + "\"",
-					WorkingDirectory = archivesFolder,
-					UseShellExecute = false
-				}
-			};
-			procMsiMsp.Start();
-			procMsiMsp.WaitForExit();
-			if (procMsiMsp.ExitCode != 0)
-				throw new Exception("Could not create patch from " + m_pcpPath);
+			var cmd = Path.Combine(_wixBinPath, "torch.exe");
+			var args = "-p -xi \"" + _baseWixpdbPath + "\" \"" + _updateWixpdbPath + "\" -out \"" + _wixmstPath + "\"";
+			RunAndOutputCmd(cmd, args);
 		}
 
 		private void CreateWixSource()
 		{
 			var wxsPatch = new XmlDocument();
 
-			string baseMsiPath = Path.Combine((m_archiveFolderManager.RootArchiveFolder),
-												BuiltInstaller.GetRelPathAdminInstallMsi(m_baseVersion));
-			string updateMsiPath = Path.Combine((m_archiveFolderManager.RootArchiveFolder),
-												BuiltInstaller.GetRelPathAdminInstallMsi(m_updateVersion));
-
-			var baseVersionSquashed = Program.Squash(m_baseVersion);
-			var updateVersionSquashed = Program.Squash(m_updateVersion);
-
 			wxsPatch.LoadXml(
-				"<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
-				"<Wix xmlns=\"http://schemas.microsoft.com/wix/2006/wi\">" +
-				"<PatchCreation" +
-				" Id=\"" + Guid.NewGuid().ToString().ToUpperInvariant() + "\"" +
-				" AllowMajorVersionMismatches=\"no\"" +
-				" AllowProductCodeMismatches=\"no\"" +
-				" CleanWorkingFolder=\"no\"" +
-				" OutputPath=\"" + m_pcpPath + "\"" +
-				" WholeFilesOnly=\"no\">" +
-
-				"<PatchInformation" +
-				" Comments=\"Patch for FieldWorks\"" +
-				" Description=\"Patches FieldWorks " + m_baseVersion  + " to " + m_updateVersion + "\"" +
-				" Manufacturer=\"SIL International\"/>" +
-
-				"<PatchMetadata" +
-				" AllowRemoval=\"yes\"" +
-				" Classification=\"Update\"" +
-				" Description=\"Patches FieldWorks " + m_baseVersion + " to " + m_updateVersion + "\"" +
-				" DisplayName=\"Patch FieldWorks " + m_updateVersion + "\"" +
-				" ManufacturerName=\"SIL International\"" +
-				" MoreInfoURL=\"fieldworks.sil.org\"" +
-				" TargetProductName=\"SIL FieldWorks\"/>" +
-
-				"<Family" +
-				" DiskId=\"" + (1 + m_updateBuiltInstaller.GetCabFileCount()) + "\"" +
-				" MediaSrcProp=\"SILFW" + baseVersionSquashed + "_" + updateVersionSquashed + "\"" +
-				" Name=\"SILFW" + baseVersionSquashed.First() + "\"" +
-				" SequenceStart=\"10000\">" +
-
-				"<UpgradeImage SourceFile=\"" + updateMsiPath + "\" Id=\"FW" + updateVersionSquashed + "\">" +
-				"<TargetImage SourceFile=\"" + baseMsiPath + "\" Order=\"" + (m_archiveFolderManager.NumArchives) + "\" Id=\"FW" + baseVersionSquashed + "\" IgnoreMissingFiles=\"no\" />" +
-				"</UpgradeImage>" +
-				"</Family>" +
-
-				"<PatchSequence PatchFamily=\"_" + m_updateBuiltInstaller.ProductGuid.ToUpperInvariant().Replace("-", "") + "\" " +
-					"Sequence=\"" + m_baseVersion + "\"/>" +
-
-				"</PatchCreation>" +
-				"</Wix>"
-				);
+				"<?xml version='1.0'?>" +
+				"<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>" +
+				"	<Patch AllowRemoval='yes' Manufacturer='SIL International' MoreInfoURL='fieldworks.sil.org'" +
+				"    DisplayName='SIL FieldWorks Patch " + _baseVersion + " to " + _updateVersion + "' Description='Small Update Patch' Classification='Update'>" +
+				"" +
+				"		<Media Id='5000' Cabinet='FW.cab' CompressionLevel='high' EmbedCab='yes'>" +
+				"			<PatchBaseline Id='FW' />" +
+				"		</Media>" +
+				"" +
+				"		<PatchFamily Id='FwPatchFamily' Version='" + _updateVersion + "' Supersede='yes'>" +
+				"		</PatchFamily>" +
+				"" +
+				"	</Patch>" +
+				"</Wix>");
 
 			// Save the new XML file:
 			var settings = new XmlWriterSettings { Indent = true };
-			var xmlWriter = XmlWriter.Create(m_wixSourcePath, settings);
+			var xmlWriter = XmlWriter.Create(_wixSourcePath, settings);
 			if (xmlWriter == null)
-				throw new Exception("Could not create output file " + m_wixSourcePath);
+				throw new Exception("Could not create output file " + _wixSourcePath);
 
 			wxsPatch.Save(xmlWriter);
 			xmlWriter.Close();
+		}
+
+		private void Candle()
+		{
+			var cmd = Path.Combine(_wixBinPath, "candle.exe");
+			var args = "\"" + _wixSourcePath + "\" -out \"" + _wixObjectPath + "\"";
+			RunAndOutputCmd(cmd, args);
+		}
+
+		private void Light()
+		{
+			var cmd = Path.Combine(_wixBinPath, "light.exe");
+			var args = "\"" + _wixObjectPath + "\" -out \"" + _wixmspPath + "\"";
+			RunAndOutputCmd(cmd, args);
+		}
+
+		private void Pyro()
+		{
+			var cmd = Path.Combine(_wixBinPath, "pyro.exe");
+			var args = "-delta \"" + _wixmspPath + "\" -out \"" + _mspPath + "\" -t FW \"" + _wixmstPath + "\"";
+			RunAndOutputCmd(cmd, args);
 		}
 	}
 }

@@ -78,7 +78,7 @@ namespace InstallerBuildUtilities
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("Exception while running this DOS command: " + cmd + Environment.NewLine + ex.Message);
+				throw new Exception("Exception while running this DOS command: " + cmd + " " + args + Environment.NewLine + ex.Message);
 			}
 
 			if (dosError)

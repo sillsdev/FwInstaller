@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -8,12 +7,10 @@ namespace ArchiveAndBuildPatch
 {
 	class ArchiveFolderManager
 	{
-		private const string ArchiveFolder = "Archives and Patches";
+		private const string ArchiveFolder = "Builds";
 		private const string VersionFolderNamePattern = @"^([0-9\.]+)$";
-		private readonly string m_archiveFolder;
-		private string m_currentArchiveFolder;
-		private readonly List<string> m_archiveFolderVersions = new List<string>();
-		private static int _numTimesCalled;
+		private readonly string _archiveFolder;
+		private readonly List<string> _archiveFolderVersions = new List<string>();
 
 		class VersionStringComparer : IComparer<string>
 		{
@@ -39,22 +36,22 @@ namespace ArchiveAndBuildPatch
 
 		public ArchiveFolderManager()
 		{
-			m_archiveFolder = Path.Combine(Program.ExeFolder, ArchiveFolder);
-			if (!Directory.Exists(m_archiveFolder))
-				Directory.CreateDirectory(m_archiveFolder);
+			_archiveFolder = Path.Combine(Program.ExeFolder, ArchiveFolder);
+			if (!Directory.Exists(_archiveFolder))
+				throw new DirectoryNotFoundException("Directory " + _archiveFolder + " not found: have any installers been built?");
 
-			var subFolders = Directory.GetDirectories(m_archiveFolder);
+			var subFolders = Directory.GetDirectories(_archiveFolder);
 			foreach (var path in subFolders)
 			{
 				var folder = Path.GetFileName(path);
 				if (Regex.IsMatch(folder, VersionFolderNamePattern))
-					m_archiveFolderVersions.Add(folder);
+					_archiveFolderVersions.Add(folder);
 			}
 
-			if (m_archiveFolderVersions.Count > 0)
+			if (_archiveFolderVersions.Count > 0)
 			{
 				var comparer = new VersionStringComparer();
-				m_archiveFolderVersions.Sort(comparer);
+				_archiveFolderVersions.Sort(comparer);
 			}
 		}
 
@@ -65,56 +62,36 @@ namespace ArchiveAndBuildPatch
 
 		public string RootArchiveFolder
 		{
-			get { return m_archiveFolder; }
+			get { return _archiveFolder; }
+		}
+
+		public string LatestVersion
+		{
+			get { return (_archiveFolderVersions.Count > 0) ? _archiveFolderVersions.Last() : null; }
 		}
 
 		public string EarliestVersion
 		{
-			get { return (m_archiveFolderVersions.Count > 0)? m_archiveFolderVersions.First() : null; }
+			get { return (_archiveFolderVersions.Count > 0)? _archiveFolderVersions.First() : null; }
 		}
 
 		public string GetNthFromEndVersion(int n)
 		{
-			if (n < 0 || n >= m_archiveFolderVersions.Count)
+			if (n < 0 || n >= _archiveFolderVersions.Count)
 				return null;
 
-			return m_archiveFolderVersions[m_archiveFolderVersions.Count - 1 - n];
+			return _archiveFolderVersions[_archiveFolderVersions.Count - 1 - n];
 		}
 
 		public int NumArchives
 		{
-			get { return m_archiveFolderVersions.Count;  }
+			get { return _archiveFolderVersions.Count;  }
 		}
 
-		public string AddArchiveFolder(string version)
+		public void ArchiveFile(string filePath)
 		{
-			if (_numTimesCalled != 0)
-				throw new Exception(
-					"Attempting to archive another installer in the same instance of this application. That is probably not what is required.");
-
-			_numTimesCalled = 1;
-
-			if (!Regex.IsMatch(version, VersionFolderNamePattern))
-				throw new Exception("Folder name " + version + " does not conform to expected version number pattern.");
-
-			m_currentArchiveFolder = GetArchiveFolder(version);
-			if (Directory.Exists(m_currentArchiveFolder))
-				throw new Exception("Folder " + m_currentArchiveFolder +
-									" already exists. Current installer may already be archived. Did you forget to increment the installer version number?");
-
-			if (m_archiveFolderVersions.Count >= 1)
-			{
-				var comparer = new VersionStringComparer();
-				if (comparer.Compare(version, m_archiveFolderVersions.Last()) != 1)
-					throw new Exception("New version " + version + " is not higher than current highest version (" + m_archiveFolderVersions.Last() +
-										"). This will not make for a viable patch!");
-			}
-
-			Directory.CreateDirectory(m_currentArchiveFolder);
-
-			m_archiveFolderVersions.Add(version);
-
-			return m_currentArchiveFolder;
+			var destFolder = GetArchiveFolder(LatestVersion);
+			File.Copy(filePath, Path.Combine(destFolder, filePath));
 		}
 	}
 }
