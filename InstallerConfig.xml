@@ -544,6 +544,7 @@
 		<Recipient Email="ken underscore zook at sil dot org" NotifyFileChanges="true"/>
 		<Recipient Email="ann underscore bush at sil dot org" NotifyFileChanges="true"/>
 		<Recipient Email="john underscore wickberg at jaars dot org"/>
+		<Recipient Email="jason underscore naylor at sil dot org"/>
 	</FailureNotification>
 	<FilesSources>
 		<!-- Define folders from which files are to be collected for the installer: -->

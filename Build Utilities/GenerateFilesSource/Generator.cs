@@ -1452,37 +1452,37 @@ namespace GenerateFilesSource
 
 					// The target will have one or more MSBuild nodes or Make nodes that we will use to
 					// see what assemblies get built by it.
-					try
-					{
 						var buildSystemParsers = VisualStudioProjectParser.GetProjectParsers(targetNode, targetsFile.XmlnsManager, _projRootPath);
 						buildSystemParsers.AddRange(MakefileParser.GetMakefileParsers(targetNode, targetsFile.XmlnsManager, _projRootPath));
 
 						foreach (var buildSystemParser in buildSystemParsers)
 						{
-							// Important: we are assuming that the built assembly will ultimately appear
-							// in Output\Release (_assemblyFolderPath):
-							var builtAssemblyPath = buildSystemParser.GetOutputAssemblyPath(_assemblyFolderPath);
-							if (builtAssemblyPath == null)
-								continue;
+							try
+							{
+								// Important: we are assuming that the built assembly will ultimately appear
+								// in Output\Release (_assemblyFolderPath):
+								var builtAssemblyPath = buildSystemParser.GetOutputAssemblyPath(_assemblyFolderPath);
+								if (builtAssemblyPath == null)
+									continue;
 
-							var newDescription = parentProj == null ? "" : "ProjDep:" + parentProj;
-							AddAssemblyAndRelativesToDictionary(builtAssemblyPath, assembliesToReturn, newDescription);
+								var newDescription = parentProj == null ? "" : "ProjDep:" + parentProj;
+								AddAssemblyAndRelativesToDictionary(builtAssemblyPath, assembliesToReturn, newDescription);
 
-							// Add all referenced assemblies where given, as these are probably part of the FW system,
-							// but may not necessarily be built by our build system:
-							var referencedAssemblies = buildSystemParser.GetReferencedAssemblies(_assemblyFolderPath);
-							foreach (var assembly in referencedAssemblies)
-								AddAssemblyAndRelativesToDictionary(assembly, assembliesToReturn, "AssRef:" + buildSystemParser.GetSourceName());
+								// Add all referenced assemblies where given, as these are probably part of the FW system,
+								// but may not necessarily be built by our build system:
+								var referencedAssemblies = buildSystemParser.GetReferencedAssemblies(_assemblyFolderPath);
+								foreach (var assembly in referencedAssemblies)
+									AddAssemblyAndRelativesToDictionary(assembly, assembliesToReturn, "AssRef:" + buildSystemParser.GetSourceName());
+							}
+							catch (FileNotFoundException fnfe)
+							{
+								_report.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + fnfe.Message);
+							}
+							catch (DataException de)
+							{
+								_report.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + de.Message);
+							}
 						}
-					}
-					catch (FileNotFoundException fnfe)
-					{
-						_report.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + fnfe.Message);
-					}
-					catch (DataException de)
-					{
-						_report.AddSeriousIssue("Error " + _description + " in Target " + vsProj + ": " + de.Message);
-					}
 
 					// Recurse through dependencies:
 					var dependsOnTargetsTxt = targetNode.GetAttribute("DependsOnTargets");

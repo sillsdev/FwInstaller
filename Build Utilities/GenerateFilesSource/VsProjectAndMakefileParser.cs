@@ -83,6 +83,13 @@ namespace GenerateFilesSource
 			var outputTypeNode = _project.SelectSingleNode("//msbuild:Project/msbuild:PropertyGroup/msbuild:OutputType", _xmlnsManager);
 			if (outputTypeNode == null)
 				throw new DataException("VS project " + _projectPath + " does not specify an OutputType.");
+			var commonAssemblyNode =
+				_project.SelectSingleNode(
+					"//msbuild:Project/msbuild:ItemGroup/msbuild:Compile[contains(@Include, 'CommonAssemblyInfo.cs') or contains(@Include, 'AssemblyInfoForTests.cs')]/msbuild:Link", _xmlnsManager);
+			if (commonAssemblyNode == null)
+			{
+				throw new DataException("VS project " + _projectPath + " does not link to CommonAssemblyInfo.cs or AssemblyInfoForTests.cs");
+			}
 
 			_outputType = outputTypeNode.InnerText;
 		}
