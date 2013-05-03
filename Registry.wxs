@@ -3,26 +3,6 @@
 	<Fragment Id="RegistryFragment">
 	<Property  Id='RegistryFragment' Value='1'/>
 		<DirectoryRef Id="TARGETDIR">
-			<Component Id="RegHyperLinks" Guid="F9188050-7FCA-45f4-8BA0-1F2612F74354">
-				<RegistryValue Id="RegHyperLinksProtocol" Root="HKCR" Key="silfw" Name="URL Protocol" KeyPath="yes" Value="" Type="string" />
-				<RegistryValue Id="RegHyperLinksCmd" Root="HKCR" Key="silfw\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" %1' />
-				<RegistryValue Id="RegHyperLinksSilfw" Root="HKCR" Key="silfw" Type="string" Value="URL:SILFW Protocol" />
-			</Component>
-			<Component Id="RegFwBackupFiles" Guid="1F2C9550-5EF6-4867-A9DF-1C9B1A90F151">
-				<RegistryValue Id="RegFwBackupFilesExt" Root="HKCR" Key=".fwbackup" Type="string" Value="fwbackup_auto_file" />
-				<RegistryValue Id="RegFwBackupFilesAutoAssoc" Root="HKCR" Key="fwbackup_auto_file" Type="string" Value="FieldWorks Backup" />
-				<RegistryValue Id="RegFwBackupFilesAutoAssocShell" Root="HKCR" Key="fwbackup_auto_file\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" "%1"' />
-			</Component>
-			<Component Id="RegFwDbFiles" Guid="F2B67E27-3994-4683-923C-E6D97A511479">
-				<RegistryValue Id="RegFwDbFilesExt" Root="HKCR" Key=".fwdb" Type="string" Value="fwdb_auto_file" />
-				<RegistryValue Id="RegFwDbFilesAutoAssoc" Root="HKCR" Key="fwdb_auto_file" Type="string" Value="FieldWorks DB File" />
-				<RegistryValue Id="RegFwDbFilesAutoAssocShell" Root="HKCR" Key="fwdb_auto_file\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" "%1"' />
-			</Component>
-			<Component Id="RegFwDataFiles" Guid="69236760-F742-4e90-9D11-584241DE1DDC">
-				<RegistryValue Id="RegFwDataFilesExt" Root="HKCR" Key=".fwdata" Type="string" Value="fwdata_auto_file" />
-				<RegistryValue Id="RegFwDataFilesAutoAssoc" Root="HKCR" Key="fwdata_auto_file" Type="string" Value="FieldWorks Data File" />
-				<RegistryValue Id="RegFwDataFilesAutoAssocShell" Root="HKCR" Key="fwdata_auto_file\shell\open\command" Type="string" Value='"[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]" "%1"' />
-			</Component>
 			<Component Id="UnregFlex" Guid="C46427EE-2C13-4596-A583-DBE1DF7109E6">
 				<RemoveRegistryValue Id="UnregFlex" Root="HKCU" Key="Software\Microsoft\Windows\ShellNoRoam\MUICache" Name="[#Flex.exe.FC28A9E5DCD6E8D3C3C2F909AF45C74A]" />
 			</Component>

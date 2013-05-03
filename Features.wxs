@@ -14,10 +14,6 @@
 			<ComponentRef Id="EncConvertersAppDataMover40.exe"/>
 			<ComponentRef Id="Quivira.ttf"/>
 			<ComponentRef Id="FwPath"/>
-			<ComponentRef Id="RegHyperLinks"/>
-			<ComponentRef Id="RegFwBackupFiles"/>
-			<ComponentRef Id="RegFwDbFiles"/>
-			<ComponentRef Id="RegFwDataFiles"/>
 			<ComponentRef Id="RegLangPack"/>
 			<ComponentRef Id="RegRootCodeDir"/>
 			<ComponentRef Id="RegProjectsDir"/>
