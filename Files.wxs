@@ -26,7 +26,11 @@
 							<File Id="FieldWorks.exe" Name="FieldWorks.exe" Source="Builds\$(var.Version)\Output\Release\FieldWorks.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Assembly=".net" AssemblyApplication="FieldWorks.exe" AssemblyManifest="FieldWorks.exe">
 								<fire:FirewallException Id="FieldWorks.exe" Name="FieldWorks" IgnoreFailure="yes" Scope="any"/>
 							</File>
+							<!-- These next two are added because otherwise they got left out, as "Output\Release\FieldWorks.exe" is a partial match in GenerateFilesSource: -->
+							<File Id="FieldWorks.exe.manifest" Name="FieldWorks.exe.manifest" Source="Builds\$(var.Version)\Output\Release\FieldWorks.exe.manifest" ReadOnly="yes" Checksum="yes" DiskId="1"/>
+							<File Id="FieldWorks.exe.config" Name="FieldWorks.exe.config" Source="Builds\$(var.Version)\Output\Release\FieldWorks.exe.config" ReadOnly="yes" Checksum="yes" DiskId="1"/>
 						</Component>
+						<!-- This file is here because we need to actually run it during installation. See CustomAction Id="LaunchAppDataMover" below. -->
 						<Component Id="EncConvertersAppDataMover40.exe" Guid="5819C8CA-9422-4c21-98F0-9C2D6F56E442">
 							<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\EncConvertersAppDataMover40.exe"/>
 						</Component>
