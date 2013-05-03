@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <?define Version = $(Fw.Version) ?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension">
 	<Fragment Id="FilesFragment">
 		<Property  Id='FilesFragment' Value='1'/>
 		<Directory Id="TARGETDIR" Name="SourceDir">
@@ -13,11 +13,19 @@
 						<Component Id="MigrateSqlDbs.exe" Guid="D25017CC-66F5-4BEE-B7BA-39BE8AE3698F">
 							<File Id="MigrateSqlDbs.exe" Name="MigrateSqlDbs.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\MigrateSqlDbs.exe" />
 						</Component>
-						<!-- The following file has to be installed as a service: -->
+						<!-- The following file has to be installed as a service and have a firewall hole: -->
 						<Component Id="FwRemoteDatabaseConnectorService.exe" Guid="A3EB2B09-8600-4017-8B04-9DA7B5F2142A">
-							<File Id="FwRemoteDatabaseConnectorService.exe" Name="FwRemoteDatabaseConnectorService.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\FwRemoteDatabaseConnectorService.exe" />
+							<File Id="FwRemoteDatabaseConnectorService.exe" Name="FwRemoteDatabaseConnectorService.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\FwRemoteDatabaseConnectorService.exe">
+								<fire:FirewallException Id="FwRemoteDatabaseConnectorService.exe" Name="FieldWorks Remote Database Connector Service" IgnoreFailure="yes" Scope="any"/>
+							</File>
 							<ServiceInstall Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" DisplayName="FieldWorks Remote Database Connector Service" Type="ownProcess" Interactive="yes" Start="auto" ErrorControl="ignore" Description="Allows connection to local FieldWorks projects from other machines on the network." />
 							<ServiceControl Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
+						</Component>
+						<!-- The following file has to have a firewall hole: -->
+						<Component Id="FieldWorks.exe" Guid="95461FE1-FA63-4D76-B32B-89A478EDA5C6">
+							<File Id="FieldWorks.exe" Name="FieldWorks.exe" Source="Builds\$(var.Version)\Output\Release\FieldWorks.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Assembly=".net" AssemblyApplication="FieldWorks.exe" AssemblyManifest="FieldWorks.exe">
+								<fire:FirewallException Id="FieldWorks.exe" Name="FieldWorks" IgnoreFailure="yes" Scope="any"/>
+							</File>
 						</Component>
 						<Component Id="EncConvertersAppDataMover40.exe" Guid="5819C8CA-9422-4c21-98F0-9C2D6F56E442">
 							<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\EncConvertersAppDataMover40.exe"/>

@@ -10,6 +10,7 @@
 			<ComponentRef Id="MigrateSqlDbs.exe"/>
 			<ComponentRef Id="FLExBridgeInstaller.msi"/>
 			<ComponentRef Id="FwRemoteDatabaseConnectorService.exe"/>
+			<ComponentRef Id="FieldWorks.exe"/>
 			<ComponentRef Id="EncConvertersAppDataMover40.exe"/>
 			<ComponentRef Id="Quivira.ttf"/>
 			<ComponentRef Id="FwPath"/>

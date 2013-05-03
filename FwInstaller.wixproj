@@ -46,6 +46,10 @@
 		<Compile Include="Shortcuts.wxs" />
 	</ItemGroup>
 	<ItemGroup>
+		<WixExtension Include="WixFirewallExtension">
+			<HintPath>$(WixExtDir)\WixFirewallExtension.dll</HintPath>
+			<Name>WixFirewallExtension</Name>
+		</WixExtension>
 		<WixExtension Include="FwWixExtension">
 			<HintPath>FwWixExtension.dll</HintPath>
 			<Name>FwWixExtension</Name>
