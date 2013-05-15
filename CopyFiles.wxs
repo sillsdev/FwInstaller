@@ -6,8 +6,8 @@
 			<Component Id="CopyLicenseTechReadme" Guid="AC8707A0-CDEF-4d0a-9907-335E5FBD0579">
 				<CopyFile Id="CopyTechSupport" SourceName="TechSupport.txt" SourceProperty="SourceDir" DestinationDirectory="INSTALLDIR" Delete="no" DestinationName="TechSupport.txt" />
 				<RemoveFile Id="RemoveTechSupport" Directory="INSTALLDIR" Name="TechSupport.txt"  On="uninstall" />
-				<CopyFile Id="CopyLicense" SourceName="License.rtf" DestinationName="License.rtf" SourceProperty="SourceDir" DestinationDirectory="INSTALLDIR" Delete="no" />
-				<RemoveFile Id="RemoveLicense" Directory="INSTALLDIR" Name="License.rtf" On="uninstall" />
+				<CopyFile Id="CopyLicense" SourceName="License.pdf" DestinationName="License.pdf" SourceProperty="SourceDir" DestinationDirectory="INSTALLDIR" Delete="no" />
+				<RemoveFile Id="RemoveLicense" Directory="INSTALLDIR" Name="License.pdf" On="uninstall" />
 			</Component>
 		</DirectoryRef>
 	</Fragment>

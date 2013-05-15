@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using InstallerBuildUtilities;
 
 namespace ComponentInstallerGenerator
 {
@@ -19,7 +19,7 @@ namespace ComponentInstallerGenerator
 		// Definitions of installers we can generate:
 		private readonly XmlDocument m_xmlDefinitions = new XmlDocument();
 		// Version number of main FW installer:
-		public string FwVersion { get; private set; }
+		public string FwVersion { get { return Tools.GetFwBuildVersion(); } }
 
 		public void Init()
 		{
@@ -31,16 +31,6 @@ namespace ComponentInstallerGenerator
 
 			// Collect the definitions of installers we can generate:
 			m_xmlDefinitions.Load(DefinintionsFileName);
-
-			// Get the version number from the main FW WIX source:
-			var fwWix = new XmlDocument();
-			fwWix.Load(FwWxsFileName);
-			// Set up WIX namespace stuff:
-			var xmlnsManagerFw = new XmlNamespaceManager(fwWix.NameTable);
-			// Add the namespace used in WIX file to the XmlNamespaceManager:
-			xmlnsManagerFw.AddNamespace("wix", WixNsUri);
-
-			FwVersion = (fwWix.SelectSingleNode("//wix:Product", xmlnsManagerFw) as XmlElement).GetAttribute("Version");
 		}
 
 		/// <summary>
@@ -312,7 +302,7 @@ namespace ComponentInstallerGenerator
 
 			// Check if any WIX extensions are required in the build:
 			var extensionNodes = installerDefinitionElement.SelectNodes("Extension");
-			var extensionSyntax = "";
+			var extensionSyntax = "-ext FwWixExtension.dll ";
 			if (extensionNodes != null)
 			{
 				foreach (XmlElement extensionNode in extensionNodes)
@@ -324,7 +314,7 @@ namespace ComponentInstallerGenerator
 
 			// Compile each WIX source, recording the names of the output files:
 			Candle(parentWix, extensionSyntax);
-			Candle(autoFilesWix, "");
+			Candle(autoFilesWix, "-ext FwWixExtension.dll ");
 
 			var wixobjFileList = new List<string>
 			{

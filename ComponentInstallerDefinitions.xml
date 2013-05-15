@@ -20,16 +20,6 @@
 		<Installer>SetupFlexMovies</Installer>
 	</Component>
 	<Component>
-		<Name>Sample Data</Name>
-		<Template>SampleDataInstallerTemplate.wxs</Template>
-		<Extension>WixUtilExtension.dll</Extension>
-		<Description>Sample projects (Sena, Lela-Teli) for FieldWorks</Description>
-		<ProductCode>9CDE0013-E791-43ED-9964-B4BF86A84CC6</ProductCode>
-		<UpgradeCode>08F9D134-415E-4D9B-B299-10370CD15B2E</UpgradeCode>
-		<Feature>SampleData</Feature>
-		<Installer>SetupFwSampleData</Installer>
-	</Component>
-	<Component>
 		<Name>Bengali Localization</Name>
 		<Description>Bengali language pack for FieldWorks</Description>
 		<ProductCode>E919E200-1AAB-4351-ABE8-6237B507A3E9</ProductCode>

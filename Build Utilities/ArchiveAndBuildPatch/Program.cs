@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,22 +33,17 @@ namespace ArchiveAndBuildPatch
 			var libraryUpdater = new ComponentLibraryUpdater();
 			libraryUpdater.UpdateLibraries();
 
-			// Get an object representing the current installer (not an archived one):
-			var installer = new BuiltInstaller();
 			// Get an object to handle archiving and associated folders:
 			var archiveFolderManager = new ArchiveFolderManager();
 
-			// Create a new folder to archive the current installer:
-			var archiveFolder = archiveFolderManager.AddArchiveFolder(installer.Version);
-			// Archive the current installer into the new folder:
-			installer.ArchiveInstaller(archiveFolder);
-			// Run an administrative install on the newly-archived installer. This
-			// basically extracts all the files, a necessary step for patch-building,
-			// and can be achieved manually using the msiexec.exe /a option:
-			installer.ArchivedAdministrativeInstall(archiveFolder);
+			// Archive the important files into the latest build version folder:
+			archiveFolderManager.ArchiveFile("AutoFiles.wxs");
+			archiveFolderManager.ArchiveFile("FileLibrary.xml");
+			archiveFolderManager.ArchiveFile("SetupFW.msi");
+			archiveFolderManager.ArchiveFile("SetupFW.wixpdb");
 
 			// Define how many installer releases back we are going to make patches from:
-			var patchFromIndexes = new [] {1, 2}; // patch from previous and previous but one installers.
+			var patchFromIndexes = new [] {1, 2, 3}; // patch from previous and previous but one installers.
 
 			Parallel.ForEach(patchFromIndexes, index =>
 			{
@@ -58,8 +52,8 @@ namespace ArchiveAndBuildPatch
 				if (archiveFolderManager.GetNthFromEndVersion(index) != null)
 				{
 					var patchBuilder =
-						new PatchBuilder(archiveFolderManager.GetNthFromEndVersion(index), installer,
-										 archiveFolderManager);
+						new PatchBuilder(archiveFolderManager.GetNthFromEndVersion(index), archiveFolderManager.LatestVersion,
+										 archiveFolderManager.RootArchiveFolder);
 					var patchPath = patchBuilder.BuildPatch();
 					var patchWrapper = new PatchWrapper(patchPath);
 					patchWrapper.Wrap();
@@ -71,37 +65,10 @@ namespace ArchiveAndBuildPatch
 		/// Removes all '.' characters from a given version number string.
 		/// </summary>
 		/// <param name="version">A version number string, e.g. 7.0.4</param>
-		/// <returns>The version number wihout the '.' characters, e.g. 704</returns>
+		/// <returns>The version number without the '.' characters, e.g. 704</returns>
 		public static string Squash(string version)
 		{
 			return version.Replace(".", "");
 		}
-
-		public static void ForceDeleteDirectory(string path)
-		{
-			if (!Directory.Exists(path))
-				return;
-
-			DirectoryInfo fol;
-			var fols = new Stack<DirectoryInfo>();
-			var root = new DirectoryInfo(path);
-			fols.Push(root);
-			while (fols.Count > 0)
-			{
-				fol = fols.Pop();
-				fol.Attributes = fol.Attributes & ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
-				foreach (var d in fol.GetDirectories())
-				{
-					fols.Push(d);
-				}
-				foreach (var f in fol.GetFiles())
-				{
-					f.Attributes = f.Attributes & ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
-					f.Delete();
-				}
-			}
-			root.Delete(true);
-		}
-
 	}
 }

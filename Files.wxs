@@ -1,44 +1,61 @@
 <?xml version="1.0"?>
-<!--
-
-IMPORTANT NOTE:
-
-This file is not compiled directly when the installer is built. It is first
-preprocessed into a file called ProcessedFiles.wxs, which is the file that gets
-compiled.
-
-Therefore, when making changes to this file, it is not sufficient to run
-"WIX Installer Compile and Link.bat". You must first preprocess this file. This
-can be done with ProcessFiles.exe. However, this will also preprocess
-AutoFiles.wxs.
-
--->
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+<?define Version = $(Fw.Version) ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension">
 	<Fragment Id="FilesFragment">
 		<Property  Id='FilesFragment' Value='1'/>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder" SourceName="Program Files">
 				<Directory Id="PFSIL" Name="SIL">
-					<Directory Id="INSTALLDIR" Name="FieldWorks 7">
+					<Directory Id="INSTALLDIR" Name="FieldWorks 8">
 						<Directory Id="OLDDATAMIGRATIONDIR" Name="OldDataMigrationScripts">
 						</Directory>
 						<!-- The following component GUID is required by the master installer to locate and launch the migration utility: -->
 						<Component Id="MigrateSqlDbs.exe" Guid="D25017CC-66F5-4BEE-B7BA-39BE8AE3698F">
-							<File Id="MigrateSqlDbs.exe" Name="MigrateSqlDbs.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\Output\Release\MigrateSqlDbs.exe" />
+							<File Id="MigrateSqlDbs.exe" Name="MigrateSqlDbs.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\MigrateSqlDbs.exe" />
 						</Component>
-						<!-- The following file has to be installed as a service: -->
+						<!-- The following file has to be installed as a service and have a firewall hole: -->
 						<Component Id="FwRemoteDatabaseConnectorService.exe" Guid="A3EB2B09-8600-4017-8B04-9DA7B5F2142A">
-							<File Id="FwRemoteDatabaseConnectorService.exe" Name="FwRemoteDatabaseConnectorService.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\Output\Release\FwRemoteDatabaseConnectorService.exe" />
+							<File Id="FwRemoteDatabaseConnectorService.exe" Name="FwRemoteDatabaseConnectorService.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\FwRemoteDatabaseConnectorService.exe">
+								<fire:FirewallException Id="FwRemoteDatabaseConnectorService.exe" Name="FieldWorks Remote Database Connector Service" IgnoreFailure="yes" Scope="any"/>
+							</File>
 							<ServiceInstall Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" DisplayName="FieldWorks Remote Database Connector Service" Type="ownProcess" Interactive="yes" Start="auto" ErrorControl="ignore" Description="Allows connection to local FieldWorks projects from other machines on the network." />
 							<ServiceControl Id="FwRemoteDatabaseConnectorService" Name="FwRemoteDatabaseConnectorService" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
 						</Component>
+						<!-- The following file has to have a firewall hole, several file associations and a URL protocol registered: -->
+						<Component Id="FieldWorks.exe" Guid="95461FE1-FA63-4D76-B32B-89A478EDA5C6">
+							<File Id="FieldWorks.exe" Name="FieldWorks.exe" Source="Builds\$(var.Version)\Output\Release\FieldWorks.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Assembly=".net" AssemblyApplication="FieldWorks.exe" AssemblyManifest="FieldWorks.exe">
+								<fire:FirewallException Id="FieldWorks.exe" Name="FieldWorks" IgnoreFailure="yes" Scope="any"/>
+							</File>
+							<ProgId Id="FwBackupFile" Icon="FieldWorks.exe" Description="FieldWorks Backup">
+								<Extension Id="fwbackup" >
+									<Verb Id="open" Command="&amp;Restore" Argument="&quot;%1&quot;" TargetFile="FieldWorks.exe" />
+								</Extension>
+							</ProgId>
+							<ProgId Id="FwDbFile" Icon="FieldWorks.exe" Description="FieldWorks DB File">
+								<Extension Id="fwdb" >
+									<Verb Id="open" Command="&amp;Open" Argument="&quot;%1&quot;" TargetFile="FieldWorks.exe" />
+								</Extension>
+							</ProgId>
+							<ProgId Id="FwDataFile" Icon="FieldWorks.exe" Description="FieldWorks Data File">
+								<Extension Id="fwdata" >
+									<Verb Id="open" Command="&amp;Open" Argument="&quot;%1&quot;" TargetFile="FieldWorks.exe" />
+								</Extension>
+							</ProgId>
+							<RegistryValue Id="RegHyperLinksProtocol" Root="HKCR" Key="silfw" Name="URL Protocol" Value="" Type="string" />
+							<RegistryValue Id="RegHyperLinksCmd" Root="HKCR" Key="silfw\shell\open\command" Type="string" Value='"[#FieldWorks.exe]" %1' />
+							<RegistryValue Id="RegHyperLinksSilfw" Root="HKCR" Key="silfw" Type="string" Value="URL:SILFW Protocol" />
+							<!-- These next two are added because otherwise they got left out, as "Output\Release\FieldWorks.exe" is a partial match in GenerateFilesSource: -->
+							<File Id="FieldWorks.exe.manifest" Name="FieldWorks.exe.manifest" Source="Builds\$(var.Version)\Output\Release\FieldWorks.exe.manifest" ReadOnly="yes" Checksum="yes" DiskId="1"/>
+							<File Id="FieldWorks.exe.config" Name="FieldWorks.exe.config" Source="Builds\$(var.Version)\Output\Release\FieldWorks.exe.config" ReadOnly="yes" Checksum="yes" DiskId="1"/>
+						</Component>
+						<!-- This file is here because we need to actually run it during installation. See CustomAction Id="LaunchAppDataMover" below. -->
 						<Component Id="EncConvertersAppDataMover40.exe" Guid="5819C8CA-9422-4c21-98F0-9C2D6F56E442">
-							<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" DiskId="1" Source="..\Output\Release\EncConvertersAppDataMover40.exe"/>
+							<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\EncConvertersAppDataMover40.exe"/>
 						</Component>
 						<Directory Id="AddOnInstallers" Name="Installers">
 							<!-- The following component GUID is required by the master installer to locate and launch the FLEx Bridge installer: -->
 							<Component Id="FLExBridgeInstaller.msi" Guid="9442BF43-4A64-4885-9593-43DD7E927290">
-								<File Id="FLExBridgeInstaller.msi" Name="FLExBridgeInstaller.msi" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="..\DistFiles\Installers\FLExBridgeInstaller.msi" />
+								<File Id="FLExBridgeInstaller.msi" Name="FLExBridgeInstaller.msi" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\DistFiles\Installers\FLExBridgeInstaller.msi" />
 							</Component>
 						</Directory>
 					</Directory>
@@ -46,12 +63,7 @@ AutoFiles.wxs.
 			</Directory>
 			<Directory Id="CommonAppDataFolder" SourceName="AppData">
 				<Directory Id="AppDataSIL" Name="SIL">
-					<Directory Id="AppDataSilFw" Name="FieldWorks 7">
-						<Component Id="CreateFwFolder" Guid="8C7C6A6A-68E9-45ee-96F1-9C08E9F269F7">
-							<CreateFolder>
-								<util:PermissionEx User="AuthenticatedUser" GenericAll="yes" />
-							</CreateFolder>
-						</Component>
+					<Directory Id="AppDataSilFw" Name="FieldWorks">
 						<Directory Id="PROJECTSDIR" Name="Projects">
 							<Component Id="CreateProjectsFolder" Guid="B42972B9-B700-47b9-950E-56B1E35E8759">
 								<CreateFolder>
@@ -71,7 +83,7 @@ AutoFiles.wxs.
 			</Directory>
 			<Directory Id="FontsFolder" SourceName="Fonts">
 				<Component Id="Quivira.ttf" Guid="E4A47C8C-2B96-4186-97A8-B2AFC3150A9C">
-					<File Id="Quivira.ttf" Name="Quivira.ttf" DiskId="1" Source="..\DistFiles\Fonts\Raw\Quivira.ttf" TrueType="yes" />
+					<File Id="Quivira.ttf" Name="Quivira.ttf" DiskId="1" Source="Builds\$(var.Version)\DistFiles\Fonts\Raw\Quivira.ttf" TrueType="yes" />
 				</Component>
 			</Directory>
 			<Directory Id="SystemFolder" SourceName="System32">
@@ -79,7 +91,7 @@ AutoFiles.wxs.
 			<Directory Id="CommonFilesFolder" Name="Common">
 				<Directory Id="SIL" Name="SIL">
 					<Component Id="vs_piaredist.exe" Guid="69E34503-AFF1-455d-8B02-38EC1EC156C2">
-						<File Id="vs_piaredist.exe" Name="vs_piaredist.exe" ReadOnly="yes" Source="..\DistFiles\vs_piaredist.exe" DiskId="1"/>
+						<File Id="vs_piaredist.exe" Name="vs_piaredist.exe" ReadOnly="yes" Source="Builds\$(var.Version)\DistFiles\vs_piaredist.exe" DiskId="1"/>
 					</Component>
 					<!-- Place holder for some EC merge modules -->
 				</Directory>

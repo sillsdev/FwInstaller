@@ -29,9 +29,10 @@ namespace GenerateFilesSource
 		/// </summary>
 		/// <param name="targetNode">MSBuild Target node</param>
 		/// <param name="xmlnsManager">XML Namespace Manager needed to parse targetNode</param>
-		/// <param name="projRootPath"></param>
+		/// <param name="projRootPath">Path to root FW folder</param>
+		/// <param name="report">Enables error reports to be logged</param>
 		/// <returns>List of VS project parsers if any specified in the target, or else null</returns>
-		public static List<IBuildSystemParser> GetProjectParsers(XmlElement targetNode, XmlNamespaceManager xmlnsManager, string projRootPath)
+		public static List<IBuildSystemParser> GetProjectParsers(XmlElement targetNode, XmlNamespaceManager xmlnsManager, string projRootPath, ReportSystem report)
 		{
 			var parsers = new List<IBuildSystemParser>();
 
@@ -42,7 +43,14 @@ namespace GenerateFilesSource
 			foreach (XmlElement msBuildNode in msBuildNodes)
 			{
 				var projectPath = msBuildNode.GetAttribute("Projects").Replace("$(fwrt)", projRootPath);
-				parsers.Add(GetProjectParser(projectPath));
+				try
+				{
+					parsers.Add(GetProjectParser(projectPath));
+				}
+				catch (MissingAssemblyInfoException ex)
+				{
+					report.AddSeriousIssue("Error: " + ex.Message);
+				}
 			}
 
 			return parsers;
@@ -83,6 +91,13 @@ namespace GenerateFilesSource
 			var outputTypeNode = _project.SelectSingleNode("//msbuild:Project/msbuild:PropertyGroup/msbuild:OutputType", _xmlnsManager);
 			if (outputTypeNode == null)
 				throw new DataException("VS project " + _projectPath + " does not specify an OutputType.");
+			var commonAssemblyNode =
+				_project.SelectSingleNode(
+					"//msbuild:Project/msbuild:ItemGroup/msbuild:Compile[contains(@Include, 'CommonAssemblyInfo.cs') or contains(@Include, 'AssemblyInfoForTests.cs')]/msbuild:Link", _xmlnsManager);
+			if (commonAssemblyNode == null)
+			{
+				throw new MissingAssemblyInfoException("VS project " + _projectPath + " does not link to CommonAssemblyInfo.cs or AssemblyInfoForTests.cs");
+			}
 
 			_outputType = outputTypeNode.InnerText;
 		}
@@ -242,6 +257,13 @@ namespace GenerateFilesSource
 		string IBuildSystemParser.GetSourcePath()
 		{
 			return _makeFilePath;
+		}
+	}
+
+	public class MissingAssemblyInfoException : DataException
+	{
+		public MissingAssemblyInfoException(string s) : base(s)
+		{
 		}
 	}
 }

@@ -1,60 +1,17 @@
 ﻿<?xml version="1.0"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment Id="ActionsFragment">
-	<Property Id='ActionsFragment' Value='1'/>
+		<Property Id='ActionsFragment' Value='1'/>
 		<CustomAction Id="CheckForResidueFiles" BinaryKey="WixHelperDll" DllEntry="CheckForFwResidueFiles" />
-	<CustomAction Id="SetLocalAppFolderPathSIL" Return="check" Property="LocalAppFolder" Value="[LocalAppDataFolder]\SIL International\Language Explorer" />
+		<CustomAction Id="SetLocalAppFolderPathSIL" Return="check" Property="LocalAppFolder" Value="[LocalAppDataFolder]\SIL International\Language Explorer" />
 		<CustomAction Id="InstallDoulosFont" Execute="deferred" Impersonate="no" BinaryKey="Doulos.exe" ExeCommand="/S" Return="ignore" />
 		<CustomAction Id="InstallCharisFont" Execute="deferred" Impersonate="no" BinaryKey="Charis.exe" ExeCommand="/S" Return="ignore" />
 		<CustomAction Id="InstallEzraFont" Execute="deferred" Impersonate="no" BinaryKey="Ezra.exe" ExeCommand="/S" Return="ignore" />
 		<CustomAction Id="InstallGalatiaFont" Execute="deferred" Impersonate="no" BinaryKey="Galatia.exe" ExeCommand="/S" Return="ignore" />
 		<CustomAction Id="GlobalWritingSystemStoreUpdater" Execute="deferred" Impersonate="no" ExeCommand="" BinaryKey="GlobalWSSUpdater" Return="ignore" />
-	<CustomAction Id="SetOldFwMigrationScriptFolder" Return="check" Property="OLDDATAMIGRATIONDIR" Value="[OLDER_FW_INSTALL_PATH]DataMigration\" />
-	<CustomAction Id="GetOlderFwMaxDbMig" BinaryKey="WixHelperDll" DllEntry="GetHighestDbMigrationVersion" />
-	<CustomAction Id="SetDelIcuDataFlag" Return="check" Property="SIL_ICU_DEL_DATA" Value="1" />
-		<CustomAction Id="SetFirewallDataFW" Return="check" Property="SetupFirewallFW" Value="[#FieldWorks.exe.1E553A508E4C83FC6FAB4C21DDCC3808]*FieldWorks 7*" />
-		<CustomAction Id="SetFirewallDataFwRemoteConnect" Return="check" Property="SetupFirewallFwRemoteConnect" Value="[#FwRemoteDatabaseConnectorService.exe]*FieldWorks 7 Remote Database Connector Service*" />
-		<CustomAction Id="SetFirewallData" Return="check" Property="SetupFirewall" Value="[SetupFirewallFW][SetupFirewallFwRemoteConnect]" />
-		<CustomAction Id="SetupFirewall" Return="ignore" Impersonate="no" Execute="deferred" Script="vbscript">
-			<![CDATA[
-Option Explicit
-dim ExemptedApplicationData
-ExemptedApplicationData = Session.Property("CustomActionData")
-Dim errornum
-errornum = 0
-Do While Len(ExemptedApplicationData) > 0
-	Dim FirstBreakIndex
-	Dim SecondBreakIndex
-	FirstBreakIndex = InStr(ExemptedApplicationData, "*")
-	SecondBreakIndex = InStr(FirstBreakIndex + 1, ExemptedApplicationData, "*")
-	if SecondBreakIndex = Len(SecondBreakIndex) then
-		SecondBreakIndex = SecondBreakIndex - 1
-	end if
-	if SecondBreakIndex = 0 then
-		SecondBreakIndex = 1 + Len(ExemptedApplicationData)
-	end if
-	Const NET_FW_PROFILE_DOMAIN = 0
-	Const NET_FW_PROFILE_STANDARD = 1
-	Const NET_FW_SCOPE_ALL = 0
-	Const NET_FW_IP_VERSION_ANY = 2
-	Dim fwMgr
-	Set fwMgr = CreateObject("HNetCfg.FwMgr")
-	Dim profile
-	Set profile = fwMgr.LocalPolicy.CurrentProfile
-	Dim app
-	Set app = CreateObject("HNetCfg.FwAuthorizedApplication")
-	app.ProcessImageFileName = Left(ExemptedApplicationData, FirstBreakIndex - 1)
-	app.Name = Mid(ExemptedApplicationData, FirstBreakIndex + 1, SecondBreakIndex - FirstBreakIndex - 1)
-	app.Scope = NET_FW_SCOPE_ALL
-	app.IpVersion = NET_FW_IP_VERSION_ANY
-	app.Enabled = FALSE
-	On Error Resume Next
-	profile.AuthorizedApplications.Add app
-	errornum = Err.Number
-	ExemptedApplicationData = Mid(ExemptedApplicationData, SecondBreakIndex + 1)
-Loop
-]]>
-		</CustomAction>
+		<CustomAction Id="SetOldFwMigrationScriptFolder" Return="check" Property="OLDDATAMIGRATIONDIR" Value="[OLDER_FW_INSTALL_PATH]DataMigration\" />
+		<CustomAction Id="GetOlderFwMaxDbMig" BinaryKey="WixHelperDll" DllEntry="GetHighestDbMigrationVersion" />
+		<CustomAction Id="SetDelIcuDataFlag" Return="check" Property="SIL_ICU_DEL_DATA" Value="1" />
 
 		<Binary Id="WixHelperDll" SourceFile="WIX Helper DLL\release\WIX Helper DLL.dll"/>
 
@@ -90,20 +47,16 @@ Loop
 			<SelfRegModules />
 			<RegisterComPlus />
 			<PublishComponents />
-	  <Custom Action="SetLocalAppFolderPathSIL" After="CostFinalize" />
-	  <Custom Action="SetOldFwMigrationScriptFolder" After="AppSearch"><![CDATA[NOT Installed AND NOT REMOVE AND OLDER_FW_INSTALL_PATH]]></Custom>
-	  <Custom Action="GetOlderFwMaxDbMig" After="SetOldFwMigrationScriptFolder" />
-	  <!-- Deleting the ICU data in the following action is connected with setting the InitIcu registry data, which happens for each main application feature -->
+			<Custom Action="SetLocalAppFolderPathSIL" After="CostFinalize" />
+			<Custom Action="SetOldFwMigrationScriptFolder" After="AppSearch"><![CDATA[NOT Installed AND NOT REMOVE AND OLDER_FW_INSTALL_PATH]]></Custom>
+			<Custom Action="GetOlderFwMaxDbMig" After="SetOldFwMigrationScriptFolder" />
+			<!-- Deleting the ICU data in the following action is connected with setting the InitIcu registry data, which happens for each main application feature -->
 			<Custom Action="SetDelIcuDataFlag" After="SetLocalAppFolderPathSIL"><![CDATA[NOT Installed]]></Custom>
 			<Custom Action="InstallDoulosFont" After="RegisterFonts"><![CDATA[NOT Installed]]></Custom>
 			<Custom Action="InstallCharisFont" After="InstallDoulosFont"><![CDATA[NOT Installed]]></Custom>
 			<Custom Action="InstallEzraFont" After="InstallCharisFont"><![CDATA[NOT Installed]]></Custom>
 			<Custom Action="InstallGalatiaFont" After="InstallEzraFont"><![CDATA[NOT Installed]]></Custom>
 			<Custom Action="GlobalWritingSystemStoreUpdater" After="InstallGalatiaFont"><![CDATA[NOT Installed]]></Custom>
-			<Custom Action="SetupFirewall" Before="StartServices"><![CDATA[(NOT REMOVE) AND SetupFirewall AND VersionNT >= 501]]></Custom>
-			<Custom Action="SetFirewallData" Before="InstallInitialize"><![CDATA[(SetupFirewallFwRemoteConnect OR SetupFirewallFW) AND VersionNT >= 501]]></Custom>
-			<Custom Action="SetFirewallDataFW" Before="SetFirewallData"><![CDATA[(NOT REMOVE) AND &FW_Core=3 AND VersionNT >= 501]]></Custom>
-			<Custom Action="SetFirewallDataFwRemoteConnect" Before="SetFirewallDataFW"><![CDATA[(NOT REMOVE) AND &FW_Core=3 AND VersionNT >= 501]]></Custom>
 		</InstallExecuteSequence>
 		<Property Id="SIL_UNISCRIBE_DLL_FOUND">
 			<DirectorySearch Id="SearchUsp10Dll" Path="[SystemFolder]" Depth="0">

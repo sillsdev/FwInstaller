@@ -17,6 +17,9 @@ namespace GenerateFilesSource
 {
 	public class Generator
 	{
+		private const string BuildsFolderFragment = "Builds"; // Folder to copy files for installer
+		private const string BuildConfig = "Release"; // No point in allowing a debug-based installer
+
 		// Controls set via command line:
 		private readonly bool _needReport;
 		private readonly bool _addOrphans;
@@ -83,9 +86,6 @@ namespace GenerateFilesSource
 		}
 		readonly Dictionary<string, CabinetMappingData> _featureCabinetMappings = new Dictionary<string, CabinetMappingData>();
 
-		// Variable used to control file sequencing in patches:
-		private int _newPatchGroup;
-
 		// Important file/folder paths:
 		private string _projRootPath;
 		private string _exeFolder;
@@ -140,6 +140,10 @@ namespace GenerateFilesSource
 		// List of file patterns of files known to be needed in the core files feature
 		// but which are not needed in either TE or FLEx:
 		private readonly List<string> _coreFileOrphans = new List<string>();
+		// List of file patterns of built files known to be needed by both TE and FLEx
+		// but where one or the other does not reference them properly, so they end up
+		// solely in the other:
+		private readonly List<string> _forceBuiltFilesIntoCore = new List<string>();
 		// List of file patterns of built files known to be needed by FLEx but which are not
 		// referenced in FLEx's dependencies:
 		private readonly List<string> _forceBuiltFilesIntoFlex = new List<string>();
@@ -214,9 +218,11 @@ namespace GenerateFilesSource
 		// Folders where installable files are to be collected from:
 		private string _outputFolderName;
 		private string _distFilesFolderName;
+		private string _distFilesFolderAbsolutePath;
 		private string _outputReleaseFolderRelativePath;
 		private string _outputReleaseFolderAbsolutePath;
 		private string _installerFolderAbsolutePath;
+		private string _installerFilesVersionedFolder;
 
 		// Set of collected DistFiles, junk filtered out:
 		private HashSet<InstallerFile> _distFilesFiltered;
@@ -306,7 +312,6 @@ namespace GenerateFilesSource
 			public string ReasonForRemoval;
 			public string ComponentGuid;
 			public int DiskId;
-			public int PatchGroup;
 			public string DirId;
 			public readonly List<string> Features;
 			public bool OnlyUsedInUnusedFeatures;
@@ -327,7 +332,6 @@ namespace GenerateFilesSource
 				ReasonForRemoval = "";
 				ComponentGuid = "unknown";
 				DiskId = 0;
-				PatchGroup = 0; // Initial release files will have implied (but omitted) PatchGroup 0, those new in first update will have Patchgroup 1, etc.
 				DirId = "";
 				Features = new List<string>();
 				OnlyUsedInUnusedFeatures = false;
@@ -472,14 +476,26 @@ namespace GenerateFilesSource
 
 			Initialize();
 			CopyExtraFiles();
-			CollectInstallableFiles();
-			BuildFeatureFileSets();
-			OutputResults();
-			DoSanityChecks();
+
+			Parallel.Invoke
+			(
+				delegate
+					{
+						CollectInstallableFiles();
+						BuildFeatureFileSets();
+						OutputResults();
+						DoSanityChecks();
+					},
+				delegate
+					{
+						DeleteExistingVersionedFolder();
+						CopyFilesToVersionedFolder();
+					}
+			);
 
 			if (_testIntegrity)
 			{
-				var tester = new InstallerIntegrityTester("Release", _overallReport);
+				var tester = new InstallerIntegrityTester(BuildConfig, _overallReport);
 				tester.Run();
 			}
 
@@ -506,6 +522,62 @@ namespace GenerateFilesSource
 		}
 
 		/// <summary>
+		/// Removes the copy of Output\Release files and DistFiles associated with the current
+		/// build version of FW.
+		/// </summary>
+		private void DeleteExistingVersionedFolder()
+		{
+			if (Directory.Exists(_installerFilesVersionedFolder))
+				Directory.Delete(_installerFilesVersionedFolder, true);
+		}
+
+		/// <summary>
+		/// Copies all DistFiles and Output\Release files to a subfolder named after the current
+		/// FW build version. This is so we can keep the files for building a patch later.
+		/// </summary>
+		private void CopyFilesToVersionedFolder()
+		{
+			DirectoryCopy(_outputReleaseFolderAbsolutePath, Path.Combine(Path.Combine(_installerFilesVersionedFolder, _outputFolderName), BuildConfig), true);
+			DirectoryCopy(_distFilesFolderAbsolutePath, Path.Combine(_installerFilesVersionedFolder, _distFilesFolderName), true);
+		}
+
+		private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
+		{
+			if (sourceDirName.Contains(".git"))
+				return;
+
+			var dir = new DirectoryInfo(sourceDirName);
+			var dirs = dir.GetDirectories();
+
+			if (!dir.Exists)
+			{
+				throw new DirectoryNotFoundException(
+					"Source directory does not exist or could not be found: "
+					+ sourceDirName);
+			}
+
+			if (!Directory.Exists(destDirName))
+				Directory.CreateDirectory(destDirName);
+
+			var files = dir.GetFiles();
+			foreach (var file in files)
+			{
+				var temppath = Path.Combine(destDirName, file.Name);
+				file.CopyTo(temppath, false);
+			}
+
+			if (copySubDirs)
+			{
+				foreach (var subdir in dirs)
+				{
+					var temppath = Path.Combine(destDirName, subdir.Name);
+					DirectoryCopy(subdir.FullName, temppath, copySubDirs);
+				}
+			}
+		}
+
+
+		/// <summary>
 		/// Initialize the class properly.
 		/// </summary>
 		private void Initialize()
@@ -523,14 +595,19 @@ namespace GenerateFilesSource
 				_projRootPath = Path.GetDirectoryName(_exeFolder);
 			else
 				_projRootPath = _exeFolder;
+
+			// This MUST happen before ConfigureFromXml():
 			_installerFolderAbsolutePath = Path.Combine(_projRootPath, "Installer");
 
 			// Read in the XML config file:
 			ConfigureFromXml();
 
 			// Define paths to folders we will be using:
-			_outputReleaseFolderRelativePath = Path.Combine(_outputFolderName, "Release");
+			_distFilesFolderAbsolutePath = Path.Combine(_projRootPath, _distFilesFolderName);
+			_outputReleaseFolderRelativePath = Path.Combine(_outputFolderName, BuildConfig);
 			_outputReleaseFolderAbsolutePath = Path.Combine(_projRootPath, _outputReleaseFolderRelativePath);
+			var fwVersion = Tools.GetFwBuildVersion();
+			_installerFilesVersionedFolder = Path.Combine(Path.Combine(_installerFolderAbsolutePath, BuildsFolderFragment), fwVersion);
 
 			// Set up File Library, either from XML file or from scratch if file doesn't exist:
 			InitFileLibrary();
@@ -575,6 +652,13 @@ namespace GenerateFilesSource
 			if (coreFileOrphans != null)
 				foreach (XmlElement file in coreFileOrphans)
 					_coreFileOrphans.Add(file.GetAttribute("PathPattern"));
+
+			// Define list of file patterns of built files known to be needed by both TE and FLEx but where one or the other does not reference them properly, so they end up solely in the other:
+			// Format: <File PathPattern="*partial path of any file that is needed by FLEx*"/>
+			var forceBuiltFilesIntoCore = configuration.SelectNodes("//FeatureAllocation/ForceBuiltFilesIntoCore/File");
+			if (forceBuiltFilesIntoCore != null)
+				foreach (XmlElement file in forceBuiltFilesIntoCore)
+					_forceBuiltFilesIntoCore.Add(file.GetAttribute("PathPattern"));
 
 			// Define list of path patterns of built files known to be needed by FLEx but which are not referenced in FLEx's dependencies:
 			// Format: <File PathPattern="*partial path of any file that is needed by FLEx*"/>
@@ -894,33 +978,9 @@ namespace GenerateFilesSource
 			else
 				_xmlFileLibrary.LoadXml("<FileLibrary>\r\n</FileLibrary>");
 
-			// Find the highest PatchGroup value so far so that we can know what PatchGroup
-			// to assign to any new files. (This has to be iterated with XPath 1.0.)
-			// If there were already files in the Library, but none had a PatchGroup
-			// value, then the current highest patch group is 0, and we want to assign a
-			// patch group of 1 to any new files discovered, so that they go at the end of
-			// the installer's file sequence.
 			var libraryFileNodes = _xmlFileLibrary.SelectNodes("//File");
 			if (libraryFileNodes != null && libraryFileNodes.Count > 0)
-			{
 				_overallReport.AddReportLine("File Library contains " + libraryFileNodes.Count + " items.");
-				int maxPatchGroup = 0;
-				foreach (XmlElement libraryFileNode in libraryFileNodes)
-				{
-					var group = libraryFileNode.GetAttribute("PatchGroup");
-					if (group.Length > 0)
-					{
-						int currentPatchGroup = Int32.Parse(group);
-						if (currentPatchGroup > maxPatchGroup)
-							maxPatchGroup = currentPatchGroup;
-					}
-				}
-				_overallReport.AddReportLine("Maximum PatchGroup in File Library = " + maxPatchGroup);
-				_newPatchGroup = 1 + maxPatchGroup;
-			}
-			else
-				_overallReport.AddReportLine("No Library file nodes contained a PatchGroup attribute.");
-			_overallReport.AddReportLine("New PatchGroup value = " + _newPatchGroup);
 
 			// Set up File Library Addenda:
 			_xmlPreviousFileLibraryAddenda = new XmlDocument();
@@ -947,6 +1007,8 @@ namespace GenerateFilesSource
 		/// </summary>
 		private void ParseWixFileSources()
 		{
+			var stringsToChop = new [] { @"..\", Path.Combine(BuildsFolderFragment, "$(var.Version)") + @"\" };
+
 			foreach (var wxs in _wixFileSources)
 			{
 				var xmlFilesPath = LocalFileFullPath(wxs);
@@ -965,8 +1027,11 @@ namespace GenerateFilesSource
 					foreach (XmlElement fileNode in customFileNodes)
 					{
 						var sourcePath = fileNode.GetAttribute("Source");
-						while (sourcePath.StartsWith(@"..\"))
-							sourcePath = sourcePath.Substring(3);
+						foreach (var chop in stringsToChop)
+						{
+							while (sourcePath.StartsWith(chop))
+								sourcePath = sourcePath.Substring(chop.Length);
+						}
 						_fileOmissions.Add(sourcePath, "already included in WIX source " + xmlFilesPath);
 					}
 				}
@@ -1218,7 +1283,7 @@ namespace GenerateFilesSource
 		/// </summary>
 		private void CollectDistFiles()
 		{
-			_distFilesFiltered = CollectAndFilterFiles(Path.Combine(_projRootPath, _distFilesFolderName));
+			_distFilesFiltered = CollectAndFilterFiles(_distFilesFolderAbsolutePath);
 		}
 
 		/// <summary>
@@ -1360,7 +1425,7 @@ namespace GenerateFilesSource
 					// see what assemblies get built by it.
 					try
 					{
-						var buildSystemParsers = VisualStudioProjectParser.GetProjectParsers(targetNode, targetsFile.XmlnsManager, _projRootPath);
+						var buildSystemParsers = VisualStudioProjectParser.GetProjectParsers(targetNode, targetsFile.XmlnsManager, _projRootPath, _report);
 						buildSystemParsers.AddRange(MakefileParser.GetMakefileParsers(targetNode, targetsFile.XmlnsManager, _projRootPath));
 
 						foreach (var buildSystemParser in buildSystemParsers)
@@ -1835,6 +1900,22 @@ namespace GenerateFilesSource
 			}
 			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Union(fwCoreFeatureFiles);
 
+			// Add to _fwCoreFeatureFiles any files specified in the _forceBuiltFilesIntoCore set:
+			// (Such files are needed by FLEx and TE but aren't referenced in the dependencies of one of them, so they would otherwise end up in the other.)
+			var forceBuiltFilesIntoCore = new HashSet<InstallerFile>();
+			foreach (var file in from file in _allFilesFiltered
+								 from coreFile in _forceBuiltFilesIntoCore
+								 where file.RelativeSourcePath.ToLowerInvariant().Contains(coreFile.ToLowerInvariant())
+								 select file)
+			{
+				file.Comment += " Specifically added to FW_Core via //FeatureAllocation/ForceBuiltFilesIntoCore in XML configuration. ";
+				forceBuiltFilesIntoCore.Add(file);
+			}
+			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Union(forceBuiltFilesIntoCore);
+			// Remove from the TE and FLex features the files we've just forced into FW_Core:
+			_flexFeatureFiles = _flexFeatureFiles.Except(forceBuiltFilesIntoCore);
+			_teFeatureFiles = _teFeatureFiles.Except(forceBuiltFilesIntoCore);
+
 			// Add to _flexFeatureFiles any files specified in the _forceBuiltFilesIntoFlex set:
 			// (Such files are needed by FLEx but aren't referenced in FLEx's dependencies.)
 			var forceBuiltFilesIntoFlex = new HashSet<InstallerFile>();
@@ -2074,11 +2155,13 @@ namespace GenerateFilesSource
 		/// Every identifier must begin with either a letter or an underscore.
 		/// Invalid characters are filtered out of the name (spaces, etc.)
 		/// The unique data is turned into an MD5 hash and appended to the name.
-		/// Space is limited to 72 chars, so if the name is more than 40 characters, it is truncated
-		/// before appending the 32-character MD5 hash.
+		/// While the maximum permitted Id length of a regular installer is 72 chars, The Pyro tool
+		/// for creating patches complains if an Id it generates from that (by prefixing with"Patch.")
+		/// is more than just 62 characters. So here, if the name is more than 24 characters, it is
+		/// truncated before appending the 32-character MD5 hash.
 		private static string MakeId(string name, string uniqueData)
 		{
-			const int maxLen = 72;
+			const int maxLen = 56; // When prefixed with "Patch.", must not exceed 62 characters.
 			const string validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.";
 			const string validStartChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_";
 
@@ -2209,6 +2292,7 @@ namespace GenerateFilesSource
 			string autoFiles = LocalFileFullPath(_autoFilesName);
 			_autoFiles = new StreamWriter(autoFiles);
 			_autoFiles.WriteLine("<?xml version=\"1.0\"?>");
+			_autoFiles.WriteLine("<?define Version = $(Fw.Version) ?>");
 			_autoFiles.WriteLine("<Wix xmlns=\"http://schemas.microsoft.com/wix/2006/wi\">");
 			_autoFiles.WriteLine("	<Fragment Id=\"AutoFilesFragment\">");
 			_autoFiles.WriteLine("		<Property  Id=\"AutoFilesFragment\" Value=\"1\"/>");
@@ -2289,22 +2373,20 @@ namespace GenerateFilesSource
 			_autoFiles.Write(indentation + "		<File Id=\"" + file.Id + "\"");
 
 			// Fill in file details:
-			_autoFiles.Write(" Name=\"" + file.Name + "\" ");
+			_autoFiles.Write(" Name=\"" + file.Name + "\"");
+			_autoFiles.Write(" Source=\"" + file.FullPath.Replace(_projRootPath, Path.Combine(BuildsFolderFragment, "$(var.Version)")) + "\"");
 
 			// Add in a ReadOnly attribute, configured according to what's in the _makeWritableList:
 			_autoFiles.Write(_makeWritableList.Where(relativeSource.Contains).Count() > 0
-							? "ReadOnly=\"no\""
-							: "ReadOnly=\"yes\"");
+							? " ReadOnly=\"no\""
+							: " ReadOnly=\"yes\"");
 
 			_autoFiles.Write(" Checksum=\"yes\" KeyPath=\"yes\"");
 			_autoFiles.Write(" DiskId=\"" + file.DiskId + "\"");
-			_autoFiles.Write(" Source=\"" + file.FullPath + "\"");
 
 			if (IsDotNetAssembly(file.FullPath))
 				_autoFiles.Write(" Assembly=\".net\" AssemblyApplication=\"" + file.Id + "\" AssemblyManifest=\"" + file.Id + "\"");
 
-			if (file.PatchGroup > 0)
-				_autoFiles.Write(" PatchGroup=\"" + file.PatchGroup + "\"");
 			_autoFiles.WriteLine(" />");
 
 			// If file has to be forcibly overwritten, then add a RemoveFile element:
@@ -2459,15 +2541,11 @@ namespace GenerateFilesSource
 			{
 				// File already exists in Library:
 				file.ComponentGuid = libSearch.GetAttribute("ComponentGuid");
-				var patchGroup = libSearch.GetAttribute("PatchGroup");
-				if (patchGroup.Length > 0)
-					file.PatchGroup = int.Parse(patchGroup);
 			}
 			else // No XML node found
 			{
 				// This is an unknown file:
 				file.ComponentGuid = Guid.NewGuid().ToString().ToUpperInvariant();
-				file.PatchGroup = _newPatchGroup;
 
 				// Add file to File Library Addenda:
 				var newFileElement = _xmlNewFileLibraryAddenda.CreateElement("File");

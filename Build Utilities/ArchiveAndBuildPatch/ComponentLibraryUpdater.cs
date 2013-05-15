@@ -13,42 +13,42 @@ namespace ArchiveAndBuildPatch
 		private const string RegLibraryName = "RegLibrary.xml";
 		private const string RegLibraryAddendaName = "RegLibraryAddenda.xml";
 
-		private string m_finalReport = "";
+		private string _finalReport = "";
 
-		private readonly string m_fileLibraryName;
-		private readonly string m_fileLibraryAddendaName;
-		private readonly string m_fileLibPath;
-		private readonly string m_fileLibAddPath;
-		private readonly string m_regLibPath;
-		private readonly string m_regLibAddPath;
-		private readonly string m_projRootPath;
+		private readonly string _fileLibraryName;
+		private readonly string _fileLibraryAddendaName;
+		private readonly string _fileLibPath;
+		private readonly string _fileLibAddPath;
+		private readonly string _regLibPath;
+		private readonly string _regLibAddPath;
+		private readonly string _projRootPath;
 
-		private XmlDocument m_xmlRegLibrary;
-		private XmlDocument m_xmlRegLibraryAddenda;
+		private XmlDocument _xmlRegLibrary;
+		private XmlDocument _xmlRegLibraryAddenda;
 
 		public ComponentLibraryUpdater()
 		{
-			m_fileLibraryName = "";
+			_fileLibraryName = "";
 			var fileLibraryNode = Program.Configuration.SelectSingleNode("//FileLibrary/Library") as XmlElement;
 			if (fileLibraryNode != null)
-				m_fileLibraryName = fileLibraryNode.GetAttribute("File");
+				_fileLibraryName = fileLibraryNode.GetAttribute("File");
 
-			m_fileLibraryAddendaName = "";
+			_fileLibraryAddendaName = "";
 			var fileLibraryAddNode = Program.Configuration.SelectSingleNode("//FileLibrary/Addenda") as XmlElement;
 			if (fileLibraryAddNode != null)
-				m_fileLibraryAddendaName = fileLibraryAddNode.GetAttribute("File");
+				_fileLibraryAddendaName = fileLibraryAddNode.GetAttribute("File");
 
-			m_fileLibPath = Path.Combine(Program.ExeFolder, m_fileLibraryName);
-			m_fileLibAddPath = Path.Combine(Program.ExeFolder, m_fileLibraryAddendaName);
+			_fileLibPath = Path.Combine(Program.ExeFolder, _fileLibraryName);
+			_fileLibAddPath = Path.Combine(Program.ExeFolder, _fileLibraryAddendaName);
 
-			m_regLibPath = Path.Combine(Program.ExeFolder, RegLibraryName);
-			m_regLibAddPath = Path.Combine(Program.ExeFolder, RegLibraryAddendaName);
+			_regLibPath = Path.Combine(Program.ExeFolder, RegLibraryName);
+			_regLibAddPath = Path.Combine(Program.ExeFolder, RegLibraryAddendaName);
 
 			// Get development project root path:
 			if (Program.ExeFolder.ToLowerInvariant().EndsWith("installer"))
-				m_projRootPath = Program.ExeFolder.Substring(0, Program.ExeFolder.LastIndexOf('\\'));
+				_projRootPath = Program.ExeFolder.Substring(0, Program.ExeFolder.LastIndexOf('\\'));
 			else
-				m_projRootPath = Program.ExeFolder;
+				_projRootPath = Program.ExeFolder;
 		}
 
 		public void UpdateLibraries()
@@ -56,7 +56,7 @@ namespace ArchiveAndBuildPatch
 			UpdateFileLibrary();
 			UpdateRegLibrary();
 
-			Console.WriteLine(m_finalReport);
+			Console.WriteLine(_finalReport);
 		}
 
 		/// <summary>
@@ -65,16 +65,16 @@ namespace ArchiveAndBuildPatch
 		private void UpdateFileLibrary()
 		{
 			// Test if we can write to the FileLibrary file:
-			if (File.Exists(m_fileLibPath))
-				if ((File.GetAttributes(m_fileLibPath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-					throw new Exception("The file " + m_fileLibPath + " is read-only. Did you forget to check it out of Perforce?");
+			if (File.Exists(_fileLibPath))
+				if ((File.GetAttributes(_fileLibPath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+					throw new Exception("The file " + _fileLibPath + " is read-only. Did you forget to check it out of Perforce?");
 
 			// Open the File Library, or create one if it doesn't yet exist:
 			var xmlFileLibrary = new XmlDocument();
-			if (File.Exists(m_fileLibPath))
+			if (File.Exists(_fileLibPath))
 			{
 				// There is a library file, so load it:
-				xmlFileLibrary.Load(m_fileLibPath);
+				xmlFileLibrary.Load(_fileLibPath);
 			}
 			else
 			{
@@ -87,16 +87,16 @@ namespace ArchiveAndBuildPatch
 
 			// Save modified File Library:
 			var settings = new XmlWriterSettings { Indent = true };
-			var xmlWriter = XmlWriter.Create(m_fileLibPath, settings);
+			var xmlWriter = XmlWriter.Create(_fileLibPath, settings);
 			if (xmlWriter == null)
-				throw new Exception("Could not create output file " + m_fileLibPath);
+				throw new Exception("Could not create output file " + _fileLibPath);
 
 			xmlFileLibrary.Save(xmlWriter);
 			xmlWriter.Close();
 
 			// Remove File Library Addenda file:
-			if (File.Exists(m_fileLibAddPath))
-				File.Delete(m_fileLibAddPath);
+			if (File.Exists(_fileLibAddPath))
+				File.Delete(_fileLibAddPath);
 		}
 
 		/// <summary>
@@ -157,7 +157,7 @@ namespace ArchiveAndBuildPatch
 		private string MakeFullPath(string relPath)
 		{
 			// Replace ${config} variable with absolute equivalent:
-			return Path.Combine(m_projRootPath, relPath.Replace("\\${config}\\", "\\" + Program.BuildType + "\\"));
+			return Path.Combine(_projRootPath, relPath.Replace("\\${config}\\", "\\" + Program.BuildType + "\\"));
 		}
 
 		/// <summary>
@@ -167,10 +167,10 @@ namespace ArchiveAndBuildPatch
 		private void MergeAddendaIntoLibrary(XmlDocument xmlFileLibrary)
 		{
 			// See if there is a FileLibraryAddenda.xml file:
-			if (!File.Exists(m_fileLibAddPath))
+			if (!File.Exists(_fileLibAddPath))
 			{
 				// There is no addenda file:
-				m_finalReport += m_fileLibraryAddendaName + " file not found: " + m_fileLibraryName + " not changed.\n";
+				_finalReport += _fileLibraryAddendaName + " file not found: " + _fileLibraryName + " not changed.\n";
 				return;
 			}
 
@@ -178,51 +178,27 @@ namespace ArchiveAndBuildPatch
 			var fileLibraryNode = xmlFileLibrary.SelectSingleNode("FileLibrary");
 			var firstFile = fileLibraryNode.SelectSingleNode("File[1]") as XmlElement;
 
-			// Get maximum PatchGroup attribute so that we can increment it for the addenda files.
-			var fileLibraryNodes = fileLibraryNode.SelectNodes("File");
-			if (fileLibraryNodes == null)
-				throw new Exception("Attempt to select File nodes in " + m_fileLibPath + " returned null.");
-
-			string newPatchGroup = "0";
-			if (fileLibraryNodes.Count > 0)
-			{
-				var maxPatchGroup = 0;
-				foreach (XmlElement node in fileLibraryNodes)
-				{
-					var patchGroup = node.GetAttribute("PatchGroup");
-					if (patchGroup.Length > 0)
-					{
-						int currentPatchGroup = int.Parse(patchGroup);
-						if (currentPatchGroup > maxPatchGroup)
-							maxPatchGroup = currentPatchGroup;
-					}
-				}
-				newPatchGroup = (1 + maxPatchGroup).ToString();
-			}
-
 			// Load addenda file:
 			var xmlFileLibraryAddenda = new XmlDocument();
-			xmlFileLibraryAddenda.Load(m_fileLibAddPath);
+			xmlFileLibraryAddenda.Load(_fileLibAddPath);
 
 			// Transfer any addenda into main library structure:
 			var fileLibraryAddendaNode = xmlFileLibraryAddenda.SelectSingleNode("FileLibrary");
 			var fileLibraryAddendaNodes = fileLibraryAddendaNode.SelectNodes("File");
 
 			if (fileLibraryAddendaNodes == null)
-				throw new Exception("Attempt to select File nodes in " + m_fileLibAddPath + " returned null.");
+				throw new Exception("Attempt to select File nodes in " + _fileLibAddPath + " returned null.");
 
 			foreach (XmlElement fileElement in fileLibraryAddendaNodes)
 			{
-				if (newPatchGroup != "0")
-					fileElement.SetAttribute("PatchGroup", newPatchGroup);
 				var elementClone = xmlFileLibrary.ImportNode(fileElement, true);
 				fileLibraryNode.InsertBefore(elementClone, firstFile);
 			}
 
 			if (fileLibraryAddendaNodes.Count == 0)
-				m_finalReport += m_fileLibraryAddendaName + " contains no data!" + Environment.NewLine;
+				_finalReport += _fileLibraryAddendaName + " contains no data!" + Environment.NewLine;
 			else
-				m_finalReport += m_fileLibraryAddendaName + ": transferred " + fileLibraryAddendaNodes.Count + " nodes." + Environment.NewLine;
+				_finalReport += _fileLibraryAddendaName + ": transferred " + fileLibraryAddendaNodes.Count + " nodes." + Environment.NewLine;
 		}
 
 		/// <summary>
@@ -236,35 +212,35 @@ namespace ArchiveAndBuildPatch
 			var ctOmittedNodes = 0;
 
 			// See if there is a RegLibraryAddenda.xml file:
-			if (!File.Exists(m_regLibAddPath))
+			if (!File.Exists(_regLibAddPath))
 			{
 				// There is no addenda file:
-				m_finalReport += RegLibraryAddendaName + " file not found: " + RegLibraryName + " not changed.\n";
+				_finalReport += RegLibraryAddendaName + " file not found: " + RegLibraryName + " not changed.\n";
 				return;
 			}
 
 			// There is an addenda file, so load it:
-			m_xmlRegLibraryAddenda = new XmlDocument();
-			m_xmlRegLibraryAddenda.Load(m_regLibAddPath);
+			_xmlRegLibraryAddenda = new XmlDocument();
+			_xmlRegLibraryAddenda.Load(_regLibAddPath);
 
 			// Open Reg Library:
-			m_xmlRegLibrary = new XmlDocument();
-			if (File.Exists(m_regLibPath))
+			_xmlRegLibrary = new XmlDocument();
+			if (File.Exists(_regLibPath))
 			{
 				// There is a library file, so load it:
-				m_xmlRegLibrary.Load(m_regLibPath);
+				_xmlRegLibrary.Load(_regLibPath);
 			}
 			else
 			{
 				// There is no library file, so initiate an XML structure for an empty library:
-				m_xmlRegLibrary.LoadXml("<RegLibrary>\r\n</RegLibrary>");
+				_xmlRegLibrary.LoadXml("<RegLibrary>\r\n</RegLibrary>");
 			}
 
-			var regLibraryNode = m_xmlRegLibrary.SelectSingleNode("RegLibrary");
+			var regLibraryNode = _xmlRegLibrary.SelectSingleNode("RegLibrary");
 			var firstReg = regLibraryNode.SelectSingleNode("Component[1]") as XmlElement;
 
 			// Transfer new addenda or edit existing data in main library structure:
-			var regLibraryAddendaNode = m_xmlRegLibraryAddenda.SelectSingleNode("RegLibrary");
+			var regLibraryAddendaNode = _xmlRegLibraryAddenda.SelectSingleNode("RegLibrary");
 			var regLibraryAddendaNodes = regLibraryAddendaNode.SelectNodes("Component");
 
 			foreach (XmlElement addendaElement in regLibraryAddendaNodes)
@@ -278,7 +254,7 @@ namespace ArchiveAndBuildPatch
 				{
 					if (matchNode.GetAttribute("ComponentGuid") != compGuid)
 					{
-						m_finalReport += "ERROR in " + RegLibraryAddendaName + ": Component with ID " + compId + " has a match in " + RegLibraryName + " with the wrong GUID.\n";
+						_finalReport += "ERROR in " + RegLibraryAddendaName + ": Component with ID " + compId + " has a match in " + RegLibraryName + " with the wrong GUID.\n";
 						OkToDeleteRegAddenda = false;
 						ctOmittedNodes++;
 						continue;
@@ -290,34 +266,34 @@ namespace ArchiveAndBuildPatch
 				else
 				{
 					// There isn't a match for this Addenda node, so simply add it to the library:
-					var elementClone = m_xmlRegLibrary.ImportNode(addendaElement, true);
+					var elementClone = _xmlRegLibrary.ImportNode(addendaElement, true);
 					regLibraryNode.InsertBefore(elementClone, firstReg);
 				}
 			}
 			var ctTranferredNodes = regLibraryAddendaNodes.Count - ctOmittedNodes;
 
 			if (regLibraryAddendaNodes.Count == 0)
-				m_finalReport += RegLibraryAddendaName + " contains no data!" + Environment.NewLine;
+				_finalReport += RegLibraryAddendaName + " contains no data!" + Environment.NewLine;
 			else
-				m_finalReport += RegLibraryAddendaName + ": transferred " + ctTranferredNodes + " nodes." + Environment.NewLine;
+				_finalReport += RegLibraryAddendaName + ": transferred " + ctTranferredNodes + " nodes." + Environment.NewLine;
 
 			// Save modified Reg Library:
 			if (ctTranferredNodes > 0)
 			{
-				if (File.Exists(m_regLibPath))
-					if ((File.GetAttributes(m_regLibPath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-						throw new Exception("The file " + m_regLibPath + " is read-only. Did you forget to check it out of Perforce?");
+				if (File.Exists(_regLibPath))
+					if ((File.GetAttributes(_regLibPath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+						throw new Exception("The file " + _regLibPath + " is read-only. Did you forget to check it out of Perforce?");
 
 				var settings = new XmlWriterSettings { Indent = true };
-				var xmlWriter = XmlWriter.Create(m_regLibPath, settings);
+				var xmlWriter = XmlWriter.Create(_regLibPath, settings);
 
-				m_xmlRegLibrary.Save(xmlWriter);
+				_xmlRegLibrary.Save(xmlWriter);
 				xmlWriter.Close();
 			}
 
 			// Remove Reg Library Addenda file:
 			if (OkToDeleteRegAddenda)
-				File.Delete(m_regLibAddPath);
+				File.Delete(_regLibAddPath);
 		}
 	}
 }
