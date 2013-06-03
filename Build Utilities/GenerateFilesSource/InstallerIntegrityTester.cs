@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -212,7 +213,7 @@ namespace GenerateFilesSource
 			var fi = new FileInfo(fullFilePath);
 
 			//var realSize = fi.Length;
-			var realDateTime = fi.LastWriteTime.ToShortDateString() + " " + fi.LastWriteTime.ToShortTimeString();
+			var realDateTime = fi.LastWriteTime.ToString(CultureInfo.InvariantCulture);
 			var realVersion = fileVersion;
 			var realMd5 = CalcFileMd5(fullFilePath);
 
@@ -242,8 +243,8 @@ namespace GenerateFilesSource
 			}
 
 			// The date of the file must not precede that in the library (we will allow up to 24 hours' precedence):
-			var libDateTime = DateTime.Parse(libDate);
-			var fileDateTime = DateTime.Parse(realDateTime);
+			var libDateTime = DateTime.Parse(libDate, CultureInfo.InvariantCulture);
+			var fileDateTime = DateTime.Parse(realDateTime, CultureInfo.InvariantCulture);
 			var timeBetweenVersions = fileDateTime.Subtract(libDateTime);
 			if (timeBetweenVersions.TotalHours < -24)
 				_report.AddSeriousIssue("ERROR #2: File " + filePath + " has a date/time stamp (" + realDateTime + ") that is earlier than a previously released version (" + libDate + "). Patching may fail.");

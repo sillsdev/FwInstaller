@@ -105,6 +105,7 @@
 			<!-- Sundry utilities -->
 			<File PathPattern="Output\Release\FixFwData.exe"/>
 			<File PathPattern="Output\Release\FixFwData.pdb"/>
+			<File PathPattern="Output\Release\PalasoUIWindowsForms.dll"/>
 			<!-- Sundry files not picked up by other means but related to those that are -->
 			<File PathPattern="Output\Release\FDOBrowser.XML"/>
 			<File PathPattern="Output\Release\Microsoft.Practices.ServiceLocation.xml"/>

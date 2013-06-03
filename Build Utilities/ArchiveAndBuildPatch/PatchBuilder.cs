@@ -16,7 +16,6 @@ namespace ArchiveAndBuildPatch
 
 		private readonly string _wixBinPath;
 
-		private readonly string _startAndEnd;
 		private readonly string _baseWixpdbPath;
 		private readonly string _updateWixpdbPath;
 		private readonly string _wixSourcePath;
@@ -25,7 +24,7 @@ namespace ArchiveAndBuildPatch
 		private readonly string _wixmspPath;
 		private readonly string _mspPath;
 
-		public PatchBuilder(string baseVersion, string updateVersion, string buildsFolder)
+		public PatchBuilder(string fwRootName, string patchRootName, string baseVersion, string updateVersion, string buildsFolder)
 		{
 			_baseVersion = baseVersion;
 			_updateVersion = updateVersion;
@@ -36,20 +35,26 @@ namespace ArchiveAndBuildPatch
 
 			_wixBinPath = Path.Combine(Environment.GetEnvironmentVariable("WIX") ?? "", "bin");
 
-			_startAndEnd = Program.Squash(baseVersion) + "to" + Program.Squash(_updateVersion);
-			var rootPatchName = "Patch" + _startAndEnd;
+			var startAndEnd = Program.Squash(baseVersion) + "to" + Program.Squash(_updateVersion);
+			var versionedPatchRootName = patchRootName + startAndEnd;
 
-			_baseWixpdbPath = Path.Combine(_baseVersionFolder, "SetupFW.wixpdb");
-			_updateWixpdbPath = Path.Combine(_updateVersionFolder, "SetupFW.wixpdb");
-			_wixSourcePath = Path.Combine(_updateVersionFolder, rootPatchName + ".wxs");
-			_wixObjectPath = Path.Combine(_updateVersionFolder, rootPatchName + ".wixobj");
-			_wixmstPath = Path.Combine(_updateVersionFolder, "Diff" + _startAndEnd + ".wixmst");
-			_wixmspPath = Path.Combine(_updateVersionFolder, rootPatchName + ".wixmsp");
-			_mspPath = Path.Combine(_updateVersionFolder, rootPatchName + ".msp");
+			_baseWixpdbPath = Path.Combine(_baseVersionFolder, fwRootName + ".wixpdb");
+			_updateWixpdbPath = Path.Combine(_updateVersionFolder, fwRootName + ".wixpdb");
+			_wixSourcePath = Path.Combine(_updateVersionFolder, versionedPatchRootName + ".wxs");
+			_wixObjectPath = Path.Combine(_updateVersionFolder, versionedPatchRootName + ".wixobj");
+			_wixmstPath = Path.Combine(_updateVersionFolder, "Diff" + versionedPatchRootName + ".wixmst");
+			_wixmspPath = Path.Combine(_updateVersionFolder, versionedPatchRootName + ".wixmsp");
+			_mspPath = Path.Combine(_updateVersionFolder, versionedPatchRootName + ".msp");
 		}
 
 		public string BuildPatch()
 		{
+			if (!File.Exists(_baseWixpdbPath) || !File.Exists(_updateWixpdbPath))
+			{
+				Console.WriteLine("Cannot build patch between " + _baseWixpdbPath + " and " + _updateWixpdbPath);
+				return null;
+			}
+
 			Torch();
 			CreateWixSource();
 			Candle();
@@ -62,7 +67,9 @@ namespace ArchiveAndBuildPatch
 		private static void RunAndOutputCmd(string cmd, string args)
 		{
 			Console.WriteLine("\"" + cmd + "\" " + args);
+
 			var output = Tools.RunDosCmd(cmd, args);
+
 			Console.WriteLine(output);
 		}
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -125,7 +126,7 @@ namespace ArchiveAndBuildPatch
 				var fi = new FileInfo(filePath);
 
 				file.SetAttribute("Size", fi.Length.ToString());
-				file.SetAttribute("Date", fi.LastWriteTime.ToShortDateString() + " " + fi.LastWriteTime.ToShortTimeString());
+				file.SetAttribute("Date", fi.LastWriteTime.ToString(CultureInfo.InvariantCulture));
 				file.SetAttribute("Version", fileVersion);
 				file.SetAttribute("MD5", CalcFileMd5(filePath));
 			}

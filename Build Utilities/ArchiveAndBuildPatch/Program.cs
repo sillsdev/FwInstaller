@@ -38,27 +38,40 @@ namespace ArchiveAndBuildPatch
 
 			// Archive the important files into the latest build version folder:
 			archiveFolderManager.ArchiveFile("AutoFiles.wxs");
+			archiveFolderManager.ArchiveFile("AutoFiles_No_TE.wxs");
 			archiveFolderManager.ArchiveFile("FileLibrary.xml");
 			archiveFolderManager.ArchiveFile("SetupFW.msi");
 			archiveFolderManager.ArchiveFile("SetupFW.wixpdb");
+			archiveFolderManager.ArchiveFile("SetupFW_SE.msi");
+			archiveFolderManager.ArchiveFile("SetupFW_SE.wixpdb");
 
-			// Define how many installer releases back we are going to make patches from:
-			var patchFromIndexes = new [] {1, 2, 3}; // patch from previous and previous but one installers.
-
-			Parallel.ForEach(patchFromIndexes, index =>
+			// Build patches from all previous versions to get to the latest version
+			Parallel.For(1, archiveFolderManager.NumArchives, index =>
 			{
 				// If there is a previous installer in the series, build a patch from the
 				// previous installer to this new one:
 				if (archiveFolderManager.GetNthFromEndVersion(index) != null)
 				{
-					var patchBuilder =
-						new PatchBuilder(archiveFolderManager.GetNthFromEndVersion(index), archiveFolderManager.LatestVersion,
-										 archiveFolderManager.RootArchiveFolder);
-					var patchPath = patchBuilder.BuildPatch();
-					var patchWrapper = new PatchWrapper(patchPath);
-					patchWrapper.Wrap();
+					Parallel.Invoke
+					(
+						() => BuildPatch(archiveFolderManager, index, "SetupFW", "FW_BTE_"),
+						() => BuildPatch(archiveFolderManager, index, "SetupFW_SE", "FW_SE_")
+					);
 				}
 			});
+		}
+
+		private static void BuildPatch(ArchiveFolderManager archiveFolderManager, int index, string installerName, string patchNamePrefix)
+		{
+			var patchBuilder = new PatchBuilder(installerName, patchNamePrefix, archiveFolderManager.GetNthFromEndVersion(index),
+												archiveFolderManager.LatestVersion, archiveFolderManager.RootArchiveFolder);
+			var patchPath = patchBuilder.BuildPatch();
+
+			if (patchPath == null)
+				return;
+
+			var patchWrapper = new PatchWrapper(patchPath);
+			patchWrapper.Wrap();
 		}
 
 		/// <summary>
