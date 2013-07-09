@@ -58,59 +58,6 @@
 							<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutUnicodeCharEditor' Type='integer' Value='1' KeyPath='yes' />
 						</Component>
 						<Directory Id="FlexMenu" Name="Language Explorer">
-							<Directory Id="FlexTrainingMenu" Name="Training">
-								<Component Id="ShortcutFlexManual" Guid="E6D70154-D056-4738-87BC-FEE1CE4FDAED">
-									<Shortcut Id="ShortcutFlexManual" Directory="FlexTrainingMenu" Name="View the Language Explorer Student Manual" Target="[#Flex_Student_Manual.doc.DD220953DBE5F5B04B8D5AE2CFDF31D6]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Training.95624E6C665BDC113CF8B72804B8ECB0" />
-									<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-									<CreateFolder />
-									<RemoveFolder Id='RF_ShortcutFlexManual' On='uninstall' />
-									<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutFlexManual' Type='integer' Value='1' KeyPath='yes' />
-								</Component>
-								<Component Id="ShortcutFlexInstructorGuide" Guid="B1609944-E075-4533-A8D0-5ADD8ED2BA81">
-									<Shortcut Id="ShortcutFlexInstructorGuide" Directory="FlexTrainingMenu" Name="View the Language Explorer Instructor Guide" Target="[#FLEx_Instructor_Guide.d.9E0F71EA4553B6FCDA39F08D79BA4BCE]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Training.95624E6C665BDC113CF8B72804B8ECB0" />
-									<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-									<CreateFolder />
-									<RemoveFolder Id='RF_ShortcutFlexInstructorGuide' On='uninstall' />
-									<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutFlexInstructorGuide' Type='integer' Value='1' KeyPath='yes' />
-								</Component>
-								<Component Id="ShortcutFlexExercises" Guid="926BC031-5009-4eb7-B6EE-6E0BA17068B1">
-									<Shortcut Id="ShortcutFlexExercises" Directory="FlexTrainingMenu" Name="View the Language Explorer Exercises" Target="[#FLEx_Exercises.doc.17DBA97566C9583593FB87EDA8B2A002]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Training.95624E6C665BDC113CF8B72804B8ECB0" />
-									<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-									<CreateFolder />
-									<RemoveFolder Id='RF_ShortcutFlexExercises' On='uninstall' />
-									<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutFlexExercises' Type='integer' Value='1' KeyPath='yes' />
-								</Component>
-							</Directory>
-							<Directory Id="FlexResourcesMenu" Name="Resources">
-								<Component Id="ShortcutFlexIntroLex" Guid="E19EB45D-CFF1-4714-8A12-1ED3C7916F46">
-									<Shortcut Id="ShortcutFlexIntroLex" Directory="FlexResourcesMenu" Name="View the Introduction to Lexicography" Target="[#Introduction_to_Lexicog.DB0E14DEAB4BBF110DB8BD477C5D7804]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Lexicography_Introduction.A1E461DD1F9170DE2A4B5D0F7527E654" />
-									<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-									<CreateFolder />
-									<RemoveFolder Id='RF_ShortcutFlexIntroLex' On='uninstall' />
-									<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutFlexIntroLex' Type='integer' Value='1' KeyPath='yes' />
-								</Component>
-								<Component Id="ShortcutFlexImportSFMHelp" Guid="8712694F-D7C8-40c2-9D88-3E3C4FE0C78A">
-									<Shortcut Id="ShortcutFlexImportSFMHelp" Directory="FlexResourcesMenu" Name="View Technical Notes on SFM Database Import" Target="[#Technical_Notes_on_SFM_.CC27EC5A114F085F4423FD9A9089EC38]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Training.95624E6C665BDC113CF8B72804B8ECB0" />
-									<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-									<CreateFolder />
-									<RemoveFolder Id='RF_ShortcutFlexImportSFMHelp' On='uninstall' />
-									<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutFlexImportSFMHelp' Type='integer' Value='1' KeyPath='yes' />
-								</Component>
-								<Component Id="ShortcutFlexImportHelp" Guid="C06A4A6B-11AD-4d99-82EF-700557699A6A">
-									<Shortcut Id="ShortcutFlexImportHelp" Directory="FlexResourcesMenu" Name="View Technical Notes on LinguaLinks Database Import" Target="[#Technical_Notes_on_Ling.B2B5B7B6C51681934776AB883EB54C1B]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Training.95624E6C665BDC113CF8B72804B8ECB0" />
-									<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-									<CreateFolder />
-									<RemoveFolder Id='RF_ShortcutFlexImportHelp' On='uninstall' />
-									<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutFlexImportHelp' Type='integer' Value='1' KeyPath='yes' />
-								</Component>
-								<Component Id="ShortcutFlexWriSys" Guid="FD1C8028-FFDC-421b-A071-189C3E19F7E7">
-									<Shortcut Id="ShortcutFlexWriSys" Directory="FlexResourcesMenu" Name="View Technical Notes on Writing Systems" Target="[#Technical_Notes_on_Writ.D777633DA47C95D241EB47C07EBC4E44]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Training.95624E6C665BDC113CF8B72804B8ECB0" />
-									<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-									<CreateFolder />
-									<RemoveFolder Id='RF_ShortcutFlexWriSys' On='uninstall' />
-									<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutFlexWriSys' Type='integer' Value='1' KeyPath='yes' />
-								</Component>
-							</Directory>
 							<Component Id="ShortcutFlex" Guid="6886BE1B-7CC3-4e14-AE30-1056C7DB8E5E">
 								<Shortcut Id="ShortcutFlex" Directory="FlexMenu" Name="Language Explorer" Target="[#Flex.exe.FC28A9E5DCD6E8D3C3C2F909AF45C74A]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
 								<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->

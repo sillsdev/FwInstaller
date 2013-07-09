@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -1692,7 +1693,7 @@ namespace GenerateFilesSource
 			var fi = new FileInfo(file);
 
 			instFile.Size = fi.Length;
-			instFile.DateTime = fi.LastWriteTime.ToShortDateString() + " " + fi.LastWriteTime.ToShortTimeString();
+			instFile.DateTime = fi.LastWriteTime.ToString(CultureInfo.InvariantCulture);
 			instFile.Version = fileVersion;
 			instFile.Md5 = CalcFileMd5(file);
 			return instFile;

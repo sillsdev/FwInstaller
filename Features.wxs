@@ -41,13 +41,6 @@
 				<ComponentRef Id="UnregFlex"/>
 				<ComponentRef Id="DeskShortcutFlex"/>
 				<ComponentRef Id="DelOldDeskShortcutFlex"/>
-				<ComponentRef Id="ShortcutFlexManual"/>
-				<ComponentRef Id="ShortcutFlexInstructorGuide"/>
-				<ComponentRef Id="ShortcutFlexExercises"/>
-				<ComponentRef Id="ShortcutFlexIntroLex"/>
-				<ComponentRef Id="ShortcutFlexImportSFMHelp"/>
-				<ComponentRef Id="ShortcutFlexImportHelp"/>
-				<ComponentRef Id="ShortcutFlexWriSys"/>
 				<ComponentRef Id="ShortcutFlex"/>
 				<ComponentRef Id="ShortcutFlexHelp"/>
 				<Feature Id="FlexMovies" Title="Demo Movies" Description="Language Explorer demonstration movies" Display="expand" Level="0" AllowAdvertise="no">

@@ -92,6 +92,11 @@ for (n = 0; n < ExternalCabMediaNodes.length; n++)
 	var CabSearchNode = xmlFW.selectSingleNode("//wix:FileSearch[@Name='" + OriginalFileName + "']");
 	CabSearchNode.setAttribute("Name", FileName);
 }
+// Remove "BTE" from the product name":
+var ProductNode = xmlFW.selectSingleNode("//wix:Product");
+var ProductName = ProductNode.getAttribute("Name");
+ProductName = ProductName.replace(" BTE", " SE");
+ProductNode.setAttribute("Name", ProductName);
 
 // 4) Remove the Translation Editor directory and all its subdirectories:
 var TeDirectory = xmlAutoFiles.selectNodes("//wix:Directory[@LongName='Translation Editor']");
