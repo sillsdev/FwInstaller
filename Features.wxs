@@ -38,6 +38,7 @@
 			<MergeRef Id="CC_DLL"/>
 			<MergeRef Id="ICUECHelp"/>
 			<Feature Id="FLEx" Title="Language Explorer (FLEx)" Description="FieldWorks Language Explorer" Display="expand" Level="3" AllowAdvertise="no">
+				<ComponentRef Id="ParatextProjectsFolder"/>
 				<ComponentRef Id="UnregFlex"/>
 				<ComponentRef Id="DeskShortcutFlex"/>
 				<ComponentRef Id="DelOldDeskShortcutFlex"/>

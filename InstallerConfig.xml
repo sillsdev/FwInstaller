@@ -46,7 +46,6 @@
 		</SampleDataOnly>
 		<TeOnly>
 			<!-- Define heuristics for TE files: -->
-			<File PathContains="Editorial Checks"/>
 			<File PathContains="Translation_Editor"/>
 			<File PathContains="Translation Editor"/>
 			<File PathContains="Scripture"/>
@@ -147,6 +146,9 @@
 			<!-- Define list of path patterns of built files known to be needed in FLEx but which are not part of the LexTextgExe FieldWorks.targets dependency chain: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is needed by FLEx*"/> -->
 			<File PathPattern="Output\Release\Discourse."/>
+			<File PathPattern="Output\Release\TeImportExport."/>
+			<File PathPattern="Output\Release\TeDialogs."/>
+			<File PathPattern="Output\Release\DiffView."/>
 		</ForceBuiltFilesIntoFlex>
 		<TeFileNameTestHeuristics>
 			<!-- Define list of regular expressions serving as coarse heuristics for guessing if a file that has been allocated -->
@@ -458,6 +460,7 @@
 		<File PathPattern="DistFiles\DropTEC.exe"/>
 		<File PathPattern="DistFiles\SFconv.exe"/>
 		<File PathPattern="DistFiles\TxtConv.exe"/>
+		<File PathPattern="DistFiles\Helps\OcmFrame\"/> <!-- directory only used in Linux -->
 		<File PathPattern="Output\Release\asserts.log"/>
 		<File PathPattern="Output\Release\DefaultIcon.ico"/>
 		<File PathPattern="Output\Release\basicTest.xml"/>
