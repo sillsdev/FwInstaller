@@ -14,6 +14,7 @@
 			<ComponentRef Id="EncConvertersAppDataMover40.exe"/>
 			<ComponentRef Id="Quivira.ttf"/>
 			<ComponentRef Id="FwPath"/>
+			<ComponentRef Id="ParatextProjectsFolder"/>
 			<ComponentRef Id="RegLangPack"/>
 			<ComponentRef Id="RegRootCodeDir"/>
 			<ComponentRef Id="RegProjectsDir"/>
@@ -38,7 +39,6 @@
 			<MergeRef Id="CC_DLL"/>
 			<MergeRef Id="ICUECHelp"/>
 			<Feature Id="FLEx" Title="Language Explorer (FLEx)" Description="FieldWorks Language Explorer" Display="expand" Level="3" AllowAdvertise="no">
-				<ComponentRef Id="ParatextProjectsFolder"/>
 				<ComponentRef Id="UnregFlex"/>
 				<ComponentRef Id="DeskShortcutFlex"/>
 				<ComponentRef Id="DelOldDeskShortcutFlex"/>
@@ -49,7 +49,6 @@
 				</Feature>
 			</Feature>
 			<Feature Id="TE" Title="Translation Editor" Description="FieldWorks Translation Editor" Display="expand" Level="3" AllowAdvertise="no">
-				<ComponentRef Id="ParatextProjectsFolder"/>
 				<ComponentRef Id="RegScrChecks"/>
 				<ComponentRef Id="DeskShortcutTE"/>
 				<ComponentRef Id="DelOldDeskShortcutTE"/>
