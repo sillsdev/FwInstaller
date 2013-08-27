@@ -8,6 +8,7 @@
 		<CustomAction Id="InstallCharisFont" Execute="deferred" Impersonate="no" BinaryKey="Charis.exe" ExeCommand="/S" Return="ignore" />
 		<CustomAction Id="InstallEzraFont" Execute="deferred" Impersonate="no" BinaryKey="Ezra.exe" ExeCommand="/S" Return="ignore" />
 		<CustomAction Id="InstallGalatiaFont" Execute="deferred" Impersonate="no" BinaryKey="Galatia.exe" ExeCommand="/S" Return="ignore" />
+		<CustomAction Id="InstallAndikaFont" Execute="deferred" Impersonate="no" BinaryKey="Andika.exe" ExeCommand="/S" Return="ignore" />
 		<CustomAction Id="GlobalWritingSystemStoreUpdater" Execute="deferred" Impersonate="no" ExeCommand="" BinaryKey="GlobalWSSUpdater" Return="ignore" />
 		<CustomAction Id="SetOldFwMigrationScriptFolder" Return="check" Property="OLDDATAMIGRATIONDIR" Value="[OLDER_FW_INSTALL_PATH]DataMigration\" />
 		<CustomAction Id="GetOlderFwMaxDbMig" BinaryKey="WixHelperDll" DllEntry="GetHighestDbMigrationVersion" />
@@ -56,7 +57,8 @@
 			<Custom Action="InstallCharisFont" After="InstallDoulosFont"><![CDATA[NOT Installed]]></Custom>
 			<Custom Action="InstallEzraFont" After="InstallCharisFont"><![CDATA[NOT Installed]]></Custom>
 			<Custom Action="InstallGalatiaFont" After="InstallEzraFont"><![CDATA[NOT Installed]]></Custom>
-			<Custom Action="GlobalWritingSystemStoreUpdater" After="InstallGalatiaFont"><![CDATA[NOT Installed]]></Custom>
+			<Custom Action="InstallAndikaFont" After="InstallGalatiaFont"><![CDATA[NOT Installed]]></Custom>
+			<Custom Action="GlobalWritingSystemStoreUpdater" After="InstallAndikaFont"><![CDATA[NOT Installed]]></Custom>
 		</InstallExecuteSequence>
 		<Property Id="SIL_UNISCRIBE_DLL_FOUND">
 			<DirectorySearch Id="SearchUsp10Dll" Path="[SystemFolder]" Depth="0">
@@ -67,10 +69,11 @@
 			<RegistrySearch Id="SearchScrChecksReg" Root="HKLM" Key="SOFTWARE\ScrChecks\1.0\Settings_Directory" Type="raw" />
 		</Property>
 
-		<Binary Id="Doulos.exe" SourceFile="Binary\DoulosSIL-4.110.exe" />
-		<Binary Id="Charis.exe" SourceFile="Binary\CharisSIL-4.110.exe" />
+		<Binary Id="Doulos.exe" SourceFile="Binary\DoulosSIL-4.112.exe" />
+		<Binary Id="Charis.exe" SourceFile="Binary\CharisSIL-4.114.exe" />
 		<Binary Id="Ezra.exe" SourceFile="Binary\EzraSIL251.exe" />
 		<Binary Id="Galatia.exe" SourceFile="Binary\GalatiaSIL-2.1.exe" />
+		<Binary Id="Andika.exe" SourceFile="Binary\Andika-1.004.exe" />
 		<Binary Id="GlobalWSSUpdater" SourceFile="GlobalWritingSystemStoreUpdater.exe" />
 	</Fragment>
 </Wix>

@@ -125,6 +125,7 @@
 			<ProgressText Action="InstallCharisFont"><![CDATA[Installing Charis font]]></ProgressText>
 			<ProgressText Action="InstallEzraFont"><![CDATA[Installing Ezra SIL font]]></ProgressText>
 			<ProgressText Action="InstallGalatiaFont"><![CDATA[Installing Galatia SIL font]]></ProgressText>
+			<ProgressText Action="InstallAndikaFont"><![CDATA[Installing Andika SIL font]]></ProgressText>
 			<ProgressText Action="DeleteICUFolders"><![CDATA[Deleting obsolete ICU files]]></ProgressText>
 			<ProgressText Action="SetupFirewall"><![CDATA[Registering applications with Windows Firewall]]></ProgressText>
 	  <ProgressText Action="GetOlderFwMaxDbMig"><![CDATA[Determining which SQL migration scripts are present]]></ProgressText>
