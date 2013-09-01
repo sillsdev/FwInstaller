@@ -1,0 +1,9 @@
+Code-Review+2: Eberhard Beilharz <eb1@sil.org>
+Verified+1: Ken Zook <ken_zook@sil.org>
+Verified-Linux+1: Ken Zook <ken_zook@sil.org>
+Code-Review+2: Alistair Imrie <alistair_imrie@sil.org>
+Submitted-by: Ken Zook <ken_zook@sil.org>
+Submitted-at: Sun, 01 Sep 2013 02:54:19 +0000
+Reviewed-on: https://gerrit.lsdev.sil.org/1357
+Project: FwInstaller
+Branch: refs/heads/develop
