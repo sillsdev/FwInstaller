@@ -48,8 +48,6 @@
 				</Feature>
 			</Feature>
 			<Feature Id="TE" Title="Translation Editor" Description="FieldWorks Translation Editor" Display="expand" Level="3" AllowAdvertise="no">
-				<ComponentRef Id="ParatextProjectsFolder"/>
-				<ComponentRef Id="RegScrChecks"/>
 				<ComponentRef Id="DeskShortcutTE"/>
 				<ComponentRef Id="DelOldDeskShortcutTE"/>
 				<ComponentRef Id="ShortcutTE"/>

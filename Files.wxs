@@ -96,12 +96,6 @@
 					<!-- Place holder for some EC merge modules -->
 				</Directory>
 			</Directory>
-			<Directory Id="MyParatextProjects" Name="MyParatextProjects">
-				<Component Id="ParatextProjectsFolder" Permanent="yes" Guid="9E72BB0B-A61C-4b87-8DA5-C535F81EA386">
-					<Condition><![CDATA[NOT SCR_CHECKS_REG_FOUND]]></Condition>
-					<CreateFolder/>
-				</Component>
-			</Directory>
 		</Directory>
 
 		<!-- The following section launches the installed file EncConvertersAppDataMover40.exe but hides its DOS window -->
@@ -120,7 +114,5 @@ WSO.run "%comspec% /c """ + EncConvertersAppDataMoverPath + """", WindowStyleSte
 			<Custom Action="SetAppDataMoverData" Before="InstallInitialize"><![CDATA[VersionNT >= 501]]></Custom>
 			<Custom Action="LaunchAppDataMover" After="PublishComponents"><![CDATA[NOT Installed]]></Custom>
 		</InstallExecuteSequence>
-
-		<Property Id="MyParatextProjects"><![CDATA[C:\My Paratext Projects]]></Property>
 	</Fragment>
 </Wix>

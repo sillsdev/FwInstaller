@@ -21,10 +21,6 @@
 			<Component Id="RegisterICUFolder" Guid="FD94075E-CB26-4C7A-ADF4-B920FC1B25D1">
 				<RegistryValue Name="ICU50DataDir" Root="HKLM"  Key="Software\SIL" Type="string" KeyPath="yes" Value="[AppDataSilIcu]" />
 			</Component>
-			<Component Id="RegScrChecks" Permanent="yes" Guid="2DB8302C-6C11-4270-BA26-D457B03B04E1">
-				<Condition><![CDATA[NOT SCR_CHECKS_REG_FOUND]]></Condition>
-				<RegistryValue Id="RegScrChecks" Root="HKLM" Key="SOFTWARE\ScrChecks\1.0\Settings_Directory" Type="string" Value="C:\My Paratext Projects" />
-			</Component>
 			<!-- Make the .NET Component Category registry data an orphan so it never gets removed: -->
 			<Component Id="RegDotNetCategory" Guid="">
 				<RegistryValue Root="HKCR" Key="Component Categories\{62C8FE65-4EBB-45e7-B440-6E39B2CDBF29}" Name="0" Value=".NET Category" Type="string"/>

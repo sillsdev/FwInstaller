@@ -65,9 +65,6 @@
 				<FileSearch Id="SearchUsp10Dll" Name="usp10.dll" MinVersion="1.626.6001.18000" />
 			</DirectorySearch>
 		</Property>
-		<Property Id="SCR_CHECKS_REG_FOUND">
-			<RegistrySearch Id="SearchScrChecksReg" Root="HKLM" Key="SOFTWARE\ScrChecks\1.0\Settings_Directory" Type="raw" />
-		</Property>
 
 		<Binary Id="Doulos.exe" SourceFile="Binary\DoulosSIL-4.112.exe" />
 		<Binary Id="Charis.exe" SourceFile="Binary\CharisSIL-4.114.exe" />
