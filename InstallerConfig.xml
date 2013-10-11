@@ -48,6 +48,7 @@
 			<!-- Define heuristics for TE files: -->
 			<File PathContains="Translation_Editor"/>
 			<File PathContains="Translation Editor"/>
+			<Except PathEnds=".vrs"/>  <!-- *.vrs files needed in SE version LT-14754 -->
 			<File PathContains="Scripture"/>
 			<File PathContains="Bibl"/>
 		</TeOnly>
@@ -55,17 +56,12 @@
 			<!-- Define heuristics for (non-TE) localization files, where the {0} parameter is replaced by the language code: -->
 			<File PathContains="\{0}\"/>
 			<File PathEnds="\strings-{0}.xml"/>
-			<File PathContains="\{0}\TeImportExport"/>
-			<File PathContains="\{0}\TeDialogs"/>
-			<File PathContains="\{0}\DiffView"/>
 		</Localization>
 		<TeLocalization>
 			<!-- Define heuristics for TE localization files, where the {0} parameter is replaced by the language code: -->
 			<File PathContains="\{0}\Te"/>
 			<File PathContains="\{0}\Scr"/>
 			<File PathEnds="\BiblicalTerms-{0}.xml"/>
-			<Except PathContains="\{0}\TeImportExport"/>
-			<Except PathContains="\{0}\TeDialogs"/>
 		</TeLocalization>
 		<!-- The following heuristics apply over all files, not just DistFiles. -->
 		<CoreFileOrphans>
@@ -133,6 +129,7 @@
 			<File PathPattern="Output\Release\Interop.LibronixDLSUtility.dll"/>
 			<File PathPattern="Output\Release\Interop.Logos4Lib.dll"/>
 			<File PathPattern="Output\Release\Interop.Utility.dll"/>
+			<File PathPattern="Output\Release\L10NSharp.dll"/>
 		</CoreFileOrphans>
 		<ForceBuiltFilesIntoCore>
 			<!-- Define list of file patterns of built files known to be needed by both TE and FLEx but where one or the other does not reference them properly, so they end up solely in the other: -->
@@ -170,6 +167,25 @@
 			<Except Path="Output\Release\SharedScrUtils.pdb"/>
 			<Except Path="Output\Release\SharedScrControls.dll"/>
 			<Except Path="Output\Release\SharedScrControls.pdb"/>
+			<Except Path="Output\Release\ScrControls.dll"/>
+			<Except Path="Output\Release\ScrControls.pdb"/>
+			<Except Path="Output\Release\ScriptureUtils.dll"/>
+			<Except Path="Output\Release\ScriptureUtils.pdb"/>
+			<Except Path="Output\Release\TeScrInitializer.dll"/>
+			<Except Path="Output\Release\TeScrInitializer.pdb"/>
+			<Except Path="Output\Release\TeResources.dll"/>
+			<Except Path="Output\Release\TeResources.pdb"/>
+			<Except Path="Output\Release\TeStylesXml.dll"/>
+			<Except Path="Output\Release\TeStylesXml.pdb"/>
+			<Except Path="DistFiles\ScrBookRef.dtd"/>
+			<Except Path="DistFiles\ScrBookRef.xml"/>
+			<Except Path="DistFiles\TeStyles.xml"/>
+			<Except Path="DistFiles\Editorial Checks\ScrChecks.dll"/>
+			<Except Path="DistFiles\Editorial Checks\ScrChecks.pdb"/>
+			<Except Path="Output\Release\TeDialogs.dll"/>
+			<Except Path="Output\Release\TeDialogs.pdb"/>
+			<Except Path="Output\Release\TeImportExport.pdb"/>
+			<Except Path="Output\Release\TeImportExport.dll"/>
 		</TeFileNameTestHeuristics>
 	</FeatureAllocation>
 	<ExtraFiles>
