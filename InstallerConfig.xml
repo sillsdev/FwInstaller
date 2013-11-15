@@ -94,6 +94,9 @@
 			<!-- Chorus Stuff -->
 			<File PathPattern="Output\Release\Vulcan.Uczniowie.HelpProvider.dll"/>
 			<File PathPattern="Output\Release\Autofac.dll"/>
+			<File PathPattern="Output\Release\Enchant.Net.dll"/>
+			<File PathPattern="Output\Release\Enchant.Net.dll.config"/>
+			<File PathPattern="Output\Release\Ionic.Zip.dll"/>
 			<!-- These assemblies are possibly loaded using reflection, copied from DistFiles by target CopyDlls in mkall.targets -->
 			<File PathPattern="Output\Release\Interop.ResourceDriver.dll"/>
 			<File PathPattern="Output\Release\LinqBridge.dll"/>
