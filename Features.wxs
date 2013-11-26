@@ -9,6 +9,7 @@
 			<ComponentRef Id="vs_piaredist.exe"/>
 			<ComponentRef Id="MigrateSqlDbs.exe"/>
 			<ComponentRef Id="FLExBridgeInstaller.msi"/>
+			<ComponentRef Id="ChorusHubInstaller.msi"/>
 			<ComponentRef Id="FwRemoteDatabaseConnectorService.exe"/>
 			<ComponentRef Id="FieldWorks.exe"/>
 			<ComponentRef Id="EncConvertersAppDataMover40.exe"/>

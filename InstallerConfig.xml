@@ -195,6 +195,7 @@
 		<!-- Define files needed in the installer that are not built locally or part of source control: -->
 		<!-- Format: <File URL="*URL of an extra file*" Destination="*Local relative path to download file to*"/> -->
 		<File URL="http://downloads.palaso.org/FlexBridge/Beta/FLExBridgeInstaller.msi" Destination="DistFiles\Installers\FLExBridgeInstaller.msi"/>
+		<File URL="http://build.palaso.org/guestAuth/repository/download/bt315/.lastSuccessful/ChorusHubInstaller.msi" Destination="DistFiles\Installers\ChorusHubInstaller.msi"/>
 	</ExtraFiles>
 	<FileConditions>
 		<!-- Define conditions to apply to specified components: -->
@@ -547,6 +548,7 @@
 		<IgnoreNonVersionedDistFiles PathPattern="Parts\Generated.fwlayout"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Parts\GeneratedParts.xml"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Installers\FLExBridgeInstaller.msi"/>-->
+		<IgnoreNonVersionedDistFiles PathPattern="Installers\ChorusHubInstaller.msi"/>-->
 		<IgnoreNonVersionedDistFiles PathPattern="Icu50\UnicodeDataOverrides.txt"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Icu50\data\UnicodeDataOverrides.txt"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Icu50\data\nfc.txt"/>
