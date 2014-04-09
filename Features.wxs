@@ -8,6 +8,7 @@
 			<ComponentRef Id="CopyLicenseTechReadme"/>
 			<ComponentRef Id="vs_piaredist.exe"/>
 			<ComponentRef Id="MigrateSqlDbs.exe"/>
+			<ComponentRef Id="UnicodeCharEditor.exe"/>
 			<ComponentRef Id="FLExBridgeInstaller.msi"/>
 			<ComponentRef Id="ChorusHubInstaller.msi"/>
 			<ComponentRef Id="FwRemoteDatabaseConnectorService.exe"/>

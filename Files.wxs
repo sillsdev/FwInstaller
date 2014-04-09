@@ -13,6 +13,10 @@
 						<Component Id="MigrateSqlDbs.exe" Guid="D25017CC-66F5-4BEE-B7BA-39BE8AE3698F">
 							<File Id="MigrateSqlDbs.exe" Name="MigrateSqlDbs.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\MigrateSqlDbs.exe" />
 						</Component>
+						<!-- The following component GUID is required by the master installer to locate and launch the custom chars utility: -->
+						<Component Id="UnicodeCharEditor.exe" Guid="7160FF24-F54B-4170-9C7A-CD58B2A64DD9">
+							<File Id="UnicodeCharEditor.exe" Name="UnicodeCharEditor.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\UnicodeCharEditor.exe" />
+						</Component>
 						<!-- The following file has to be installed as a service and have a firewall hole: -->
 						<Component Id="FwRemoteDatabaseConnectorService.exe" Guid="A3EB2B09-8600-4017-8B04-9DA7B5F2142A">
 							<File Id="FwRemoteDatabaseConnectorService.exe" Name="FwRemoteDatabaseConnectorService.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\FwRemoteDatabaseConnectorService.exe">
