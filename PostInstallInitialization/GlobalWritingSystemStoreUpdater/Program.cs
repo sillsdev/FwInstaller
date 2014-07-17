@@ -9,7 +9,7 @@ namespace GlobalWritingSystemStoreUpdater
 {
 	class Program
 	{
-		private const int FwVersion = 7;
+		private const int FwVersion = 8;	// Registry key to get RootCodeDir
 
 		static void Main()
 		{
@@ -17,10 +17,6 @@ namespace GlobalWritingSystemStoreUpdater
 			{
 				DateTime now = DateTime.UtcNow;
 				UpdateGlobalWritingSystemStore(now);
-				UpdateProjectWritingSystemStore("Sena 2", now);
-				UpdateProjectWritingSystemStore("Sena 3", now);
-				UpdateProjectWritingSystemStore("Lela-Teli 2", now);
-				UpdateProjectWritingSystemStore("Lela-Teli 3", now);
 			}
 			catch (Exception e)
 			{
@@ -31,6 +27,7 @@ namespace GlobalWritingSystemStoreUpdater
 			}
 		}
 
+		// Copy ldml files from Templates to global WritingSystemStore if not already there and make them useable.
 		private static void UpdateGlobalWritingSystemStore(DateTime dateTime)
 		{
 			string wsStorePath = GlobalWritingSystemStoreDirectory;
@@ -41,9 +38,12 @@ namespace GlobalWritingSystemStoreUpdater
 				try
 				{
 					string dest = Path.Combine(wsStorePath, Path.GetFileName(src));
-					File.Copy(src, dest, true);
-					File.SetAttributes(dest, FileAttributes.Normal);
-					UpdateWritingSystem(dest, dateTime);
+					if (!File.Exists(dest))
+					{
+						File.Copy(src, dest, true);
+						File.SetAttributes(dest, FileAttributes.Normal);
+						UpdateWritingSystem(dest, dateTime);
+					}
 				}
 				catch (Exception e)
 				{
@@ -105,7 +105,7 @@ namespace GlobalWritingSystemStoreUpdater
 		private static string GetDirectory(string pathValue)
 		{
 			string rootDir = null;
-			RegistryKey fwKey = Registry.LocalMachine.OpenSubKey(string.Format("Software\\SIL\\FieldWorks\\{0}.0", FwVersion));
+			RegistryKey fwKey = Registry.LocalMachine.OpenSubKey(string.Format("Software\\SIL\\FieldWorks\\{0}", FwVersion));
 			if (fwKey != null)
 			{
 				rootDir = (string)fwKey.GetValue(pathValue);
