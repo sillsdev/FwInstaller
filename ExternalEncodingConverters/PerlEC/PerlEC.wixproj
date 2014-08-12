@@ -24,7 +24,7 @@
 	</PropertyGroup>
 	<Import Project="$(WixTargetsPath)" />
 	<ItemGroup>
-		<Compile Include="PerlEC.mm.wxs" />
+		<Compile Include="PerlEcMM.mm.wxs" />
 	</ItemGroup>
 	<PropertyGroup>
 		<PreBuildEvent />

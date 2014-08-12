@@ -26,7 +26,7 @@
 	</PropertyGroup>
 	<Import Project="$(WixTargetsPath)" />
 	<ItemGroup>
-		<Compile Include="PythonEC.mm.wxs" />
+		<Compile Include="PythonEcMM.mm.wxs" />
 	</ItemGroup>
 	<PropertyGroup>
 		<PreBuildEvent />

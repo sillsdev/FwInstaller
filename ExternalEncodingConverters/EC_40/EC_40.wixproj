@@ -25,7 +25,7 @@
 		<SuppressSpecificWarnings>1072</SuppressSpecificWarnings>
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Include="EC_40.mm.wxs" />
+		<Compile Include="EC_40_MM.mm.wxs" />
 	</ItemGroup>
 	<ItemGroup>
 		<WixExtension Include="WixUtilExtension">
