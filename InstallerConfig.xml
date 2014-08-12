@@ -133,6 +133,13 @@
 			<File PathPattern="Output\Release\Interop.Logos4Lib.dll"/>
 			<File PathPattern="Output\Release\Interop.Utility.dll"/>
 			<File PathPattern="Output\Release\L10NSharp.dll"/>
+			<!-- These two files are needed in TE resource viewer right-pane to avoid a crash when clicked, and also in EC tool for creating/testing converters -->
+			<File PathPattern="Output\Release\geckofx-core-14.dll"/>
+			<File PathPattern="Output\Release\Geckofx-Winforms-14.dll"/>
+			<!-- These files are specified in mkall.targets for registration-free COM and are needed for Windows, but not Linux -->
+			<File PathPattern="Output\Release\FwKernel.manifest"/>
+			<File PathPattern="Output\Release\Graphite.manifest"/>
+			<File PathPattern="Output\Release\Views.manifest"/>
 		</CoreFileOrphans>
 		<ForceBuiltFilesIntoCore>
 			<!-- Define list of file patterns of built files known to be needed by both TE and FLEx but where one or the other does not reference them properly, so they end up solely in the other: -->
