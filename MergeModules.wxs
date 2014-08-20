@@ -3,15 +3,15 @@
 	<Fragment Id="MergeModulesFragment">
 		<Property Id='MergeModulesFragment' Value='1'/>
 		<DirectoryRef Id="SIL">
+			<Merge Id="TECkit_DLLs" Language="1033" SourceFile="externalencodingconverters\TECkitDLLsMM.msm" DiskId="1"/>
+			<Merge Id="ICUECHelp" Language="1033" SourceFile="externalencodingconverters\ICUECHelp.msm" DiskId="1"/>
+			<Merge Id="Set_Path_EC" Language="1033" SourceFile="externalencodingconverters\SetPath.msm" DiskId="1"/>
+		</DirectoryRef>
+		<DirectoryRef Id="INSTALLDIR">
 			<Merge Id="PerlEC" Language="1033" SourceFile="externalencodingconverters\PerlEcMM.msm" DiskId="1"/>
 			<Merge Id="PythonEC" Language="1033" SourceFile="externalencodingconverters\PythonEcMM.msm" DiskId="1"/>
-			<Merge Id="EcFolderACLs" Language="1033" SourceFile="externalencodingconverters\EcFolderACLs.msm" DiskId="1"/>
-			<Merge Id="Set_Path_EC" Language="1033" SourceFile="externalencodingconverters\SetPath.msm" DiskId="1"/>
-			<Merge Id="Managed_Install_Fix" Language="1033" SourceFile="externalencodingconverters\Managed Install Fix.msm" DiskId="1"/>
-			<Merge Id="TECkit_DLLs" Language="1033" SourceFile="externalencodingconverters\TECkitDLLsMM.msm" DiskId="1"/>
 			<Merge Id="CC_DLL" Language="1033" SourceFile="externalencodingconverters\CcDLLsMM.msm" DiskId="1"/>
 			<Merge Id="EncConverters_Common" Language="1033" SourceFile="externalencodingconverters\EC_40_MM.msm" DiskId="1"/>
-			<Merge Id="ICUECHelp" Language="1033" SourceFile="externalencodingconverters\ICUECHelp.msm" DiskId="1"/>
 		</DirectoryRef>
 		<DirectoryRef Id="SystemFolder">
 			<Merge Id="ATL" Language="1033" SourceFile="ExternalMergeModules\Microsoft_VC100_ATL_x86.msm" DiskId="1"/>

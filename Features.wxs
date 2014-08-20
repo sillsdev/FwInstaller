@@ -12,7 +12,6 @@
 			<ComponentRef Id="ChorusHubInstaller.msi"/>
 			<ComponentRef Id="FwRemoteDatabaseConnectorService.exe"/>
 			<ComponentRef Id="FieldWorks.exe"/>
-			<ComponentRef Id="EncConvertersAppDataMover40.exe"/>
 			<ComponentRef Id="Quivira.ttf"/>
 			<ComponentRef Id="FwPath"/>
 			<ComponentRef Id="RegLangPack"/>
@@ -32,9 +31,7 @@
 			<MergeRef Id="PerlEC"/>
 			<MergeRef Id="PythonEC"/>
 			<MergeRef Id="EncConverters_Common"/>
-			<MergeRef Id="EcFolderACLs"/>
 			<MergeRef Id="Set_Path_EC"/>
-			<MergeRef Id="Managed_Install_Fix"/>
 			<MergeRef Id="TECkit_DLLs"/>
 			<MergeRef Id="CC_DLL"/>
 			<MergeRef Id="ICUECHelp"/>

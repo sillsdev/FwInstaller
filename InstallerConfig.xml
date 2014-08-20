@@ -68,20 +68,11 @@
 			<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed or not directly referenced by either TE or FLEx: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is not needed by TE or FLEx but is needed in the FW installation*"/> -->
 			<!-- Encoding Converters Stuff -->
-			<File PathPattern="Output\Release\CcEC.dll"/>
 			<File PathPattern="Output\Release\IcuConvEC.dll"/>
 			<File PathPattern="Output\Release\IcuEC.dll"/>
 			<File PathPattern="Output\Release\IcuRegexEC.dll"/>
 			<File PathPattern="Output\Release\IcuTranslitEC.dll"/>
-			<File PathPattern="Output\Release\PerlExpressionEC.dll"/>
-			<File PathPattern="Output\Release\PyScriptEC.dll"/>
-			<File PathPattern="Output\Release\PyScriptEncConverter.dll"/>
-			<File PathPattern="Output\Release\EC\Plugins\CC 4.0.0.0 Plugin Details.xml"/>
-			<File PathPattern="Output\Release\EC\Plugins\EC 4.0.0.0 Plugin Details.xml"/>
 			<File PathPattern="Output\Release\EC\Plugins\IcuEC 4.0.0.0 Plugin Details.xml"/>
-			<File PathPattern="Output\Release\EC\Plugins\PerlEC 4.0.0.0 Plugin Details.xml"/>
-			<File PathPattern="Output\Release\EC\Plugins\PythonEC 4.0.0.0 Plugin Details.xml"/>
-			<File PathPattern="Output\Release\EC\Plugins\SIEC 4.0.0.0 Plugin Details.xml"/>
 			<!-- ICU Stuff -->
 			<File PathPattern="Output\Release\icu.net.dll"/>
 			<File PathPattern="Output\Release\icudt50.dll"/>
@@ -133,13 +124,13 @@
 			<File PathPattern="Output\Release\Interop.Logos4Lib.dll"/>
 			<File PathPattern="Output\Release\Interop.Utility.dll"/>
 			<File PathPattern="Output\Release\L10NSharp.dll"/>
-			<!-- These two files are needed in TE resource viewer right-pane to avoid a crash when clicked, and also in EC tool for creating/testing converters -->
-			<File PathPattern="Output\Release\geckofx-core-14.dll"/>
-			<File PathPattern="Output\Release\Geckofx-Winforms-14.dll"/>
+			<!-- These two files are needed in TE resource viewer right-pane to avoid a crash when clicked, and also in EC tool for creating/testing converters, but it is installed by EC merge modules, so we don't want to do it here. -->
+			<!--File PathPattern="Output\Release\geckofx-core-14.dll"/-->
+			<!--File PathPattern="Output\Release\Geckofx-Winforms-14.dll"/-->
 			<!-- These files are specified in mkall.targets for registration-free COM and are needed for Windows, but not Linux -->
-			<File PathPattern="Output\Release\FwKernel.manifest"/>
-			<File PathPattern="Output\Release\Graphite.manifest"/>
-			<File PathPattern="Output\Release\Views.manifest"/>
+			<File PathPattern="Output\Release\FwKernel.X.manifest"/>
+			<File PathPattern="Output\Release\Graphite.X.manifest"/>
+			<File PathPattern="Output\Release\Views.X.manifest"/>
 		</CoreFileOrphans>
 		<ForceBuiltFilesIntoCore>
 			<!-- Define list of file patterns of built files known to be needed by both TE and FLEx but where one or the other does not reference them properly, so they end up solely in the other: -->
@@ -482,10 +473,8 @@
 		<File PathPattern="DistFiles\Fonts\Raw"/>
 		<File PathPattern="DistFiles\TECkit"/>
 		<File PathPattern="DistFiles\CC32.dll"/>
-		<File PathPattern="ECInterfaces.pdb"/>
-		<File PathPattern="SilEncConverters40.pdb"/>
-		<File PathPattern="ECInterfaces.tlb"/>
-		<File PathPattern="SilEncConverters40.tlb"/>
+		<File PathPattern="SilEncConverters40"/>
+		<File PathPattern="ECInterfaces"/>
 		<File PathPattern="icuin50d.dll"/>
 		<File PathPattern="icuuc50d.dll"/>
 		<File PathPattern="DistFiles\DropTEC.exe"/>
@@ -499,16 +488,30 @@
 		<File PathPattern="Output\Release\includeTest.xml"/>
 		<File PathPattern="Output\Release\listitems.bmp"/>
 		<File PathPattern="Output\Release\PhonEnvValidatorTest"/>
+		<File PathPattern="Output\Release\EC\Plugins\CC 4.0.0.0 Plugin Details.xml"/>
+		<File PathPattern="Output\Release\EC\Plugins\EC 4.0.0.0 Plugin Details.xml"/>
+		<File PathPattern="Output\Release\EC\Plugins\PerlEC 4.0.0.0 Plugin Details.xml"/>
+		<File PathPattern="Output\Release\EC\Plugins\PythonEC 4.0.0.0 Plugin Details.xml"/>
+		<File PathPattern="Output\Release\EC\Plugins\SIEC 4.0.0.0 Plugin Details.xml"/>
+		<File PathPattern="Output\Release\Perl"/>
+		<File PathPattern="Output\Release\Python"/>
+		<File PathPattern="Output\Release\PyScript"/>
+		<File PathPattern="Output\Release\CC"/>
+		<File PathPattern="Output\Release\EncConvertersAppDataMover40"/>
 		<File PathPattern="Output\Release\TLP"/>
 		<File PathPattern="Output\Release\whitepixel.bmp"/>
 		<File PathPattern="Output\Release\ScrChecks.dll"/> <!-- this will be taken from DistFiles\Editorial Checks -->
 		<File PathPattern="Output\Release\ScrChecks.pdb"/> <!-- this will be taken from DistFiles\Editorial Checks -->
 		<File PathPattern="Output\Release\MigrateSqlDbs.pdb"/>
 		<File PathPattern="Output\Release\FormsTester."/>
+		<File PathPattern="Output\Release\FwParatextLexiconPlugin"/> <!--FW-PT plugin based on current development version of PT-->
+		<File PathPattern="Output\Release\Paratext.LexicalContracts"/> <!--FW-PT plugin based on current development version of PT-->
 		<File PathPattern="Output\Release\ProjectUnpacker."/>
 		<File PathPattern="Output\Release\xCoreInterfaces.XmlSerializers."/>
 		<File PathPattern="Output\Release\CacheLight."/>
 		<File PathPattern="Output\Release\RBRExtensions."/>
+		<File PathPattern="Output\Release\geckofx-core-14.dll"/> <!-- Installed by EC merge modules-->
+		<File PathPattern="Output\Release\Geckofx-Winforms-14.dll"/> <!-- Installed by EC merge modules-->
 		<File PathPattern="XceedZip.dll"/>
 		<File PathPattern="Output\Release\DebugProcs."/>
 		<File PathPattern="Generic.lib"/>
