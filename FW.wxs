@@ -26,11 +26,11 @@
 		<Media Id='14' Cabinet='Hindi.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='15' Cabinet='Malay.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='16' Cabinet='Telugu.cab' EmbedCab='yes' CompressionLevel='high'/>
-		<Media Id='17' Cabinet='Korean.cab' EmbedCab='no' CompressionLevel='high'/>
-		<Media Id='18' Cabinet='Turkish.cab' EmbedCab='no' CompressionLevel='high'/>
-		<Media Id='19' Cabinet='Vietnam.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='17' Cabinet='Korean.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='18' Cabinet='Turkish.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='19' Cabinet='Vietnam.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='20' Cabinet='Persian.cab' EmbedCab='yes' CompressionLevel='high'/>
-		<Media Id='21' Cabinet='Kinyarwa.cab' EmbedCab='no' CompressionLevel='high'/>
+		<Media Id='21' Cabinet='Kinyarwa.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='22' Cabinet='Hungaria.cab' EmbedCab='yes' CompressionLevel='high'/>
 
 		<Property Id="FLEX_MOVIES_CAB1_FOUND">

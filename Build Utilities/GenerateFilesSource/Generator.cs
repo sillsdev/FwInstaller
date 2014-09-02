@@ -509,7 +509,7 @@ namespace GenerateFilesSource
 					foreach (var recipient in _emailList)
 						message.To.Add(recipient);
 					message.Subject = "Automatic Report from FW Installer Build";
-					message.From = new System.Net.Mail.MailAddress("alistair_imrie@sil.org");
+					message.From = new System.Net.Mail.MailAddress("ken_zook@sil.org");
 					message.Body = _overallReport.CombineReports(Tools.GetBuildDetails(_projRootPath), _needReport);
 					var smtp = new System.Net.Mail.SmtpClient("mail.jaars.org");
 					smtp.Send(message);
