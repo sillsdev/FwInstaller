@@ -12,7 +12,6 @@
 			<ComponentRef Id="ChorusHubInstaller.msi"/>
 			<ComponentRef Id="FwRemoteDatabaseConnectorService.exe"/>
 			<ComponentRef Id="FieldWorks.exe"/>
-			<ComponentRef Id="EncConvertersAppDataMover40.exe"/>
 			<ComponentRef Id="Quivira.ttf"/>
 			<ComponentRef Id="FwPath"/>
 			<ComponentRef Id="RegLangPack"/>
@@ -32,9 +31,7 @@
 			<MergeRef Id="PerlEC"/>
 			<MergeRef Id="PythonEC"/>
 			<MergeRef Id="EncConverters_Common"/>
-			<MergeRef Id="EcFolderACLs"/>
 			<MergeRef Id="Set_Path_EC"/>
-			<MergeRef Id="Managed_Install_Fix"/>
 			<MergeRef Id="TECkit_DLLs"/>
 			<MergeRef Id="CC_DLL"/>
 			<MergeRef Id="ICUECHelp"/>
@@ -87,16 +84,14 @@
 					<Feature Id="Hungarian_TE" Title="Hungarian_TE" Description="Hungarian user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
-				<Feature Id="Kinyarwanda" Title="Kinyarwanda" Description="Allows the software to have a Kinyarwanda user interface." Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">KINYARWANDA_CAB_FOUND OR REMOVE</Condition>
-					<Feature Id="Kinyarwanda_TE" Title="Kinyarwanda_TE" Description="Kinyarwanda user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
-						<Condition Level="3">KINYARWANDA_CAB_FOUND OR REMOVE</Condition>
+				<Feature Id="Kinyarwanda" Title="Kinyarwanda" Description="Allows the software to have a Kinyarwanda user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1048 OR REMOVE</Condition>
+					<Feature Id="Kinyarwanda_TE" Title="Kinyarwanda_TE" Description="Kinyarwanda user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
-				<Feature Id="Korean" Title="Korean" Description="Allows the software to have a Korean user interface." Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">KOREAN_CAB_FOUND OR REMOVE</Condition>
-					<Feature Id="Korean_TE" Title="Korean_TE" Description="Korean user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
-						<Condition Level="3">KOREAN_CAB_FOUND OR REMOVE</Condition>
+				<Feature Id="Korean" Title="Korean" Description="Allows the software to have a Korean user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1042 OR REMOVE</Condition>
+					<Feature Id="Korean_TE" Title="Korean_TE" Description="Korean user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
 				<Feature Id="Persian" Title="Persian" Description="Allows the software to have a Persian user interface." Display="expand" Level="4" AllowAdvertise="no">
@@ -123,16 +118,14 @@
 					<Feature Id="Telugu_TE" Title="Telugu_TE" Description="Telugu user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
-				<Feature Id="Turkish" Title="Turkish" Description="Allows the software to have a Turkish user interface." Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">TURKISH_CAB_FOUND OR REMOVE</Condition>
-					<Feature Id="Turkish_TE" Title="Turkish_TE" Description="Turkish user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
-						<Condition Level="3">TURKISH_CAB_FOUND OR REMOVE</Condition>
+				<Feature Id="Turkish" Title="Turkish" Description="Allows the software to have a Turkish user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1055 OR REMOVE</Condition>
+					<Feature Id="Turkish_TE" Title="Turkish_TE" Description="Turkish user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
-				<Feature Id="Vietnamese" Title="Vietnamese" Description="Allows the software to have a Vietnamese user interface." Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">VIETNAMESE_CAB_FOUND OR REMOVE</Condition>
-					<Feature Id="Vietnamese_TE" Title="Vietnamese_TE" Description="Vietnamese user interface files just for TE." Display="hidden" Level="0" AllowAdvertise="no">
-						<Condition Level="3">VIETNAMESE_CAB_FOUND OR REMOVE</Condition>
+				<Feature Id="Vietnamese" Title="Vietnamese" Description="Allows the software to have a Vietnamese user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1066 OR REMOVE</Condition>
+					<Feature Id="Vietnamese_TE" Title="Vietnamese_TE" Description="Vietnamese user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
 			</Feature>

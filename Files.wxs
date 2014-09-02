@@ -48,10 +48,6 @@
 							<File Id="FieldWorks.exe.manifest" Name="FieldWorks.exe.manifest" Source="Builds\$(var.Version)\Output\Release\FieldWorks.exe.manifest" ReadOnly="yes" Checksum="yes" DiskId="1"/>
 							<File Id="FieldWorks.exe.config" Name="FieldWorks.exe.config" Source="Builds\$(var.Version)\Output\Release\FieldWorks.exe.config" ReadOnly="yes" Checksum="yes" DiskId="1"/>
 						</Component>
-						<!-- This file is here because we need to actually run it during installation. See CustomAction Id="LaunchAppDataMover" below. -->
-						<Component Id="EncConvertersAppDataMover40.exe" Guid="5819C8CA-9422-4c21-98F0-9C2D6F56E442">
-							<File Id="EncConvertersAppDataMover40.exe" Name="EncConvertersAppDataMover40.exe" ReadOnly="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\Output\Release\EncConvertersAppDataMover40.exe"/>
-						</Component>
 						<Directory Id="AddOnInstallers" Name="Installers">
 							<!-- The following component GUID is required by the master installer to locate and launch the FLEx Bridge installer: -->
 							<Component Id="FLExBridgeInstaller.msi" Guid="9442BF43-4A64-4885-9593-43DD7E927290">
@@ -101,21 +97,5 @@
 			</Directory>
 		</Directory>
 
-		<!-- The following section launches the installed file EncConvertersAppDataMover40.exe but hides its DOS window -->
-		<CustomAction Id="SetAppDataMoverData" Return="check" Property="LaunchAppDataMover" Value="[#EncConvertersAppDataMover40.exe]" />
-		<CustomAction Id="LaunchAppDataMover" Return="ignore" Impersonate="no" Execute="deferred" Script="vbscript">
-			<![CDATA[
-dim EncConvertersAppDataMoverPath
-EncConvertersAppDataMoverPath = Session.Property("CustomActionData")
-const WindowStyleStealth  = &H20000000
-set WSO = createobject("WScript.Shell")
-WSO.run "%comspec% /c """ + EncConvertersAppDataMoverPath + """", WindowStyleStealth, false
-]]>
-		</CustomAction>
-
-		<InstallExecuteSequence>
-			<Custom Action="SetAppDataMoverData" Before="InstallInitialize"><![CDATA[VersionNT >= 501]]></Custom>
-			<Custom Action="LaunchAppDataMover" After="PublishComponents"><![CDATA[NOT Installed]]></Custom>
-		</InstallExecuteSequence>
 	</Fragment>
 </Wix>
