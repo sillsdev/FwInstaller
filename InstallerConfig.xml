@@ -504,7 +504,6 @@
 		<File PathPattern="Output\Release\ScrChecks.pdb"/> <!-- this will be taken from DistFiles\Editorial Checks -->
 		<File PathPattern="Output\Release\MigrateSqlDbs.pdb"/>
 		<File PathPattern="Output\Release\FormsTester."/>
-		<File PathPattern="Output\Release\FwParatextLexiconPlugin"/> <!--FW-PT plugin based on current development version of PT-->
 		<File PathPattern="Output\Release\Paratext.LexicalContracts"/> <!--FW-PT plugin based on current development version of PT-->
 		<File PathPattern="Output\Release\ProjectUnpacker."/>
 		<File PathPattern="Output\Release\xCoreInterfaces.XmlSerializers."/>
