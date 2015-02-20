@@ -73,6 +73,7 @@
 		<Feature>Indonesian_TE</Feature>
 		<Installer>SetupFw-id</Installer>
 	</Component>
+	<!--
 	<Component>
 		<Name>Khmer Localization</Name>
 		<Description>Khmer language pack for FieldWorks</Description>
@@ -82,6 +83,7 @@
 		<Feature>Khmer_TE</Feature>
 		<Installer>SetupFw-km</Installer>
 	</Component>
+	-->
 	<Component>
 		<Name>Kinyarwanda Localization</Name>
 		<Description>Kinyarwanda language pack for FieldWorks</Description>
@@ -109,6 +111,7 @@
 		<Feature>Malay_TE</Feature>
 		<Installer>SetupFw-ms</Installer>
 	</Component>
+	<!--
 	<Component>
 		<Name>Nepali Localization</Name>
 		<Description>Nepali language pack for FieldWorks</Description>
@@ -118,6 +121,7 @@
 		<Feature>Nepali_TE</Feature>
 		<Installer>SetupFw-ne</Installer>
 	</Component>
+	-->
 	<Component>
 		<Name>Persian Localization</Name>
 		<Description>Persian language pack for FieldWorks</Description>
@@ -163,6 +167,7 @@
 		<Feature>Telugu_TE</Feature>
 		<Installer>SetupFw-te</Installer>
 	</Component>
+	<!--
 	<Component>
 		<Name>Thai Localization</Name>
 		<Description>Thai language pack for FieldWorks</Description>
@@ -172,6 +177,7 @@
 		<Feature>Thai_TE</Feature>
 		<Installer>SetupFw-th</Installer>
 	</Component>
+	-->
 	<Component>
 		<Name>Turkish Localization</Name>
 		<Description>Turkish language pack for FieldWorks</Description>
@@ -181,6 +187,7 @@
 		<Feature>Turkish_TE</Feature>
 		<Installer>SetupFw-tr</Installer>
 	</Component>
+	<!--
 	<Component>
 		<Name>Urdu Localization</Name>
 		<Description>Urdu language pack for FieldWorks</Description>
@@ -190,6 +197,7 @@
 		<Feature>Urdu_TE</Feature>
 		<Installer>SetupFw-ur</Installer>
 	</Component>
+	-->
 	<Component>
 		<Name>Vietnamese Localization</Name>
 		<Description>Vietnamese language pack for FieldWorks</Description>
