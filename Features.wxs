@@ -54,12 +54,12 @@
 				<ComponentRef Id="ShortcutTEMovies"/>
 			</Feature>
 			<Feature Id="LOC" Title="Language Packs" Description="Additional languages for the user interface." Display="expand" Level="3" AllowAdvertise="no">
-				<Feature Id="Indonesian" Title="Bahasa Indonesia" Description="Allows the software to have an Indonesian user interface." Display="expand" Level="4" AllowAdvertise="no">
+				<Feature Id="Indonesian" Title="Indonesian" Description="Allows the software to have an Indonesian user interface." Display="expand" Level="4" AllowAdvertise="no">
 					<Condition Level="3">UserLanguageID = 1057 OR REMOVE</Condition>
 					<Feature Id="Indonesian_TE" Title="Indonesian_TE" Description="Indonesian user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
-				<Feature Id="Malay" Title="Bahasa Malaysia" Description="Allows the software to have a Malay user interface." Display="expand" Level="4" AllowAdvertise="no">
+				<Feature Id="Malay" Title="Malay" Description="Allows the software to have a Malay user interface." Display="expand" Level="4" AllowAdvertise="no">
 					<Condition Level="3">UserLanguageID = 1086 OR REMOVE</Condition>
 					<Feature Id="Malay_TE" Title="Malay_TE" Description="Malay user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
