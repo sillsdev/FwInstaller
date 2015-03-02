@@ -16,7 +16,7 @@ using InstallerBuildUtilities;
 
 namespace GenerateFilesSource
 {
-	public class Generator
+	internal sealed class Generator
 	{
 		private const string BuildsFolderFragment = "Builds"; // Folder to copy files for installer
 		private const string BuildConfig = "Release"; // No point in allowing a debug-based installer
@@ -148,9 +148,6 @@ namespace GenerateFilesSource
 		// List of file patterns of built files known to be needed by FLEx but which are not
 		// referenced in FLEx's dependencies:
 		private readonly List<string> _forceBuiltFilesIntoFlex = new List<string>();
-		// List of file patterns of built files known to be needed by TE but which are not
-		// referenced in TE's dependencies:
-		private readonly List<string> _forceBuiltFilesIntoTe = new List<string>();
 
 		// List of (partial) paths of files that must not be set to read-only:
 		private readonly List<string> _makeWritableList = new List<string>();
@@ -178,11 +175,6 @@ namespace GenerateFilesSource
 						return true;
 					return false;
 				}
-				public void Merge(HeuristicSet that)
-				{
-					PathContains.AddRange(that.PathContains);
-					PathEnds.AddRange(that.PathEnds);
-				}
 			}
 			public readonly HeuristicSet Inclusions = new HeuristicSet();
 			public readonly HeuristicSet Exclusions = new HeuristicSet();
@@ -195,18 +187,11 @@ namespace GenerateFilesSource
 					return true;
 				return false;
 			}
-			public void Merge(FileHeuristics that)
-			{
-				Inclusions.Merge(that.Inclusions);
-				Exclusions.Merge(that.Exclusions);
-			}
 		}
 		private readonly FileHeuristics _flexFileHeuristics = new FileHeuristics();
 		private readonly FileHeuristics _flexMovieFileHeuristics = new FileHeuristics();
 		private readonly FileHeuristics _sampleDataFileHeuristics = new FileHeuristics();
-		private readonly FileHeuristics _teFileHeuristics = new FileHeuristics();
 		private readonly Dictionary<string, FileHeuristics> _localizationHeuristics = new Dictionary<string, FileHeuristics>();
-		private readonly Dictionary<string, FileHeuristics> _teLocalizationHeuristics = new Dictionary<string, FileHeuristics>();
 
 		// List of regular expressions serving as coarse heuristics for guessing if a file might be meant only for TE:
 		private readonly List<string> _teFileNameTestHeuristics = new List<string>();
@@ -233,8 +218,6 @@ namespace GenerateFilesSource
 		private HashSet<InstallerFile> _allFilesFiltered = new HashSet<InstallerFile>();
 		// Set of collected installable FLEx files:
 		private HashSet<InstallerFile> _flexFiles;
-		// Set of collected installable TE files:
-		private HashSet<InstallerFile> _teFiles;
 		// Set of collected installable files from build target "allCsharpNoTests":
 		private HashSet<InstallerFile> _allCsharpNoTestsFiles;
 		// Set of collected installable files from build target "allCppNoTest":
@@ -243,17 +226,15 @@ namespace GenerateFilesSource
 		private readonly HashSet<InstallerFile> _duplicateFiles = new HashSet<InstallerFile>();
 
 		// Set of files for FLEx feature:
-		private IEnumerable<InstallerFile> _flexFeatureFiles;
+		private List<InstallerFile> _flexFeatureFiles;
 		// Set of files for FlexMovies feature:
-		private IEnumerable<InstallerFile> _flexMoviesFeatureFiles;
+		private List<InstallerFile> _flexMoviesFeatureFiles;
 		// Set of files for SampleData feature:
-		private IEnumerable<InstallerFile> _sampleDataFeatureFiles;
-		// Set of files for TE feature:
-		private IEnumerable<InstallerFile> _teFeatureFiles;
+		private List<InstallerFile> _sampleDataFeatureFiles;
 		// Set of files for FW Core feature:
-		private IEnumerable<InstallerFile> _fwCoreFeatureFiles;
+		private List<InstallerFile> _fwCoreFeatureFiles;
 		// Set of files in Output\Release that don't seem to belong to any features:
-		private IEnumerable<InstallerFile> _orphanFiles;
+		private List<InstallerFile> _orphanFiles;
 		// Set of features represented in the Features.wxs file:
 		private readonly HashSet<string> _representedFeatures = new HashSet<string>();
 
@@ -289,9 +270,9 @@ namespace GenerateFilesSource
 
 			// Convert the byte array to hexadecimal string:
 			var sb = new StringBuilder();
-			for (int i = 0; i < hashBytes.Length; i++)
+			foreach (var t in hashBytes)
 			{
-				sb.Append(hashBytes[i].ToString("X2"));
+				sb.Append(t.ToString("X2"));
 			}
 			return sb.ToString();
 		}
@@ -435,14 +416,12 @@ namespace GenerateFilesSource
 		{
 			public readonly string LanguageName;
 			public readonly string Folder;
-			public IEnumerable<InstallerFile> TeFiles;
 			public IEnumerable<InstallerFile> OtherFiles;
 
 			public LocalizationData(string language, string languageCode)
 			{
 				LanguageName = language;
 				Folder = languageCode;
-				TeFiles = new HashSet<InstallerFile>();
 				OtherFiles = new HashSet<InstallerFile>();
 			}
 		}
@@ -461,7 +440,7 @@ namespace GenerateFilesSource
 		/// <param name="report"></param>
 		/// <param name="addOrphans"></param>
 		/// /// <param name="testIntegrity"></param>
-		public Generator(bool report, bool addOrphans, bool testIntegrity)
+		internal Generator(bool report, bool addOrphans, bool testIntegrity)
 		{
 			_needReport = report;
 			_addOrphans = addOrphans;
@@ -528,8 +507,22 @@ namespace GenerateFilesSource
 		/// </summary>
 		private void DeleteExistingVersionedFolder()
 		{
-			if (Directory.Exists(_installerFilesVersionedFolder))
-				Directory.Delete(_installerFilesVersionedFolder, true);
+			if (!Directory.Exists(_installerFilesVersionedFolder))
+				return;
+
+			var done = false;
+			while (!done)
+			{
+				try
+				{
+					Directory.Delete(_installerFilesVersionedFolder, true);
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine("crashed.");
+				}
+				done = true;
+			}
 		}
 
 		/// <summary>
@@ -567,16 +560,15 @@ namespace GenerateFilesSource
 				file.CopyTo(temppath, false);
 			}
 
-			if (copySubDirs)
+			if (!copySubDirs)
+				return;
+
+			foreach (var subdir in dirs)
 			{
-				foreach (var subdir in dirs)
-				{
-					var temppath = Path.Combine(destDirName, subdir.Name);
-					DirectoryCopy(subdir.FullName, temppath, copySubDirs);
-				}
+				var temppath = Path.Combine(destDirName, subdir.Name);
+				DirectoryCopy(subdir.FullName, temppath, true);
 			}
 		}
-
 
 		/// <summary>
 		/// Initialize the class properly.
@@ -592,10 +584,7 @@ namespace GenerateFilesSource
 				throw new Exception("Cannot get directory of " + exePath);
 
 			// Get development project root path:
-			if (_exeFolder.ToLowerInvariant().EndsWith("installer"))
-				_projRootPath = Path.GetDirectoryName(_exeFolder);
-			else
-				_projRootPath = _exeFolder;
+			_projRootPath = _exeFolder.ToLowerInvariant().EndsWith("installer") ? Path.GetDirectoryName(_exeFolder) : _exeFolder;
 
 			// This MUST happen before ConfigureFromXml():
 			_installerFolderAbsolutePath = Path.Combine(_projRootPath, "Installer");
@@ -668,13 +657,6 @@ namespace GenerateFilesSource
 				foreach (XmlElement file in forceBuiltFilesIntoFlex)
 					_forceBuiltFilesIntoFlex.Add(file.GetAttribute("PathPattern"));
 
-			// Define list of path patterns of built files known to be needed by TE but which are not not referenced in TE's dependencies:
-			// Format: <File PathPattern="*partial path of any file that is needed by TE*"/>
-			var forceBuiltFilesIntoTe = configuration.SelectNodes("//FeatureAllocation/ForceBuiltFilesIntoTE/File");
-			if (forceBuiltFilesIntoTe != null)
-				foreach (XmlElement file in forceBuiltFilesIntoTe)
-					_forceBuiltFilesIntoTe.Add(file.GetAttribute("PathPattern"));
-
 			// Define conditions to apply to specified components:
 			// Format: <File Path="*partial path of a file that is conditionally installed*" Condition="*MSI Installer condition that must be true to install file*"/>
 			// Beware! This XML is double-interpreted, so for example a 'less than' sign must be represented as &amp;lt;
@@ -728,16 +710,11 @@ namespace GenerateFilesSource
 			// Define lists of heuristics for assigning DistFiles files into their correct installer features:
 			ConfigureHeuristics(configuration, _flexFileHeuristics, "//FeatureAllocation/FlexOnly");
 			ConfigureHeuristics(configuration, _flexMovieFileHeuristics, "//FeatureAllocation/FlexMoviesOnly");
-			ConfigureHeuristics(configuration, _teFileHeuristics, "//FeatureAllocation/TeOnly");
 			ConfigureHeuristics(configuration, _sampleDataFileHeuristics, "//FeatureAllocation/SampleDataOnly");
 
 			// Do the same for localization files.
 			// Prerequisite: _languages already configured with all languages:
 			ConfigureLocalizationHeuristics(configuration, _localizationHeuristics, "//FeatureAllocation/Localization");
-			ConfigureLocalizationHeuristics(configuration, _teLocalizationHeuristics, "//FeatureAllocation/TeLocalization");
-			// Merge _teLocalizationHeuristics into _localizationHeuristics so that the latter is a complete set of all localization heuristics:
-			foreach (var language in _languages)
-				_localizationHeuristics[language.Folder].Merge(_teLocalizationHeuristics[language.Folder]);
 
 			// Define list of regular expressions serving as coarse heuristics for guessing if a file that
 			// has been allocated to the Core or FLEx features may actually be meant only for TE (used as
@@ -873,8 +850,6 @@ namespace GenerateFilesSource
 					var indexes = assignment.GetAttribute("CabinetIndexes");
 					var divisions = assignment.GetAttribute("CabinetDivisions");
 					_featureCabinetMappings.Add(feature, new CabinetMappingData(index, indexes, divisions));
-					if (_languages.Any(language => language.LanguageName == feature))
-						_featureCabinetMappings.Add(feature + "_TE", new CabinetMappingData(index, indexes, divisions));
 				}
 			}
 		}
@@ -1111,14 +1086,12 @@ namespace GenerateFilesSource
 			 Parallel.Invoke(
 				GetAllFilesFiltered, // fills up _allFilesFiltered and _duplicateFiles sets
 				GetFlexFiles, // fills up _flexFiles set
-				GetTeFiles, // fills up _teFiles set
 				GetAllCsharpNoTestsFiles, // fills up _allCsharpNoTestsFiles set
 				GetAllCppNoTestFiles // fills up _allCppNoTestFiles set
 			);
 
 			Parallel.Invoke(
 				CleanUpFlexFiles,
-				CleanUpTeFiles,
 				CleanUpAllCsharpNoTestsFiles,
 				CleanUpAllCppNoTestFiles,
 				CollectLocalizationFiles
@@ -1133,17 +1106,8 @@ namespace GenerateFilesSource
 			foreach (var currentLanguage in _languages)
 			{
 				var language = currentLanguage;
-				currentLanguage.TeFiles = (_allFilesFiltered.Where(file => FileIsForTeLocalization(file, language)));
 				currentLanguage.OtherFiles = (_allFilesFiltered.Where(file => FileIsForNonTeLocalization(file, language)));
 			}
-		}
-
-		/// <summary>
-		/// Removes any _teFiles that have already been rejected elsewhere.
-		/// </summary>
-		private void CleanUpTeFiles()
-		{
-			CleanUpFileSet(_teFiles, "TE");
 		}
 
 		/// <summary>
@@ -1221,14 +1185,6 @@ namespace GenerateFilesSource
 		private void GetFlexFiles()
 		{
 			_flexFiles = GetSpecificTargetFiles("LexTextExe", "from FLEx target");
-		}
-
-		/// <summary>
-		/// Assigns to _teFiles the list of files determined to be dependencies of TE.exe.
-		/// </summary>
-		private void GetTeFiles()
-		{
-			_teFiles = GetSpecificTargetFiles("TeExe", "from TE target");
 		}
 
 		/// <summary>
@@ -1537,7 +1493,7 @@ namespace GenerateFilesSource
 			private bool FileShouldBeOmitted(string path)
 			{
 				var omissionsMatches = _fileOmissions.Where(om => om.CaseSensitive ? path.Contains(om.RelativePath) : path.ToLowerInvariant().Contains(om.RelativePath.ToLowerInvariant()));
-				return (omissionsMatches.Count() > 0);
+				return (omissionsMatches.Any());
 			}
 
 			/// <summary>
@@ -1669,14 +1625,16 @@ namespace GenerateFilesSource
 		/// <returns>InstallerFile object containing lots of file details</returns>
 		private InstallerFile GetInstallerFile(string file, string dirId, string comment)
 		{
-			var instFile = new InstallerFile();
+			var instFile = new InstallerFile
+			{
+				Name = Path.GetFileName(file),
+				Comment = comment,
+				FullPath = file,
+				RelativeSourcePath = MakeRelativePath(file),
+				DirId = dirId
+			};
 			// Put in all the file data the WIX install build will need to know:
-			instFile.Name = Path.GetFileName(file);
-			instFile.Comment = comment;
-			instFile.FullPath = file;
-			instFile.RelativeSourcePath = MakeRelativePath(file);
 			instFile.Id = MakeId(instFile.Name, instFile.RelativeSourcePath);
-			instFile.DirId = dirId;
 
 			if (!File.Exists(file))
 			{
@@ -1715,9 +1673,9 @@ namespace GenerateFilesSource
 
 			// Convert the byte array to hexadecimal string:
 			var sb = new StringBuilder();
-			for (var i = 0; i < hashBytes.Length; i++)
+			foreach (var t in hashBytes)
 			{
-				sb.Append(hashBytes[i].ToString("X2"));
+				sb.Append(t.ToString("X2"));
 			}
 			return sb.ToString();
 		}
@@ -1734,8 +1692,8 @@ namespace GenerateFilesSource
 			{
 				var relPath = f.RelativeSourcePath;
 				var relPathLower = relPath.ToLowerInvariant();
-				var omissionsMatches = _fileOmissions.Where(om => om.CaseSensitive ? relPath.Contains(om.RelativePath) : relPathLower.Contains(om.RelativePath.ToLowerInvariant()));
-				if (omissionsMatches.Count() == 0)
+				var omissionsMatches = _fileOmissions.Where(om => om.CaseSensitive ? relPath.Contains(om.RelativePath) : relPathLower.Contains(om.RelativePath.ToLowerInvariant())).ToList();
+				if (!omissionsMatches.Any())
 					returnSet.Add(f);
 				else
 					f.ReasonForRemoval += " " + omissionsMatches.First().Reason;
@@ -1750,13 +1708,14 @@ namespace GenerateFilesSource
 		/// <param name="preferredSet">This set of files will always be in the result</param>
 		/// <param name="otherSet">Files from this set will be in the result if there are no duplicates with the first set</param>
 		/// <returns>A new set containing the merged combination of the arguments</returns>
-		private HashSet<InstallerFile> MergeFileSets(IEnumerable<InstallerFile> preferredSet, IEnumerable<InstallerFile> otherSet)
+		private HashSet<InstallerFile> MergeFileSets(HashSet<InstallerFile> preferredSet, HashSet<InstallerFile> otherSet)
 		{
 			// Find sets of files with matching names:
 			foreach (var currentFile in preferredSet.ToArray())
 			{
+				var cf = currentFile;
 				var matchingFiles = from other in otherSet
-									where other.FileNameMatches(currentFile)
+									where other.FileNameMatches(cf)
 									select other;
 
 				ArbitrateFileMatches(currentFile, matchingFiles);
@@ -1830,12 +1789,12 @@ namespace GenerateFilesSource
 		/// </summary>
 		/// <param name="subSet">the set whose members will get replaced by others</param>
 		/// <param name="masterSet">the source of items to replace in the other set</param>
-		private static void ReplaceEquivalentFiles(ISet<InstallerFile> subSet, IEnumerable<InstallerFile> masterSet)
+		private static void ReplaceEquivalentFiles(ISet<InstallerFile> subSet, HashSet<InstallerFile> masterSet)
 		{
 			foreach (var file in subSet.ToArray())
 			{
-				var masterEquivalenceSet = masterSet.Where(masterFile => masterFile.Equals(file));
-				if (masterEquivalenceSet.Count() == 0)
+				var masterEquivalenceSet = masterSet.Where(masterFile => masterFile.Equals(file)).ToList();
+				if (!masterEquivalenceSet.Any())
 					continue;
 
 				var replacement = masterEquivalenceSet.Single();
@@ -1853,40 +1812,34 @@ namespace GenerateFilesSource
 		private void BuildFeatureFileSets()
 		{
 			// UsedDistFiles consists of all DistFiles except those that were duplicated in Output\Release:
-			var usedDistFiles = _allFilesFiltered.Intersect(_distFilesFiltered);
+			var usedDistFiles = _allFilesFiltered.Intersect(_distFilesFiltered).ToList();
 
-			var flexOnlyDistFiles = from file in usedDistFiles
+			var flexOnlyDistFiles = (from file in usedDistFiles
 									where FileIsForFlexOnly(file)
-									select file;
+									select file).ToList();
 
-			_flexMoviesFeatureFiles = from file in usedDistFiles
+			_flexMoviesFeatureFiles = (from file in usedDistFiles
 									   where FileIsForFlexMoviesOnly(file)
-									   select file;
-			_sampleDataFeatureFiles = from file in usedDistFiles
+									   select file).ToList();
+			_sampleDataFeatureFiles = (from file in usedDistFiles
 									  where FileIsForSampleDataOnly(file)
-									  select file;
+									   select file).ToList();
 
 			var localizationFiles = from file in usedDistFiles
 									where FileIsForLocalization(file)
 									select file;
 
-			var teOnlyDistFiles = from file in usedDistFiles
-								  where FileIsForTeOnly(file)
-								  select file;
-			var coreDistFiles = usedDistFiles.Except(flexOnlyDistFiles).Except(teOnlyDistFiles).Except(_flexMoviesFeatureFiles).Except(_sampleDataFeatureFiles).Except(localizationFiles);
+			var coreDistFiles = usedDistFiles.Except(flexOnlyDistFiles).Except(_flexMoviesFeatureFiles).Except(_sampleDataFeatureFiles).Except(localizationFiles).ToList();
 
 			var allCppAndCsharpFiles = _allCsharpNoTestsFiles.Union(_allCppNoTestFiles);
 
-			var flexButNotTeFiles = _flexFiles.Except(_teFiles);
-			var teButNotFlexFiles = _teFiles.Except(_flexFiles);
+			var flexButNotTeFiles = _flexFiles;
 
-			var coreBuiltFiles = allCppAndCsharpFiles.Except(flexButNotTeFiles).Except(teButNotFlexFiles);
+			var coreBuiltFiles = allCppAndCsharpFiles.Except(flexButNotTeFiles).ToList();
 			var flexOnlyBuiltFiles = flexButNotTeFiles.Except(coreBuiltFiles);
-			var teOnlyBuiltFiles = teButNotFlexFiles.Except(coreBuiltFiles);
 
-			_flexFeatureFiles = flexOnlyBuiltFiles.Union(flexOnlyDistFiles);
-			_teFeatureFiles = teOnlyBuiltFiles.Union(teOnlyDistFiles);
-			_fwCoreFeatureFiles = coreBuiltFiles.Union(coreDistFiles);
+			_flexFeatureFiles = flexOnlyBuiltFiles.Union(flexOnlyDistFiles).ToList();
+			_fwCoreFeatureFiles = coreBuiltFiles.Union(coreDistFiles).ToList();
 
 			// Add to _fwCoreFeatureFiles any files specified in the _coreFileOrphans set:
 			// (Such files are not needed by FLEx or TE, so won't appear in FLEx or TE sets.)
@@ -1899,7 +1852,7 @@ namespace GenerateFilesSource
 				file.Comment += " Listed in <CoreFileOrphans> ";
 				fwCoreFeatureFiles.Add(file);
 			}
-			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Union(fwCoreFeatureFiles);
+			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Union(fwCoreFeatureFiles).ToList();
 
 			// Add to _fwCoreFeatureFiles any files specified in the _forceBuiltFilesIntoCore set:
 			// (Such files are needed by FLEx and TE but aren't referenced in the dependencies of one of them, so they would otherwise end up in the other.)
@@ -1912,10 +1865,9 @@ namespace GenerateFilesSource
 				file.Comment += " Specifically added to FW_Core via //FeatureAllocation/ForceBuiltFilesIntoCore in XML configuration. ";
 				forceBuiltFilesIntoCore.Add(file);
 			}
-			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Union(forceBuiltFilesIntoCore);
-			// Remove from the TE and FLex features the files we've just forced into FW_Core:
-			_flexFeatureFiles = _flexFeatureFiles.Except(forceBuiltFilesIntoCore);
-			_teFeatureFiles = _teFeatureFiles.Except(forceBuiltFilesIntoCore);
+			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Union(forceBuiltFilesIntoCore).ToList();
+			// Remove from the FLex features the files we've just forced into FW_Core:
+			_flexFeatureFiles = _flexFeatureFiles.Except(forceBuiltFilesIntoCore).ToList();
 
 			// Add to _flexFeatureFiles any files specified in the _forceBuiltFilesIntoFlex set:
 			// (Such files are needed by FLEx but aren't referenced in FLEx's dependencies.)
@@ -1928,24 +1880,9 @@ namespace GenerateFilesSource
 				file.Comment += " Specifically added to FLEx via //FeatureAllocation/ForceBuiltFilesIntoFlex in XML configuration. ";
 				forceBuiltFilesIntoFlex.Add(file);
 			}
-			_flexFeatureFiles = _flexFeatureFiles.Union(forceBuiltFilesIntoFlex);
+			_flexFeatureFiles = _flexFeatureFiles.Union(forceBuiltFilesIntoFlex).ToList();
 			// Remove from the Core features the files we've just forced into FLEx:
-			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Except(forceBuiltFilesIntoFlex);
-
-			// Add to _teFeatureFiles any files specified in the _forceBuiltFilesIntoTe set:
-			// (Such files are needed by TE but aren't referenced in TE's dependencies.)
-			var forceBuiltFilesIntoTe = new HashSet<InstallerFile>();
-			foreach (var file in from file in _allFilesFiltered
-								 from teFile in _forceBuiltFilesIntoTe
-								 where file.RelativeSourcePath.ToLowerInvariant().Contains(teFile.ToLowerInvariant())
-								 select file)
-			{
-				file.Comment += " Specifically added to TE via //FeatureAllocation/ForceBuiltFilesIntoTE in XML configuration. ";
-				forceBuiltFilesIntoTe.Add(file);
-			}
-			_teFeatureFiles = _teFeatureFiles.Union(forceBuiltFilesIntoTe);
-			// Remove from the Core features the files we've just forced into TE:
-			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Except(forceBuiltFilesIntoTe);
+			_fwCoreFeatureFiles = _fwCoreFeatureFiles.Except(forceBuiltFilesIntoFlex).ToList();
 
 			// Run tests to see if any files that look like they are for TE appear in the core or in FLEx:
 			TestForPossibleTeFiles(_fwCoreFeatureFiles, "Core");
@@ -1958,8 +1895,6 @@ namespace GenerateFilesSource
 				file.Features.Add("FlexMovies");
 			foreach (var file in _sampleDataFeatureFiles)
 				file.Features.Add("SampleData");
-			foreach (var file in _teFeatureFiles)
-				file.Features.Add("TE");
 			foreach (var file in _fwCoreFeatureFiles)
 				file.Features.Add("FW_Core");
 
@@ -1967,11 +1902,9 @@ namespace GenerateFilesSource
 			{
 				foreach (var file in language.OtherFiles)
 					file.Features.Add(language.LanguageName);
-				foreach (var file in language.TeFiles)
-					file.Features.Add(language.LanguageName + "_TE");
 			}
 
-			_orphanFiles = _allFilesFiltered.Where(file => file.Features.Count == 0).ToArray();
+			_orphanFiles = _allFilesFiltered.Where(file => file.Features.Count == 0).ToArray().ToList();
 			if (_addOrphans)
 			{
 				foreach (var file in _orphanFiles)
@@ -1988,10 +1921,9 @@ namespace GenerateFilesSource
 
 				// Assign a DiskId for the file's cabinet:
 				var firstFeature = file.Features.First();
-				if (_featureCabinetMappings.ContainsKey(firstFeature))
-					file.DiskId = _featureCabinetMappings[firstFeature].GetCabinet(file);
-				else
-					file.DiskId = _featureCabinetMappings["Default"].GetCabinet(file);
+				file.DiskId = _featureCabinetMappings.ContainsKey(firstFeature)
+					? _featureCabinetMappings[firstFeature].GetCabinet(file)
+					: _featureCabinetMappings["Default"].GetCabinet(file);
 			}
 		}
 
@@ -2062,22 +1994,6 @@ namespace GenerateFilesSource
 		}
 
 		/// <summary>
-		/// Determines heuristically whether a given installer file is for use in TE only.
-		/// Currently uses hard-coded heuristics, and examines file name and relative path.
-		/// </summary>
-		/// <param name="file">the candidate installer file</param>
-		/// <returns>true if the file is for TE only</returns>
-		private bool FileIsForTeOnly(InstallerFile file)
-		{
-			// If a file is a localization file it will be put in a localization pack
-			// and not considered a TE file as such:
-			if (FileIsForLocalization(file))
-				return false;
-
-			return _teFileHeuristics.IsFileIncluded(file.RelativeSourcePath);
-		}
-
-		/// <summary>
 		/// Returns true if the given file is a localization resource file for the
 		/// given language.
 		/// </summary>
@@ -2103,38 +2019,14 @@ namespace GenerateFilesSource
 		}
 
 		/// <summary>
-		/// Returns true if the given file is a TE localization resource file.
+		/// Returns true if the given file is a FLEx localization resource file.
 		/// </summary>
 		/// <param name="file">File to be analyzed</param>
 		/// <param name="language">Language to be considered</param>
-		/// <returns>True if file is a TE localization file for that language</returns>
-		private bool FileIsForTeLocalization(InstallerFile file, LocalizationData language)
-		{
-			if (language.Folder.Length == 0)
-				throw new Exception("Language defined with no localization folder");
-
-			return _teLocalizationHeuristics[language.Folder].IsFileIncluded(file.RelativeSourcePath);
-		}
-
-		/// <summary>
-		/// Returns true if the given file is a TE localization resource file for any language.
-		/// </summary>
-		/// <param name="file">File to be analyzed</param>
-		/// <returns>True if file is a TE localization file for any language</returns>
-		private bool FileIsForTeLocalization(InstallerFile file)
-		{
-			return _languages.Any(currentLanguage => FileIsForTeLocalization(file, currentLanguage));
-		}
-
-		/// <summary>
-		/// Returns true if the given file is a TE or FLEx localization resource file.
-		/// </summary>
-		/// <param name="file">File to be analyzed</param>
-		/// <param name="language">Language to be considered</param>
-		/// <returns>True if file is a TE or FLEx localization file</returns>
+		/// <returns>True if file is a FLEx localization file</returns>
 		private bool FileIsForNonTeLocalization(InstallerFile file, LocalizationData language)
 		{
-			if (FileIsForLocalization(file, language) && !FileIsForTeLocalization(file, language))
+			if (FileIsForLocalization(file, language))
 				return true;
 
 			return false;
@@ -2316,7 +2208,9 @@ namespace GenerateFilesSource
 			var indentation = Indent(indentLevel);
 
 			if (dtn.IsDirReference)
+			{
 				_autoFiles.WriteLine(indentation + "<DirectoryRef Id=\"" + dtn.Name + "\">");
+			}
 			else
 			{
 				var nameClause = "Name=\"" + dtn.Name + "\"";
@@ -2324,18 +2218,31 @@ namespace GenerateFilesSource
 			}
 
 			// Iterate over all local files:
-			var localFiles = dtn.LocalFiles.Where(file => file.Features.Count != 0 && !file.OnlyUsedInUnusedFeatures).ToArray();
+			InstallerFile[] localFiles = dtn.LocalFiles.Where(file => file.Features.Count != 0 && !file.OnlyUsedInUnusedFeatures).ToArray();
+			var sortedLocalFiles = new SortedDictionary<string, InstallerFile>();
 			foreach (var file in localFiles)
+			{
+				sortedLocalFiles.Add(file.Name, file);
+			}
+			foreach (var file in sortedLocalFiles.Values)
+			{
 				OutputFileWix(file, indentation);
+			}
 
 			// Recurse over all child folders:
 			foreach (var child in dtn.Children)
+			{
 				OutputDirectoryTreeWix(child, indentLevel + 1);
+			}
 
 			if (dtn.IsDirReference)
+			{
 				_autoFiles.WriteLine(indentation + "</DirectoryRef>");
+			}
 			else
+			{
 				_autoFiles.WriteLine(indentation + "</Directory>");
+			}
 		}
 
 		/// <summary>
@@ -2355,7 +2262,7 @@ namespace GenerateFilesSource
 			_autoFiles.Write(indentation + "	<Component Id=\"" + file.Id + "\" Guid=\"" + file.ComponentGuid + "\"");
 
 			// Configure component to never overwrite an existing instance, if specified in _neverOverwriteList:
-			_autoFiles.Write(_neverOverwriteList.Where(relativeSource.Contains).Count() > 0
+			_autoFiles.Write(_neverOverwriteList.Where(relativeSource.Contains).Any()
 							? " NeverOverwrite=\"yes\""
 							: "");
 
@@ -2378,7 +2285,7 @@ namespace GenerateFilesSource
 			_autoFiles.Write(" Source=\"" + file.FullPath.Replace(_projRootPath, Path.Combine(BuildsFolderFragment, "$(var.Version)")) + "\"");
 
 			// Add in a ReadOnly attribute, configured according to what's in the _makeWritableList:
-			_autoFiles.Write(_makeWritableList.Where(relativeSource.Contains).Count() > 0
+			_autoFiles.Write(_makeWritableList.Where(relativeSource.Contains).Any()
 							? " ReadOnly=\"no\""
 							: " ReadOnly=\"yes\"");
 
@@ -2391,7 +2298,7 @@ namespace GenerateFilesSource
 			_autoFiles.WriteLine(" />");
 
 			// If file has to be forcibly overwritten, then add a RemoveFile element:
-			if (_forceOverwriteList.Where(relativeSource.Contains).Count() > 0)
+			if (_forceOverwriteList.Where(relativeSource.Contains).Any())
 			{
 				_autoFiles.Write(indentation + "		<RemoveFile Id=\"_" + file.Id + "\"");
 				_autoFiles.WriteLine(" Name=\"" + file.Name + "\" On=\"install\"/>");
@@ -2587,25 +2494,25 @@ namespace GenerateFilesSource
 			else
 			{
 				var previousAddendaFiles = previousFileLibraryAddendaNode.SelectNodes("//File");
-				if (previousAddendaFiles != null)
-				{
-					// Iterate over files in the new file library addenda:
-					foreach (XmlElement newFileNode in newAddendaFiles)
-					{
-						// See if current new file can be found in previous file library addenda
-						var node = newFileNode;
-						if (!previousAddendaFiles.Cast<XmlElement>().Any(f => f.GetAttribute("Path") == node.GetAttribute("Path")))
-							_overallReport.AddNewFile(newFileNode.GetAttribute("Path"));
-					}
+				if (previousAddendaFiles == null)
+					return;
 
-					// Iterate over files in the previous file library addenda:
-					foreach (XmlElement previousFileNode in previousAddendaFiles)
-					{
-						// See if current previous file can be found in new file library addenda
-						var node = previousFileNode;
-						if (!newAddendaFiles.Cast<XmlElement>().Any(f => f.GetAttribute("Path") == node.GetAttribute("Path")))
-							_overallReport.AddDeletedFile(previousFileNode.GetAttribute("Path"));
-					}
+				// Iterate over files in the new file library addenda:
+				foreach (XmlElement newFileNode in newAddendaFiles)
+				{
+					// See if current new file can be found in previous file library addenda
+					var node = newFileNode;
+					if (previousAddendaFiles.Cast<XmlElement>().All(f => f.GetAttribute("Path") != node.GetAttribute("Path")))
+						_overallReport.AddNewFile(newFileNode.GetAttribute("Path"));
+				}
+
+				// Iterate over files in the previous file library addenda:
+				foreach (XmlElement previousFileNode in previousAddendaFiles)
+				{
+					// See if current previous file can be found in new file library addenda
+					var node = previousFileNode;
+					if (newAddendaFiles.Cast<XmlElement>().All(f => f.GetAttribute("Path") != node.GetAttribute("Path")))
+						_overallReport.AddDeletedFile(previousFileNode.GetAttribute("Path"));
 				}
 			}
 		}
@@ -2621,7 +2528,7 @@ namespace GenerateFilesSource
 		{
 			try
 			{
-				var assembly = AssemblyName.GetAssemblyName(filePath);
+				AssemblyName.GetAssemblyName(filePath);
 
 				return true;
 			}
@@ -2653,11 +2560,11 @@ namespace GenerateFilesSource
 			const string indent = "    ";
 
 			// List all files that were only used in unused features:
-			var unusedFiles = from file in _allFilesFiltered
+			var unusedFiles = (from file in _allFilesFiltered
 							  where file.OnlyUsedInUnusedFeatures && file.Features.Count > 0
-							  select file.RelativeSourcePath + " [" + string.Join(", ", file.Features.ToArray()) + "]";
+							  select file.RelativeSourcePath + " [" + string.Join(", ", file.Features.ToArray()) + "]").ToList();
 
-			if (unusedFiles.Count() > 0)
+			if (unusedFiles.Any())
 			{
 				_overallReport.AddSeriousIssue(
 					"The following files were left out because the features they belong to are not defined in Features.wxs: " +
@@ -2665,35 +2572,23 @@ namespace GenerateFilesSource
 			}
 
 			// Test that all files in _flexFeatureFiles were used:
-			unusedFiles = from file in _flexFeatureFiles
+			unusedFiles = (from file in _flexFeatureFiles
 						  where !file.UsedInComponent && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval).ToList();
 
-			if (unusedFiles.Count() > 0)
+			if (unusedFiles.Any())
 			{
 				_overallReport.AddSeriousIssue(
 					"The following files were earmarked for FLEx only but got left out (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
 					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
-			// Test that all files in _teFeatureFiles were used:
-			unusedFiles = from file in _teFeatureFiles
-						  where !file.UsedInComponent && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
-
-			if (unusedFiles.Count() > 0)
-			{
-				_overallReport.AddSeriousIssue(
-					"The following files were earmarked for TE only but got left out (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
-					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
-			}
-
 			// Test that all files in _fwCoreFeatureFiles were used:
-			unusedFiles = from file in _fwCoreFeatureFiles
+			unusedFiles = (from file in _fwCoreFeatureFiles
 						  where !file.UsedInComponent && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval).ToList();
 
-			if (unusedFiles.Count() > 0)
+			if (unusedFiles.Any())
 			{
 				_overallReport.AddSeriousIssue(
 					"The following files were earmarked for FW_Core but got left out (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
@@ -2701,35 +2596,23 @@ namespace GenerateFilesSource
 			}
 
 			// Test that all files in _flexFeatureFiles were referenced:
-			unusedFiles = from file in _flexFeatureFiles
+			unusedFiles = (from file in _flexFeatureFiles
 						  where !file.UsedInFeatureRef && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval).ToList();
 
-			if (unusedFiles.Count() > 0)
+			if (unusedFiles.Any())
 			{
 				_overallReport.AddSeriousIssue(
 					"The following files were earmarked for FLEx only but were not referenced in any features (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
 					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
-			// Test that all files in _teFeatureFiles were referenced:
-			unusedFiles = from file in _teFeatureFiles
-						  where !file.UsedInFeatureRef && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
-
-			if (unusedFiles.Count() > 0)
-			{
-				_overallReport.AddSeriousIssue(
-					"The following files were earmarked for TE only but were not referenced in any features (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
-					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
-			}
-
 			// Test that all files in _fwCoreFeatureFiles were referenced:
-			unusedFiles = from file in _fwCoreFeatureFiles
+			unusedFiles = (from file in _fwCoreFeatureFiles
 						  where !file.UsedInFeatureRef && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval).ToList();
 
-			if (unusedFiles.Count() > 0)
+			if (unusedFiles.Any())
 			{
 				_overallReport.AddSeriousIssue(
 					"The following files were earmarked for FW_Core but were not referenced in any features (possibly listed in the <Omissions> section of InstallerConfig.xml but referenced in a VS project): " +
@@ -2737,11 +2620,11 @@ namespace GenerateFilesSource
 			}
 
 			// Test that all files in _allFilesFiltered were used:
-			unusedFiles = from file in _allFilesFiltered
+			unusedFiles = (from file in _allFilesFiltered
 						  where !file.UsedInComponent && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval).ToList();
 
-			if (unusedFiles.Count() > 0)
+			if (unusedFiles.Any())
 			{
 				_overallReport.AddSeriousIssue(
 					"The following files were unused: they probably appear in the full build but are not used by either TE (dependency of TeExe target) or FLEx (dependency of LexTextExe target): " +
@@ -2749,22 +2632,22 @@ namespace GenerateFilesSource
 			}
 
 			// Test that all files in _allFilesFiltered were referenced exactly once:
-			unusedFiles = from file in _allFilesFiltered
+			unusedFiles = (from file in _allFilesFiltered
 						  where !file.UsedInFeatureRef && !file.OnlyUsedInUnusedFeatures
-						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval).ToList();
 
-			if (unusedFiles.Count() > 0)
+			if (unusedFiles.Any())
 			{
 				_overallReport.AddSeriousIssue(
 					"The following files were not referenced in any features (tested via UsedInFeatureRef flag): " +
 					Environment.NewLine + indent + string.Join(Environment.NewLine + indent, unusedFiles.ToArray()));
 			}
 
-			var overusedFiles = from file in _allFilesFiltered
+			var overusedFiles = (from file in _allFilesFiltered
 								where file.Features.Count > 1
-								select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
+								select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval).ToList();
 
-			if (overusedFiles.Count() > 0)
+			if (overusedFiles.Any())
 			{
 				_overallReport.AddSeriousIssue(
 					"The following files were referenced by more than one feature: " +
@@ -2772,11 +2655,11 @@ namespace GenerateFilesSource
 			}
 
 			// Test Features.Count to verify that all files in _allFilesFiltered were referenced exactly once:
-			unusedFiles = from file in _allFilesFiltered
+			unusedFiles = (from file in _allFilesFiltered
 						  where file.Features.Count == 0
-						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval;
+						  select file.RelativeSourcePath + " [" + file.Comment + "]" + ": " + file.ReasonForRemoval).ToList();
 
-			if (unusedFiles.Count() > 0)
+			if (unusedFiles.Any())
 			{
 				_overallReport.AddSeriousIssue(
 					"The following files were omitted because they were not referenced in any features (tested Features.Count==0):" +
@@ -2786,7 +2669,7 @@ namespace GenerateFilesSource
 			}
 
 			// Warn about orphaned files that were included:
-			if (_addOrphans && _orphanFiles.Count() > 0)
+			if (_addOrphans && _orphanFiles.Any())
 			{
 				_overallReport.AddSeriousIssue(
 					"The following " + _orphanFiles.Count() + " \"orphan\" files were added to FW_Core because the AddOrphans command line option was used and the files were found in Output\\Release, even though they were not referenced by any VS project or specified in InstallerConfig.xml:" +

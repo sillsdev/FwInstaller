@@ -1,0 +1,17 @@
+# other files
+*.user
+*.suo
+[Oo]bj/
+[Bb]in/
+Output/
+Output
+*.pdb
+*.config
+*.vshost.*
+Builds/
+AutoFiles.wxs
+FileLibraryAddenda.xml
+*.cab
+cab/
+MD5SUM.md5
+SetupFW.*

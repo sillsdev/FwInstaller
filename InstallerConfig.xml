@@ -33,36 +33,22 @@
 			<!-- Define heuristics for FLEx files: -->
 			<File PathContains="Language Explorer"/>
 			<File PathContains="Language_Explorer"/>
-			<File PathContains="Data Notebook"/>
-			<File PathContains="Data_Notebook"/>
+			<Except PathContains="Language Explorer\Movies\notfound.html"/>
+			<Except PathContains="Output\Release\UIAutomationProvider.dll"/>
+			<Except PathContains="Output\Release\UIAutomationTypes.dll"/>
 		</FlexOnly>
 		<FlexMoviesOnly>
 			<!-- Define heuristics for FLEx movie files: -->
 			<File PathContains="Language Explorer\Movies"/>
-			<Except PathContains="Language Explorer\Movies\notfound.html"/>
 		</FlexMoviesOnly>
 		<SampleDataOnly>
 			<!-- We're no longer shipping sample data as an installer feature -->
 		</SampleDataOnly>
-		<TeOnly>
-			<!-- Define heuristics for TE files: -->
-			<File PathContains="Translation_Editor"/>
-			<File PathContains="Translation Editor"/>
-			<Except PathEnds=".vrs"/>  <!-- *.vrs files needed in SE version LT-14754 -->
-			<File PathContains="Scripture"/>
-			<File PathContains="Bibl"/>
-		</TeOnly>
 		<Localization>
 			<!-- Define heuristics for (non-TE) localization files, where the {0} parameter is replaced by the language code: -->
 			<File PathContains="\{0}\"/>
 			<File PathEnds="\strings-{0}.xml"/>
 		</Localization>
-		<TeLocalization>
-			<!-- Define heuristics for TE localization files, where the {0} parameter is replaced by the language code: -->
-			<File PathContains="\{0}\Te"/>
-			<File PathContains="\{0}\Scr"/>
-			<File PathEnds="\BiblicalTerms-{0}.xml"/>
-		</TeLocalization>
 		<!-- The following heuristics apply over all files, not just DistFiles. -->
 		<CoreFileOrphans>
 			<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed or not directly referenced by either TE or FLEx: -->
@@ -94,11 +80,11 @@
 			<File PathPattern="Output\Release\log4net.dll"/>
 			<File PathPattern="Output\Release\Patr100.dll"/>
 			<File PathPattern="Output\Release\xample.dll"/>
-			<File PathPattern="Output\Release\Utilities.dll"/>
+			<!-- <File PathPattern="Output\Release\Utilities.dll"/> -->
 			<!-- Sundry utilities -->
 			<File PathPattern="Output\Release\FixFwData.exe"/>
 			<File PathPattern="Output\Release\FixFwData.pdb"/>
-			<File PathPattern="Output\Release\PalasoUIWindowsForms.dll"/>
+			<!-- <File PathPattern="Output\Release\PalasoUIWindowsForms.dll"/> -->
 			<!-- Sundry files not picked up by other means but related to those that are -->
 			<File PathPattern="Output\Release\FDOBrowser.XML"/>
 			<File PathPattern="Output\Release\Microsoft.Practices.ServiceLocation.xml"/>
@@ -118,12 +104,7 @@
 			<File PathPattern="Output\Release\remoting_tcp_server.config"/>
 			<!-- The following is copied from DistFiles by project Src\Common\Controls\Widgets\Widgets.csproj although the project appears not to reference the assembly -->
 			<File PathPattern="Output\Release\irrKlang.NET4.dll"/>
-			<!-- The following 4 are copied from DistFiles by project Src\TE\TeEditing\TeEditing.csproj although the project appears not to reference the assemblies -->
-			<File PathPattern="Output\Release\Interop.LibronixDLS.dll"/>
-			<File PathPattern="Output\Release\Interop.LibronixDLSUtility.dll"/>
-			<File PathPattern="Output\Release\Interop.Logos4Lib.dll"/>
-			<File PathPattern="Output\Release\Interop.Utility.dll"/>
-			<File PathPattern="Output\Release\L10NSharp.dll"/>
+			<!-- <File PathPattern="Output\Release\L10NSharp.dll"/> -->
 			<!-- These two files are needed in TE resource viewer right-pane to avoid a crash when clicked, and also in EC tool for creating/testing converters, but it is installed by EC merge modules, so we don't want to do it here. -->
 			<!--File PathPattern="Output\Release\geckofx-core-14.dll"/-->
 			<!--File PathPattern="Output\Release\Geckofx-Winforms-14.dll"/-->
@@ -131,22 +112,20 @@
 			<File PathPattern="Output\Release\FwKernel.X.manifest"/>
 			<File PathPattern="Output\Release\Graphite.X.manifest"/>
 			<File PathPattern="Output\Release\Views.X.manifest"/>
+			<File PathPattern="Output\Release\Geckofx"/>
+			<File PathPattern="Output\Release\Keyman7Interop.dll"/>
+			<File PathPattern="Output\Release\KeymanLink.dll"/>
+			<File PathPattern="Output\Release\QuickGraph.dll"/>
+			<File PathPattern="Output\Release\taglib-sharp.dll"/>
+			<File PathPattern="Output\Release\xulrunner"/>
 		</CoreFileOrphans>
 		<ForceBuiltFilesIntoCore>
-			<!-- Define list of file patterns of built files known to be needed by both TE and FLEx but where one or the other does not reference them properly, so they end up solely in the other: -->
+			<!-- Define list of file patterns of built files known to be needed by FLEx but where it does not reference them properly: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is needed in the Core*"/> -->
 			<!-- The following is referenced by the TE target, but it is also needed by FLEx, which doesn't reference it -->
-			<File PathPattern="Output\Release\Commons.Xml.Relaxng.dll"/>
 			<File PathPattern="Output\Release\TeImportExport."/>
 			<File PathPattern="Output\Release\TeDialogs."/>
-			<File PathPattern="Output\Release\DiffView."/>
 		</ForceBuiltFilesIntoCore>
-		<ForceBuiltFilesIntoTE>
-			<!-- Define list of path patterns of built files known to be needed in TE but which are not part of the TeExe FieldWorks.targets dependency chain: -->
-			<!-- Format: <File PathPattern="*partial path of any file that is needed by TE*"/> -->
-			<File PathPattern="Output\Release\System.Drawing.Html.dll"/>
-			<File PathPattern="Output\Release\TeUIAdapters.dll"/>
-		</ForceBuiltFilesIntoTE>
 		<ForceBuiltFilesIntoFlex>
 			<!-- Define list of path patterns of built files known to be needed in FLEx but which are not part of the LexTextgExe FieldWorks.targets dependency chain: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is needed by FLEx*"/> -->
@@ -180,9 +159,16 @@
 			<Except Path="Output\Release\TeStylesXml.pdb"/>
 			<Except Path="DistFiles\ScrBookRef.dtd"/>
 			<Except Path="DistFiles\ScrBookRef.xml"/>
-			<Except Path="DistFiles\TeStyles.xml"/>
+			<Except Path="DistFiles\Language Explorer\TeStyles.xml"/>
 			<Except Path="DistFiles\Editorial Checks\ScrChecks.dll"/>
 			<Except Path="DistFiles\Editorial Checks\ScrChecks.pdb"/>
+			<Except Path="DistFiles\Editorial Checks\eng.vrs"/>
+			<Except Path="DistFiles\Editorial Checks\lxx.vrs"/>
+			<Except Path="DistFiles\Editorial Checks\org.vrs"/>
+			<Except Path="DistFiles\Editorial Checks\oth.vrs"/>
+			<Except Path="DistFiles\Editorial Checks\rsc.vrs"/>
+			<Except Path="DistFiles\Editorial Checks\rso.vrs"/>
+			<Except Path="DistFiles\Editorial Checks\vul.vrs"/>
 			<Except Path="Output\Release\TeDialogs.dll"/>
 			<Except Path="Output\Release\TeDialogs.pdb"/>
 			<Except Path="Output\Release\TeImportExport.pdb"/>
@@ -508,6 +494,7 @@
 		<File PathPattern="Output\Release\xCoreInterfaces.XmlSerializers."/>
 		<File PathPattern="Output\Release\CacheLight."/>
 		<File PathPattern="Output\Release\RBRExtensions."/>
+		<File PathPattern="Output\Release\FieldWorks.vshost."/>
 		<File PathPattern="Output\Release\geckofx-core-14.dll"/> <!-- Installed by EC merge modules-->
 		<File PathPattern="Output\Release\Geckofx-Winforms-14.dll"/> <!-- Installed by EC merge modules-->
 		<File PathPattern="XceedZip.dll"/>
@@ -516,10 +503,14 @@
 		<File PathPattern="DistFiles\libxample32.so"/> <!-- Linux file -->
 		<File PathPattern="DistFiles\libxample64.so"/> <!-- Linux file -->
 		<File PathPattern="SIL\Repository"/>
+		<File PathPattern="Output\Release\UIAutomationTypes.dll"/>
+		<File PathPattern="Output\Release\UIAutomationProvider.dll"/>
 		<!-- Define pairs of file paths known (and allowed) to be similar. This suppresses warnings about omitted files that look like other included files: -->
 		<!-- Format: <SuppressSimilarityWarning Path1="*path of first file of matching pair*" Path2="*path of second file of matching pair*"/> -->
 		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.dll" Path2="Output\Release\ScrChecks.dll"/>
 		<SuppressSimilarityWarning Path1="DistFiles\Editorial Checks\ScrChecks.pdb" Path2="Output\Release\ScrChecks.pdb"/>
+		<SuppressSimilarityWarning Path1="DistFiles\UIAutomationProvider.dll" Path2="Output\Release\UIAutomationProvider.dll"/>
+		<SuppressSimilarityWarning Path1="DistFiles\UIAutomationTypes.dll" Path2="Output\Release\UIAutomationTypes.dll"/>
 	</Omissions>
 	<FolderRedirections>
 		<!-- Define list of folders that will be redirected to some other folder on the end-user's machine: -->

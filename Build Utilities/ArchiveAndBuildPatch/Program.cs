@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
+using BuildUtilities;
 
 namespace ArchiveAndBuildPatch
 {
@@ -37,7 +38,7 @@ namespace ArchiveAndBuildPatch
 			var archiveFolderManager = new ArchiveFolderManager();
 
 			// Archive the important files into the latest build version folder:
-			archiveFolderManager.ArchiveFile("AutoFiles.wxs");
+			archiveFolderManager.ArchiveFile(InstallerConstants.AutoFilesFileName);
 			archiveFolderManager.ArchiveFile("AutoFiles_No_TE.wxs");
 			archiveFolderManager.ArchiveFile("FileLibrary.xml");
 			archiveFolderManager.ArchiveFile("SetupFW.msi");

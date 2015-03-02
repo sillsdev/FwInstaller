@@ -18,20 +18,6 @@
 					<CreateFolder/>
 					<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='DelOldDeskShortcutFlex' Type='integer' Value='1' KeyPath='yes' />
 				</Component>
-				<Component Id="DeskShortcutTE" Guid="D6A665CC-9977-49f8-B390-23C9CFEB57AD">
-					<Condition><![CDATA[SIL_DESKTOP_ICONS]]></Condition>
-					<Shortcut Id="DeskShortcutTE" Directory="DesktopFolder" Name="Translation Editor 8" Target="[#TE.exe.F5642C6BE113D2E83EB790EFF901FBFB]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
-					<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-					<CreateFolder />
-					<RemoveFolder Id='RF_DeskShortcutTE' On='uninstall' />
-					<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='DeskShortcutTE' Type='integer' Value='1' KeyPath='yes' />
-				</Component>
-				<Component Id="DelOldDeskShortcutTE" Guid="2DABC23F-293F-47ff-99A4-FB94B595A74C">
-					<RemoveFile Id="DelOldDeskShortcutTE" Name="Translation Editor 4.lnk" On="install"/>
-					<!-- The next 2 items are junk to make validation pass on ICE18 and ICE38. -->
-					<CreateFolder/>
-					<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='DelOldDeskShortcutTE' Type='integer' Value='1' KeyPath='yes' />
-				</Component>
 			</Directory>
 			<Directory Id="StartMenuFolder" SourceName="Start Menu">
 				<Directory Id="ProgramMenuFolder" SourceName="Programs">
@@ -78,36 +64,6 @@
 								<CreateFolder />
 								<RemoveFolder Id='RF_ShortcutMorphIntro' On='uninstall' />
 								<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutMorphIntro' Type='integer' Value='1' KeyPath='yes' />
-							</Component>
-						</Directory>
-						<Directory Id="TEMenu" Name="Translation Editor">
-							<Component Id="ShortcutTE" Guid="8DC73582-DBAA-48a6-8C18-E91CA2D83792">
-								<Shortcut Id="ShortcutTE" Directory="TEMenu" Name="Translation Editor" Target="[#TE.exe.F5642C6BE113D2E83EB790EFF901FBFB]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="INSTALLDIR" />
-								<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-								<CreateFolder />
-								<RemoveFolder Id='RF_ShortcutTE' On='uninstall' />
-								<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutTE' Type='integer' Value='1' KeyPath='yes' />
-							</Component>
-							<Component Id="ShortcutTEManual" Guid="8CB72BC1-2179-4ca2-8EC0-227D35B7068B">
-								<Shortcut Id="ShortcutTEManual" Directory="TEMenu" Name="Translation Editor Student Manual" Target="[#TE_Student_Manual.doc.45C4AA24E6DB50DBA50D3554E02D91F0]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Training.5986AE16BC0F1F5B5EC81DE119F0B21B" />
-								<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-								<CreateFolder />
-								<RemoveFolder Id='RF_ShortcutTEManual' On='uninstall' />
-								<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutTEManual' Type='integer' Value='1' KeyPath='yes' />
-							</Component>
-							<Component Id="ShortcutTEHelp" Guid="FC2AB33D-7545-45bd-9760-CCE57F8852E4">
-								<Shortcut Id="ShortcutTEHelp" Directory="TEMenu" Name="Translation Editor Help" Target="[#FieldWorks_Translation_.580D94F47DD4C90CCD1505C6C512C95E]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Helps.02B7932A250F90AC18E7695AC5B9577F" />
-								<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-								<CreateFolder />
-								<RemoveFolder Id='RF_ShortcutTEHelp' On='uninstall' />
-								<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutTEHelp' Type='integer' Value='1' KeyPath='yes' />
-							</Component>
-							<Component Id="ShortcutTEMovies" Guid="4E1620D4-B27F-4e85-8477-0DC45DF604C4">
-								<Shortcut Id="ShortcutTEMovies" Directory="TEMenu" Name="Translation Editor Demos" Target="[#index.html.EC78722910DED7891A015CD9B9216DD2]" Hotkey="0" IconIndex="0" Show="normal" WorkingDirectory="Demos.CBEB5F7BB09C3A579C563C71A9C14732" />
-								<!-- The next 3 items are junk to make validation pass on ICE18, ICE38 and ICE43. -->
-								<CreateFolder />
-								<RemoveFolder Id='RF_ShortcutTEMovies' On='uninstall' />
-								<RegistryValue Root='HKCU' Key='Software\SIL\FieldWorks\Installer' Name='ShortcutTEMovies' Type='integer' Value='1' KeyPath='yes' />
 							</Component>
 						</Directory>
 					</Directory>

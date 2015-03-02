@@ -16,13 +16,7 @@ namespace FwWixExtension
 		/// </summary>
 		public override PreprocessorExtension PreprocessorExtension
 		{
-			get
-			{
-				if (_preprocessorExtension == null)
-					_preprocessorExtension = new FwPreprocessorExtension();
-
-				return _preprocessorExtension;
-			}
+			get { return _preprocessorExtension ?? (_preprocessorExtension = new FwPreprocessorExtension()); }
 		}
 	}
 
@@ -32,7 +26,7 @@ namespace FwWixExtension
 	public class FwPreprocessorExtension : PreprocessorExtension
 	{
 		// Specify which variable prefixes we deal with:
-		private static string[] prefixes = { "Fw" };
+		private static readonly string[] prefixes = { "Fw" };
 		public override string[] Prefixes { get { return prefixes; } }
 
 		public override string GetVariableValue(string prefix, string name)

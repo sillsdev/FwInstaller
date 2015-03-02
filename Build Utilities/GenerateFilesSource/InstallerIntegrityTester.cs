@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
+using BuildUtilities;
 using InstallerBuildUtilities;
 
 namespace GenerateFilesSource
@@ -108,7 +109,7 @@ namespace GenerateFilesSource
 			}
 
 			// Load all .wxs files containing files definitions into a List for iterative processing:
-			_wixFilesSources = new List<WixSource> {new WixSource("Files.wxs"), new WixSource("AutoFiles.wxs")};
+			_wixFilesSources = new List<WixSource> {new WixSource("Files.wxs"), new WixSource(InstallerConstants.AutoFilesFileName)};
 			if (File.Exists("PatchCorrections.wxs"))
 				_wixFilesSources.Add(new WixSource("PatchCorrections.wxs"));
 		}

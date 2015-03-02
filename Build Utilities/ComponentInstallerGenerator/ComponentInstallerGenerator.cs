@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using BuildUtilities;
 using InstallerBuildUtilities;
 
 namespace ComponentInstallerGenerator
@@ -87,7 +88,6 @@ namespace ComponentInstallerGenerator
 
 	class InstallerGenerator
 	{
-		private const string AutoFilesFileName = "AutoFiles.wxs";
 		private const string DefaultInstallerTemplateFileName = "ComponentInstallerTemplate.wxs";
 
 		private readonly InstallerInfo m_installerInfo;
@@ -100,8 +100,8 @@ namespace ComponentInstallerGenerator
 
 		public void Init()
 		{
-			if (!File.Exists(AutoFilesFileName))
-				throw new Exception(AutoFilesFileName + " is missing.");
+			if (!File.Exists(InstallerConstants.AutoFilesFileName))
+				throw new Exception(InstallerConstants.AutoFilesFileName + " is missing.");
 		}
 
 		/// <summary>
@@ -128,7 +128,7 @@ namespace ComponentInstallerGenerator
 		{
 			// Create a working copy of the main AutoFiles.wxs structure:
 			var xmlFiles = new XmlDocument();
-			xmlFiles.Load(AutoFilesFileName);
+			xmlFiles.Load(InstallerConstants.AutoFilesFileName);
 
 			// Set up WIX namespace stuff:
 			var xmlnsManager = new XmlNamespaceManager(xmlFiles.NameTable);
