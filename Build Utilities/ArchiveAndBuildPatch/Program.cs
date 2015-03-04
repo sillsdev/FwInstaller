@@ -39,12 +39,9 @@ namespace ArchiveAndBuildPatch
 
 			// Archive the important files into the latest build version folder:
 			archiveFolderManager.ArchiveFile(InstallerConstants.AutoFilesFileName);
-			archiveFolderManager.ArchiveFile("AutoFiles_No_TE.wxs");
 			archiveFolderManager.ArchiveFile("FileLibrary.xml");
 			archiveFolderManager.ArchiveFile("SetupFW.msi");
 			archiveFolderManager.ArchiveFile("SetupFW.wixpdb");
-			archiveFolderManager.ArchiveFile("SetupFW_SE.msi");
-			archiveFolderManager.ArchiveFile("SetupFW_SE.wixpdb");
 
 			// Build patches from all previous versions to get to the latest version
 			Parallel.For(1, archiveFolderManager.NumArchives, index =>
@@ -55,8 +52,7 @@ namespace ArchiveAndBuildPatch
 				{
 					Parallel.Invoke
 					(
-						() => BuildPatch(archiveFolderManager, index, "SetupFW", "FW_BTE_"),
-						() => BuildPatch(archiveFolderManager, index, "SetupFW_SE", "FW_SE_")
+						() => BuildPatch(archiveFolderManager, index, "SetupFW", "FW_SE_")
 					);
 				}
 			});

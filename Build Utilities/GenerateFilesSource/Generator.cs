@@ -1080,9 +1080,8 @@ namespace GenerateFilesSource
 			// We do these tasks in parallel:
 			// 1) Collect existing files from Output\Release and DistFiles;
 			// 2) Collect files from the LexTextExe target and all its dependencies;
-			// 3) Collect files from the TeExe target and all its dependencies;
-			// 4) Collect files from the allCsharpNoTests target and all its dependencies;
-			// 5) Collect files from the allCppNoTest target and all its dependencies;
+			// 3) Collect files from the allCsharpNoTests target and all its dependencies;
+			// 4) Collect files from the allCppNoTest target and all its dependencies;
 			 Parallel.Invoke(
 				GetAllFilesFiltered, // fills up _allFilesFiltered and _duplicateFiles sets
 				GetFlexFiles, // fills up _flexFiles set

@@ -51,7 +51,7 @@
 		</Localization>
 		<!-- The following heuristics apply over all files, not just DistFiles. -->
 		<CoreFileOrphans>
-			<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed or not directly referenced by either TE or FLEx: -->
+			<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed or not directly referenced by FLEx: -->
 			<!-- Format: <File PathPattern="*partial path of any file that is not needed by TE or FLEx but is needed in the FW installation*"/> -->
 			<!-- Encoding Converters Stuff -->
 			<File PathPattern="Output\Release\IcuConvEC.dll"/>
@@ -100,8 +100,6 @@
 			<File PathPattern="Output\Release\WriteKey.exe.manifest"/>
 			<!-- The following is copied from DistFiles by project Src\FDO\FDO.csproj although the project appears not to reference the assembly -->
 			<File PathPattern="Output\Release\Mono.Cecil.dll"/>
-			<!-- The following is copied from DistFiles by project Src\Common\FwRemoteDatabaseConnectorService\FwRemoteDatabaseConnectorService.csproj -->
-			<File PathPattern="Output\Release\remoting_tcp_server.config"/>
 			<!-- The following is copied from DistFiles by project Src\Common\Controls\Widgets\Widgets.csproj although the project appears not to reference the assembly -->
 			<File PathPattern="Output\Release\irrKlang.NET4.dll"/>
 			<!-- <File PathPattern="Output\Release\L10NSharp.dll"/> -->
