@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace GenerateFilesSource
+﻿namespace GenerateFilesSource
 {
 	class Program
 	{
@@ -11,8 +9,6 @@ namespace GenerateFilesSource
 			var report = false;
 			// Flag to indicate if we should launch the installer integrity tester at the end:
 			var testIntegrity = false;
-			// Flag to indicate if we should include all feature-unassigned files in FW_Core:
-			var addOrphans = false;
 
 			foreach (var arg in args)
 			{
@@ -24,12 +20,9 @@ namespace GenerateFilesSource
 					case "check":
 						testIntegrity = true;
 						break;
-					case "addorphans":
-						addOrphans = true;
-						break;
 				}
 			}
-			var gen = new Generator(report, addOrphans, testIntegrity);
+			var gen = new Generator(report, testIntegrity);
 			gen.Run();
 		}
 	}

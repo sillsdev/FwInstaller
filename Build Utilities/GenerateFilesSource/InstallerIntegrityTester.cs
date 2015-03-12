@@ -32,20 +32,20 @@ namespace GenerateFilesSource
 	// 3: File XXXX has a version number of 0.0.0.0.
 	// 4: Could not determine if DistFiles folder is consistent with source control: XXXX
 
-	class InstallerIntegrityTester
+	internal sealed class InstallerIntegrityTester
 	{
 		private readonly string _buildType;
 		private readonly ReportSystem _report;
-
+		private InstallerConfigFile _installerConfigFile;
 		private const string LogFileName = "TestInstallerIntegrity.log";
 		private string _exeFolder;
 		private string _projRootPath;
 		private XmlNodeList _fileNodes;
 		private class WixSource
 		{
-			public readonly XmlDocument XmlDoc;
-			public readonly XmlNamespaceManager XmlnsMan;
-			public WixSource(string fileName)
+			internal readonly XmlDocument XmlDoc;
+			internal readonly XmlNamespaceManager XmlnsMan;
+			internal WixSource(string fileName)
 			{
 				XmlDoc = new XmlDocument();
 				XmlDoc.Load(fileName);
@@ -55,21 +55,9 @@ namespace GenerateFilesSource
 		}
 		private List<WixSource> _wixFilesSources;
 
-		// List of file patterns of files that may legitimately exist in DistFiles
-		// without being checked into source control:
-		private readonly List<string> _nonVersionedDistFiles = new List<string>();
-		// List of file patterns of files that may legitimately have a version number of 0.0.0.0:
-		private readonly List<string> _versionZeroFiles = new List<string>();
-		// List of file name fragments whose files should be omitted:
-		private readonly List<string> _fileOmissions = new List<string>();
-
-		// List of machines which will email people if something goes wrong:
-		private readonly List<string> _emailingMachineNames = new List<string>();
-		// List of people to email if something goes wrong:
-		private readonly List<string> _emailList = new List<string>();
-
-		public InstallerIntegrityTester(string buildType, ReportSystem report)
+		internal InstallerIntegrityTester(InstallerConfigFile installerConfigFile, string buildType, ReportSystem report)
 		{
+			_installerConfigFile = installerConfigFile;
 			_buildType = buildType;
 			_report = report;
 		}
@@ -77,7 +65,6 @@ namespace GenerateFilesSource
 		internal void Run()
 		{
 			Init();
-
 			TestFileLibrary();
 			TestUnversionedDistFiles();
 		}
@@ -98,8 +85,6 @@ namespace GenerateFilesSource
 			// Get development project root path:
 			_projRootPath = _exeFolder.ToLowerInvariant().EndsWith("installer") ? Path.GetDirectoryName(_exeFolder) : _exeFolder;
 
-			ConfigureFromXml();
-
 			// Load File Library:
 			if (File.Exists("FileLibrary.xml"))
 			{
@@ -112,60 +97,6 @@ namespace GenerateFilesSource
 			_wixFilesSources = new List<WixSource> {new WixSource("Files.wxs"), new WixSource(InstallerConstants.AutoFilesFileName)};
 			if (File.Exists("PatchCorrections.wxs"))
 				_wixFilesSources.Add(new WixSource("PatchCorrections.wxs"));
-		}
-
-		/// <summary>
-		/// Reads configuration data from InstallerConfig.xml
-		/// </summary>
-		private void ConfigureFromXml()
-		{
-			var configuration = new XmlDocument();
-			configuration.Load("InstallerConfig.xml");
-
-			// Define list of (partial) paths of files that are OK in DistFiles folder without being in source control:
-			// Format: <IgnoreNonVersionedDistFiles PathPattern="*partial path of any file may exist in DistFiles without being checked into version control*"/>
-			var ignoreNonVersionedDistFiles = configuration.SelectNodes("//IntegrityChecks/IgnoreNonVersionedDistFiles");
-			if (ignoreNonVersionedDistFiles != null)
-				foreach (XmlElement file in ignoreNonVersionedDistFiles)
-					_nonVersionedDistFiles.Add(file.GetAttribute("PathPattern"));
-
-			// Define list of (partial) paths of files that are allowed to have a version number of 0.0.0.0:
-			// Format: <IgnoreVersionZeroFiles PathPattern="*partial path of any file allowed to have a version number of 0.0.0.0*"/>
-			var ignoreVersionZeroFiles = configuration.SelectNodes("//IntegrityChecks/IgnoreVersionZeroFiles");
-			if (ignoreVersionZeroFiles != null)
-				foreach (XmlElement file in ignoreVersionZeroFiles)
-					_versionZeroFiles.Add(file.GetAttribute("PathPattern"));
-
-			// Define list of file patterns to be filtered out. Any file whose path contains (anywhere) one of these strings will be filtered out:
-			// Format: <File PathPattern="*partial path of any file that is not needed in the FW installation*"/>
-			var omittedFiles = configuration.SelectNodes("//Omissions/File");
-			if (omittedFiles != null)
-				foreach (XmlElement file in omittedFiles)
-					_fileOmissions.Add(file.GetAttribute("PathPattern"));
-
-			// Define list of machines to email people if something goes wrong:
-			// Format: <EmailingMachine Name="*name of machine (within current domain) which is required to email people if there is a problem*"/>
-			var failureNotification = configuration.SelectSingleNode("//FailureNotification");
-			if (failureNotification != null)
-			{
-				// Define list of machines to email people if something goes wrong:
-				// Format: <EmailingMachine Name="*name of machine (within current domain) which is required to email people if there is a problem*"/>
-				var emailingMachines = failureNotification.SelectNodes("EmailingMachine");
-				if (emailingMachines != null)
-					foreach (XmlElement emailingMachine in emailingMachines)
-						_emailingMachineNames.Add(emailingMachine.GetAttribute("Name"));
-
-				// Define list of people to email if something goes wrong:
-				// Format: <Recipient Email="*email address of someone to notify if there is a problem*"/>
-				var failureReportRecipients = failureNotification.SelectNodes("Recipient");
-				if (failureReportRecipients != null)
-					foreach (XmlElement recipient in failureReportRecipients)
-					{
-						var address = Tools.ElucidateEmailAddress(recipient.GetAttribute("Email"));
-						_emailList.Add(address);
-					}
-			}
-
 		}
 
 		private void TestFileLibrary()
@@ -250,7 +181,7 @@ namespace GenerateFilesSource
 			if (timeBetweenVersions.TotalHours < -24)
 				_report.AddSeriousIssue("ERROR #2: File " + filePath + " has a date/time stamp (" + realDateTime + ") that is earlier than a previously released version (" + libDate + "). Patching may fail.");
 
-			if (realVersion == "0.0.0.0" && !_versionZeroFiles.Any(path => fullFilePath.ToLowerInvariant().Contains(path.Replace("\\${config}\\", "\\" + _buildType + "\\").ToLowerInvariant())))
+			if (realVersion == "0.0.0.0" && !_installerConfigFile.VersionZeroFiles.Any(path => fullFilePath.ToLowerInvariant().Contains(path.Replace("\\${config}\\", "\\" + _buildType + "\\").ToLowerInvariant())))
 				_report.AddSeriousIssue("WARNING #3: File " + filePath + " has a version number of 0.0.0.0. That is very silly, and I don't like it. You'll only regret it later.");
 
 			// The version number must not be lower in the latest version than it was in the previous one:
@@ -481,12 +412,12 @@ namespace GenerateFilesSource
 			// Filter out files that are allowed to exist in DistFiles without being in source control:
 			// (specified in InstallerConfig.xml in the IntegrityChecks element)
 			distFilesNotInSourceControl = (from file in distFilesNotInSourceControl
-										   where !_nonVersionedDistFiles.Any(pattern => FilePatternMatcher.PathMatchesPattern(file, pattern))
+										   where !_installerConfigFile.NonVersionedDistFiles.Any(pattern => FilePatternMatcher.PathMatchesPattern(file, pattern))
 										   select file).ToList();
 
 			// Filter out files that were specifically to be omitted from the installer:
 			distFilesNotInSourceControl = (from file in distFilesNotInSourceControl
-							where _fileOmissions.All(f => !Path.Combine("DistFiles", file).ToLowerInvariant().Contains(f.Replace("\\${config}\\", "\\" + _buildType + "\\").ToLowerInvariant()))
+										   where _installerConfigFile.FileOmissions.All(fo => !Path.Combine("DistFiles", file).ToLowerInvariant().Contains(fo.RelativePath.Replace("\\${config}\\", "\\" + _buildType + "\\").ToLowerInvariant()))
 							select Path.Combine("DistFiles", file)).ToList();
 
 			if (distFilesNotInSourceControl.Count() > 0)

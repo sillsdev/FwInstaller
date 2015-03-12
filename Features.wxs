@@ -2,7 +2,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment Id="FeaturesFragment">
 	<Property  Id='FeaturesFragment' Value='1'/>
-		<Feature Id="FW_Core" Title="FieldWorks" Description="Files common to all FieldWorks applications" Display="expand" Level="3" AllowAdvertise="no">
+		<Feature Id="FW_Core" Title="FieldWorks" Description="FieldWorks Language Explorer (FLEx)" Display="expand" Level="3" AllowAdvertise="no">
 			<ComponentRef Id="CreateProjectsFolder"/>
 			<ComponentRef Id="CreateIcuFolder"/>
 			<ComponentRef Id="CopyLicenseTechReadme"/>
@@ -23,6 +23,11 @@
 			<ComponentRef Id="ShortcutLicense"/>
 			<ComponentRef Id="ShortcutTechSupport"/>
 			<ComponentRef Id="ShortcutUnicodeCharEditor"/>
+			<ComponentRef Id="UnregFlex"/>
+			<ComponentRef Id="DeskShortcutFlex"/>
+			<ComponentRef Id="DelOldDeskShortcutFlex"/>
+			<ComponentRef Id="ShortcutFlex"/>
+			<ComponentRef Id="ShortcutFlexHelp"/>
 			<MergeRef Id="ATL"/>
 			<MergeRef Id="CRT"/>
 			<MergeRef Id="CRT90"/>
@@ -34,15 +39,8 @@
 			<MergeRef Id="TECkit_DLLs"/>
 			<MergeRef Id="CC_DLL"/>
 			<MergeRef Id="ICUECHelp"/>
-			<Feature Id="FLEx" Title="Language Explorer (FLEx)" Description="FieldWorks Language Explorer" Display="expand" Level="3" AllowAdvertise="no">
-				<ComponentRef Id="UnregFlex"/>
-				<ComponentRef Id="DeskShortcutFlex"/>
-				<ComponentRef Id="DelOldDeskShortcutFlex"/>
-				<ComponentRef Id="ShortcutFlex"/>
-				<ComponentRef Id="ShortcutFlexHelp"/>
-				<Feature Id="FlexMovies" Title="Demo Movies" Description="Language Explorer demonstration movies" Display="expand" Level="0" AllowAdvertise="no">
-					<Condition Level="3">(FLEX_MOVIES_CAB1_FOUND AND FLEX_MOVIES_CAB2_FOUND AND FLEX_MOVIES_CAB3_FOUND) OR REMOVE</Condition>
-				</Feature>
+			<Feature Id="FlexMovies" Title="Demo Movies" Description="Language Explorer demonstration movies" Display="expand" Level="0" AllowAdvertise="no">
+				<Condition Level="3">(FLEX_MOVIES_CAB1_FOUND AND FLEX_MOVIES_CAB2_FOUND AND FLEX_MOVIES_CAB3_FOUND) OR REMOVE</Condition>
 			</Feature>
 			<Feature Id="LOC" Title="Language Packs" Description="Additional languages for the user interface." Display="expand" Level="3" AllowAdvertise="no">
 				<Feature Id="Indonesian" Title="Indonesian" Description="Allows the software to have an Indonesian user interface." Display="expand" Level="4" AllowAdvertise="no">

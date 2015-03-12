@@ -20,6 +20,13 @@
 		<Language Name="Hungarian" Id="hu"/>
 	</Languages>
 	<FeatureAllocation>
+		<!--
+		In the new world order, there are only these Features in the FW installer:
+			FW_Core
+				FlexMovies
+				LOC
+					Various localized languages
+		-->
 		<!-- Allocation of files in Output\Release is generally done by analyzing FieldWorks.targets -->
 		<!-- and comparing the resulting file sets. Here we define heuristics for dealing with files in -->
 		<!-- DistFiles. Each main element defines what section of the installer is being addressed, and -->
@@ -29,149 +36,15 @@
 		<!-- <Except PathContains="*partial path appearing anywhere in a DistFiles file that must not appear in the current section*"/> -->
 		<!-- <Except PathEnds="*partial path appearing at the end of a DistFiles file that must not appear in the current section*"/> -->
 		<!-- Be aware that the Except elements take precedence over the File elements. -->
-		<FlexOnly>
-			<!-- Define heuristics for FLEx files: -->
-			<File PathContains="Language Explorer"/>
-			<File PathContains="Language_Explorer"/>
-			<Except PathContains="Language Explorer\Movies\notfound.html"/>
-			<Except PathContains="Output\Release\UIAutomationProvider.dll"/>
-			<Except PathContains="Output\Release\UIAutomationTypes.dll"/>
-		</FlexOnly>
 		<FlexMoviesOnly>
 			<!-- Define heuristics for FLEx movie files: -->
 			<File PathContains="Language Explorer\Movies"/>
 		</FlexMoviesOnly>
-		<SampleDataOnly>
-			<!-- We're no longer shipping sample data as an installer feature -->
-		</SampleDataOnly>
 		<Localization>
 			<!-- Define heuristics for (non-TE) localization files, where the {0} parameter is replaced by the language code: -->
 			<File PathContains="\{0}\"/>
 			<File PathEnds="\strings-{0}.xml"/>
 		</Localization>
-		<!-- The following heuristics apply over all files, not just DistFiles. -->
-		<CoreFileOrphans>
-			<!-- Define list of path patterns of files known to be needed in the core files feature but which are not needed or not directly referenced by FLEx: -->
-			<!-- Format: <File PathPattern="*partial path of any file that is not needed by TE or FLEx but is needed in the FW installation*"/> -->
-			<!-- Encoding Converters Stuff -->
-			<File PathPattern="Output\Release\IcuConvEC.dll"/>
-			<File PathPattern="Output\Release\IcuEC.dll"/>
-			<File PathPattern="Output\Release\IcuRegexEC.dll"/>
-			<File PathPattern="Output\Release\IcuTranslitEC.dll"/>
-			<File PathPattern="Output\Release\EC\Plugins\IcuEC 4.0.0.0 Plugin Details.xml"/>
-			<!-- ICU Stuff -->
-			<File PathPattern="Output\Release\icu.net.dll"/>
-			<File PathPattern="Output\Release\icudt50.dll"/>
-			<File PathPattern="Output\Release\icuin50.dll"/>
-			<File PathPattern="Output\Release\icuuc50.dll"/>
-			<File PathPattern="Output\Release\gennorm2.exe"/>
-			<File PathPattern="Output\Release\icutu50.dll"/>
-			<!-- Spelling checker Stuff -->
-			<File PathPattern="Output\Release\libhunspell.dll"/>
-			<!-- Chorus Stuff -->
-			<File PathPattern="Output\Release\Vulcan.Uczniowie.HelpProvider.dll"/>
-			<File PathPattern="Output\Release\Autofac.dll"/>
-			<File PathPattern="Output\Release\Enchant.Net.dll"/>
-			<File PathPattern="Output\Release\Enchant.Net.dll.config"/>
-			<File PathPattern="Output\Release\Ionic.Zip.dll"/>
-			<!-- These assemblies are possibly loaded using reflection, copied from DistFiles by target CopyDlls in mkall.targets -->
-			<File PathPattern="Output\Release\Interop.ResourceDriver.dll"/>
-			<File PathPattern="Output\Release\LinqBridge.dll"/>
-			<File PathPattern="Output\Release\log4net.dll"/>
-			<File PathPattern="Output\Release\Patr100.dll"/>
-			<File PathPattern="Output\Release\xample.dll"/>
-			<!-- <File PathPattern="Output\Release\Utilities.dll"/> -->
-			<!-- Sundry utilities -->
-			<File PathPattern="Output\Release\FixFwData.exe"/>
-			<File PathPattern="Output\Release\FixFwData.pdb"/>
-			<!-- <File PathPattern="Output\Release\PalasoUIWindowsForms.dll"/> -->
-			<!-- Sundry files not picked up by other means but related to those that are -->
-			<File PathPattern="Output\Release\FDOBrowser.XML"/>
-			<File PathPattern="Output\Release\Microsoft.Practices.ServiceLocation.xml"/>
-			<!-- The following may not be needed, but are copied to Output\Release by the project
-			Src\Common\FwUtils\FwUtils.csproj. In the old NAnt build system, the first 4 of these files
-			were described as being needed for the Paratext control that allows us to display USFM
-			resources. -->
-			<File PathPattern="Output\Release\FormattedEditor.dll"/>
-			<File PathPattern="Output\Release\HelpSystem.dll"/>
-			<File PathPattern="Output\Release\HtmlEditor.dll"/>
-			<File PathPattern="Output\Release\NetLoc.dll"/>
-			<File PathPattern="Output\Release\WriteKey.exe"/>
-			<File PathPattern="Output\Release\WriteKey.exe.manifest"/>
-			<!-- The following is copied from DistFiles by project Src\FDO\FDO.csproj although the project appears not to reference the assembly -->
-			<File PathPattern="Output\Release\Mono.Cecil.dll"/>
-			<!-- The following is copied from DistFiles by project Src\Common\Controls\Widgets\Widgets.csproj although the project appears not to reference the assembly -->
-			<File PathPattern="Output\Release\irrKlang.NET4.dll"/>
-			<!-- <File PathPattern="Output\Release\L10NSharp.dll"/> -->
-			<!-- These two files are needed in TE resource viewer right-pane to avoid a crash when clicked, and also in EC tool for creating/testing converters, but it is installed by EC merge modules, so we don't want to do it here. -->
-			<!--File PathPattern="Output\Release\geckofx-core-14.dll"/-->
-			<!--File PathPattern="Output\Release\Geckofx-Winforms-14.dll"/-->
-			<!-- These files are specified in mkall.targets for registration-free COM and are needed for Windows, but not Linux -->
-			<File PathPattern="Output\Release\FwKernel.X.manifest"/>
-			<File PathPattern="Output\Release\Graphite.X.manifest"/>
-			<File PathPattern="Output\Release\Views.X.manifest"/>
-			<File PathPattern="Output\Release\Geckofx"/>
-			<File PathPattern="Output\Release\Keyman7Interop.dll"/>
-			<File PathPattern="Output\Release\KeymanLink.dll"/>
-			<File PathPattern="Output\Release\QuickGraph.dll"/>
-			<File PathPattern="Output\Release\taglib-sharp.dll"/>
-			<File PathPattern="Output\Release\xulrunner"/>
-		</CoreFileOrphans>
-		<ForceBuiltFilesIntoCore>
-			<!-- Define list of file patterns of built files known to be needed by FLEx but where it does not reference them properly: -->
-			<!-- Format: <File PathPattern="*partial path of any file that is needed in the Core*"/> -->
-			<!-- The following is referenced by the TE target, but it is also needed by FLEx, which doesn't reference it -->
-			<File PathPattern="Output\Release\TeImportExport."/>
-			<File PathPattern="Output\Release\TeDialogs."/>
-		</ForceBuiltFilesIntoCore>
-		<ForceBuiltFilesIntoFlex>
-			<!-- Define list of path patterns of built files known to be needed in FLEx but which are not part of the LexTextgExe FieldWorks.targets dependency chain: -->
-			<!-- Format: <File PathPattern="*partial path of any file that is needed by FLEx*"/> -->
-			<File PathPattern="Output\Release\Discourse."/>
-		</ForceBuiltFilesIntoFlex>
-		<TeFileNameTestHeuristics>
-			<!-- Define list of regular expressions serving as coarse heuristics for guessing if a file that has been allocated -->
-			<!-- to the Core or FLEx features may actually be meant only for TE (used as a secondary measure only in generating warnings): -->
-			<!-- Format: <Heuristic RegExp="*regular expression matching names (not full paths) of files that may belong exclusively to TE*"/> -->
-			<Heuristic RegExp="[sS]criptur"/>
-			<Heuristic RegExp="[bB]ibl"/>
-			<Heuristic RegExp="Scr[A-Z]"/>
-			<Heuristic RegExp="^Te[A-Z]"/>
-			<!-- Define list of specific files that may look like TE-only files but aren't really (used in -->
-			<!-- conjunction with above Heuristics to suppress warnings): -->
-			<!-- Format: <File Path="*relative path from FW folder of a file looks like it is TE-exclusive but isn't*"/> -->
-			<Except Path="Output\Release\ScrUtilsInterfaces.dll"/>
-			<Except Path="Output\Release\SharedScrUtils.dll"/>
-			<Except Path="Output\Release\SharedScrUtils.pdb"/>
-			<Except Path="Output\Release\SharedScrControls.dll"/>
-			<Except Path="Output\Release\SharedScrControls.pdb"/>
-			<Except Path="Output\Release\ScrControls.dll"/>
-			<Except Path="Output\Release\ScrControls.pdb"/>
-			<Except Path="Output\Release\ScriptureUtils.dll"/>
-			<Except Path="Output\Release\ScriptureUtils.pdb"/>
-			<Except Path="Output\Release\TeScrInitializer.dll"/>
-			<Except Path="Output\Release\TeScrInitializer.pdb"/>
-			<Except Path="Output\Release\TeResources.dll"/>
-			<Except Path="Output\Release\TeResources.pdb"/>
-			<Except Path="Output\Release\TeStylesXml.dll"/>
-			<Except Path="Output\Release\TeStylesXml.pdb"/>
-			<Except Path="DistFiles\ScrBookRef.dtd"/>
-			<Except Path="DistFiles\ScrBookRef.xml"/>
-			<Except Path="DistFiles\Language Explorer\TeStyles.xml"/>
-			<Except Path="DistFiles\Editorial Checks\ScrChecks.dll"/>
-			<Except Path="DistFiles\Editorial Checks\ScrChecks.pdb"/>
-			<Except Path="DistFiles\Editorial Checks\eng.vrs"/>
-			<Except Path="DistFiles\Editorial Checks\lxx.vrs"/>
-			<Except Path="DistFiles\Editorial Checks\org.vrs"/>
-			<Except Path="DistFiles\Editorial Checks\oth.vrs"/>
-			<Except Path="DistFiles\Editorial Checks\rsc.vrs"/>
-			<Except Path="DistFiles\Editorial Checks\rso.vrs"/>
-			<Except Path="DistFiles\Editorial Checks\vul.vrs"/>
-			<Except Path="Output\Release\TeDialogs.dll"/>
-			<Except Path="Output\Release\TeDialogs.pdb"/>
-			<Except Path="Output\Release\TeImportExport.pdb"/>
-			<Except Path="Output\Release\TeImportExport.dll"/>
-		</TeFileNameTestHeuristics>
 	</FeatureAllocation>
 	<ExtraFiles>
 		<!-- Define files needed in the installer that are not built locally or part of source control: -->
@@ -446,6 +319,7 @@
 		<File PathPattern="DistFiles\ReleaseData"/>
 		<File PathPattern=".git"/>
 		<File PathPattern="nunit"/>
+		<File PathPattern="vshost"/>
 		<File PathPattern="tests"/>
 		<File CaseSensitive="true" PathPattern="\test"/>
 		<File CaseSensitive="true" PathPattern="\Test"/>
@@ -568,14 +442,9 @@
 		<!-- Email addresses are stored with simple obfuscation to try to reduce spam emails -->
 		<Recipient Email="ken underscore zook at sil dot org" NotifyFileChanges="true"/>
 		<Recipient Email="ann underscore bush at sil dot org" NotifyFileChanges="true"/>
-		<Recipient Email="john underscore wickberg at jaars dot org"/>
 		<Recipient Email="jason underscore naylor at sil dot org"/>
 	</FailureNotification>
 	<FilesSources>
-		<!-- Define folders from which files are to be collected for the installer: -->
-		<!-- (Only two entries are possible: BuiltFiles and StaticFiles) -->
-		<BuiltFiles Path="Output"/>
-		<StaticFiles Path="DistFiles"/>
 		<!-- Define list of WIX files that list files explicitly: -->
 		<!-- Format: <WixSource File="*name of WIX source file in Installer folder that contains <File> definitions inside <Component> definitions*"/> -->
 		<WixSource File="Files.wxs"/>
@@ -584,14 +453,6 @@
 		<!-- Merge modules defined in such files must have WIX source file names formed by substituting the .msm extension with .mm.wxs -->
 		<MergeModules File="MergeModules.wxs"/>
 	</FilesSources>
-	<FileLibrary>
-		<!-- Define File Library details: -->
-		<!-- (Only two entries are possible: Library and Addenda) -->
-		<Library File="FileLibrary.xml"/>
-		<Addenda File="FileLibraryAddenda.xml"/>
-	</FileLibrary>
-	<!-- Define output file: -->
-	<Output File="AutoFiles.wxs"/>
 	<CabinetAssignments>
 		<!-- CabinetDivisions are the starts of file name strings signifying the break between one cabinet and the next. -->
 		<!-- By dividing files roughly equally (size-wise) over 3 cabinets, we significantly reduce the installer build time. -->
@@ -599,21 +460,20 @@
 		<!-- go into cabinets specified in MergeModules.wxs or Files.wxs respectively, typically cabinet 1. -->
 		<Default CabinetIndexes="1,2,3" CabinetDivisions="f,m"/>
 		<Cabinet Feature="FlexMovies" CabinetIndexes="4,5,6" CabinetDivisions="28,49"/>
-		<Cabinet Feature="SampleData" CabinetIndex="7"/>
-		<Cabinet Feature="French" CabinetIndex="8"/>
-		<Cabinet Feature="Spanish" CabinetIndex="9"/>
-		<Cabinet Feature="Indonesian" CabinetIndex="10"/>
-		<Cabinet Feature="Portuguese" CabinetIndex="11"/>
-		<Cabinet Feature="Russian" CabinetIndex="12"/>
-		<Cabinet Feature="Chinese" CabinetIndex="13"/>
-		<Cabinet Feature="Hindi" CabinetIndex="14"/>
-		<Cabinet Feature="Malay" CabinetIndex="15"/>
-		<Cabinet Feature="Telugu" CabinetIndex="16"/>
-		<Cabinet Feature="Korean" CabinetIndex="17"/>
-		<Cabinet Feature="Turkish" CabinetIndex="18"/>
-		<Cabinet Feature="Vietnamese" CabinetIndex="19"/>
-		<Cabinet Feature="Persian" CabinetIndex="20"/>
-		<Cabinet Feature="Kinyarwanda" CabinetIndex="21"/>
-		<Cabinet Feature="Hungarian" CabinetIndex="22"/>
+		<Cabinet Feature="French" CabinetIndex="7"/>
+		<Cabinet Feature="Spanish" CabinetIndex="8"/>
+		<Cabinet Feature="Indonesian" CabinetIndex="9"/>
+		<Cabinet Feature="Portuguese" CabinetIndex="10"/>
+		<Cabinet Feature="Russian" CabinetIndex="11"/>
+		<Cabinet Feature="Chinese" CabinetIndex="12"/>
+		<Cabinet Feature="Hindi" CabinetIndex="13"/>
+		<Cabinet Feature="Malay" CabinetIndex="14"/>
+		<Cabinet Feature="Telugu" CabinetIndex="15"/>
+		<Cabinet Feature="Korean" CabinetIndex="16"/>
+		<Cabinet Feature="Turkish" CabinetIndex="17"/>
+		<Cabinet Feature="Vietnamese" CabinetIndex="18"/>
+		<Cabinet Feature="Persian" CabinetIndex="19"/>
+		<Cabinet Feature="Kinyarwanda" CabinetIndex="20"/>
+		<Cabinet Feature="Hungarian" CabinetIndex="21"/>
 	</CabinetAssignments>
 </InstallerConfig>

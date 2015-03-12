@@ -4,14 +4,14 @@ using System.IO;
 
 namespace GenerateFilesSource
 {
-	class ReportSystem
+	internal sealed class ReportSystem
 	{
-		public string GeneralReport { get; private set; }
-		public string SeriousIssues { get; private set; }
-		public string NewFiles { get; private set; }
-		public string DeletedFiles { get; private set; }
+		internal string GeneralReport { get; private set; }
+		internal string SeriousIssues { get; private set; }
+		internal string NewFiles { get; private set; }
+		internal string DeletedFiles { get; private set; }
 
-		public ReportSystem()
+		internal ReportSystem()
 		{
 			GeneralReport = "";
 			SeriousIssues = "";
@@ -23,7 +23,7 @@ namespace GenerateFilesSource
 		/// Adds a line of text to the overall report
 		/// </summary>
 		/// <param name="line">Text to add to report</param>
-		public void AddReportLine(string line)
+		internal void AddReportLine(string line)
 		{
 			lock (GeneralReport)
 			{
@@ -35,7 +35,7 @@ namespace GenerateFilesSource
 		/// Adds a line of text to the SeriousIssues report
 		/// </summary>
 		/// <param name="line">Text to add to report</param>
-		public void AddSeriousIssue(string line)
+		internal void AddSeriousIssue(string line)
 		{
 			lock (SeriousIssues)
 			{
@@ -47,7 +47,7 @@ namespace GenerateFilesSource
 		/// Used for logging new files that have just been added to the installer.
 		/// </summary>
 		/// <param name="path">Path of new file</param>
-		public void AddNewFile(string path)
+		internal void AddNewFile(string path)
 		{
 			lock (NewFiles)
 			{
@@ -60,7 +60,7 @@ namespace GenerateFilesSource
 		/// typically because they have been deleted.
 		/// </summary>
 		/// <param name="path">Path of removed file</param>
-		public void AddDeletedFile(string path)
+		internal void AddDeletedFile(string path)
 		{
 			lock (DeletedFiles)
 			{
@@ -73,7 +73,7 @@ namespace GenerateFilesSource
 		/// </summary>
 		/// <param name="includeGeneralReport">true if a general status report is required</param>
 		/// <returns>true if there is nothing to report</returns>
-		public bool IsReportEmpty(bool includeGeneralReport)
+		internal bool IsReportEmpty(bool includeGeneralReport)
 		{
 			if (NewFiles.Length > 0)
 				return false;
@@ -97,7 +97,7 @@ namespace GenerateFilesSource
 		/// <param name="preamble">Optional text to go at the start of the report</param>
 		/// <param name="includeGeneralReport">true if a general status report is required</param>
 		/// <returns>the text of the full report</returns>
-		public string CombineReports(string preamble, bool includeGeneralReport)
+		internal string CombineReports(string preamble, bool includeGeneralReport)
 		{
 			string combinedReport = "";
 
@@ -147,7 +147,7 @@ namespace GenerateFilesSource
 		/// </summary>
 		/// <param name="preamble">Optional text to go at the start of the report</param>
 		/// <param name="includeGeneralReport">true if a general status report is required</param>
-		public void DisplayReport(string preamble, bool includeGeneralReport)
+		internal void DisplayReport(string preamble, bool includeGeneralReport)
 		{
 			// Save the report to a temporary file, then open it for the user to see:
 			var tempFileName = Path.GetTempFileName() + ".txt";
