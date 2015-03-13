@@ -339,6 +339,10 @@
 		<File PathPattern="DistFiles\SFconv.exe"/>
 		<File PathPattern="DistFiles\TxtConv.exe"/>
 		<File PathPattern="DistFiles\Helps\OcmFrame\"/> <!-- directory only used in Linux -->
+		<!-- No longer want TE helps, but they are not yet removed from the Helps repo. -->
+		<File PathPattern="DistFiles\Helps\FieldWorks_Translation_Editor_Help.chm\"/>
+		<File PathPattern="DistFiles\Helps\Translation Editor\"/>
+		<!-- End: No longer want TE helps, but they are not yet removed from the Helps repo. -->
 		<File PathPattern="Output\Release\asserts.log"/>
 		<File PathPattern="Output\Release\DefaultIcon.ico"/>
 		<File PathPattern="Output\Release\basicTest.xml"/>
