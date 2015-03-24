@@ -86,6 +86,24 @@ namespace InstallerBuildUtilities
 			return output;
 		}
 
+		public static string MajorVersion
+		{
+			get
+			{
+				// Assume the version number is stored in fw\Src\MasterVersionInfo.txt, and that we're in fw\Installer:
+				var versionInfoFile = new StreamReader(@"..\Src\MasterVersionInfo.txt");
+				var currLine = versionInfoFile.ReadLine();
+				while (currLine != null)
+				{
+					if (currLine.StartsWith("FWMAJOR="))
+						return currLine.Substring(1 + currLine.IndexOf('=')).Trim();
+
+					currLine = versionInfoFile.ReadLine();
+				}
+				throw new InvalidDataException(@"Src\MasterVersionInfo.txt does not include definition for FWMAJOR");
+			}
+		}
+
 		/// <summary>
 		/// Uses the master version file to retrieve the version number built into FieldWorks.
 		/// </summary>

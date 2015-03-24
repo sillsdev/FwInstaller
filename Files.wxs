@@ -6,7 +6,7 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder" SourceName="Program Files">
 				<Directory Id="PFSIL" Name="SIL">
-					<Directory Id="INSTALLDIR" Name="FieldWorks 8">
+					<Directory Id="INSTALLDIR" Name="FieldWorks $(var.MajorVersion)">
 						<Directory Id="OLDDATAMIGRATIONDIR" Name="OldDataMigrationScripts">
 						</Directory>
 						<!-- The following component GUID is required by the master installer to locate and launch the migration utility: -->

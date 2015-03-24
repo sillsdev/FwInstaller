@@ -61,7 +61,7 @@
 	</ItemGroup>
 	<Import Project="$(WixTargetsPath)" />
 	<PropertyGroup>
-		<PreBuildEvent>GenerateFilesSource.exe check AddOrphans</PreBuildEvent>
+		<PreBuildEvent>GenerateFilesSource.exe check</PreBuildEvent>
 	</PropertyGroup>
 	<!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

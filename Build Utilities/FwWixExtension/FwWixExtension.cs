@@ -38,6 +38,8 @@ namespace FwWixExtension
 				{
 					case "Version":
 						return Tools.GetFwBuildVersion();
+					case "MajorVersion":
+						return Tools.MajorVersion;
 				}
 			}
 			return null;
