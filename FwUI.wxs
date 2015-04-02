@@ -953,7 +953,36 @@ To install into a different folder, click the Browse button, and select another 
 					<Publish Event="SpawnDialog" Value="OutOfDisk"><![CDATA[OutOfDiskSpace = 1]]></Publish>
 					<!-- The following lines (2 per language) make sure that the localized TE files will be
 					selected if the user selects the main language pack for a given language. -->
-					<!-- Removed all sorts of TE localizations here. -->
+					<Publish Event="AddLocal" Value="Chinese_TE"><![CDATA[((&Chinese = 3 AND !TE = 3) OR (!Chinese = 3 AND &TE = 3) OR (&Chinese = 3 AND &TE = 3)) AND NOT (&Chinese = 2)]]></Publish>
+					<Publish Event="Remove" Value="Chinese_TE"><![CDATA[&Chinese = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="French_TE"><![CDATA[((&French = 3 AND !TE = 3) OR (!French = 3 AND &TE = 3) OR (&French = 3 AND &TE = 3)) AND NOT (&French = 2)]]></Publish>
+					<Publish Event="Remove" Value="French_TE"><![CDATA[&French = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Indonesian_TE"><![CDATA[((&Indonesian = 3 AND !TE = 3) OR (!Indonesian = 3 AND &TE = 3) OR (&Indonesian = 3 AND &TE = 3)) AND NOT (&Indonesian = 2)]]></Publish>
+					<Publish Event="Remove" Value="Indonesian_TE"><![CDATA[&Indonesian = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Portuguese_TE"><![CDATA[((&Portuguese = 3 AND !TE = 3) OR (!Portuguese = 3 AND &TE = 3) OR (&Portuguese = 3 AND &TE = 3)) AND NOT (&Portuguese = 2)]]></Publish>
+					<Publish Event="Remove" Value="Portuguese_TE"><![CDATA[&Portuguese = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Russian_TE"><![CDATA[((&Russian = 3 AND !TE = 3) OR (!Russian = 3 AND &TE = 3) OR (&Russian = 3 AND &TE = 3)) AND NOT (&Russian = 2)]]></Publish>
+					<Publish Event="Remove" Value="Russian_TE"><![CDATA[&Russian = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Spanish_TE"><![CDATA[((&Spanish = 3 AND !TE = 3) OR (!Spanish = 3 AND &TE = 3) OR (&Spanish = 3 AND &TE = 3)) AND NOT (&Spanish = 2)]]></Publish>
+					<Publish Event="Remove" Value="Spanish_TE"><![CDATA[&Spanish = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Korean_TE"><![CDATA[((&Korean = 3 AND !TE = 3) OR (!Korean = 3 AND &TE = 3) OR (&Korean = 3 AND &TE = 3)) AND NOT (&Korean = 2)]]></Publish>
+					<Publish Event="Remove" Value="Korean_TE"><![CDATA[&Korean = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Turkish_TE"><![CDATA[((&Turkish = 3 AND !TE = 3) OR (!Turkish = 3 AND &TE = 3) OR (&Turkish = 3 AND &TE = 3)) AND NOT (&Turkish = 2)]]></Publish>
+					<Publish Event="Remove" Value="Turkish_TE"><![CDATA[&Turkish = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Hindi_TE"><![CDATA[((&Hindi = 3 AND !TE = 3) OR (!Hindi = 3 AND &TE = 3) OR (&Hindi = 3 AND &TE = 3)) AND NOT (&Hindi = 2)]]></Publish>
+					<Publish Event="Remove" Value="Hindi_TE"><![CDATA[&Hindi = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Vietnamese_TE"><![CDATA[((&Vietnamese = 3 AND !TE = 3) OR (!Vietnamese = 3 AND &TE = 3) OR (&Vietnamese = 3 AND &TE = 3)) AND NOT (&Vietnamese = 2)]]></Publish>
+					<Publish Event="Remove" Value="Vietnamese_TE"><![CDATA[&Vietnamese = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Persian_TE"><![CDATA[((&Persian = 3 AND !TE = 3) OR (!Persian = 3 AND &TE = 3) OR (&Persian = 3 AND &TE = 3)) AND NOT (&Persian = 2)]]></Publish>
+					<Publish Event="Remove" Value="Persian_TE"><![CDATA[&Persian = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Malay_TE"><![CDATA[((&Malay = 3 AND !TE = 3) OR (!Malay = 3 AND &TE = 3) OR (&Malay = 3 AND &TE = 3)) AND NOT (&Malay = 2)]]></Publish>
+					<Publish Event="Remove" Value="Malay_TE"><![CDATA[&Malay = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Telugu_TE"><![CDATA[((&Telugu = 3 AND !TE = 3) OR (!Telugu = 3 AND &TE = 3) OR (&Telugu = 3 AND &TE = 3)) AND NOT (&Telugu = 2)]]></Publish>
+					<Publish Event="Remove" Value="Telugu_TE"><![CDATA[&Telugu = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Kinyarwanda_TE"><![CDATA[((&Kinyarwanda = 3 AND !TE = 3) OR (!Kinyarwanda = 3 AND &TE = 3) OR (&Kinyarwanda = 3 AND &TE = 3)) AND NOT (&Kinyarwanda = 2)]]></Publish>
+					<Publish Event="Remove" Value="Kinyarwanda_TE"><![CDATA[&Kinyarwanda = 2 OR &TE = 2]]></Publish>
+					<Publish Event="AddLocal" Value="Hungarian_TE"><![CDATA[((&Hungarian = 3 AND !TE = 3) OR (!Hungarian = 3 AND &TE = 3) OR (&Hungarian = 3 AND &TE = 3)) AND NOT (&Hungarian = 2)]]></Publish>
+					<Publish Event="Remove" Value="Hungarian_TE"><![CDATA[&Hungarian = 2 OR &TE = 2]]></Publish>
 					<!-- Phew! now on with the rest of the stuff. -->
 					<Publish Event="Reinstall" Value="ALL"><![CDATA[Installed AND MaintenanceMode="Repair"]]></Publish>
 					<Publish Event="EndDialog" Value="Return"><![CDATA[OutOfDiskSpace <> 1]]></Publish>
@@ -1247,8 +1276,8 @@ Click the Cancel button to exit the uninstall process.]]>
 		</UI>
 		<Binary Id="Icon" SourceFile="Binary\Icon.bmp" />
 		<Binary Id="Custom" SourceFile="Binary\Custom.bmp" />
-		<Binary Id="top16" SourceFile="Binary\FieldWorks.topgreen.bmp" />
-		<Binary Id="side16" SourceFile="Binary\FieldWorks.sidegreenfabric.bmp" />
+		<Binary Id="top16" SourceFile="Binary\FieldWorks.topfabric.bmp" />
+		<Binary Id="side16" SourceFile="Binary\FieldWorks.sidepurplefabric.bmp" />
 		<Binary Id="SideWarning" SourceFile="Binary\Warning.bmp" />
 		<Binary Id="Up" SourceFile="Binary\Up.bmp" />
 		<Binary Id="New" SourceFile="Binary\New.bmp" />
