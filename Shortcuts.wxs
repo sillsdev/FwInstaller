@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0"?>
+<?define MajorVersion = $(Fw.MajorVersion) ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 	<Fragment Id="ShortcutsFragment">
 	<Property  Id='ShortcutsFragment' Value='1'/>

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <?define Version = $(Fw.Version) ?>
+<?define MajorVersion = $(Fw.MajorVersion) ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension">
 	<Fragment Id="FilesFragment">
 		<Property  Id='FilesFragment' Value='1'/>
