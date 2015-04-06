@@ -1276,8 +1276,8 @@ Click the Cancel button to exit the uninstall process.]]>
 		</UI>
 		<Binary Id="Icon" SourceFile="Binary\Icon.bmp" />
 		<Binary Id="Custom" SourceFile="Binary\Custom.bmp" />
-		<Binary Id="top16" SourceFile="Binary\FieldWorks.topyellow.bmp" />
-		<Binary Id="side16" SourceFile="Binary\FieldWorks.sideyellowfabric.bmp" />
+		<Binary Id="top16" SourceFile="Binary\FieldWorks.topfabric.bmp" />
+		<Binary Id="side16" SourceFile="Binary\FieldWorks.sidepurplefabric.bmp" />
 		<Binary Id="SideWarning" SourceFile="Binary\Warning.bmp" />
 		<Binary Id="Up" SourceFile="Binary\Up.bmp" />
 		<Binary Id="New" SourceFile="Binary\New.bmp" />
