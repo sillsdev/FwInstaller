@@ -131,6 +131,11 @@
 			<File PathPattern="Output\Release\FwKernel.X.manifest"/>
 			<File PathPattern="Output\Release\Graphite.X.manifest"/>
 			<File PathPattern="Output\Release\Views.X.manifest"/>
+			<File PathPattern="Output\Release\Keyman7Interop.dll"/>
+			<File PathPattern="Output\Release\KeymanLink.dll"/>
+			<File PathPattern="Output\Release\QuickGraph.dll"/>
+			<File PathPattern="Output\Release\taglib-sharp.dll"/>
+			<File PathPattern="Output\Release\xulrunner\"/>
 		</CoreFileOrphans>
 		<ForceBuiltFilesIntoCore>
 			<!-- Define list of file patterns of built files known to be needed by both TE and FLEx but where one or the other does not reference them properly, so they end up solely in the other: -->

@@ -3,7 +3,7 @@ JScript to process various WIX fragments, as follows:
 
 1) Remove all TE-only features their sub-features from Features.wxs.
 
-2) Adjust the UI module: change the yellow bitmaps to green, and remove any special TE behavior.
+2) Adjust the UI module: remove any special TE behavior.
 
 3) Adjust the FW main module: change the external .cab file name so it doesn't clash with the version including TE.
 (The .cab file made with this installer turns out to be incompatible with the one for the main BTE installer,
@@ -54,12 +54,8 @@ xmlFeaturesSet.push(xmlPatchCorrections);
 RemoveFeature("TE");
 RemoveFeatureEndingWith("_TE");
 
-// 2) Adjust the UI module: change the yellow bitmaps to green, and remove any special TE behavior.
+// 2) Adjust the UI module: remove any special TE behavior.
 var xmlUI = GetXmlParser(fso.BuildPath(InstallerFolder, "FwUI.wxs"));
-var TopBitmap = xmlUI.selectSingleNode("//wix:Binary[@SourceFile='Binary\\FieldWorks.topyellow.bmp']");
-TopBitmap.setAttribute("SourceFile", "Binary\\FieldWorks.topgreen.bmp");
-var SideBitmap = xmlUI.selectSingleNode("//wix:Binary[@SourceFile='Binary\\FieldWorks.sideyellowfabric.bmp']");
-SideBitmap.setAttribute("SourceFile", "Binary\\FieldWorks.sidegreenfabric.bmp");
 var LocalizationTEEvents = xmlUI.selectNodes("//wix:Publish[contains(@Value, '_TE') and substring-after(@Value, '_TE') = '']");
 LocalizationTEEvents.removeAll();
 
