@@ -232,20 +232,20 @@ You can run the setup program at a later time to complete the installation.]]>
 					<Publish Event="EndDialog" Value="Return"><![CDATA[1]]></Publish>
 					<Condition Action="disable"><![CDATA[1]]></Condition>
 				</Control>
-				<Control Id="Text" Type="Text" X="105" Y="6" Width="229" Height="51" Transparent="yes">
+				<Control Id="Text" Type="Text" X="110" Y="6" Width="229" Height="51" Transparent="yes">
 					<Text>
 						<![CDATA[{&Arial14}[ProductName] has been successfully installed.]]>
 					</Text>
 					<Condition Action="hide"><![CDATA[Uninstalling]]></Condition>
 				</Control>
-				<Control Id="Text56" Type="Text" X="105" Y="6" Width="229" Height="51" Transparent="yes">
+				<Control Id="Text56" Type="Text" X="110" Y="6" Width="229" Height="51" Transparent="yes">
 					<Text><![CDATA[{&Arial14}[ProductName] has been successfully uninstalled.]]></Text>
 					<Condition Action="hide"><![CDATA[NOT Uninstalling]]></Condition>
 				</Control>
-				<Control Id="Text6" Type="Text" X="100" Y="70" Width="227" Height="38" Transparent="yes">
+				<Control Id="Text6" Type="Text" X="110" Y="70" Width="227" Height="38" Transparent="yes">
 					<Text><![CDATA[[DialogFontDefault]Click the Finish button to exit this installation.]]></Text>
 				</Control>
-				<Control Id="RebootWarning" Type="Text" X="100" Y="110" Width="227" Height="38" Transparent="yes">
+				<Control Id="RebootWarning" Type="Text" X="110" Y="110" Width="227" Height="38" Transparent="yes">
 					<Text><![CDATA[[DialogFontDefault]If you encounter an error when starting FieldWorks for the first time after this installation, please restart your computer and then try again.]]></Text>
 					<Condition Action="hide"><![CDATA[Uninstalling]]></Condition>
 				</Control>
@@ -281,11 +281,11 @@ You can run the setup program at a later time to complete the installation.]]>
 				<Control Id="ActionProgress95" Type="ProgressBar" X="55" Y="120" Width="270" Height="15">
 					<Subscribe Event="SetProgress" Attribute="Progress" />
 				</Control>
-				<Control Id="Text28" Type="Text" X="95" Y="22" Width="277" Height="24" Transparent="yes">
+				<Control Id="Text28" Type="Text" X="110" Y="22" Width="277" Height="24" Transparent="yes">
 					<Text><![CDATA[[DialogFontDefault]The features you selected are currently being installed.]]></Text>
 					<Condition Action="hide"><![CDATA[Uninstalling]]></Condition>
 				</Control>
-				<Control Id="Text57" Type="Text" X="95" Y="22" Width="277" Height="24" Transparent="yes">
+				<Control Id="Text57" Type="Text" X="110" Y="22" Width="277" Height="24" Transparent="yes">
 					<Text><![CDATA[{&MSSansSerif8}The features you selected are currently being uninstalled.]]></Text>
 					<Condition Action="hide"><![CDATA[NOT Uninstalling]]></Condition>
 				</Control>
@@ -1113,22 +1113,22 @@ Click the Cancel button to exit the uninstall process.]]>
 					<Text><![CDATA[[DialogFontDefault]Cancel]]></Text>
 					<Publish Event="SpawnDialog" Value="Cancel"><![CDATA[1]]></Publish>
 				</Control>
-				<Control Id="Text" Type="Text" X="105" Y="6" Width="227" Height="53" Property="ProductName" Transparent="yes">
+				<Control Id="Text" Type="Text" X="110" Y="6" Width="227" Height="53" Property="ProductName" Transparent="yes">
 					<Text><![CDATA[{&Arial14}Welcome to the [ProductName] Installation Wizard]]></Text>
 				</Control>
-				<Control Id="Text2516" Type="Text" X="100" Y="90" Width="228" Height="30" Transparent="yes">
+				<Control Id="Text2516" Type="Text" X="110" Y="90" Width="228" Height="30" Transparent="yes">
 					<Text><![CDATA[[DialogFontDefault]Click Cancel to quit the setup program, then close any programs you have running.  Click Next to continue the installation.]]></Text>
 				</Control>
-				<Control Id="Text2517" Type="Text" X="100" Y="153" Width="228" Height="45" Transparent="yes">
+				<Control Id="Text2517" Type="Text" X="110" Y="153" Width="228" Height="45" Transparent="yes">
 					<Text>
 						<![CDATA[[DialogFontDefault]Unauthorized reproduction or distribution of this program, or any portion of it, may result in severe civil and criminal penalties, and will be prosecuted to the maximum extent possible under law.]]>
 					</Text>
 				</Control>
-				<Control Id="Text2" Type="Text" X="100" Y="123" Width="228" Height="30" Transparent="yes">
+				<Control Id="Text2" Type="Text" X="110" Y="123" Width="228" Height="30" Transparent="yes">
 					<Text><![CDATA[[DialogFontDefault]WARNING: This program is protected by copyright law and international treaties.]]></Text>
 				</Control>
 				<Control Id="Bitmap35" Type="Bitmap" X="0" Y="0" Width="375" Height="234" Text="side16" />
-				<Control Id="Text1" Type="Text" X="100" Y="60" Width="228" Height="30" Transparent="yes">
+				<Control Id="Text1" Type="Text" X="110" Y="60" Width="228" Height="30" Transparent="yes">
 					<Text><![CDATA[[DialogFontDefault]It is strongly recommended that you exit all Windows programs before running this setup program.]]></Text>
 				</Control>
 				<Control Id="Line" Type="Line" X="0" Y="234" Width="375" Height="1" />
