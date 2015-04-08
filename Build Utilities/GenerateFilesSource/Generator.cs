@@ -1421,7 +1421,9 @@ namespace GenerateFilesSource
 						foundTargetButItWasLinux = true;
 						continue;
 					}
-
+					// This target is c++ and does not have an assembly, so don't flag it as a serious error.
+					if (vsProj == "Unit++")
+						continue;
 					// The target will have one or more MSBuild nodes or Make nodes that we will use to
 					// see what assemblies get built by it.
 					try
@@ -1488,7 +1490,7 @@ namespace GenerateFilesSource
 					return assembliesToReturn;
 				}
 
-				if (!foundTargetButItWasLinux)
+				if (!foundTargetButItWasLinux && vsProj != "Unit++")
 					_report.AddSeriousIssue("Error " + _description + ": could not find MSBuild Target " + vsProj + " (referenced by " + (parentProj ?? "nothing") + ") in any .targets file.");
 
 				return assembliesToReturn;
