@@ -45,6 +45,11 @@
 			<File PathContains="\{0}\"/>
 			<File PathEnds="\strings-{0}.xml"/>
 		</Localization>
+			<File PathPattern="Output\Release\Keyman7Interop.dll"/>
+			<File PathPattern="Output\Release\KeymanLink.dll"/>
+			<File PathPattern="Output\Release\QuickGraph.dll"/>
+			<File PathPattern="Output\Release\taglib-sharp.dll"/>
+			<File PathPattern="Output\Release\xulrunner\"/>
 	</FeatureAllocation>
 	<ExtraFiles>
 		<!-- Define files needed in the installer that are not built locally or part of source control: -->
