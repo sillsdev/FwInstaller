@@ -43,6 +43,9 @@ namespace GenerateFilesSource
 			foreach (XmlElement msBuildNode in msBuildNodes)
 			{
 				var projectPath = msBuildNode.GetAttribute("Projects").Replace("$(fwrt)", projRootPath);
+				// Was crashing with C:\fwrepo\fw\Lib\src\icu\source\allinone\allinone.sln
+				if (projectPath.EndsWith(".sln"))
+					continue;
 				try
 				{
 					parsers.Add(GetProjectParser(projectPath));
