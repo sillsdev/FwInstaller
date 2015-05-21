@@ -59,8 +59,8 @@
 							</Component>
 						</Directory>
 					</Directory>
-					<Directory Id="AppDataSilIcu" Name="Icu50">
-						<Component Id="CreateIcuFolder" Guid="DF251485-C17C-4185-8FA5-806436A423D2">
+					<Directory Id="AppDataSilIcu" Name="Icu54">
+						<Component Id="CreateIcuFolder" Guid="DB7AFBF5-2B81-44D3-A4CE-073C40410BAE">
 							<CreateFolder>
 								<util:PermissionEx User="AuthenticatedUser" GenericAll="yes" />
 							</CreateFolder>

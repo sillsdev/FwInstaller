@@ -329,7 +329,7 @@
 		<File CaseSensitive="true" PathPattern="\test"/>
 		<File CaseSensitive="true" PathPattern="\Test"/>
 		<File PathPattern="mock"/>
-		<File PathPattern="DistFiles\Icu50.zip"/>
+		<File PathPattern="DistFiles\Icu54.zip"/>
 		<File PathPattern="DistFiles\Windows"/>
 		<File PathPattern="DistFiles\Linux"/>
 		<File PathPattern="DistFiles\Projects"/>
@@ -397,12 +397,12 @@
 		<!-- Define list of folders that will be redirected to some other folder on the end-user's machine: -->
 		<!-- Format: <Redirect Folder="*folder whose contents will be installed to a different folder*" InstallDir="*MSI Installer folder variable where the affected files will be installed*"/> -->
 		<Redirect Folder="DistFiles\MSSQLMigration\OldMigrationScripts" InstallerDir="OLDDATAMIGRATIONDIR"/>
-		<Redirect Folder="DistFiles\Icu50" InstallerDir="AppDataSilIcu"/>
+		<Redirect Folder="DistFiles\Icu54" InstallerDir="AppDataSilIcu"/>
 	</FolderRedirections>
 	<WritableFiles>
 		<!-- Define list of (partial) paths of files that must not be set to read-only: -->
 		<!-- Format: <File PathPattern="*partial path of any file that must not have the read-only flag set*"/> -->
-		<File PathPattern="DistFiles\Icu50"/>
+		<File PathPattern="DistFiles\Icu54"/>
 	</WritableFiles>
 	<ForceOverwrite>
 		<!-- Define list of (partial) paths of files that have to have older versions forcibly removed prior to installing: -->
@@ -429,15 +429,15 @@
 		<IgnoreNonVersionedDistFiles PathPattern="Parts\GeneratedParts.xml"/>
 		<IgnoreNonVersionedDistFiles PathPattern="Installers\FLExBridgeInstaller.msi"/>-->
 		<IgnoreNonVersionedDistFiles PathPattern="Installers\ChorusHubInstaller.msi"/>-->
-		<IgnoreNonVersionedDistFiles PathPattern="Icu50\UnicodeDataOverrides.txt"/>
-		<IgnoreNonVersionedDistFiles PathPattern="Icu50\data\UnicodeDataOverrides.txt"/>
-		<IgnoreNonVersionedDistFiles PathPattern="Icu50\data\nfc.txt"/>
-		<IgnoreNonVersionedDistFiles PathPattern="Icu50\data\nfcHebrew.txt"/>
-		<IgnoreNonVersionedDistFiles PathPattern="Icu50\data\nfcOverrides.txt"/>
-		<IgnoreNonVersionedDistFiles PathPattern="Icu50\data\nfkc.txt"/>
-		<IgnoreNonVersionedDistFiles PathPattern="Icu50\data\nfkcOverrides.txt"/>
-		<IgnoreNonVersionedDistFiles PathPattern="Icu50\icudt50l\nfc.nrm"/>
-		<IgnoreNonVersionedDistFiles PathPattern="Icu50\icudt50l\nfkc.nrm"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Icu54\UnicodeDataOverrides.txt"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Icu54\data\UnicodeDataOverrides.txt"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Icu54\data\nfc.txt"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Icu54\data\nfcHebrew.txt"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Icu54\data\nfcOverrides.txt"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Icu54\data\nfkc.txt"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Icu54\data\nfkcOverrides.txt"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Icu54\icudt54l\nfc_fw.nrm"/>
+		<IgnoreNonVersionedDistFiles PathPattern="Icu54\icudt54l\nfkc_fw.nrm"/>
 		<!-- Define list of (partial) paths of files that are allowed to have a version of 0.0.0.0: -->
 		<!-- Format: <IgnoreVersionZeroFiles PathPattern="*partial path of any file that is allowed to have a version of 0.0.0.0*"/> -->
 		<IgnoreVersionZeroFiles PathPattern="Output\Release\MsHtmHstInterop.dll"/>
