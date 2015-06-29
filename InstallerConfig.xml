@@ -584,7 +584,6 @@
 		<!-- Email addresses are stored with simple obfuscation to try to reduce spam emails -->
 		<Recipient Email="ken underscore zook at sil dot org" NotifyFileChanges="true"/>
 		<Recipient Email="ann underscore bush at sil dot org" NotifyFileChanges="true"/>
-		<Recipient Email="john underscore wickberg at jaars dot org"/>
 		<Recipient Email="jason underscore naylor at sil dot org"/>
 	</FailureNotification>
 	<FilesSources>
