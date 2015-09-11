@@ -145,6 +145,7 @@
 			<File PathPattern="Output\Release\TeImportExport."/>
 			<File PathPattern="Output\Release\TeDialogs."/>
 			<File PathPattern="Output\Release\DiffView."/>
+			<File PathPattern="Output\Release\FormLanguageSwitch."/>
 		</ForceBuiltFilesIntoCore>
 		<ForceBuiltFilesIntoTE>
 			<!-- Define list of path patterns of built files known to be needed in TE but which are not part of the TeExe FieldWorks.targets dependency chain: -->
