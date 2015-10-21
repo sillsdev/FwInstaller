@@ -29,6 +29,15 @@
 		<Installer>SetupFw-ms</Installer>
 	</Component>
 	<Component>
+		<Name>Burmese Localization</Name>
+		<Description>Burmese language pack for FieldWorks</Description>
+		<ProductCode>147FF7FC-9DB9-41F4-B0EB-2E4066A56410</ProductCode>
+		 <UpgradeCode>B8A74520-6D4F-4D98-95F3-23A358691E7A</UpgradeCode>
+		<Feature>Burmese</Feature>
+		<Feature>Burmese_TE</Feature>
+		<Installer>SetupFw-my</Installer>
+	</Component>
+	<Component>
 		<Name>Chinese Localization</Name>
 		<Description>Chinese language pack for FieldWorks</Description>
 		<ProductCode>53C2895C-E4B7-402f-BDAB-62815E92047F</ProductCode>
@@ -159,6 +168,15 @@
 		<Installer>SetupFw-es</Installer>
 	</Component>
 	<Component>
+		<Name>Swahili Localization</Name>
+		<Description>Swahili language pack for FieldWorks</Description>
+		<ProductCode>E8331F5D-84C3-4811-AFD7-70EC8C934AE6</ProductCode>
+		<UpgradeCode>C61E2849-DC8E-49BE-9525-D4FD0C9F6EE2</UpgradeCode>
+		<Feature>Swahili</Feature>
+		<Feature>Swahili_TE</Feature>
+		<Installer>SetupFw-sw</Installer>
+	</Component>
+	<Component>
 		<Name>Telugu Localization</Name>
 		<Description>Telugu language pack for FieldWorks</Description>
 		<ProductCode>FB8E9808-4755-404b-924F-46A1198C673B</ProductCode>
@@ -167,7 +185,6 @@
 		<Feature>Telugu_TE</Feature>
 		<Installer>SetupFw-te</Installer>
 	</Component>
-	<!--
 	<Component>
 		<Name>Thai Localization</Name>
 		<Description>Thai language pack for FieldWorks</Description>
@@ -177,7 +194,6 @@
 		<Feature>Thai_TE</Feature>
 		<Installer>SetupFw-th</Installer>
 	</Component>
-	-->
 	<Component>
 		<Name>Turkish Localization</Name>
 		<Description>Turkish language pack for FieldWorks</Description>
