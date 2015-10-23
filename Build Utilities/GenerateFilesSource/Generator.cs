@@ -512,7 +512,7 @@ namespace GenerateFilesSource
 					message.From = new System.Net.Mail.MailAddress("ken_zook@sil.org");
 					message.Body = _overallReport.CombineReports(Tools.GetBuildDetails(_projRootPath), _needReport);
 					var smtp = new System.Net.Mail.SmtpClient("mail.jaars.org");
-					smtp.Send(message);
+					// smtp.Send(message);  GTIS disabled this capability so we need another solution.
 				}
 				else
 				{

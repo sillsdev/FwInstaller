@@ -70,6 +70,7 @@
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindKinyarwandaCabFile">
 				<FileSearch Name="Kinyarwa.cab"/>
 			</DirectorySearch>
+		</Property>
 		<Property Id="THAI_CAB_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindThaiCabFile">
 				<FileSearch Name="Thai.cab"/>
