@@ -128,12 +128,6 @@
 					<Feature Id="Vietnamese_TE" Title="Vietnamese_TE" Description="Vietnamese user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
-				<Feature Id="Thai" Title="Thai" Description="Allows the software to have a Thai user interface." Display="expand" Level="4" AllowAdvertise="no">
-				</Feature>
-				<Feature Id="Burmese" Title="Burmese" Description="Allows the software to have a Burmese user interface." Display="expand" Level="4" AllowAdvertise="no">
-				</Feature>
-				<Feature Id="Swahili" Title="Swahili" Description="Allows the software to have a Swahili user interface." Display="expand" Level="4" AllowAdvertise="no">
-				</Feature>
 			</Feature>
 		</Feature>
 	</Fragment>

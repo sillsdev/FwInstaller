@@ -18,10 +18,6 @@
 		<Language Name="Telugu" Id="te"/>
 		<Language Name="Kinyarwanda" Id="ro"/>
 		<Language Name="Hungarian" Id="hu"/>
-		<Language Name="Thai" Id="th"/>
-		<Language Name="Burmese" Id="my"/>
-		<Language Name="Swahili" Id="sw"/>
-
 	</Languages>
 	<FeatureAllocation>
 		<!-- Allocation of files in Output\Release is generally done by analyzing FieldWorks.targets -->
@@ -635,8 +631,5 @@
 		<Cabinet Feature="Persian" CabinetIndex="20"/>
 		<Cabinet Feature="Kinyarwanda" CabinetIndex="21"/>
 		<Cabinet Feature="Hungarian" CabinetIndex="22"/>
-		<Cabinet Feature="Thai" CabinetIndex="23"/>
-		<Cabinet Feature="Burmese" CabinetIndex="24"/>
-		<Cabinet Feature="Swahili" CabinetIndex="25"/>
 	</CabinetAssignments>
 </InstallerConfig>
