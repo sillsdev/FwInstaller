@@ -68,7 +68,6 @@
 				<FileSearch Name="Kinyarwa.cab"/>
 			</DirectorySearch>
 		</Property>
-		</Property>
 		<Property Id="OLDER_FW_INSTALL_PATH">
 			<RegistrySearch Id="SearchOldeFwReg" Root="HKLM" Key="SOFTWARE\SIL\FieldWorks" Name="RootCodeDir" Type="raw" />
 		</Property>
