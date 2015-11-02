@@ -45,17 +45,12 @@
 			<File PathContains="\{0}\"/>
 			<File PathEnds="\strings-{0}.xml"/>
 		</Localization>
-			<File PathPattern="Output\Release\Keyman7Interop.dll"/>
-			<File PathPattern="Output\Release\KeymanLink.dll"/>
-			<File PathPattern="Output\Release\QuickGraph.dll"/>
-			<File PathPattern="Output\Release\taglib-sharp.dll"/>
-			<File PathPattern="Output\Release\xulrunner\"/>
 	</FeatureAllocation>
 	<ExtraFiles>
 		<!-- Define files needed in the installer that are not built locally or part of source control: -->
 		<!-- Format: <File URL="*URL of an extra file*" Destination="*Local relative path to download file to*"/> -->
-		<File URL="http://downloads.palaso.org/FlexBridge/Beta/FLExBridgeInstaller.msi" Destination="DistFiles\Installers\FLExBridgeInstaller.msi"/>
-		<File URL="http://build.palaso.org/guestAuth/repository/download/bt315/.lastSuccessful/ChorusHubInstaller.msi" Destination="DistFiles\Installers\ChorusHubInstaller.msi"/>
+		<File URL="http://downloads.palaso.org/FlexBridge/Alpha/FLExBridgeInstaller.msi" Destination="DistFiles\Installers\FLExBridgeInstaller.msi"/>
+		<File URL="http://build.palaso.org/guestAuth/repository/download/bt333/.lastSuccessful/ChorusHubInstaller.msi" Destination="DistFiles\Installers\ChorusHubInstaller.msi"/>
 	</ExtraFiles>
 	<FileConditions>
 		<!-- Define conditions to apply to specified components: -->
