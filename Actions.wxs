@@ -60,11 +60,6 @@
 			<Custom Action="InstallAndikaFont" After="InstallGalatiaFont"><![CDATA[NOT Installed]]></Custom>
 			<Custom Action="GlobalWritingSystemStoreUpdater" After="InstallAndikaFont"><![CDATA[NOT Installed]]></Custom>
 		</InstallExecuteSequence>
-		<Property Id="SIL_UNISCRIBE_DLL_FOUND">
-			<DirectorySearch Id="SearchUsp10Dll" Path="[SystemFolder]" Depth="0">
-				<FileSearch Id="SearchUsp10Dll" Name="usp10.dll" MinVersion="1.626.6001.18000" />
-			</DirectorySearch>
-		</Property>
 
 		<Binary Id="Doulos.exe" SourceFile="Binary\DoulosSIL-4.112.exe" />
 		<Binary Id="Charis.exe" SourceFile="Binary\CharisSIL-4.114.exe" />
