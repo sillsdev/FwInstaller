@@ -128,6 +128,11 @@
 					<Feature Id="Vietnamese_TE" Title="Vietnamese_TE" Description="Vietnamese user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
+				<Feature Id="Azerbaijani" Title="Azerbaijani" Description="Allows the software to have an Azerbaijani user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1088 OR REMOVE</Condition>
+					<Feature Id="Azerbaijani_TE" Title="Azerbaijani_TE" Description="Azerbaijani user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+					</Feature>
+				</Feature>
 			</Feature>
 		</Feature>
 	</Fragment>
