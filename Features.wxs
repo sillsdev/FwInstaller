@@ -54,14 +54,9 @@
 				<ComponentRef Id="ShortcutTEMovies"/>
 			</Feature>
 			<Feature Id="LOC" Title="Language Packs" Description="Additional languages for the user interface." Display="expand" Level="3" AllowAdvertise="no">
-				<Feature Id="Indonesian" Title="Indonesian" Description="Allows the software to have an Indonesian user interface." Display="expand" Level="4" AllowAdvertise="no">
-					<Condition Level="3">UserLanguageID = 1057 OR REMOVE</Condition>
-					<Feature Id="Indonesian_TE" Title="Indonesian_TE" Description="Indonesian user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
-					</Feature>
-				</Feature>
-				<Feature Id="Malay" Title="Malay" Description="Allows the software to have a Malay user interface." Display="expand" Level="4" AllowAdvertise="no">
-					<Condition Level="3">UserLanguageID = 1086 OR REMOVE</Condition>
-					<Feature Id="Malay_TE" Title="Malay_TE" Description="Malay user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+				<Feature Id="Azerbaijani" Title="Azerbaijani" Description="Allows the software to have an Azerbaijani user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1088 OR REMOVE</Condition>
+					<Feature Id="Azerbaijani_TE" Title="Azerbaijani_TE" Description="Azerbaijani user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
 				<Feature Id="Chinese" Title="Chinese" Description="Allows the software to have a Chinese user interface." Display="expand" Level="4" AllowAdvertise="no">
@@ -84,6 +79,11 @@
 					<Feature Id="Hungarian_TE" Title="Hungarian_TE" Description="Hungarian user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
+				<Feature Id="Indonesian" Title="Indonesian" Description="Allows the software to have an Indonesian user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1057 OR REMOVE</Condition>
+					<Feature Id="Indonesian_TE" Title="Indonesian_TE" Description="Indonesian user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+					</Feature>
+				</Feature>
 				<Feature Id="Kinyarwanda" Title="Kinyarwanda" Description="Allows the software to have a Kinyarwanda user interface." Display="expand" Level="4" AllowAdvertise="no">
 					<Condition Level="3">UserLanguageID = 1048 OR REMOVE</Condition>
 					<Feature Id="Kinyarwanda_TE" Title="Kinyarwanda_TE" Description="Kinyarwanda user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
@@ -92,6 +92,11 @@
 				<Feature Id="Korean" Title="Korean" Description="Allows the software to have a Korean user interface." Display="expand" Level="4" AllowAdvertise="no">
 					<Condition Level="3">UserLanguageID = 1042 OR REMOVE</Condition>
 					<Feature Id="Korean_TE" Title="Korean_TE" Description="Korean user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
+					</Feature>
+				</Feature>
+				<Feature Id="Malay" Title="Malay" Description="Allows the software to have a Malay user interface." Display="expand" Level="4" AllowAdvertise="no">
+					<Condition Level="3">UserLanguageID = 1086 OR REMOVE</Condition>
+					<Feature Id="Malay_TE" Title="Malay_TE" Description="Malay user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
 				<Feature Id="Persian" Title="Persian" Description="Allows the software to have a Persian user interface." Display="expand" Level="4" AllowAdvertise="no">
@@ -126,11 +131,6 @@
 				<Feature Id="Vietnamese" Title="Vietnamese" Description="Allows the software to have a Vietnamese user interface." Display="expand" Level="4" AllowAdvertise="no">
 					<Condition Level="3">UserLanguageID = 1066 OR REMOVE</Condition>
 					<Feature Id="Vietnamese_TE" Title="Vietnamese_TE" Description="Vietnamese user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
-					</Feature>
-				</Feature>
-				<Feature Id="Azerbaijani" Title="Azerbaijani" Description="Allows the software to have an Azerbaijani user interface." Display="expand" Level="4" AllowAdvertise="no">
-					<Condition Level="3">UserLanguageID = 1088 OR REMOVE</Condition>
-					<Feature Id="Azerbaijani_TE" Title="Azerbaijani_TE" Description="Azerbaijani user interface files just for TE." Display="hidden" Level="4" AllowAdvertise="no">
 					</Feature>
 				</Feature>
 			</Feature>
