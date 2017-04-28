@@ -18,6 +18,7 @@
 		<Language Name="Telugu" Id="te"/>
 		<Language Name="Kinyarwanda" Id="ro"/>
 		<Language Name="Hungarian" Id="hu"/>
+		<Language Name="Azerbaijani" Id="az"/>
 	</Languages>
 	<FeatureAllocation>
 		<!-- Allocation of files in Output\Release is generally done by analyzing FieldWorks.targets -->
@@ -198,7 +199,7 @@
 	<ExtraFiles>
 		<!-- Define files needed in the installer that are not built locally or part of source control: -->
 		<!-- Format: <File URL="*URL of an extra file*" Destination="*Local relative path to download file to*"/> -->
-		<File URL="http://downloads.palaso.org/FlexBridge/Alpha/FLExBridgeInstaller.msi" Destination="DistFiles\Installers\FLExBridgeInstaller.msi"/>
+		<File URL="http://build.palaso.org/guestAuth/repository/download/FBrDictWin32InstallerSansPublish/fw-8.3.tcbuildtag/FLExBridgeInstaller.msi" Destination="DistFiles\Installers\FLExBridgeInstaller.msi"/>
 		<File URL="http://build.palaso.org/guestAuth/repository/download/bt333/.lastSuccessful/ChorusHubInstaller.msi" Destination="DistFiles\Installers\ChorusHubInstaller.msi"/>
 	</ExtraFiles>
 	<FileConditions>
@@ -631,5 +632,6 @@
 		<Cabinet Feature="Persian" CabinetIndex="20"/>
 		<Cabinet Feature="Kinyarwanda" CabinetIndex="21"/>
 		<Cabinet Feature="Hungarian" CabinetIndex="22"/>
+		<Cabinet Feature="Azerbaijani" CabinetIndex="23"/>
 	</CabinetAssignments>
 </InstallerConfig>
