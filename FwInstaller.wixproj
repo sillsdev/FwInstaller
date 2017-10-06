@@ -32,26 +32,20 @@
 		</DefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-		<OutputPath>.\</OutputPath>
-		<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+		<DefineConstants>Debug</DefineConstants>
 		<SuppressIces>ICE03;ICE47;ICE48;ICE57;ICE60;ICE69;ICE82;ICE83</SuppressIces>
 		<SuppressSpecificWarnings>1055;1056;1076</SuppressSpecificWarnings>
-		<VerboseOutput>True</VerboseOutput>
-		<WixVariables>
-		</WixVariables>
-		<DefineConstants>
-		</DefineConstants>
+		<OutputPath>.\</OutputPath>
+		<IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-		<OutputPath>.\</OutputPath>
-		<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
 		<SuppressIces>ICE03;ICE47;ICE48;ICE57;ICE60;ICE69;ICE82;ICE83</SuppressIces>
 		<SuppressSpecificWarnings>1055;1056;1076</SuppressSpecificWarnings>
 		<VerboseOutput>True</VerboseOutput>
-		<WixVariables>
-		</WixVariables>
-		<DefineConstants>
-		</DefineConstants>
+		<WixVariables />
+		<DefineConstants />
+		<OutputPath>.\</OutputPath>
+		<IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="Actions.wxs" />
@@ -84,22 +78,6 @@
 	<Import Project="$(WixTargetsPath)" />
 	<PropertyGroup>
 		<PreBuildEvent>GenerateFilesSource.exe check</PreBuildEvent>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-		<DefineConstants>Debug</DefineConstants>
-		<SuppressIces>ICE03;ICE47;ICE48;ICE57;ICE60;ICE69;ICE82;ICE83</SuppressIces>
-		<SuppressSpecificWarnings>1055;1056;1076</SuppressSpecificWarnings>
-		<OutputPath>.\</OutputPath>
-		<IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-		<SuppressIces>ICE03;ICE47;ICE48;ICE57;ICE60;ICE69;ICE82;ICE83</SuppressIces>
-		<SuppressSpecificWarnings>1055;1056;1076</SuppressSpecificWarnings>
-		<VerboseOutput>True</VerboseOutput>
-		<WixVariables />
-		<DefineConstants />
-		<OutputPath>.\</OutputPath>
-		<IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 	<!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
