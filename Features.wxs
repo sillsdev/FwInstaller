@@ -37,8 +37,10 @@
 			<MergeRef Id="EncConverters_Common"/>
 			<MergeRef Id="Set_Path_EC"/>
 			<MergeRef Id="TECkit_DLLs"/>
+			<?if $(var.Platform) != x64 ?>
 			<MergeRef Id="CC_DLL"/>
 			<MergeRef Id="ICUECHelp"/>
+			<?endif?>
 			<Feature Id="FlexMovies" Title="Demo Movies" Description="Language Explorer demonstration movies" Display="expand" Level="0" AllowAdvertise="no">
 				<Condition Level="3">(FLEX_MOVIES_CAB1_FOUND AND FLEX_MOVIES_CAB2_FOUND AND FLEX_MOVIES_CAB3_FOUND) OR REMOVE</Condition>
 			</Feature>
