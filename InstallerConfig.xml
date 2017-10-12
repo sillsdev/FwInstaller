@@ -371,8 +371,8 @@
 		<File PathPattern="Output\Release\CacheLight."/>
 		<File PathPattern="Output\Release\RBRExtensions."/>
 		<File PathPattern="Output\Release\FieldWorks.vshost."/>
-		<File PathPattern="Output\Release\geckofx-core-14.dll"/> <!-- Installed by EC merge modules-->
-		<File PathPattern="Output\Release\Geckofx-Winforms-14.dll"/> <!-- Installed by EC merge modules-->
+		<File PathPattern="Output\Release\Geckofx-Core.dll"/> <!-- Installed by EC merge modules-->
+		<File PathPattern="Output\Release\Geckofx-Winforms.dll"/> <!-- Installed by EC merge modules-->
 		<File PathPattern="XceedZip.dll"/>
 		<File PathPattern="Output\Release\DebugProcs."/>
 		<File PathPattern="Generic.lib"/>
