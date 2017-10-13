@@ -373,6 +373,10 @@
 		<File PathPattern="Output\Release\FieldWorks.vshost."/>
 		<File PathPattern="Output\Release\Geckofx-Core.dll"/> <!-- Installed by EC merge modules-->
 		<File PathPattern="Output\Release\Geckofx-Winforms.dll"/> <!-- Installed by EC merge modules-->
+		<File PathPattern="Output\Release\IcuEC.dll"/> <!-- Installed by EC merge modules-->
+		<File PathPattern="Output\Release\IcuConvEC.dll"/> <!-- Installed by EC merge modules-->
+		<File PathPattern="Output\Release\IcuRegexEC.dll"/> <!-- Installed by EC merge modules-->
+		<File PathPattern="Output\Release\IcuTranslitEC.dll"/> <!-- Installed by EC merge modules-->
 		<File PathPattern="XceedZip.dll"/>
 		<File PathPattern="Output\Release\DebugProcs."/>
 		<File PathPattern="Generic.lib"/>
