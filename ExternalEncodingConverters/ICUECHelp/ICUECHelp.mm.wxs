@@ -9,14 +9,18 @@
 <Module Id="SILICUECHELP50" Language="0" Version="5.0">
 		<Package Id="3DAFE62A-D816-4d02-BDB5-8645ECE89BE4" Keywords="MergeModule, MSI, ICU EncConverters Help Files" Description="SIL's ICU 5.0 EncConverter Help Installation" Comments="Common installer module for SIL's ICU EncConverters Helps" Manufacturer="SIL International" InstallerVersion="110" Platform="x86" Languages="0" SummaryCodepage="1252"/>
 	<Directory Id="TARGETDIR" Name="SourceDir">
-	  <Directory Id="CommonFilesFolder" Name="Common">
-		<Directory Id="SIL" Name="SIL">
-		  <Directory Id="Help" Name="Help">
+		<?if $(var.Platform) = x64 ?>
+		<Directory Id="CommonFiles64Folder" Name="Common">
+			<?else ?>
+			<Directory Id="CommonFilesFolder" Name="Common">
+				<?endif ?>
+				<Directory Id="SIL" Name="SIL">
+					<Directory Id="Help" Name="Help">
 						<Component Id="IcuRegex" Guid="786CA242-4204-46B7-86D5-93ED456710B5">
-			<File Id="IcuRegex" Name="ICU Regular Expression Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\ICU Regular Expression Plug-in About box.mht"/>
+							<File Id="IcuRegex" Name="ICU Regular Expression Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\ICU Regular Expression Plug-in About box.mht"/>
 						</Component>
 						<Component Id="IcuTranslit" Guid="024219A1-29EB-4D20-BB9A-DB9E3C3F1743">
-			<File Id="IcuTranslit" Name="ICU Transliterators Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\ICU Transliterators Plug-in About box.mht"/>
+							<File Id="IcuTranslit" Name="ICU Transliterators Plug-in About box.mht" ReadOnly="yes" KeyPath="yes" Source="..\..\..\DistFiles\Windows\EC Common\Help\ICU Transliterators Plug-in About box.mht"/>
 						</Component>
 						<Component Id="ICU_Converters_Plugin_About_box.htm" Guid="963A2D88-6CFE-4C91-8830-CD6F8A3872E8">
 							<!-- The following File ID has been truncated to suppress ICE03 string overflow in the shortcut that uses it -->
@@ -46,10 +50,15 @@
 							</Component>
 						</Directory>
 					</Directory>
-		  <!--End of ICU Help files-->
+					<!--End of ICU Help files-->
 				</Directory>
-			</Directory>
-			<Directory Id="ProgramMenuFolder" Name="Program">
+				<?if $(var.Platform) = x64 ?>
+				</Directory>
+				<?else ?>
+				</Directory>
+				<?endif ?>
+
+				<Directory Id="ProgramMenuFolder" Name="Program">
 				<Directory Id="SIL_Converters" Name="SIL Converters">
 					<Directory Id="SILConvHelp" Name="Help">
 						<Component Id="HelpShortcuts" Guid="1EA5CB2D-D255-4CAD-8538-971E59BE87E6" KeyPath="yes">

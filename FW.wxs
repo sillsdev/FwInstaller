@@ -6,7 +6,7 @@
 			 Version='$(var.Version)' Manufacturer='SIL International'>
 		<Package Id='*'
 				  Description='FieldWorks Installer'
-				  Manufacturer='SIL International' InstallerVersion='300' Compressed='yes' Platform='$(var.Platform)'/>
+				  Manufacturer='SIL International' InstallerVersion='405' Compressed='yes' Platform='$(var.Platform)'/>
 		<Condition Message="You need to be an administrator to install this product.">Privileged</Condition>
 		<Condition Message="[ProductName] will only run on Windows 2000 or better. You cannot intall it on this machine.">
 			<![CDATA[(NOT Version9X) OR (NOT VersionNT OR (VersionNT >= 500))]]>
