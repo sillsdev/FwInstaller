@@ -2,11 +2,11 @@
 <?define Version = $(Fw.Version) ?>
 <?define MajorVersion = $(Fw.MajorVersion) ?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product UpgradeCode="1092269F-9EA1-419B-8685-90203F83E254" Id="8E80F1ED-826A-46d5-A59A-D8A203F2F0D9" Name='SIL FieldWorks $(var.Version) SE' Language='1033'
+	<Product UpgradeCode="1092269F-9EA1-419B-8685-90203F83E254" Id="8E80F1ED-826A-46d5-A59A-D8A203F2F0D9" Name='SIL FieldWorks $(var.Version)' Language='1033'
 			 Version='$(var.Version)' Manufacturer='SIL International'>
 		<Package Id='*'
 				  Description='FieldWorks Installer'
-				  Manufacturer='SIL International' InstallerVersion='300' Compressed='yes' />
+				  Manufacturer='SIL International' InstallerVersion='405' Compressed='yes' Platform='$(var.Platform)'/>
 		<Condition Message="You need to be an administrator to install this product.">Privileged</Condition>
 		<Condition Message="[ProductName] will only run on Windows 2000 or better. You cannot intall it on this machine.">
 			<![CDATA[(NOT Version9X) OR (NOT VersionNT OR (VersionNT >= 500))]]>

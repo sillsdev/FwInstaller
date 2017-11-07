@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "FwInstaller", "FwInstaller.wixproj", "{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CF99CB0E-433A-4D26-B6F7-3A7ECACB46A7}"
@@ -12,20 +14,26 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
 		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Debug|x64.ActiveCfg = Debug|x64
+		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Debug|x64.Build.0 = Debug|x64
 		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Debug|x86.ActiveCfg = Debug|x86
 		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Debug|x86.Build.0 = Debug|x86
 		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Release|Any CPU.ActiveCfg = Release|x86
 		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Release|Mixed Platforms.Build.0 = Release|x86
+		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Release|x64.ActiveCfg = Release|x64
+		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Release|x64.Build.0 = Release|x64
 		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Release|x86.ActiveCfg = Release|x86
 		{BAE39AE8-BD8A-4EDC-9525-BF31468744DF}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection

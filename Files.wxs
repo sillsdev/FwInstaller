@@ -1,11 +1,18 @@
 <?xml version="1.0"?>
 <?define Version = $(Fw.Version) ?>
 <?define MajorVersion = $(Fw.MajorVersion) ?>
+<?if $(var.Platform) = x64 ?>
+<?define PFDir = ProgramFiles64Folder?>
+<?define CFDir = CommonFiles64Folder?>
+<?else?>
+<?define PFDir = ProgramFilesFolder?>
+<?define CFDir = CommonFilesFolder?>
+<?endif?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" xmlns:fire="http://schemas.microsoft.com/wix/FirewallExtension">
 	<Fragment Id="FilesFragment">
 		<Property  Id='FilesFragment' Value='1'/>
 		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder" SourceName="Program Files">
+			<Directory Id="$(var.PFDir)" SourceName="Program Files">
 				<Directory Id="PFSIL" Name="SIL">
 					<Directory Id="INSTALLDIR" Name="FieldWorks $(var.MajorVersion)">
 						<Directory Id="OLDDATAMIGRATIONDIR" Name="OldDataMigrationScripts">
@@ -75,7 +82,7 @@
 			</Directory>
 			<Directory Id="SystemFolder" SourceName="System32">
 			</Directory>
-			<Directory Id="CommonFilesFolder" Name="Common">
+			<Directory Id="$(var.CFDir)" Name="Common">
 				<Directory Id="SIL" Name="SIL">
 					<Component Id="vs_piaredist.exe" Guid="69E34503-AFF1-455d-8B02-38EC1EC156C2">
 						<File Id="vs_piaredist.exe" Name="vs_piaredist.exe" ReadOnly="yes" Source="Builds\$(var.Version)\DistFiles\vs_piaredist.exe" DiskId="1"/>

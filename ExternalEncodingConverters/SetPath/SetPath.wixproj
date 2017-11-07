@@ -22,6 +22,17 @@
 		<IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
 		<SuppressSpecificWarnings>1079</SuppressSpecificWarnings>
 	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+		<DefineConstants>Debug</DefineConstants>
+		<SuppressSpecificWarnings>1079</SuppressSpecificWarnings>
+		<OutputPath>..\64bit\</OutputPath>
+		<IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+		<SuppressSpecificWarnings>1079</SuppressSpecificWarnings>
+		<OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+		<IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+	</PropertyGroup>
 	<ItemGroup>
 		<Compile Include="SetPath.mm.wxs" />
 	</ItemGroup>
