@@ -1,0 +1,7 @@
+Code-Review+2: Hasso Pape <hasso_pape@sil.org>
+Verified+1: Hasso Pape <hasso_pape@sil.org>
+Submitted-by: Jason Naylor <jason_naylor@sil.org>
+Submitted-at: Wed, 08 Nov 2017 12:27:12 +0000
+Reviewed-on: https://gerrit.lsdev.sil.org/5682
+Project: FwInstaller
+Branch: refs/heads/hotfix/8.3.10
