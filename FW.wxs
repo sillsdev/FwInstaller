@@ -33,6 +33,7 @@
 		<Media Id='19' Cabinet='Persian.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='20' Cabinet='Kinyarwa.cab' EmbedCab='yes' CompressionLevel='high'/>
 		<Media Id='21' Cabinet='Hungaria.cab' EmbedCab='yes' CompressionLevel='high'/>
+		<Media Id='22' Cabinet='Azerbaij.cab' EmbedCab='yes' CompressionLevel='high'/>
 
 		<Property Id="FLEX_MOVIES_CAB1_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindFlexMoviesCab1File">
@@ -67,6 +68,11 @@
 		<Property Id="KINYARWANDA_CAB_FOUND">
 			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindKinyarwandaCabFile">
 				<FileSearch Name="Kinyarwa.cab"/>
+			</DirectorySearch>
+		</Property>
+		<Property Id="AZERBAIJANI_CAB_FOUND">
+			<DirectorySearch Path="[SourceDir]" Depth="0" Id="FindAzerbaijaniCabFile">
+				<FileSearch Name="Azerbaij.cab"/>
 			</DirectorySearch>
 		</Property>
 		<Property Id="OLDER_FW_INSTALL_PATH">

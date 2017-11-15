@@ -488,7 +488,7 @@ You can run the setup program at a later time to complete the installation.]]>
 				</Control>
 				<Control Id="Next" Type="PushButton" X="244" Y="244" Width="56" Height="17">
 					<Text><![CDATA[[DialogFontDefault]&Next >]]></Text>
-					<Publish Event="NewDialog" Value="Readme_Dialog"><![CDATA[1]]></Publish>
+					<Publish Event="NewDialog" Value="User_Information_Dialog"><![CDATA[1]]></Publish>
 					<Condition Action="default"><![CDATA[Accept = "Yes"]]></Condition>
 					<Condition Action="enable"><![CDATA[Accept = "Yes"]]></Condition>
 					<Condition Action="disable"><![CDATA[Accept <> "Yes"]]></Condition>
@@ -671,40 +671,6 @@ The parts of this package licensed under CPOL are: SilSidePane, derived from Out
 					<Text><![CDATA[[DialogFontDefault]It is strongly recommended that you exit all Windows programs before running this Setup Program.]]></Text>
 				</Control>
 				<Control Id="Line" Type="Line" X="0" Y="234" Width="375" Height="1" />
-			</Dialog>
-			<Dialog Id="Readme_Dialog" Width="375" Height="270" Title="[ProductName] [DialogSuffix]" CustomPalette="yes">
-				<Control Id="Next" Type="PushButton" X="244" Y="244" Width="56" Height="17" Default="yes">
-					<Text><![CDATA[[DialogFontDefault]&Next >]]></Text>
-					<Publish Event="NewDialog" Value="User_Information_Dialog"><![CDATA[1]]></Publish>
-				</Control>
-				<Control Id="Previous" Type="PushButton" X="189" Y="244" Width="56" Height="17">
-					<Text><![CDATA[[DialogFontDefault]< &Back]]></Text>
-					<Publish Event="NewDialog" Value="License_Dialog"><![CDATA[1]]></Publish>
-				</Control>
-				<Control Id="Cancel" Type="PushButton" X="309" Y="244" Width="56" Height="17" Cancel="yes">
-					<Text><![CDATA[[DialogFontDefault]Cancel]]></Text>
-					<Publish Event="SpawnDialog" Value="Cancel"><![CDATA[1]]></Publish>
-				</Control>
-				<Control Id="ScrollableText" Type="ScrollableText" X="5" Y="55" Width="363" Height="172" Sunken="yes">
-					<Text>
-						<![CDATA[{\rtf1\ansi\ansicpg1252\deff0\deflang1033\deflangfe1033{\fonttbl{\f0\froman\fprq2\fcharset0 Times New Roman;}}
-{\stylesheet{ Normal;}{\s1 heading 1;}{\s2 heading 2;}{\s3 heading 3;}}
-\viewkind4\uc1\pard\keepn\s3\sb360\sa120\b\f0\fs28 ReadMe Files
-\par \pard\b0\fs22
-\par \fs24 Some of the ReadMe files previously distributed with FieldWorks are now available only on the web site. See FieldWorks.sil.org for details.
-\par
-\par }]]>
-					</Text>
-				</Control>
-				<Control Id="Text18" Type="Text" X="85" Y="8" Width="284" Height="12" Transparent="yes">
-					<Text><![CDATA[[DialogTitleFontDefault]Readme Information]]></Text>
-				</Control>
-				<Control Id="Bitmap23" Type="Bitmap" X="0" Y="0" Width="375" Height="50" Text="top16" />
-				<Control Id="Line17" Type="Line" X="0" Y="50" Width="375" Height="1" />
-				<Control Id="Text19" Type="Text" X="95" Y="22" Width="277" Height="24" Transparent="yes">
-					<Text><![CDATA[[DialogFontDefault]The following information describes this installation.]]></Text>
-				</Control>
-				<Control Id="Line7" Type="Line" X="0" Y="234" Width="375" Height="1" />
 			</Dialog>
 			<Dialog Id="ReinstallMode" Width="321" Height="241" Title="[ProductName] Reinstall Mode Dialog">
 				<Control Id="OK" Type="PushButton" X="164" Y="213" Width="70" Height="18" Default="yes">
@@ -1013,7 +979,7 @@ Alternatively, click the Back button to reenter the installation information, or
 				</Control>
 				<Control Id="Previous" Type="PushButton" X="189" Y="244" Width="56" Height="17">
 					<Text><![CDATA[[DialogFontDefault]< &Back]]></Text>
-					<Publish Event="NewDialog" Value="Readme_Dialog"><![CDATA[1]]></Publish>
+					<Publish Event="NewDialog" Value="License_Dialog"><![CDATA[1]]></Publish>
 				</Control>
 				<Control Id="Cancel" Type="PushButton" X="309" Y="244" Width="56" Height="17" Cancel="yes">
 					<Text><![CDATA[[DialogFontDefault]Cancel]]></Text>

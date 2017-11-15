@@ -65,6 +65,15 @@
 		<Installer>SetupFw-hu</Installer>
 	</Component>
 	<Component>
+		<Name>Azerbaijani Localization</Name>
+		<Description>Azerbaijani language pack for FieldWorks</Description>
+		<ProductCode>B2E16259-E710-4AC7-B8EC-48A4CA16483B</ProductCode>
+		<UpgradeCode>8525EAD0-C070-463D-9EA0-2EAD23367AE0</UpgradeCode>
+		<Feature>Azerbaijani</Feature>
+		<Feature>Azerbaijani_TE</Feature>
+		<Installer>SetupFw-az</Installer>
+	</Component>
+	<Component>
 		<Name>Indonesian Localization</Name>
 		<Description>Indonesian language pack for FieldWorks</Description>
 		<ProductCode>07A99D41-FADB-4c41-B22E-B079CACF2DF5</ProductCode>

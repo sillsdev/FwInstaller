@@ -18,6 +18,7 @@
 		<Language Name="Telugu" Id="te"/>
 		<Language Name="Kinyarwanda" Id="ro"/>
 		<Language Name="Hungarian" Id="hu"/>
+		<Language Name="Azerbaijani" Id="az"/>
 	</Languages>
 	<FeatureAllocation>
 		<!--
@@ -480,5 +481,6 @@
 		<Cabinet Feature="Persian" CabinetIndex="19"/>
 		<Cabinet Feature="Kinyarwanda" CabinetIndex="20"/>
 		<Cabinet Feature="Hungarian" CabinetIndex="21"/>
+		<Cabinet Feature="Azerbaijani" CabinetIndex="22"/>
 	</CabinetAssignments>
 </InstallerConfig>
