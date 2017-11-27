@@ -16,7 +16,7 @@
 			<?if $(var.Platform) = x64 ?>
 			<Merge Id="PerlEC" Language="1033" SourceFile="$(var.EncodingConvertersPath)\PerlEc64bitMM.msm" DiskId="1"/>
 			<Merge Id="PythonEC" Language="1033" SourceFile="$(var.EncodingConvertersPath)\PythonEc64bitMM.msm" DiskId="1"/>
-			<Merge Id="EncConverters_Common" Language="1033" SourceFile="$(EncodingConvertersPath)\EC_40_64bit_MM.msm" DiskId="1"/>
+			<Merge Id="EncConverters_Common" Language="1033" SourceFile="$(var.EncodingConvertersPath)\EC_40_64bit_MM.msm" DiskId="1"/>
 			<?else?>
 			<Merge Id="PerlEC" Language="1033" SourceFile="$(var.EncodingConvertersPath)\PerlEcMM.msm" DiskId="1"/>
 			<Merge Id="PythonEC" Language="1033" SourceFile="$(var.EncodingConvertersPath)\PythonEcMM.msm" DiskId="1"/>
