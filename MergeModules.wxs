@@ -1,26 +1,27 @@
 ﻿<?xml version="1.0"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<?define EncodingConvertersPath = "..\packages\Encoding-Converters-Core.0.0.4\MergeModules" ?>
 	<Fragment Id="MergeModulesFragment">
 		<Property Id='MergeModulesFragment' Value='1'/>
 		<DirectoryRef Id="SIL">
 			<?if $(var.Platform) = x64 ?>
-			<Merge Id="TECkit_DLLs" Language="1033" SourceFile="..\packages\Encoding-Converters-Core.0.0.3\MergeModules\TECkit64bitDLLsMM.msm" DiskId="1"/>
+			<Merge Id="TECkit_DLLs" Language="1033" SourceFile="$(EncodingConvertersPath)\TECkit64bitDLLsMM.msm" DiskId="1"/>
 			<Merge Id="Set_Path_EC" Language="1033" SourceFile="externalencodingconverters\64bit\SetPath.msm" DiskId="1"/>
 		  <?else?>
-			<Merge Id="TECkit_DLLs" Language="1033" SourceFile="..\packages\Encoding-Converters-Core.0.0.3\MergeModules\TECkitDLLsMM.msm" DiskId="1"/>
+			<Merge Id="TECkit_DLLs" Language="1033" SourceFile="$(EncodingConvertersPath)\TECkitDLLsMM.msm" DiskId="1"/>
 			<Merge Id="Set_Path_EC" Language="1033" SourceFile="externalencodingconverters\SetPath.msm" DiskId="1"/>
 			<?endif?>
 		</DirectoryRef>
 		<DirectoryRef Id="INSTALLDIR">
 			<?if $(var.Platform) = x64 ?>
-			<Merge Id="PerlEC" Language="1033" SourceFile="..\packages\Encoding-Converters-Core.0.0.3\MergeModules\PerlEc64bitMM.msm" DiskId="1"/>
-			<Merge Id="PythonEC" Language="1033" SourceFile="..\packages\Encoding-Converters-Core.0.0.3\MergeModules\PythonEc64bitMM.msm" DiskId="1"/>
-			<Merge Id="EncConverters_Common" Language="1033" SourceFile="..\packages\Encoding-Converters-Core.0.0.3\MergeModules\EC_40_64bit_MM.msm" DiskId="1"/>
+			<Merge Id="PerlEC" Language="1033" SourceFile="$(EncodingConvertersPath)\PerlEc64bitMM.msm" DiskId="1"/>
+			<Merge Id="PythonEC" Language="1033" SourceFile="$(EncodingConvertersPath)\PythonEc64bitMM.msm" DiskId="1"/>
+			<Merge Id="EncConverters_Common" Language="1033" SourceFile="$(EncodingConvertersPath)\EC_40_64bit_MM.msm" DiskId="1"/>
 			<?else?>
-			<Merge Id="PerlEC" Language="1033" SourceFile="..\packages\Encoding-Converters-Core.0.0.3\MergeModules\PerlEcMM.msm" DiskId="1"/>
-			<Merge Id="PythonEC" Language="1033" SourceFile="..\packages\Encoding-Converters-Core.0.0.3\MergeModules\PythonEcMM.msm" DiskId="1"/>
-			<Merge Id="CC_DLL" Language="1033" SourceFile="..\packages\Encoding-Converters-Core.0.0.3\MergeModules\CcDLLsMM.msm" DiskId="1"/>
-			<Merge Id="EncConverters_Common" Language="1033" SourceFile="..\packages\Encoding-Converters-Core.0.0.3\MergeModules\EC_40_MM.msm" DiskId="1"/>
+			<Merge Id="PerlEC" Language="1033" SourceFile="$(EncodingConvertersPath)\PerlEcMM.msm" DiskId="1"/>
+			<Merge Id="PythonEC" Language="1033" SourceFile="$(EncodingConvertersPath)\PythonEcMM.msm" DiskId="1"/>
+			<Merge Id="CC_DLL" Language="1033" SourceFile="$(EncodingConvertersPath)\CcDLLsMM.msm" DiskId="1"/>
+			<Merge Id="EncConverters_Common" Language="1033" SourceFile="$(EncodingConvertersPath)\EC_40_MM.msm" DiskId="1"/>
 		  <?endif?>
 		</DirectoryRef>
 		<DirectoryRef Id="SystemFolder">
