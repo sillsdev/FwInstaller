@@ -45,8 +45,8 @@
 						</Component>
 						<Directory Id="AddOnInstallers" Name="Installers">
 							<!-- The following component GUID is required by the master installer to locate and launch the FLEx Bridge installer: -->
-							<Component Id="FLExBridgeInstaller.msi" Guid="9442BF43-4A64-4885-9593-43DD7E927290">
-								<File Id="FLExBridgeInstaller.msi" Name="FLExBridgeInstaller.msi" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\DistFiles\Installers\FLExBridgeInstaller.msi" />
+							<Component Id="FLExBridgeInstaller.exe" Guid="9442BF43-4A64-4885-9593-43DD7E927290">
+								<File Id="FLExBridgeInstaller.exe" Name="FLExBridgeInstaller.exe" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\DistFiles\Installers\FLExBridgeInstaller.exe" />
 							</Component>
 							<Component Id="ChorusHubInstaller.msi" Guid="F06F46FC-4A57-44DC-BEAC-C498F8E77BA6">
 								<File Id="ChorusHubInstaller.msi" Name="ChorusHubInstaller.msi" ReadOnly="yes" Checksum="yes" KeyPath="yes" DiskId="1" Source="Builds\$(var.Version)\DistFiles\Installers\ChorusHubInstaller.msi" />
