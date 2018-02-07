@@ -30,7 +30,7 @@
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
 		<SuppressSpecificWarnings>1079</SuppressSpecificWarnings>
-		<OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+		<OutputPath>..\64bit\</OutputPath>
 		<IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
 	</PropertyGroup>
 	<ItemGroup>
