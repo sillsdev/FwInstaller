@@ -8,7 +8,7 @@
 			<ComponentRef Id="CopyLicenseTechReadme"/>
 			<ComponentRef Id="vs_piaredist.exe"/>
 			<ComponentRef Id="MigrateSqlDbs.exe"/>
-			<ComponentRef Id="FLExBridgeInstaller.msi"/>
+			<ComponentRef Id="FLExBridgeInstaller.exe"/>
 			<ComponentRef Id="ChorusHubInstaller.msi"/>
 			<ComponentRef Id="FieldWorks.exe"/>
 			<ComponentRef Id="Quivira.ttf"/>
