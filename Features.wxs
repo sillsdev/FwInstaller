@@ -13,6 +13,7 @@
 			<ComponentRef Id="FieldWorks.exe"/>
 			<ComponentRef Id="Quivira.ttf"/>
 			<ComponentRef Id="FwPath"/>
+			<ComponentRef Id="FwInstallDir"/>
 			<ComponentRef Id="RegLangPack"/>
 			<ComponentRef Id="RegRootCodeDir"/>
 			<ComponentRef Id="RegProjectsDir"/>

@@ -5,6 +5,7 @@
 		<DirectoryRef Id="TARGETDIR">
 			<Component Id="FwPath" Guid="53E0A9D8-9477-423a-89A9-F6BC3FAC4F40">
 				<Environment Id="FwPath" Name="PATH" Action="set" System="yes" Part="first" Value="[INSTALLDIR]" />
+				<Environment Id="FwInstallDir" Name="FIELDWORKSDIR" Action="set" System="yes" Value="[INSTALLDIR]" />
 			</Component>
 		</DirectoryRef>
 	</Fragment>
