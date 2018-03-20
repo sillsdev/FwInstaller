@@ -50,7 +50,7 @@
 	<ExtraFiles>
 		<!-- Define files needed in the installer that are not built locally or part of source control: -->
 		<!-- Format: <File URL="*URL of an extra file*" Destination="*Local relative path to download file to*"/> -->
-		<File URL="https://build.palaso.org/guestAuth/repository/download/FLExBridgeDevelopWin32InstallerSansPublish/.lastSuccessful/FLExBridge_3.0.0.1_Offline.exe" Destination="DistFiles\Installers\FLExBridgeInstaller.exe"/>
+		<File URL="https://build.palaso.org/guestAuth/repository/download/FLExBridgeDevelopWin32InstallerSansPublish/.lastSuccessful/FLExBridge_Offline.exe" Destination="DistFiles\Installers\FLExBridgeInstaller.exe"/>
 		<File URL="http://build.palaso.org/guestAuth/repository/download/bt333/.lastSuccessful/ChorusHubInstaller.msi" Destination="DistFiles\Installers\ChorusHubInstaller.msi"/>
 	</ExtraFiles>
 	<FileConditions>
