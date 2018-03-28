@@ -38,7 +38,7 @@
 			<MergeRef Id="Set_Path_EC"/>
 			<MergeRef Id="TECkit_DLLs"/>
 			<MergeRef Id="CC_DLL"/>
-			<?if $(var.Platform) == x64 ?>
+			<?if $(var.Platform) = x64 ?>
 			<MergeRef Id="CRT100"/>
 			<?else?>
 			<MergeRef Id="ATL"/>
