@@ -82,6 +82,8 @@
 			</Directory>
 			<Directory Id="SystemFolder" SourceName="System32">
 			</Directory>
+			<Directory Id="System64Folder" SourceName="System32">
+			</Directory>
 			<Directory Id="$(var.CFDir)" Name="Common">
 				<Directory Id="SIL" Name="SIL">
 					<Component Id="vs_piaredist.exe" Guid="69E34503-AFF1-455d-8B02-38EC1EC156C2">
