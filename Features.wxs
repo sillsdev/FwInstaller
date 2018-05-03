@@ -29,20 +29,22 @@
 			<ComponentRef Id="DelOldDeskShortcutFlex"/>
 			<ComponentRef Id="ShortcutFlex"/>
 			<ComponentRef Id="ShortcutFlexHelp"/>
-			<MergeRef Id="CRT"/>
 			<MergeRef Id="CRT90"/>
-			<MergeRef Id="MFC"/>
+			<?if $(var.Platform) = x64 ?>
+			<MergeRef Id="CRT100"/>
+			<?else?>
+			<MergeRef Id="ATL100"/>
+			<?endif?>
+			<MergeRef Id="MFC120"/>
+			<MergeRef Id="CRT120"/>
+			<MergeRef Id="CRT140"/>
+			<MergeRef Id="CRT141"/>
 			<MergeRef Id="PerlEC"/>
 			<MergeRef Id="PythonEC"/>
 			<MergeRef Id="EncConverters_Common"/>
 			<MergeRef Id="Set_Path_EC"/>
 			<MergeRef Id="TECkit_DLLs"/>
 			<MergeRef Id="CC_DLL"/>
-			<?if $(var.Platform) = x64 ?>
-			<MergeRef Id="CRT100"/>
-			<?else?>
-			<MergeRef Id="ATL"/>
-			<?endif?>
 			<Feature Id="FlexMovies" Title="Demo Movies" Description="Language Explorer demonstration movies" Display="expand" Level="0" AllowAdvertise="no">
 				<Condition Level="3">(FLEX_MOVIES_CAB1_FOUND AND FLEX_MOVIES_CAB2_FOUND AND FLEX_MOVIES_CAB3_FOUND) OR REMOVE</Condition>
 			</Feature>
